@@ -8,10 +8,12 @@ function read(path: string) {
 
 const outputPath = `${__dirname}/../src/constants/assets.ts`;
 
-const fileContents = `export const BODY = ${read("body")} as const;
+const fileContents = `const BODY = ${read("body")} as const;
 
-export const OUTFIT = ${read("outfit")} as const;
+const OUTFIT = ${read("outfit")} as const;
 
-export const BACKGROUND = ${read("background")} as const;`;
+const BACKGROUND = ${read("background")} as const;
+
+export const ASSETS = {BODY, OUTFIT, BACKGROUND};`;
 
 fs.writeFileSync(outputPath, fileContents);

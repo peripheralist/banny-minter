@@ -1,5 +1,32 @@
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/DMMono-Regular.ttf");
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/DMMono-Medium.ttf");
+  font-weight: bold;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/DMMono-Italic.ttf");
+  font-style: italic;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/DMMono-MediumItalic.ttf");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: "VT323";
+  src: url("/fonts/VT323-Regular.ttf");
+}
+
 body {
+  font-family: "VT323", monospace;
   margin: 0;
+  background: #D98F02;
 }
 
 button {

@@ -2,6 +2,7 @@ import Head from "next/head";
 import Factory from "@/components/Factory";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
+import EditorContextProvider from "@/contexts/EditorContextProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,9 @@ export default function Home() {
       </Head>
 
       <main>
-        <Factory />
+        <EditorContextProvider>
+          <Factory />
+        </EditorContextProvider>
       </main>
     </>
   );
