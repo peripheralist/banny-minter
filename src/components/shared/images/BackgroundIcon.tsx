@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React, { CSSProperties } from "react";
 
-export default function BannyBody({
+export default function BackgroundIcon({
   style,
   active,
 }: {
@@ -13,8 +13,8 @@ export default function BannyBody({
       style={style}
       width={40}
       height={40}
-      src={`/assets/body${active ? "-active" : ""}.png`}
-      alt="body"
+      src={`/assets/background${active ? "-active" : ""}.svg`}
+      alt="Background"
     />
   );
 }

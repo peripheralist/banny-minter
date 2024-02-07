@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React, { CSSProperties } from "react";
 
-export default function Background({
+export default function HeadgearIcon({
   style,
   active,
 }: {
@@ -13,8 +13,8 @@ export default function Background({
       style={style}
       width={40}
       height={40}
-      src={`/assets/background${active ? "-active" : ""}.png`}
-      alt="body"
+      src={`/assets/headgear${active ? "-active" : ""}.svg`}
+      alt="Headgear"
     />
   );
 }

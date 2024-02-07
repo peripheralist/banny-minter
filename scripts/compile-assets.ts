@@ -14,6 +14,10 @@ const OUTFIT = ${read("outfit")} as const;
 
 const BACKGROUND = ${read("background")} as const;
 
-export const ASSETS = {BODY, OUTFIT, BACKGROUND};`;
+const HEADGEAR = ${read("headgear")} as const;
+
+const GRIP_RIGHT = ${read("grip-right")} as const;
+
+export const ASSETS = {BODY, OUTFIT, BACKGROUND, HEADGEAR, GRIP_RIGHT};`;
 
 fs.writeFileSync(outputPath, fileContents);

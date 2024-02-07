@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React, { CSSProperties } from "react";
 
-export default function Outfit({
+export default function SwordIcon({
   style,
   active,
 }: {
@@ -13,8 +13,8 @@ export default function Outfit({
       style={style}
       width={40}
       height={40}
-      src={`/assets/outfit${active ? "-active" : ""}.png`}
-      alt="body"
+      src={`/assets/sword${active ? "-active" : ""}.svg`}
+      alt="Sword"
     />
   );
 }

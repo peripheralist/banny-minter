@@ -10,15 +10,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import CheckBadge from "../shared/images/CheckBadge";
-import TabEdge from "../shared/images/TabEdge";
-import BannyBody from "../shared/images/BannyBody";
-import Outfit from "../shared/images/Outfit";
-import Background from "../shared/images/Background";
+import CheckBadge from "../shared/images/CheckBadgeIcon";
+import TabBar from "./TabBar";
 
-type Tab = keyof typeof ASSETS;
+export type Tab = keyof typeof ASSETS;
 
-const tabs: Tab[] = ["BODY", "OUTFIT", "BACKGROUND"];
+const tabs: Tab[] = ["BODY", "OUTFIT", "HEADGEAR", "GRIP_RIGHT", "BACKGROUND"];
 
 const IMG_SIZE = 150;
 
@@ -51,86 +48,86 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
     return () => document.removeEventListener("keypress", listener);
   }, [randomize]);
 
-  const TabBar = useCallback(
-    () => (
-      <div style={{ position: "relative", width: "100%", height: 60 }}>
-        <div
-          style={{
-            display: "flex",
-            // width: "100%",
-            width: IMG_SIZE * 4 - 24,
-            paddingLeft: 17,
-            position: "absolute",
-          }}
-        >
-          {tabs.map((t, i) => {
-            const active = activeTab === t;
+  // const TabBar = useCallback(
+  //   () => (
+  //     <div style={{ position: "relative", width: "100%", height: 60 }}>
+  //       <div
+  //         style={{
+  //           display: "flex",
+  //           // width: "100%",
+  //           width: IMG_SIZE * 4 - 24,
+  //           paddingLeft: 17,
+  //           position: "absolute",
+  //         }}
+  //       >
+  //         {tabs.map((t, i) => {
+  //           const active = activeTab === t;
 
-            let icon: JSX.Element | undefined = undefined;
+  //           let icon: JSX.Element | undefined = undefined;
 
-            switch (t) {
-              case "BACKGROUND":
-                icon = <Background active={active} />;
-                break;
-              case "BODY":
-                icon = <BannyBody active={active} />;
-                break;
-              case "OUTFIT":
-                icon = <Outfit active={active} />;
-                break;
-            }
+  //           switch (t) {
+  //             case "BACKGROUND":
+  //               icon = <Background active={active} />;
+  //               break;
+  //             case "BODY":
+  //               icon = <BannyBody active={active} />;
+  //               break;
+  //             case "OUTFIT":
+  //               icon = <Outfit active={active} />;
+  //               break;
+  //           }
 
-            return (
-              <div
-                key={t}
-                style={{
-                  position: "relative",
-                  cursor: "default",
-                  height: 60,
-                  flex: 1,
-                  // width: 140,
-                  marginRight: -15,
-                  marginLeft: -15,
-                  zIndex: active ? 10 : 10 - i,
-                }}
-                onClick={active ? undefined : () => setActiveTab(t)}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 30,
-                    right: 30,
-                    top: 0,
-                    bottom: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: active ? "white" : "#F8B431",
-                    borderTop: "2px solid",
-                    borderColor: "white",
-                  }}
-                >
-                  {icon}
-                </div>
+  //           return (
+  //             <div
+  //               key={t}
+  //               style={{
+  //                 position: "relative",
+  //                 cursor: "default",
+  //                 height: 60,
+  //                 flex: 1,
+  //                 // width: 140,
+  //                 marginRight: -15,
+  //                 marginLeft: -15,
+  //                 zIndex: active ? 10 : 10 - i,
+  //               }}
+  //               onClick={active ? undefined : () => setActiveTab(t)}
+  //             >
+  //               <div
+  //                 style={{
+  //                   position: "absolute",
+  //                   left: 30,
+  //                   right: 30,
+  //                   top: 0,
+  //                   bottom: 0,
+  //                   display: "flex",
+  //                   alignItems: "center",
+  //                   justifyContent: "center",
+  //                   background: active ? "white" : "#F8B431",
+  //                   borderTop: "2px solid",
+  //                   borderColor: "white",
+  //                 }}
+  //               >
+  //                 {icon}
+  //               </div>
 
-                <TabEdge
-                  active={active}
-                  style={{ position: "absolute", left: 0 }}
-                  side="left"
-                />
-                <TabEdge
-                  active={active}
-                  style={{ position: "absolute", right: 0 }}
-                  side="right"
-                />
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    ),
-    [activeTab]
-  );
+  //               <TabEdge
+  //                 active={active}
+  //                 style={{ position: "absolute", left: 0 }}
+  //                 side="left"
+  //               />
+  //               <TabEdge
+  //                 active={active}
+  //                 style={{ position: "absolute", right: 0 }}
+  //                 side="right"
+  //               />
+  //             </div>
+  //           );
+  //         })}
+  //       </div>
+  //     </div>
+  //   ),
+  //   [activeTab]
+  // );
 
   const AssetGrid = useCallback(() => {
     let fn: Dispatch<SetStateAction<string>> | undefined;
@@ -228,7 +225,7 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
         ...style,
       }}
     >
-      <TabBar />
+      <TabBar tabs={tabs} activeTab={activeTab} onSelectTab={setActiveTab} />
 
       <div
         style={{

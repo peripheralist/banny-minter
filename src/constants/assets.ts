@@ -4,4 +4,8 @@ const OUTFIT = ["PIRATE-body.png","assasin-body.png","astronaut-body.png","banan
 
 const BACKGROUND = ["alien.png","baker.png","banatut.png","banhova.png","banmora.png","bannible.png","banny_in_black.png","banny_potter.png","batbanny.png","blondie.png","boneless.png","buddha.png","elf.png","farceur.png","gale.png","ipkiss.png","jango_fett.png","john_row.png","johnny_rotten.png","kenobanana.png","leia.png","lestat.png","makonnen.png","manhattan.png","mario.png","musa.png","musashi.png","nammu.png","peach.png","playboy.png","prince_of_darkness.png","shining.png","sith.png","spider_jerusalem.png","spock.png","stark.png","teach.png","utah.png","wade.png"] as const;
 
-export const ASSETS = {BODY, OUTFIT, BACKGROUND};
+const HEADGEAR = [] as const;
+
+const GRIP_RIGHT = [] as const;
+
+export const ASSETS = {BODY, OUTFIT, BACKGROUND, HEADGEAR, GRIP_RIGHT};
