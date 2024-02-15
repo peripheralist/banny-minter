@@ -23,13 +23,29 @@
   src: url("/fonts/VT323-Regular.ttf");
 }
 
-body {
+* {
   font-family: "VT323", monospace;
+}
+
+body {
   margin: 0;
-  background: #D98F02;
+  background: skyblue;
+  /* background: #D98F02; */
+  cursor: crosshair;
 }
 
 button {
-  padding: 12px;
-  height: 40px;
+  display: block;
+  appearance: none;
+  outline: none;
+  border: none;
+  cursor: crosshair;
+  letter-spacing: 2px;
+  white-space: nowrap;
 }
+
+.shadow-inner-sm {
+  box-shadow: inset 10px 10px 0px 10px #00000044;
+}
+
+/* box-shadow: 4px 4px #00000044; */

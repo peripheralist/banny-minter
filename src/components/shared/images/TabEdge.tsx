@@ -4,11 +4,13 @@ import React, { CSSProperties } from "react";
 export default function TabEdge({
   side,
   active,
+  shadow,
   style,
   width,
 }: {
   side: "left" | "right";
   active?: boolean;
+  shadow?: boolean;
   style?: CSSProperties;
   width?: number;
 }) {
@@ -22,7 +24,9 @@ export default function TabEdge({
       }}
       width={_width}
       height={_width * 2}
-      src={`/assets/tab-edge${active ? "-active" : ""}.svg`}
+      src={`/assets/tab-edge${
+        active ? "-active" : shadow ? "-shadow" : ""
+      }.svg`}
       alt="Tab edge"
     />
   );

@@ -12,6 +12,8 @@ import {
 } from "react";
 import CheckBadge from "../shared/images/CheckBadgeIcon";
 import TabBar from "./TabBar";
+import { COLORS } from "@/constants/colors";
+import PixelShape from "../PixelShape";
 
 export type Tab = keyof typeof ASSETS;
 
@@ -48,87 +50,6 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
     return () => document.removeEventListener("keypress", listener);
   }, [randomize]);
 
-  // const TabBar = useCallback(
-  //   () => (
-  //     <div style={{ position: "relative", width: "100%", height: 60 }}>
-  //       <div
-  //         style={{
-  //           display: "flex",
-  //           // width: "100%",
-  //           width: IMG_SIZE * 4 - 24,
-  //           paddingLeft: 17,
-  //           position: "absolute",
-  //         }}
-  //       >
-  //         {tabs.map((t, i) => {
-  //           const active = activeTab === t;
-
-  //           let icon: JSX.Element | undefined = undefined;
-
-  //           switch (t) {
-  //             case "BACKGROUND":
-  //               icon = <Background active={active} />;
-  //               break;
-  //             case "BODY":
-  //               icon = <BannyBody active={active} />;
-  //               break;
-  //             case "OUTFIT":
-  //               icon = <Outfit active={active} />;
-  //               break;
-  //           }
-
-  //           return (
-  //             <div
-  //               key={t}
-  //               style={{
-  //                 position: "relative",
-  //                 cursor: "default",
-  //                 height: 60,
-  //                 flex: 1,
-  //                 // width: 140,
-  //                 marginRight: -15,
-  //                 marginLeft: -15,
-  //                 zIndex: active ? 10 : 10 - i,
-  //               }}
-  //               onClick={active ? undefined : () => setActiveTab(t)}
-  //             >
-  //               <div
-  //                 style={{
-  //                   position: "absolute",
-  //                   left: 30,
-  //                   right: 30,
-  //                   top: 0,
-  //                   bottom: 0,
-  //                   display: "flex",
-  //                   alignItems: "center",
-  //                   justifyContent: "center",
-  //                   background: active ? "white" : "#F8B431",
-  //                   borderTop: "2px solid",
-  //                   borderColor: "white",
-  //                 }}
-  //               >
-  //                 {icon}
-  //               </div>
-
-  //               <TabEdge
-  //                 active={active}
-  //                 style={{ position: "absolute", left: 0 }}
-  //                 side="left"
-  //               />
-  //               <TabEdge
-  //                 active={active}
-  //                 style={{ position: "absolute", right: 0 }}
-  //                 side="right"
-  //               />
-  //             </div>
-  //           );
-  //         })}
-  //       </div>
-  //     </div>
-  //   ),
-  //   [activeTab]
-  // );
-
   const AssetGrid = useCallback(() => {
     let fn: Dispatch<SetStateAction<string>> | undefined;
     let multiplier = 1;
@@ -157,6 +78,7 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
           gridTemplateColumns: "repeat(4, 1fr)",
           width: "100%",
           boxSizing: "border-box",
+          overflow: "auto",
         }}
       >
         {ASSETS[activeTab].map((a) => {
@@ -181,7 +103,6 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                cursor: "pointer",
                 border: active ? "4px solid white" : "none",
                 // borderColor: active ? "white" : "transparent",
                 boxSizing: "border-box",
@@ -216,54 +137,111 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
   return (
     <div
       style={{
-        position: "relative",
         display: "flex",
-        flexDirection: "column",
-        minWidth: IMG_SIZE * 4,
-        zIndex: 1,
-        padding: 20,
-        ...style,
+        height: "calc(100vh - 20px)",
       }}
     >
-      <TabBar tabs={tabs} activeTab={activeTab} onSelectTab={setActiveTab} />
+      <div>
+        <PixelShape
+          width={20}
+          height={40}
+          fill={COLORS.brown}
+          plot={(x, y) => y < x * 2}
+        />
+        <div
+          style={{
+            background: COLORS.brown,
+            width: 20,
+            height: "calc(100% - 40px)",
+          }}
+        />
+      </div>
 
       <div
         style={{
           position: "relative",
-          overflow: "auto",
-          flex: 1,
-          border: "2px solid #F8B431",
-          boxSizing: "border-box",
-          background: "#F8B431",
+          display: "flex",
+          flexDirection: "column",
+          minWidth: IMG_SIZE * 4,
           zIndex: 1,
+          padding: 20,
+          ...style,
         }}
       >
-        <AssetGrid />
-      </div>
+        <h1
+          style={{
+            zIndex: 1,
+            margin: 0,
+            textAlign: "center",
+            fontSize: "3rem",
+          }}
+        >
+          1-800-BANANA
+        </h1>
+        <div
+          style={{
+            position: "relative",
+            flex: 1,
+            zIndex: 1,
+            marginTop: 20,
+            overflow: "hidden",
+            background: "#00000044",
+            border: "2px solid #00000044",
+          }}
+        >
+          <div style={{ maxHeight: "100%", overflow: "auto" }}>
+            <AssetGrid />
+          </div>
 
-      <div
-        style={{
-          color: "white",
-          zIndex: 1,
-          textAlign: "center",
-          paddingTop: 20,
-          cursor: "pointer",
-        }}
-        onClick={randomize}
-      >
-        Randomize (space)
-      </div>
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              width: 6,
+              background: "#00000044",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 6,
+              right: 0,
+              height: 6,
+              background: "#00000044",
+            }}
+          />
+        </div>
 
-      <div
-        style={{
-          background: "#F8B431",
-          position: "absolute",
-          left: 0,
-          top: 60,
-          bottom: 0,
-          right: 0,
-        }}
-      />
+        <div
+          style={{
+            display: "inline-block",
+            color: "white",
+            zIndex: 1,
+            padding: 20,
+            margin: "0 auto",
+          }}
+          onClick={randomize}
+        >
+          Randomize (space)
+        </div>
+
+        <TabBar tabs={tabs} activeTab={activeTab} onSelectTab={setActiveTab} />
+
+        <div
+          style={{
+            background: "#F8B431",
+            position: "absolute",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            right: 0,
+            borderTop: "2px solid white",
+          }}
+        />
+      </div>
     </div>
   );
 }
