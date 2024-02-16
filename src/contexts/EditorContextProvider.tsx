@@ -2,13 +2,18 @@ import { ASSETS } from "@/constants/assets";
 import { useAnimation } from "@/hooks/useAnimation";
 import { PropsWithChildren, useCallback, useState } from "react";
 import { EditorContext } from "./editorContext";
+import { AssetType } from "@/components/Factory/Controls";
 
 const { BODY, OUTFIT, BACKGROUND } = ASSETS;
 
 export default function EditorContextProvider({ children }: PropsWithChildren) {
-  const [body, _setBody] = useState<string>(BODY[0]);
-  const [outfit, _setOutfit] = useState<string>(OUTFIT[0]);
-  const [background, _setBackground] = useState<string>(BACKGROUND[0]);
+  const [body, _setBody] = useState<string>(ASSETS["BODY"][0]);
+  const [outfit, _setOutfit] = useState<string>();
+  const [background, _setBackground] = useState<string>();
+  const [tab, _setTab] = useState<[AssetType, AssetType | undefined]>([
+    "BACKGROUND",
+    undefined,
+  ]);
 
   const {
     animate: animateBody,
@@ -67,6 +72,15 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
     setBackground(BACKGROUND[Math.floor(Math.random() * BACKGROUND.length)]);
   }, [setBody, setOutfit, setBackground]);
 
+  const setTab = useCallback((t: AssetType) => {
+    // Store previous tab in index[1]
+    _setTab(([_t]) => [t, _t]);
+
+    setTimeout(() => {
+      _setTab(([_t]) => [_t, undefined]);
+    }, 250);
+  }, []);
+
   return (
     <EditorContext.Provider
       value={{
@@ -80,6 +94,8 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
         setBackground,
         backgroundFrame,
         randomize,
+        tab,
+        setTab,
       }}
     >
       {children}

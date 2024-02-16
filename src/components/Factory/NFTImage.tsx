@@ -1,14 +1,7 @@
 import { EditorContext } from "@/contexts/editorContext";
-import React, {
-  CSSProperties,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import Fuzz from "../Fuzz";
 import Image from "next/image";
-import { useAnimation } from "@/hooks/useAnimation";
+import { CSSProperties, useCallback, useContext } from "react";
+import Fuzz from "../Fuzz";
 
 const IMG_SIZE = 480;
 
@@ -39,16 +32,22 @@ export default function NFTImage() {
     []
   );
 
-  const bodyUrl = `/assets/banny/body/${body}`;
-  const backgroundUrl = `/assets/banny/background/${background}`;
-  const outfitUrl = `/assets/banny/outfit/${outfit}`;
+  const bodyUrl = body ? `/assets/banny/body/${body}` : undefined;
+  const backgroundUrl = background
+    ? `/assets/banny/background/${background}`
+    : undefined;
+  const outfitUrl = outfit ? `/assets/banny/outfit/${outfit}` : undefined;
 
   return (
     <div
       style={{
+        position: "relative",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        padding: 40,
+        background: "#fff",
+        border: "4px solid black",
       }}
     >
       <div
@@ -65,7 +64,6 @@ export default function NFTImage() {
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          border: "40px solid white",
         }}
       >
         <_Fuzz
@@ -75,17 +73,19 @@ export default function NFTImage() {
           }}
           frame={backgroundFrame}
         />
-        <Image
-          style={{
-            position: "absolute",
-            // need an offset bc alien body is off-center
-            marginLeft: body === "alien.png" ? IMG_SIZE * 0.035 : 0,
-          }}
-          width={IMG_SIZE * 1.4}
-          height={IMG_SIZE * 1.4}
-          src={bodyUrl}
-          alt={body}
-        />
+        {body && bodyUrl && (
+          <Image
+            style={{
+              position: "absolute",
+              // need an offset bc alien body is off-center
+              marginLeft: body === "alien.png" ? IMG_SIZE * 0.035 : 0,
+            }}
+            width={IMG_SIZE * 1.4}
+            height={IMG_SIZE * 1.4}
+            src={bodyUrl}
+            alt={body}
+          />
+        )}
         <_Fuzz
           style={{
             maskImage: `url(${bodyUrl})`,
@@ -93,13 +93,15 @@ export default function NFTImage() {
           }}
           frame={bodyFrame}
         />
-        <Image
-          style={{ position: "absolute" }}
-          width={IMG_SIZE * 1.05}
-          height={IMG_SIZE * 1.05}
-          src={outfitUrl}
-          alt={body}
-        />
+        {outfit && outfitUrl && (
+          <Image
+            style={{ position: "absolute" }}
+            width={IMG_SIZE * 1.05}
+            height={IMG_SIZE * 1.05}
+            src={outfitUrl}
+            alt={outfit}
+          />
+        )}
         <_Fuzz
           style={{
             maskImage: `url(${outfitUrl})`,
@@ -107,19 +109,28 @@ export default function NFTImage() {
           }}
           frame={outfitFrame}
         />
-
-        <div
-          style={{
-            top: -20,
-            left: -20,
-            width: IMG_SIZE + 80,
-            height: IMG_SIZE + 80,
-            position: "absolute",
-            background: "#00000044",
-            zIndex: -1,
-          }}
-        />
       </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          width: 8,
+          background: "#00000064",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 8,
+          right: 0,
+          height: 8,
+          background: "#00000064",
+        }}
+      />
     </div>
   );
 }

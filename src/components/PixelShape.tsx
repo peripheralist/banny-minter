@@ -34,7 +34,14 @@ export default function PixelShape({
 
   return (
     <div
-      style={{ width, height, ...style }}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width,
+        height,
+        ...style,
+      }}
       dangerouslySetInnerHTML={{ __html: svg }}
     />
   );

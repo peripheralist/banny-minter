@@ -1,70 +1,115 @@
-import { ASSETS } from "@/constants/assets";
-import { EditorContext } from "@/contexts/editorContext";
-import Image from "next/image";
-import {
+import React, {
   CSSProperties,
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
-import CheckBadge from "../shared/images/CheckBadgeIcon";
-import Buttons from "./Buttons";
-
-export type AssetType = keyof typeof ASSETS;
-
-const tabs: AssetType[] = [
-  "BODY",
-  "OUTFIT",
-  "HEADGEAR",
-  "GRIP_RIGHT",
-  "BACKGROUND",
-];
+import CheckBadgeIcon from "../shared/images/CheckBadgeIcon";
+import { EditorContext } from "@/contexts/editorContext";
+import { AssetType, tabs } from "./Controls";
+import { ASSETS } from "@/constants/assets";
+import Image from "next/image";
+import { COLORS } from "@/constants/colors";
+import ButtonPad from "../shared/ButtonPad";
 
 const IMG_SIZE = 150;
-const GRID_WIDTH = IMG_SIZE * 4 + 6;
+const GRID_COUNT = 3;
+const PAGE_SIZE = 3 ** 2;
+const GRID_WIDTH = IMG_SIZE * GRID_COUNT + (GRID_COUNT + 1);
 
-export default function Drawer({ style }: { style?: CSSProperties }) {
-  const [prevTab, setPrevTab] = useState<AssetType>();
-  const [activeTab, _setActiveTab] = useState<AssetType>("BODY");
+export default function GridSelector({ style }: { style?: CSSProperties }) {
+  const { body, outfit, background, setBody, setOutfit, setBackground, tab } =
+    useContext(EditorContext);
 
-  const setActiveTab = useCallback(
-    (t: AssetType) => {
-      setPrevTab(activeTab);
-      _setActiveTab(t);
+  const [pageIdx, setPageIdx] = useState<number>(0);
 
-      setTimeout(() => {
-        setPrevTab(undefined);
-      }, 200);
-    },
+  const [activeTab, prevTab] = tab;
+
+  useEffect(() => {
+    setPageIdx(0);
+  }, [activeTab]);
+
+  const pagesCount = useMemo(
+    () => Math.ceil(ASSETS[activeTab].length / PAGE_SIZE),
     [activeTab]
   );
 
-  const {
-    body,
-    outfit,
-    background,
-    setBody,
-    setOutfit,
-    setBackground,
-    randomize,
-  } = useContext(EditorContext);
+  const assetsForPage = useMemo(() => {
+    return ASSETS[activeTab].slice(
+      pageIdx * PAGE_SIZE,
+      (pageIdx + 1) * PAGE_SIZE
+    );
+  }, [pageIdx, activeTab]);
 
-  useEffect(() => {
-    if (!randomize) return;
+  const PageIndicator = useCallback(() => {
+    const children: JSX.Element[] = [];
 
-    const listener = (e: KeyboardEvent) => {
-      switch (e.code) {
-        case "Space":
-          randomize();
-          break;
-      }
-    };
+    for (let i = 0; i < pagesCount; i++) {
+      const active = pageIdx === i;
 
-    document.addEventListener("keypress", listener);
+      children.push(
+        <div
+          style={{
+            width: 12,
+            height: 12,
+            background: "black",
+            position: "relative",
+            borderRadius: 2,
+          }}
+          onClick={() => setPageIdx(i)}
+        >
+          <div
+            style={{
+              width: 6,
+              height: 6,
+              position: "absolute",
+              top: 2,
+              left: 2,
+              background: active ? "white" : COLORS.banana,
+              borderRadius: 1,
+            }}
+          />
+        </div>
+      );
+    }
 
-    return () => document.removeEventListener("keypress", listener);
-  }, [randomize]);
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        {children}
+      </div>
+    );
+  }, [pagesCount, pageIdx]);
+
+  const PageSelector = useCallback(() => {
+    const style = { width: 40, height: 40, fontSize: "1.4rem" };
+
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 20,
+        }}
+      >
+        <ButtonPad
+          style={style}
+          fillFg={COLORS.banana}
+          onClick={() => setPageIdx((i) => Math.max(i - 1, 0))}
+        >
+          {"<"}
+        </ButtonPad>
+        <ButtonPad
+          style={style}
+          fillFg={COLORS.banana}
+          onClick={() => setPageIdx((i) => Math.min(i + 1, pagesCount - 1))}
+        >
+          {">"}
+        </ButtonPad>
+      </div>
+    );
+  }, [pagesCount]);
 
   const AssetGrid = useCallback(
     ({ assetType, style }: { assetType: AssetType; style?: CSSProperties }) => {
@@ -91,7 +136,6 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
         <div
           style={{
             width: GRID_WIDTH,
-            minWidth: GRID_WIDTH,
             ...style,
           }}
         >
@@ -99,13 +143,13 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
             style={{
               display: "grid",
               gap: 2,
-              gridTemplateColumns: "repeat(4, 1fr)",
+              gridTemplateColumns: "repeat(3, 1fr)",
               width: "100%",
               boxSizing: "border-box",
               overflow: "auto",
             }}
           >
-            {ASSETS[assetType].map((a) => {
+            {assetsForPage.map((a) => {
               let active = false;
 
               switch (assetType) {
@@ -145,7 +189,7 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
                   />
 
                   {active && (
-                    <CheckBadge
+                    <CheckBadgeIcon
                       style={{ position: "absolute", bottom: 0, left: 0 }}
                     />
                   )}
@@ -156,35 +200,25 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
         </div>
       );
     },
-    [setBackground, setBody, setOutfit, background, body, outfit]
+    [setBackground, setBody, setOutfit, background, body, outfit, assetsForPage]
   );
 
   return (
-    <div
-      style={{
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        gap: 20,
-        ...style,
-      }}
-    >
+    <div>
       <div
         style={{
           position: "relative",
-          flex: 1,
-          marginTop: 20,
           overflow: "hidden",
           background: "#00000064",
           border: "4px solid black",
+          ...style,
         }}
       >
         <div
           style={{
             maxHeight: "100%",
-            overflow: "auto",
             width: GRID_WIDTH,
+            height: GRID_WIDTH,
             position: "relative",
             zIndex: 1,
           }}
@@ -240,19 +274,17 @@ export default function Drawer({ style }: { style?: CSSProperties }) {
         />
       </div>
 
-      <Buttons tabs={tabs} activeTab={activeTab} onSelectTab={setActiveTab} />
-      {/* <TabBar tabs={tabs} activeTab={activeTab} onSelectTab={setActiveTab} /> */}
-
       <div
         style={{
-          display: "inline-block",
-          color: "white",
-          padding: 10,
-          margin: "0 auto",
+          display: "flex",
+          gap: 20,
+          paddingTop: 20,
+          paddingBottom: 20,
+          paddingLeft: 6,
         }}
-        onClick={randomize}
       >
-        Randomize (space)
+        <PageSelector />
+        <PageIndicator />
       </div>
     </div>
   );

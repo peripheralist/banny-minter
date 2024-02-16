@@ -29,7 +29,8 @@
 
 body {
   margin: 0;
-  background: skyblue;
+  /* background: skyblue; */
+  /* background: #cde; */
   background: #f8b431;
   /* background: #D98F02; */
   cursor: crosshair;

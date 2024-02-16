@@ -29,7 +29,7 @@ export default function Button({
   // storing width in state using useLayoutEffect not working great
   const width = contentRef.current?.clientWidth;
 
-  const bg = "#e221a0dd";
+  const bg = "#e221a0";
 
   const height = 48;
   const edgeWidth = height / 2;
