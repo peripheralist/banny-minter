@@ -1,48 +1,38 @@
-import React, {
+import { useAnimation } from "@/hooks/useAnimation";
+import {
   ButtonHTMLAttributes,
   CSSProperties,
   DetailedHTMLProps,
   PropsWithChildren,
   useCallback,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import PixelShape from "./PixelShape";
+import Fuzz from "./Fuzz";
 
 export default function Button({
   children,
+  loading,
   ...props
 }: PropsWithChildren &
   DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
-  >) {
+  > & { loading?: boolean }) {
   const [isHover, setIsHover] = useState<boolean>();
-  const [frame, setFrame] = useState<number>(0);
-  const targetRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  // const [height, setHeight] = useState(0);
+  const { frame, animate } = useAnimation({ step: 0.25, interval: 25 });
 
-  // useLayoutEffect(() => {
-  //   if (targetRef.current) {
-  //     setHeight(targetRef.current.offsetHeight);
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setFrame((f) => (isHover ? Math.min(f + 0.2, 1) : Math.max(f - 0.2, 0)));
-    }, 10);
-
-    return () => clearInterval(id);
-  }, [isHover]);
+  // storing width in state using useLayoutEffect not working great
+  const width = contentRef.current?.clientWidth;
 
   const bg = "#e221a0dd";
 
   const height = 48;
-  const width = height / 2;
+  const edgeWidth = height / 2;
 
   const Arc = useCallback(
     ({
@@ -65,55 +55,70 @@ export default function Button({
           top,
           bottom,
         }}
-        height={width}
-        width={width}
+        height={edgeWidth}
+        width={edgeWidth}
         pixelSize={4}
-        plot={(x, y) => y < Math.sqrt(width ** 2 - (2 - frame) * x ** 2)}
+        plot={(x, y) =>
+          y <= Math.sqrt(edgeWidth ** 2 - (1 - frame + 0.1) * x ** 2)
+        }
         fill={bg}
       />
     ),
-    [width, frame]
+    [edgeWidth, frame]
   );
 
-  const textOffset = isHover ? 3 : 2;
+  const textOffset = isHover ? 4 : 0;
 
   return (
     <button
-      ref={targetRef}
       {...props}
       style={{
         position: "relative",
         background: bg,
-        height: 48,
+        height,
         fontSize: "1.6rem",
-        transform: `scale(${isHover ? 1.05 : 1})`,
-        transition: "transform 0.1s ease",
         ...props.style,
       }}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      onMouseEnter={() => {
+        setIsHover(true);
+        animate(true);
+      }}
+      onMouseLeave={() => {
+        setIsHover(false);
+        animate();
+      }}
     >
-      <Arc deg={180} right="100%" top={0} />
-      <Arc deg={0} right="100%" bottom={0} flipX />
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "white",
-          transform: isHover
-            ? `translate(-${textOffset}px, -${textOffset}px)`
-            : undefined,
-          textShadow: isHover
-            ? `${textOffset}px ${textOffset}px #000`
-            : undefined,
-          transition: "text-shadow 0.1s ease",
-        }}
-      >
-        {children}
-      </div>
-      <Arc deg={180} left="100%" top={0} flipX />
-      <Arc deg={0} left="100%" bottom={0} />
+      <Arc deg={270} right="100%" top={0} />
+      <Arc deg={270} right="100%" bottom={0} flipX />
+      {loading && width ? (
+        <Fuzz
+          width={width}
+          height={height - 20}
+          fill="white"
+          pixelSize={4}
+          interval={250}
+        />
+      ) : (
+        <div
+          ref={contentRef}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white",
+            transform: isHover
+              ? `scale(1.1, 1) translate(0, -${textOffset}px)`
+              : undefined,
+            // transform: `translate(-${textOffset}px, -${textOffset}px)`,
+            textShadow: `0px ${textOffset}px #000`,
+            transition: "text-shadow 0.1s ease-out, transform 0.1s ease-out",
+          }}
+        >
+          {children}
+        </div>
+      )}
+      <Arc deg={90} left="100%" top={0} flipX />
+      <Arc deg={90} left="100%" bottom={0} />
     </button>
   );
 }

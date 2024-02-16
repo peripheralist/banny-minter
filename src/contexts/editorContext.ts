@@ -5,11 +5,14 @@ const { BODY, OUTFIT, BACKGROUND } = ASSETS;
 
 export const EditorContext = createContext<{
   body: string;
-  setBody?: Dispatch<SetStateAction<string>>;
+  setBody?: (s: string) => void;
+  bodyFrame?: number;
   outfit: string;
-  setOutfit?: Dispatch<SetStateAction<string>>;
+  setOutfit?: (s: string) => void;
+  outfitFrame?: number;
   background: string;
-  setBackground?: Dispatch<SetStateAction<string>>;
+  setBackground?: (s: string) => void;
+  backgroundFrame?: number;
   randomize?: VoidFunction;
 }>({
   body: BODY[0],

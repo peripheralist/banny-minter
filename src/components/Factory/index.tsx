@@ -1,89 +1,55 @@
-import { EditorContext } from "@/contexts/editorContext";
-import Image from "next/image";
-import { useContext } from "react";
-import Fuzz from "../Fuzz";
-import Drawer from "./Drawer";
+import { useState } from "react";
 import Button from "../Button";
-import PixelShape from "../PixelShape";
-
-const IMG_SIZE = 540;
+import Drawer from "./Drawer";
+import NFTImage from "./NFTImage";
 
 export default function Index() {
-  const { body, outfit, background } = useContext(EditorContext);
+  const [mintLoading, setMintLoading] = useState<boolean>();
 
   return (
     <div
       style={{
         display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         width: "100vw",
         height: "100vh",
-        overflow: "hidden",
+        boxSizing: "border-box",
+        padding: 40,
       }}
     >
-      <div
+      <Drawer
         style={{
-          display: "flex",
-          alignItems: "flex-end",
+          boxSizing: "border-box",
+          height: "94vh",
+          maxHeight: 1200,
         }}
-      >
-        <Drawer />
-      </div>
+      />
 
       <div
         style={{
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           flex: 1,
+          gap: 80,
+          padding: 40,
         }}
       >
-        <div
-          style={{
-            position: "relative",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flex: 1,
-            backgroundImage: `url("/assets/banny/background/${background}")`,
-            width: IMG_SIZE,
-            maxWidth: IMG_SIZE,
-            height: IMG_SIZE,
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            border: "40px solid white",
-          }}
-        >
-          <Image
-            style={{
-              // need an offset bc alien body is off-center
-              marginLeft: body === "alien.png" ? IMG_SIZE * 0.035 : 0,
-            }}
-            width={IMG_SIZE * 1.4}
-            height={IMG_SIZE * 1.4}
-            src={`/assets/banny/body/${body}`}
-            alt={body}
-          />
-          <Image
-            style={{ position: "absolute" }}
-            width={IMG_SIZE * 1.05}
-            height={IMG_SIZE * 1.05}
-            src={`/assets/banny/outfit/${outfit}`}
-            alt={body}
-          />
+        <NFTImage />
 
-          <div
-            style={{
-              top: -20,
-              left: -20,
-              width: IMG_SIZE + 80,
-              height: IMG_SIZE + 80,
-              position: "absolute",
-              background: "#00000044",
-              zIndex: -1,
-            }}
-          />
-        </div>
+        <Button
+          onClick={() => {
+            setMintLoading(true);
+            setTimeout(() => {
+              setMintLoading(false);
+            }, 2000);
+          }}
+          loading={mintLoading}
+        >
+          Mint Banny
+        </Button>
       </div>
     </div>
   );

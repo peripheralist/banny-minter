@@ -30,6 +30,7 @@
 body {
   margin: 0;
   background: skyblue;
+  background: #f8b431;
   /* background: #D98F02; */
   cursor: crosshair;
 }
@@ -46,6 +47,42 @@ button {
 
 .shadow-inner-sm {
   box-shadow: inset 10px 10px 0px 10px #00000044;
+}
+
+@keyframes slide-in-left {
+  0% {
+    margin-left: 606px;
+  }
+  100% {
+    margin-left: 0px;
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    margin-left: -606px;
+  }
+  100% {
+    margin-left: 0px;
+  }
+}
+
+@keyframes slide-out-left {
+  0% {
+    left: 0px;
+  }
+  100% {
+    left: -606px;
+  }
+}
+
+@keyframes slide-out-right {
+  0% {
+    left: 0px;
+  }
+  100% {
+    left: 606px;
+  }
 }
 
 /* box-shadow: 4px 4px #00000044; */
