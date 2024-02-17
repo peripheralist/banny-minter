@@ -30,22 +30,25 @@ export default function Index() {
         style={{
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "space-between",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
+          // justifyContent: "flex-end",
           height: "100%",
         }}
       >
-        {/* <div style={{ padding: 0, textTransform: "uppercase" }}>
+        <div style={{ textTransform: "uppercase" }}>
           <h1
             style={{
-              fontSize: "2rem",
               margin: 0,
-              letterSpacing: 3,
+              fontSize: "1.6rem",
+              letterSpacing: 6,
             }}
           >
-            1-800-BANNY4U
+            1-800-BANNY4U{" "}
+            <span style={{ fontWeight: "lighter", opacity: 0.5 }}>
+              A JUICEBOX PRODUCTION
+            </span>
           </h1>
-        </div> */}
+        </div>
 
         <div
           style={{

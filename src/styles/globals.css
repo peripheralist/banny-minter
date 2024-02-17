@@ -25,6 +25,7 @@
 
 * {
   font-family: "VT323", monospace;
+  cursor: crosshair;
 }
 
 body {
@@ -33,7 +34,6 @@ body {
   /* background: #cde; */
   background: #f8b431;
   /* background: #D98F02; */
-  cursor: crosshair;
 }
 
 button {
