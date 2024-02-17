@@ -1,6 +1,5 @@
 import { AssetType } from "@/components/Factory/Controls";
-import { ASSETS } from "@/constants/assets";
-import { Dispatch, SetStateAction, createContext } from "react";
+import { createContext } from "react";
 
 export const EditorContext = createContext<{
   body?: string;

@@ -1,10 +1,12 @@
 import { useState } from "react";
-import Button from "../Button";
-import Controls from "./Controls";
-import NFTImage from "./NFTImage";
+import Fuzz from "../Fuzz";
 import Summary from "../Summary";
-import GridSelector from "./GridSelector";
 import ButtonPad from "../shared/ButtonPad";
+import RoundedFrame from "../shared/RoundedFrame";
+import Controls from "./Controls";
+import GridSelector from "./GridSelector";
+import NFTImage from "./NFTImage";
+import PixelShape from "../PixelShape";
 
 export default function Index() {
   const [mintLoading, setMintLoading] = useState<boolean>();
@@ -14,100 +16,212 @@ export default function Index() {
       style={{
         width: "100vw",
         height: "100vh",
+        overflow: "hidden",
+        minHeight: 810,
         boxSizing: "border-box",
-        padding: 40,
         display: "flex",
-        justifyContent: "space-around",
+        justifyContent: "space-between",
+        alignItems: "flex-end",
+        padding: 32,
       }}
     >
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "flex-start",
+          // justifyContent: "space-between",
           justifyContent: "flex-end",
+          height: "100%",
         }}
       >
-        <GridSelector />
+        {/* <div style={{ padding: 0, textTransform: "uppercase" }}>
+          <h1
+            style={{
+              fontSize: "2rem",
+              margin: 0,
+              letterSpacing: 3,
+            }}
+          >
+            1-800-BANNY4U
+          </h1>
+        </div> */}
 
-        <Controls />
+        <div
+          style={{
+            padding: 0,
+            display: "flex",
+            alignItems: "flex-end",
+            gap: 32,
+            boxSizing: "border-box",
+          }}
+        >
+          <Controls style={{ padding: 32 }} />
+
+          <GridSelector style={{ padding: 32 }} gridRows={4} gridCols={3} />
+        </div>
       </div>
 
       <div
         style={{
           display: "flex",
-          alignItems: "stretch",
           flexDirection: "column",
           justifyContent: "flex-end",
-          gap: 20,
+          flex: 1,
+          height: "100%",
+          marginLeft: 32,
+          gap: 32,
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 80,
-          }}
-        >
-          <NFTImage />
-        </div>
+        <RoundedFrame shadow style={{ width: "100%", height: "100%" }}>
+          <div
+            style={{
+              position: "relative",
+              height: "100%",
+              background: "#eef",
+            }}
+          >
+            <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+              <NFTImage />
+            </div>
+
+            <PixelShape
+              style={{ position: "absolute", bottom: 0, left: 20 }}
+              width={64}
+              height={32}
+              plot={(x, y) => y <= 0.5 * x}
+              fill="#DDE"
+            />
+            <PixelShape
+              style={{
+                position: "absolute",
+                bottom: 0,
+                right: 20,
+                transform: `scale(-1,1)`,
+              }}
+              width={64}
+              height={32}
+              plot={(x, y) => y <= 0.5 * x}
+              fill="#DDE"
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 84,
+                right: 84,
+                height: 32,
+                background: "#DDE",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: 32,
+                top: 0,
+                right: 84,
+                left: 84,
+                background: "white",
+              }}
+            />
+            {/* <div
+              style={{
+                position: "absolute",
+                bottom: 32,
+                top: 0,
+                left: 80,
+                width: 4,
+                background: "#99A",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: 32,
+                top: 0,
+                right: 80,
+                width: 4,
+                background: "#99A",
+              }}
+            /> */}
+          </div>
+        </RoundedFrame>
 
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 20,
+            gap: 32,
           }}
         >
           <div
             style={{
-              position: "relative",
               display: "flex",
               flex: 1,
-              justifyContent: "space-between",
-              padding: 20,
-              border: "4px solid black",
+              height: "100%",
             }}
           >
-            <Summary />
-
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                width: 6,
-                background: "#00000064",
-                zIndex: 1,
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 6,
-                right: 0,
-                height: 6,
-                background: "#00000064",
-                zIndex: 1,
-              }}
-            />
+            <RoundedFrame style={{ flex: 1, height: "100%" }}>
+              <div
+                style={{
+                  background: "black",
+                  padding: 20,
+                  height: "100%",
+                  boxSizing: "border-box",
+                }}
+              >
+                <Summary />
+              </div>
+            </RoundedFrame>
           </div>
 
-          <ButtonPad
+          <div
             style={{
-              width: 106,
-              height: 106,
-              color: "white",
-              fontSize: "3rem",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 20,
+              paddingRight: 6,
+              paddingTop: 6,
             }}
-            fillFg="#e221a0"
           >
-            MINT
-          </ButtonPad>
+            <ButtonPad
+              style={{
+                width: 150,
+                height: 100,
+                color: "white",
+                fontSize: "3rem",
+              }}
+              fillFg="#e221a0"
+              onClick={() => {
+                setMintLoading(true);
+
+                setTimeout(() => setMintLoading(false), 2000);
+              }}
+            >
+              {mintLoading ? (
+                <Fuzz
+                  width={80}
+                  height={32}
+                  fill="white"
+                  pixelSize={4}
+                  interval={500}
+                />
+              ) : (
+                "MINT"
+              )}
+            </ButtonPad>
+
+            <div
+              style={{
+                fontSize: "2.4rem",
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              4.20 ETH
+            </div>
+          </div>
         </div>
       </div>
     </div>

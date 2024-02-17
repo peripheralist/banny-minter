@@ -1,9 +1,12 @@
 import { ASSETS } from "@/constants/assets";
 import { EditorContext } from "@/contexts/editorContext";
-import { CSSProperties, useContext, useEffect } from "react";
+import { CSSProperties, useCallback, useContext, useEffect } from "react";
 import Fuzz from "../Fuzz";
 import ButtonPadLight from "../shared/ButtonPadLight";
 import AssetButton from "./AssetButton";
+import ButtonPad from "../shared/ButtonPad";
+import RoundedFrame from "../shared/RoundedFrame";
+import { COLORS } from "@/constants/colors";
 
 export type AssetType = keyof typeof ASSETS;
 
@@ -19,34 +22,8 @@ export default function Controls({ style }: { style?: CSSProperties }) {
 
   const [activeTab] = tab;
 
-  useEffect(() => {
-    if (!randomize) return;
-
-    const listener = (e: KeyboardEvent) => {
-      switch (e.code) {
-        case "Space":
-          randomize();
-          break;
-      }
-    };
-
-    document.addEventListener("keypress", listener);
-
-    return () => document.removeEventListener("keypress", listener);
-  }, [randomize]);
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        position: "relative",
-        justifyContent: "space-between",
-        padding: 20,
-        gap: 20,
-        border: "4px solid black",
-        ...style,
-      }}
-    >
+  const BannyButtons = useCallback(
+    () => (
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
         {ASSETS["BODY"].map((b) => {
           let color = "";
@@ -76,36 +53,64 @@ export default function Controls({ style }: { style?: CSSProperties }) {
           );
         })}
       </div>
+    ),
+    [body, setBody]
+  );
 
-      {tabs.map((t) => (
-        <AssetButton
-          key={t}
-          asset={t}
-          active={activeTab === t}
-          onClick={activeTab === t || !setTab ? undefined : () => setTab(t)}
-        />
-      ))}
-
+  return (
+    <RoundedFrame shadow>
       <div
         style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: 0,
-          width: 6,
-          background: "#00000064",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          position: "relative",
+          height: "100%",
+          boxSizing: "border-box",
+          gap: 20,
+          background: "#00000044",
+          ...style,
         }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 6,
-          right: 0,
-          height: 6,
-          background: "#00000064",
-        }}
-      />
-    </div>
+      >
+        <BannyButtons />
+
+        {tabs.map((t) => (
+          <AssetButton
+            key={t}
+            asset={t}
+            active={activeTab === t}
+            onClick={activeTab === t || !setTab ? undefined : () => setTab(t)}
+          />
+        ))}
+
+        <ButtonPad
+          style={{ height: 40, fontSize: "1.4rem" }}
+          onClick={randomize}
+        >
+          RANDOMIZE
+        </ButtonPad>
+
+        {/* <div
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            width: 6,
+            background: "#00000064",
+          }}
+          />
+          <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 6,
+            right: 0,
+            height: 6,
+            background: "#00000064",
+          }}
+        /> */}
+      </div>
+    </RoundedFrame>
   );
 }

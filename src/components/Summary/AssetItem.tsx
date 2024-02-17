@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useMemo, useRef } from "react";
 import { AssetType } from "../Factory/Controls";
 import { EditorContext } from "@/contexts/editorContext";
 import Fuzz from "../Fuzz";
@@ -28,13 +28,21 @@ export default function AssetItem({ assetType }: { assetType: AssetType }) {
       break;
   }
 
+  const price = useMemo(() => 0.69, []);
+
   return (
-    <div style={{ display: "inline-flex", alignItems: "center" }}>
+    <div
+      style={{ display: "inline-flex", alignItems: "center", color: "white" }}
+    >
       <span ref={ref}>
         {frame && frame !== 1 && width ? (
-          <Fuzz width={width} height={12} pixelSize={4} fill="black" />
+          <Fuzz width={width} height={12} pixelSize={4} fill="white" />
+        ) : asset ? (
+          <span>
+            {price} ETH {asset.split(".")[0]}
+          </span>
         ) : (
-          asset?.split(".")[0] || "--"
+          "--"
         )}
       </span>
     </div>

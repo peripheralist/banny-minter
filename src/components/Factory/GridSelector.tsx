@@ -13,13 +13,29 @@ import { ASSETS } from "@/constants/assets";
 import Image from "next/image";
 import { COLORS } from "@/constants/colors";
 import ButtonPad from "../shared/ButtonPad";
+import RoundedFrame from "../shared/RoundedFrame";
 
-const IMG_SIZE = 150;
-const GRID_COUNT = 3;
-const PAGE_SIZE = 3 ** 2;
-const GRID_WIDTH = IMG_SIZE * GRID_COUNT + (GRID_COUNT + 1);
+const IMG_SIZE = 120;
 
-export default function GridSelector({ style }: { style?: CSSProperties }) {
+export default function GridSelector({
+  style,
+  gridCols,
+  gridRows,
+}: {
+  style?: CSSProperties;
+  gridCols: number;
+  gridRows: number;
+}) {
+  const pageSize = useMemo(() => gridRows * gridCols, [gridRows, gridCols]);
+  // const gridWidth = useMemo(
+  //   () => IMG_SIZE * gridCols + (gridCols + 1) * 7,
+  //   [gridCols]
+  // );
+  const gridHeight = useMemo(
+    () => IMG_SIZE * gridRows + (gridRows + 1) * 10,
+    [gridRows]
+  );
+
   const { body, outfit, background, setBody, setOutfit, setBackground, tab } =
     useContext(EditorContext);
 
@@ -32,16 +48,16 @@ export default function GridSelector({ style }: { style?: CSSProperties }) {
   }, [activeTab]);
 
   const pagesCount = useMemo(
-    () => Math.ceil(ASSETS[activeTab].length / PAGE_SIZE),
-    [activeTab]
+    () => Math.ceil(ASSETS[activeTab].length / pageSize),
+    [activeTab, pageSize]
   );
 
   const assetsForPage = useMemo(() => {
     return ASSETS[activeTab].slice(
-      pageIdx * PAGE_SIZE,
-      (pageIdx + 1) * PAGE_SIZE
+      pageIdx * pageSize,
+      (pageIdx + 1) * pageSize
     );
-  }, [pageIdx, activeTab]);
+  }, [pageIdx, activeTab, pageSize]);
 
   const PageIndicator = useCallback(() => {
     const children: JSX.Element[] = [];
@@ -51,6 +67,7 @@ export default function GridSelector({ style }: { style?: CSSProperties }) {
 
       children.push(
         <div
+          key={i}
           style={{
             width: 12,
             height: 12,
@@ -67,7 +84,7 @@ export default function GridSelector({ style }: { style?: CSSProperties }) {
               position: "absolute",
               top: 2,
               left: 2,
-              background: active ? "white" : COLORS.banana,
+              background: active ? "white" : "black",
               borderRadius: 1,
             }}
           />
@@ -96,14 +113,14 @@ export default function GridSelector({ style }: { style?: CSSProperties }) {
         <ButtonPad
           style={style}
           fillFg={COLORS.banana}
-          onClick={() => setPageIdx((i) => Math.max(i - 1, 0))}
+          onClick={() => setPageIdx((i) => (i === 0 ? pagesCount - 1 : i - 1))}
         >
           {"<"}
         </ButtonPad>
         <ButtonPad
           style={style}
           fillFg={COLORS.banana}
-          onClick={() => setPageIdx((i) => Math.min(i + 1, pagesCount - 1))}
+          onClick={() => setPageIdx((i) => (i === pagesCount - 1 ? 0 : i + 1))}
         >
           {">"}
         </ButtonPad>
@@ -119,14 +136,11 @@ export default function GridSelector({ style }: { style?: CSSProperties }) {
       switch (assetType) {
         case "BACKGROUND":
           fn = setBackground;
-          break;
-        case "BODY":
-          fn = setBody;
-          multiplier = 1.5;
+          multiplier = 1;
           break;
         case "OUTFIT":
           fn = setOutfit;
-          multiplier = 1.2;
+          multiplier = 1.1;
           break;
       }
 
@@ -135,18 +149,15 @@ export default function GridSelector({ style }: { style?: CSSProperties }) {
       return (
         <div
           style={{
-            width: GRID_WIDTH,
+            // width: gridWidth,
             ...style,
           }}
         >
           <div
             style={{
               display: "grid",
-              gap: 2,
-              gridTemplateColumns: "repeat(3, 1fr)",
-              width: "100%",
-              boxSizing: "border-box",
-              overflow: "auto",
+              gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
+              gap: 16,
             }}
           >
             {assetsForPage.map((a) => {
@@ -165,127 +176,125 @@ export default function GridSelector({ style }: { style?: CSSProperties }) {
               }
 
               return (
-                <div
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: active ? "4px solid white" : "none",
-                    boxSizing: "border-box",
-                    background: "white",
-                    width: IMG_SIZE,
-                    height: IMG_SIZE,
-                    overflow: "hidden",
-                  }}
-                  key={a}
-                  onClick={() => fn?.(a)}
-                >
-                  <Image
-                    width={_size}
-                    height={_size}
-                    src={`/assets/banny/${assetType.toLowerCase()}/${a}`}
-                    alt={a}
-                  />
-
-                  {active && (
-                    <CheckBadgeIcon
-                      style={{ position: "absolute", bottom: 0, left: 0 }}
+                <ButtonPad fillFg="white" key={a} onClick={() => fn?.(a)}>
+                  <div
+                    style={{
+                      position: "relative",
+                      width: IMG_SIZE,
+                      height: IMG_SIZE,
+                      background: "white",
+                    }}
+                  >
+                    <Image
+                      style={{ position: "absolute", inset: 0 }}
+                      width={_size}
+                      height={_size}
+                      src={`/assets/banny/${assetType.toLowerCase()}/${a}`}
+                      alt={a}
                     />
-                  )}
-                </div>
+
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        border: "4px solid",
+                        borderColor: active ? COLORS.banana : "white",
+                      }}
+                    />
+
+                    {active && (
+                      <CheckBadgeIcon
+                        style={{
+                          position: "absolute",
+                          bottom: 4,
+                          left: 4,
+                          zIndex: 1,
+                        }}
+                      />
+                    )}
+                  </div>
+                </ButtonPad>
               );
             })}
           </div>
         </div>
       );
     },
-    [setBackground, setBody, setOutfit, background, body, outfit, assetsForPage]
+    [
+      setBackground,
+      setOutfit,
+      background,
+      body,
+      outfit,
+      assetsForPage,
+      // gridWidth,
+      gridCols,
+    ]
   );
 
   return (
-    <div>
-      <div
-        style={{
-          position: "relative",
-          overflow: "hidden",
-          background: "#00000064",
-          border: "4px solid black",
-          ...style,
-        }}
-      >
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 32,
+      }}
+    >
+      <RoundedFrame shadow>
         <div
           style={{
-            maxHeight: "100%",
-            width: GRID_WIDTH,
-            height: GRID_WIDTH,
             position: "relative",
-            zIndex: 1,
+            background: "#00000044",
+            ...style,
           }}
         >
-          {prevTab && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              flex: 1,
+              gap: 20,
+              marginBottom: 32,
+            }}
+          >
+            <PageSelector />
+            <PageIndicator />
+          </div>
+
+          <div
+            style={{
+              // width: gridWidth,
+              height: gridHeight,
+            }}
+          >
+            {/* {prevTab && (
+              <AssetGrid
+                assetType={prevTab}
+                style={{
+                  position: "absolute",
+                  animation:
+                    tabs.indexOf(activeTab) > tabs.indexOf(prevTab)
+                      ? "slide-out-left .2s"
+                      : "slide-out-right .2s",
+                }}
+              />
+            )} */}
             <AssetGrid
-              assetType={prevTab}
-              style={{
-                position: "absolute",
-                animation:
-                  tabs.indexOf(activeTab) > tabs.indexOf(prevTab)
-                    ? "slide-out-left .2s"
-                    : "slide-out-right .2s",
-              }}
+              assetType={activeTab}
+              // style={
+              //   prevTab
+              //     ? {
+              //         animation:
+              //           tabs.indexOf(activeTab) > tabs.indexOf(prevTab)
+              //             ? "slide-in-left .2s"
+              //             : "slide-in-right .2s",
+              //       }
+              //     : undefined
+              // }
             />
-          )}
-          <AssetGrid
-            assetType={activeTab}
-            style={
-              prevTab
-                ? {
-                    animation:
-                      tabs.indexOf(activeTab) > tabs.indexOf(prevTab)
-                        ? "slide-in-left .2s"
-                        : "slide-in-right .2s",
-                  }
-                : undefined
-            }
-          />
+          </div>
         </div>
-
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            left: 0,
-            width: 6,
-            background: "#00000064",
-            zIndex: 1,
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 6,
-            right: 0,
-            height: 6,
-            background: "#00000064",
-            zIndex: 1,
-          }}
-        />
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          gap: 20,
-          paddingTop: 20,
-          paddingBottom: 20,
-          paddingLeft: 6,
-        }}
-      >
-        <PageSelector />
-        <PageIndicator />
-      </div>
+      </RoundedFrame>
     </div>
   );
 }

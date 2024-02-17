@@ -3,7 +3,7 @@ import Image from "next/image";
 import { CSSProperties, useCallback, useContext } from "react";
 import Fuzz from "../Fuzz";
 
-const IMG_SIZE = 480;
+const IMG_SIZE = 440;
 
 export default function NFTImage() {
   const { body, outfit, background, bodyFrame, outfitFrame, backgroundFrame } =
@@ -45,9 +45,10 @@ export default function NFTImage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: 40,
-        background: "#fff",
-        border: "4px solid black",
+        height: "100%",
+        width: "100%",
+        // border: "4px solid black",
+        boxSizing: "border-box",
       }}
     >
       <div
@@ -110,27 +111,6 @@ export default function NFTImage() {
           frame={outfitFrame}
         />
       </div>
-
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: 0,
-          width: 8,
-          background: "#00000064",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 8,
-          right: 0,
-          height: 8,
-          background: "#00000064",
-        }}
-      />
     </div>
   );
 }

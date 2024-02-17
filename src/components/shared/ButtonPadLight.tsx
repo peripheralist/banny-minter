@@ -1,5 +1,6 @@
 import { CSSProperties, PropsWithChildren } from "react";
 import ButtonPad from "./ButtonPad";
+import Fuzz from "../Fuzz";
 
 export default function ButtonPadLight({
   children,
@@ -26,24 +27,23 @@ export default function ButtonPadLight({
       >
         <div
           style={{
-            width: 12,
-            height: 12,
+            width: 20,
+            height: 20,
             background: "black",
             position: "relative",
             borderRadius: 2,
           }}
         >
-          <div
-            style={{
-              position: "absolute",
-              top: 4,
-              left: 4,
-              width: 6,
-              height: 6,
-              borderTopLeftRadius: 1,
-              background: active ? "white" : "black",
-            }}
-          />
+          {active && (
+            <Fuzz
+              style={{ position: "absolute", left: 4, top: 4 }}
+              width={12}
+              height={12}
+              fill="white"
+              interval={500}
+              pixelSize={6}
+            />
+          )}
         </div>
       </div>
     </ButtonPad>
