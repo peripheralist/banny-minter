@@ -7,6 +7,7 @@ import Controls from "./Controls";
 import GridSelector from "./GridSelector";
 import NFTImage from "./NFTImage";
 import PixelShape from "../PixelShape";
+import { COLORS } from "@/constants/colors";
 
 export default function Index() {
   const [mintLoading, setMintLoading] = useState<boolean>();
@@ -57,7 +58,11 @@ export default function Index() {
         >
           <Controls style={{ padding: 32 }} />
 
-          <GridSelector style={{ padding: 32, gap: 32 }} gridRows={4} gridCols={3} />
+          <GridSelector
+            style={{ padding: 32, gap: 32 }}
+            gridRows={4}
+            gridCols={3}
+          />
         </div>
       </div>
 
@@ -192,7 +197,7 @@ export default function Index() {
                 color: "white",
                 fontSize: "3rem",
               }}
-              fillFg="#e221a0"
+              fillFg={COLORS.pink}
               onClick={() => {
                 setMintLoading(true);
 

@@ -1,15 +1,13 @@
-import { useCallback } from "react";
-import ButtonPad from "../shared/ButtonPad";
+import { COLORS } from "@/constants/colors";
+import { useCallback, useEffect, useState } from "react";
+import Fuzz from "../Fuzz";
+import ButtonPadLight from "../shared/ButtonPadLight";
 import BackgroundIcon from "../shared/images/BackgroundIcon";
 import BannyBodyIcon from "../shared/images/BannyBodyIcon";
 import HeadgearIcon from "../shared/images/HeadgearIcon";
 import OutfitIcon from "../shared/images/OutfitIcon";
 import SwordIcon from "../shared/images/SwordIcon";
 import { AssetType } from "./Controls";
-import { COLORS } from "@/constants/colors";
-import { act } from "react-dom/test-utils";
-import Fuzz from "../Fuzz";
-import ButtonPadLight from "../shared/ButtonPadLight";
 
 export default function AssetButton({
   asset,

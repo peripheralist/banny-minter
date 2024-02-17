@@ -1,4 +1,7 @@
-import React, {
+import { ASSETS } from "@/constants/assets";
+import { COLORS } from "@/constants/colors";
+import { EditorContext } from "@/contexts/editorContext";
+import {
   CSSProperties,
   useCallback,
   useContext,
@@ -6,14 +9,10 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import CheckBadgeIcon from "../shared/images/CheckBadgeIcon";
-import { EditorContext } from "@/contexts/editorContext";
-import { AssetType, tabs } from "./Controls";
-import { ASSETS } from "@/constants/assets";
-import Image from "next/image";
-import { COLORS } from "@/constants/colors";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
+import AssetOptionButton from "./AssetOptionButton";
+import { AssetType } from "./Controls";
 
 const IMG_SIZE = 120;
 
@@ -130,16 +129,13 @@ export default function GridSelector({
 
   const AssetGrid = useCallback(
     ({ assetType, style }: { assetType: AssetType; style?: CSSProperties }) => {
-      let fn: ((s: string) => void) | undefined;
       let multiplier = 1;
 
       switch (assetType) {
         case "BACKGROUND":
-          fn = setBackground;
           multiplier = 1;
           break;
         case "OUTFIT":
-          fn = setOutfit;
           multiplier = 1.1;
           break;
       }
@@ -159,72 +155,20 @@ export default function GridSelector({
               gap: 16,
             }}
           >
-            {assetsForPage.map((a) => {
-              let active = false;
-
-              switch (assetType) {
-                case "BACKGROUND":
-                  active = background === a;
-                  break;
-                case "BODY":
-                  active = body === a;
-                  break;
-                case "OUTFIT":
-                  active = outfit === a;
-                  break;
-              }
-
-              return (
-                <ButtonPad fillFg="white" key={a} onClick={() => fn?.(a)}>
-                  <div
-                    style={{
-                      position: "relative",
-                      width: IMG_SIZE,
-                      height: IMG_SIZE,
-                    }}
-                  >
-                    <Image
-                      style={{ position: "absolute", inset: 0 }}
-                      width={_size}
-                      height={_size}
-                      src={`/assets/banny/${assetType.toLowerCase()}/${a}`}
-                      alt={a}
-                    />
-
-                    <div
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        border: "4px solid",
-                        borderColor: active ? COLORS.banana : "white",
-                        borderRadius: 4 // TODO: WHYYYYY
-                      }}
-                    />
-
-                    {active && (
-                      <CheckBadgeIcon
-                        style={{
-                          position: "absolute",
-                          bottom: 4,
-                          left: 4,
-                          zIndex: 1,
-                        }}
-                      />
-                    )}
-                  </div>
-                </ButtonPad>
-              );
-            })}
+            {assetsForPage.map((a) => (
+              <AssetOptionButton
+                key={a}
+                assetType={assetType}
+                asset={a}
+                buttonSize={IMG_SIZE}
+                assetSize={_size}
+              />
+            ))}
           </div>
         </div>
       );
     },
     [
-      setBackground,
-      setOutfit,
-      background,
-      body,
-      outfit,
       assetsForPage,
       // gridWidth,
       gridCols,
