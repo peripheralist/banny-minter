@@ -27,10 +27,10 @@ export default function GridSelector({
   gridRows: number;
 }) {
   const pageSize = useMemo(() => gridRows * gridCols, [gridRows, gridCols]);
-  // const gridWidth = useMemo(
-  //   () => IMG_SIZE * gridCols + (gridCols + 1) * 7,
-  //   [gridCols]
-  // );
+  const gridWidth = useMemo(
+    () => IMG_SIZE * gridCols + (gridCols + 1) * 8,
+    [gridCols]
+  );
   const gridHeight = useMemo(
     () => IMG_SIZE * gridRows + (gridRows + 1) * 10,
     [gridRows]
@@ -149,7 +149,6 @@ export default function GridSelector({
       return (
         <div
           style={{
-            // width: gridWidth,
             ...style,
           }}
         >
@@ -182,7 +181,6 @@ export default function GridSelector({
                       position: "relative",
                       width: IMG_SIZE,
                       height: IMG_SIZE,
-                      background: "white",
                     }}
                   >
                     <Image
@@ -199,6 +197,7 @@ export default function GridSelector({
                         inset: 0,
                         border: "4px solid",
                         borderColor: active ? COLORS.banana : "white",
+                        borderRadius: 4 // TODO: WHYYYYY
                       }}
                     />
 
@@ -233,41 +232,26 @@ export default function GridSelector({
   );
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 32,
-      }}
-    >
-      <RoundedFrame shadow>
+    <RoundedFrame style={{ height: "100%", boxSizing: "border-box" }} shadow>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          position: "relative",
+          background: "#00000044",
+          height: "100%",
+          boxSizing: "border-box",
+          ...style,
+        }}
+      >
         <div
           style={{
-            position: "relative",
-            background: "#00000044",
-            ...style,
+            width: gridWidth,
+            height: gridHeight,
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-end",
-              flex: 1,
-              gap: 20,
-              marginBottom: 32,
-            }}
-          >
-            <PageSelector />
-            <PageIndicator />
-          </div>
-
-          <div
-            style={{
-              // width: gridWidth,
-              height: gridHeight,
-            }}
-          >
-            {/* {prevTab && (
+          {/* {prevTab && (
               <AssetGrid
                 assetType={prevTab}
                 style={{
@@ -279,22 +263,32 @@ export default function GridSelector({
                 }}
               />
             )} */}
-            <AssetGrid
-              assetType={activeTab}
-              // style={
-              //   prevTab
-              //     ? {
-              //         animation:
-              //           tabs.indexOf(activeTab) > tabs.indexOf(prevTab)
-              //             ? "slide-in-left .2s"
-              //             : "slide-in-right .2s",
-              //       }
-              //     : undefined
-              // }
-            />
-          </div>
+          <AssetGrid
+            assetType={activeTab}
+            // style={
+            //   prevTab
+            //     ? {
+            //         animation:
+            //           tabs.indexOf(activeTab) > tabs.indexOf(prevTab)
+            //             ? "slide-in-left .2s"
+            //             : "slide-in-right .2s",
+            //       }
+            //     : undefined
+            // }
+          />
         </div>
-      </RoundedFrame>
-    </div>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            gap: 20,
+          }}
+        >
+          <PageSelector />
+          <PageIndicator />
+        </div>
+      </div>
+    </RoundedFrame>
   );
 }

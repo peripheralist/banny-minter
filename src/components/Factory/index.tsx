@@ -57,7 +57,7 @@ export default function Index() {
         >
           <Controls style={{ padding: 32 }} />
 
-          <GridSelector style={{ padding: 32 }} gridRows={4} gridCols={3} />
+          <GridSelector style={{ padding: 32, gap: 32 }} gridRows={4} gridCols={3} />
         </div>
       </div>
 
