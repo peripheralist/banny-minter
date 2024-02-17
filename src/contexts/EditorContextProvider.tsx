@@ -11,7 +11,7 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
   const [outfit, _setOutfit] = useState<string>();
   const [background, _setBackground] = useState<string>();
   const [tab, _setTab] = useState<[AssetType, AssetType | undefined]>([
-    "BACKGROUND",
+    "OUTFIT",
     undefined,
   ]);
 

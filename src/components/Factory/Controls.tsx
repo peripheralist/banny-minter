@@ -1,18 +1,16 @@
 import { ASSETS } from "@/constants/assets";
 import { EditorContext } from "@/contexts/editorContext";
-import { CSSProperties, useCallback, useContext, useEffect } from "react";
-import Fuzz from "../Fuzz";
-import ButtonPadLight from "../shared/ButtonPadLight";
-import AssetButton from "./AssetButton";
+import { CSSProperties, useCallback, useContext } from "react";
 import ButtonPad from "../shared/ButtonPad";
+import ButtonPadLight from "../shared/ButtonPadLight";
 import RoundedFrame from "../shared/RoundedFrame";
-import { COLORS } from "@/constants/colors";
+import AssetButton from "./AssetButton";
 
 export type AssetType = keyof typeof ASSETS;
 
 export const tabs: AssetType[] = [
-  "BACKGROUND",
   "OUTFIT",
+  "BACKGROUND",
   "HEADGEAR",
   "GRIP_RIGHT",
 ];

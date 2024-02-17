@@ -15,5 +15,5 @@ export const EditorContext = createContext<{
   tab: [AssetType, AssetType | undefined];
   setTab?: (t: AssetType) => void;
 }>({
-  tab: ["BODY", undefined],
+  tab: ["OUTFIT", undefined],
 });
