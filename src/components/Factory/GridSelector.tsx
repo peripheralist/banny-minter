@@ -35,8 +35,7 @@ export default function GridSelector({
     [gridRows]
   );
 
-  const { body, outfit, background, setBody, setOutfit, setBackground, tab } =
-    useContext(EditorContext);
+  const { tab, background, outfit } = useContext(EditorContext);
 
   const [pageIdx, setPageIdx] = useState<number>(0);
 
@@ -57,6 +56,27 @@ export default function GridSelector({
       (pageIdx + 1) * pageSize
     );
   }, [pageIdx, activeTab, pageSize]);
+
+  const pageIdxOfSelected = useMemo(() => {
+    switch (activeTab) {
+      case "BACKGROUND":
+        return background
+          ? Math.floor(
+              ASSETS["BACKGROUND"].indexOf(
+                background as (typeof ASSETS)["BACKGROUND"][number]
+              ) / pageSize
+            )
+          : undefined;
+      case "OUTFIT":
+        return outfit
+          ? Math.floor(
+              ASSETS["OUTFIT"].indexOf(
+                outfit as (typeof ASSETS)["OUTFIT"][number]
+              ) / pageSize
+            )
+          : undefined;
+    }
+  }, [activeTab, background, outfit, pageSize]);
 
   const PageIndicator = useCallback(() => {
     const children: JSX.Element[] = [];
@@ -83,7 +103,11 @@ export default function GridSelector({
               position: "absolute",
               top: 2,
               left: 2,
-              background: active ? "white" : "black",
+              background: active
+                ? "white"
+                : i === pageIdxOfSelected
+                ? COLORS.pink
+                : "black",
               borderRadius: 1,
             }}
           />
@@ -96,7 +120,7 @@ export default function GridSelector({
         {children}
       </div>
     );
-  }, [pagesCount, pageIdx]);
+  }, [pagesCount, pageIdx, pageIdxOfSelected]);
 
   const PageSelector = useCallback(() => {
     const style = { width: 40, height: 40, fontSize: "1.4rem" };

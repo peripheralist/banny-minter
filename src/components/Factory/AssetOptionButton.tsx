@@ -71,7 +71,7 @@ export default function AssetOptionButton({
           }}
         />
 
-        {active && (
+        {/* {active && (
           <CheckBadgeIcon
             style={{
               position: "absolute",
@@ -80,7 +80,7 @@ export default function AssetOptionButton({
               zIndex: 1,
             }}
           />
-        )}
+        )} */}
 
         {frame && frame < 1 && (
           <Fuzz
