@@ -1,5 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { EditorContext } from "@/contexts/editorContext";
+import { MinterContext } from "@/contexts/minterContext";
 import { useAnimation } from "@/hooks/useAnimation";
 import Image from "next/image";
 import { useContext, useEffect, useMemo } from "react";
@@ -20,7 +20,7 @@ export default function AssetOptionButton({
   assetSize: number;
 }) {
   const { outfit, background, setOutfit, setBackground, tab } =
-    useContext(EditorContext);
+    useContext(MinterContext);
 
   const { animate, frame } = useAnimation({ step: 0.125 });
 

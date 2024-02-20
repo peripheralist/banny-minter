@@ -1,6 +1,6 @@
 import { ASSETS } from "@/constants/assets";
 import { COLORS } from "@/constants/colors";
-import { EditorContext } from "@/contexts/editorContext";
+import { MinterContext } from "@/contexts/minterContext";
 import {
   CSSProperties,
   useCallback,
@@ -35,7 +35,7 @@ export default function GridSelector({
     [gridRows]
   );
 
-  const { tab, background, outfit } = useContext(EditorContext);
+  const { tab, background, outfit } = useContext(MinterContext);
 
   const [pageIdx, setPageIdx] = useState<number>(0);
 

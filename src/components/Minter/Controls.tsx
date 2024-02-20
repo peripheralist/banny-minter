@@ -1,5 +1,5 @@
 import { ASSETS } from "@/constants/assets";
-import { EditorContext } from "@/contexts/editorContext";
+import { MinterContext } from "@/contexts/minterContext";
 import { CSSProperties, useCallback, useContext } from "react";
 import ButtonPad from "../shared/ButtonPad";
 import ButtonPadLight from "../shared/ButtonPadLight";
@@ -16,7 +16,7 @@ export const tabs: AssetType[] = [
 ];
 
 export default function Controls({ style }: { style?: CSSProperties }) {
-  const { body, setBody, randomize, tab, setTab } = useContext(EditorContext);
+  const { body, setBody, randomize, tab, setTab } = useContext(MinterContext);
 
   const [activeTab] = tab;
 

@@ -1,12 +1,12 @@
 import { ASSETS } from "@/constants/assets";
 import { useAnimation } from "@/hooks/useAnimation";
 import { PropsWithChildren, useCallback, useState } from "react";
-import { EditorContext } from "./editorContext";
-import { AssetType } from "@/components/Factory/Controls";
+import { MinterContext } from "./minterContext";
+import { AssetType } from "@/components/Minter/Controls";
 
 const { BODY, OUTFIT, BACKGROUND } = ASSETS;
 
-export default function EditorContextProvider({ children }: PropsWithChildren) {
+export default function MinterContextProvider({ children }: PropsWithChildren) {
   const [body, _setBody] = useState<string>(ASSETS["BODY"][0]);
   const [outfit, _setOutfit] = useState<string>();
   const [background, _setBackground] = useState<string>();
@@ -82,7 +82,7 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <EditorContext.Provider
+    <MinterContext.Provider
       value={{
         body,
         setBody,
@@ -99,6 +99,6 @@ export default function EditorContextProvider({ children }: PropsWithChildren) {
       }}
     >
       {children}
-    </EditorContext.Provider>
+    </MinterContext.Provider>
   );
 }

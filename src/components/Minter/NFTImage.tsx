@@ -1,4 +1,4 @@
-import { EditorContext } from "@/contexts/editorContext";
+import { MinterContext } from "@/contexts/minterContext";
 import Image from "next/image";
 import { CSSProperties, useCallback, useContext } from "react";
 import Fuzz from "../Fuzz";
@@ -7,7 +7,7 @@ const IMG_SIZE = 440;
 
 export default function NFTImage() {
   const { body, outfit, background, bodyFrame, outfitFrame, backgroundFrame } =
-    useContext(EditorContext);
+    useContext(MinterContext);
 
   const _Fuzz = useCallback(
     ({ frame, style }: { frame: number | undefined; style?: CSSProperties }) =>

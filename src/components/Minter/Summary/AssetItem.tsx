@@ -1,11 +1,11 @@
 import React, { useContext, useMemo, useRef } from "react";
-import { AssetType } from "../Factory/Controls";
-import { EditorContext } from "@/contexts/editorContext";
-import Fuzz from "../Fuzz";
+import { AssetType } from "../Controls";
+import { MinterContext } from "@/contexts/minterContext";
+import Fuzz from "../../Fuzz";
 
 export default function AssetItem({ assetType }: { assetType: AssetType }) {
   const { body, bodyFrame, background, backgroundFrame, outfit, outfitFrame } =
-    useContext(EditorContext);
+    useContext(MinterContext);
 
   const ref = useRef<HTMLSpanElement>(null);
 

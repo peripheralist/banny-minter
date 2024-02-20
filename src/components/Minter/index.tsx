@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Fuzz from "../Fuzz";
-import Summary from "../Summary";
+import Summary from "./Summary";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import Controls from "./Controls";
@@ -43,10 +43,7 @@ export default function Index() {
               letterSpacing: 6,
             }}
           >
-            1-800-BANNY4U{" "}
-            <span style={{ fontWeight: "lighter", opacity: 0.5 }}>
-              A JUICEBOX PRODUCTION
-            </span>
+            MINT A BANNY
           </h1>
         </div>
 

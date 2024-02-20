@@ -1,7 +1,7 @@
-import { AssetType } from "@/components/Factory/Controls";
+import { AssetType } from "@/components/Minter/Controls";
 import { createContext } from "react";
 
-export const EditorContext = createContext<{
+export const MinterContext = createContext<{
   body?: string;
   setBody?: (s: string) => void;
   bodyFrame?: number;

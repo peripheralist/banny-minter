@@ -1,6 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { useCallback, useEffect, useState } from "react";
-import Fuzz from "../Fuzz";
+import { useCallback } from "react";
 import ButtonPadLight from "../shared/ButtonPadLight";
 import BackgroundIcon from "../shared/images/BackgroundIcon";
 import BannyBodyIcon from "../shared/images/BannyBodyIcon";
