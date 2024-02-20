@@ -41,6 +41,7 @@ export default function ButtonPad({
         userSelect: "none",
         ...style,
       }}
+      role="button"
       onClick={_onClick}
     >
       <div

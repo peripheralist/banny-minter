@@ -1,3 +1,4 @@
+import ButtonPad from "@/components/shared/ButtonPad";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -15,7 +16,19 @@ export default function Home() {
         <div style={{ padding: 40 }}>
           <h1>...is unfolding</h1>
           <p>You are in the right place</p>
-          <Link href={"/mint"}>Mint</Link>
+          <div>
+            <Link href={"/mint"}>
+              <ButtonPad
+                style={{
+                  width: 120,
+                  height: 80,
+                  fontSize: "2rem",
+                }}
+              >
+                MINT
+              </ButtonPad>
+            </Link>
+          </div>
         </div>
       </main>
     </>

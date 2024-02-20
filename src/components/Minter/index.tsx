@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Fuzz from "../Fuzz";
 import Summary from "./Summary";
 import ButtonPad from "../shared/ButtonPad";
@@ -12,13 +12,33 @@ import { TOOLBAR_HEIGHT } from "../Toolbar";
 
 export default function Index() {
   const [mintLoading, setMintLoading] = useState<boolean>();
+  const [containerHeight, setContainerHeight] = useState<number>(0);
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fn = () => {
+      if (!ref.current) return;
+      setContainerHeight(ref.current.offsetHeight);
+    };
+
+    fn();
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
+
+  const gridRows = useMemo(() => {
+    if (containerHeight > 800) return 5;
+    if (containerHeight > 720) return 4;
+    return 3;
+  }, [containerHeight]);
 
   return (
     <div
+      ref={ref}
       style={{
         width: "100vw",
         height: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
-        maxHeight: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
         marginTop: TOOLBAR_HEIGHT,
         overflow: "hidden",
         minHeight: 600,
@@ -55,7 +75,7 @@ export default function Index() {
             padding: 0,
             display: "flex",
             alignItems: "flex-end",
-            gap: 32,
+            gap: 24,
             boxSizing: "border-box",
             height: "100%",
           }}
@@ -64,7 +84,7 @@ export default function Index() {
 
           <GridSelector
             style={{ padding: 32, gap: 32 }}
-            gridRows={3}
+            gridRows={gridRows}
             gridCols={3}
           />
         </div>
@@ -77,8 +97,8 @@ export default function Index() {
           justifyContent: "flex-end",
           flex: 1,
           height: "100%",
-          marginLeft: 32,
-          gap: 32,
+          marginLeft: 24,
+          gap: 24,
         }}
       >
         <RoundedFrame shadow style={{ width: "100%", height: "100%" }}>
@@ -86,14 +106,15 @@ export default function Index() {
             style={{
               position: "relative",
               height: "100%",
-              background: "#eef",
+              background: "white",
+              // background: "#eef",
             }}
           >
             <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
               <NFTImage />
             </div>
 
-            <PixelShape
+            {/* <PixelShape
               style={{ position: "absolute", bottom: 0, left: 20 }}
               width={64}
               height={32}
@@ -131,7 +152,7 @@ export default function Index() {
                 left: 84,
                 background: "white",
               }}
-            />
+            /> */}
             {/* <div
               style={{
                 position: "absolute",
