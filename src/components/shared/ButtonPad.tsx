@@ -8,23 +8,27 @@ export default function ButtonPad({
   fillFg,
   onClick,
   style,
+  disabled,
 }: PropsWithChildren<{
   fillBg?: CSSProperties["fill"];
   fillFg?: CSSProperties["fill"];
   radius?: number;
   onClick?: VoidFunction;
   style?: CSSProperties;
+  disabled?: boolean;
 }>) {
   const [clicked, setClicked] = useState<boolean>();
 
   const _onClick = useCallback(() => {
+    if (disabled) return;
+
     setClicked(true);
     onClick?.();
 
     setTimeout(() => {
       setClicked(false);
     }, 100);
-  }, [onClick]);
+  }, [onClick, disabled]);
 
   const depth = 6;
   const edge = 6;
@@ -43,9 +47,10 @@ export default function ButtonPad({
         style={{
           width: "100%",
           height: "100%",
-          transform: clicked
-            ? "translate(0px, 0px)"
-            : `translate(-${depth / 2}px, -${depth / 2}px)`,
+          transform:
+            clicked || disabled
+              ? "translate(0px, 0px)"
+              : `translate(-${depth / 2}px, -${depth / 2}px)`,
           transition: "transform 40ms",
         }}
       >

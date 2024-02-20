@@ -8,6 +8,7 @@ import GridSelector from "./GridSelector";
 import NFTImage from "./NFTImage";
 import PixelShape from "../PixelShape";
 import { COLORS } from "@/constants/colors";
+import { TOOLBAR_HEIGHT } from "../Toolbar";
 
 export default function Index() {
   const [mintLoading, setMintLoading] = useState<boolean>();
@@ -16,9 +17,11 @@ export default function Index() {
     <div
       style={{
         width: "100vw",
-        height: "100vh",
+        height: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
+        maxHeight: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
+        marginTop: TOOLBAR_HEIGHT,
         overflow: "hidden",
-        minHeight: 810,
+        minHeight: 600,
         boxSizing: "border-box",
         display: "flex",
         justifyContent: "space-between",
@@ -35,7 +38,7 @@ export default function Index() {
           height: "100%",
         }}
       >
-        <div style={{ textTransform: "uppercase" }}>
+        {/* <div style={{ textTransform: "uppercase" }}>
           <h1
             style={{
               margin: 0,
@@ -45,7 +48,7 @@ export default function Index() {
           >
             MINT A BANNY
           </h1>
-        </div>
+        </div> */}
 
         <div
           style={{
@@ -54,13 +57,14 @@ export default function Index() {
             alignItems: "flex-end",
             gap: 32,
             boxSizing: "border-box",
+            height: "100%",
           }}
         >
-          <Controls style={{ padding: 32 }} />
+          <Controls style={{ padding: 32, height: "100%" }} />
 
           <GridSelector
             style={{ padding: 32, gap: 32 }}
-            gridRows={4}
+            gridRows={3}
             gridCols={3}
           />
         </div>

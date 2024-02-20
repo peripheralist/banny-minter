@@ -56,7 +56,7 @@ export default function Controls({ style }: { style?: CSSProperties }) {
   );
 
   return (
-    <RoundedFrame shadow>
+    <RoundedFrame shadow style={{ height: "100%" }}>
       <div
         style={{
           display: "flex",

@@ -34,7 +34,7 @@ export default function AssetButton({
 
   return (
     <ButtonPadLight
-      style={{ width: 100, height: 100 }}
+      style={{ width: 100, height: "100%" }}
       fillFg={COLORS.banana}
       onClick={onClick}
       active={active}

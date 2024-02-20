@@ -36,6 +36,14 @@ body {
   /* background: #D98F02; */
 }
 
+a, a:visited {
+  color: #e221a0
+}
+
+a:hover {
+  opacity: .7;
+}
+
 button {
   display: block;
   appearance: none;
