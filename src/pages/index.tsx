@@ -16,19 +16,17 @@ export default function Home() {
         <div style={{ padding: 40 }}>
           <h1>...is unfolding</h1>
           <p>You are in the right place</p>
-          <div>
-            <Link href={"/mint"}>
-              <ButtonPad
-                style={{
-                  width: 120,
-                  height: 80,
-                  fontSize: "2rem",
-                }}
-              >
-                MINT
-              </ButtonPad>
-            </Link>
-          </div>
+          <Link style={{ display: "inline-block" }} href={"/mint"}>
+            <ButtonPad
+              style={{
+                width: 120,
+                height: 80,
+                fontSize: "2rem",
+              }}
+            >
+              MINT
+            </ButtonPad>
+          </Link>
         </div>
       </main>
     </>
