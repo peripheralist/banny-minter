@@ -1,5 +1,5 @@
 import { CSSProperties, PropsWithChildren } from "react";
-import PixelArc from "../PixelArc";
+import PixelArc from "../pixelRenderers/PixelArc";
 
 export default function RoundedFrame({
   children,

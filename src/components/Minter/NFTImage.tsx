@@ -1,7 +1,7 @@
 import { MinterContext } from "@/contexts/minterContext";
 import Image from "next/image";
 import { CSSProperties, useCallback, useContext } from "react";
-import Fuzz from "../Fuzz";
+import Fuzz from "../pixelRenderers/Fuzz";
 
 const IMG_SIZE = 440;
 

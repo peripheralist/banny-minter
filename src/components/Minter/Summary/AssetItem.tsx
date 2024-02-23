@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useRef } from "react";
 import { AssetType } from "../Controls";
 import { MinterContext } from "@/contexts/minterContext";
-import Fuzz from "../../Fuzz";
+import Fuzz from "../../pixelRenderers/Fuzz";
 
 export default function AssetItem({ assetType }: { assetType: AssetType }) {
   const { body, bodyFrame, background, backgroundFrame, outfit, outfitFrame } =

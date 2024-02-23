@@ -3,7 +3,7 @@ import { MinterContext } from "@/contexts/minterContext";
 import { useAnimation } from "@/hooks/useAnimation";
 import Image from "next/image";
 import { useContext, useEffect, useMemo } from "react";
-import Fuzz from "../Fuzz";
+import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
 import CheckBadgeIcon from "../shared/images/CheckBadgeIcon";
 import { AssetType } from "./Controls";

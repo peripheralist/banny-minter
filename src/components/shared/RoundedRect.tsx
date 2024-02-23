@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import PixelShape from "../PixelShape";
+import PixelShape from "../pixelRenderers/PixelShape";
 
 export default function RoundedRect({
   radius,

@@ -1,6 +1,6 @@
 import { CSSProperties, PropsWithChildren } from "react";
 import ButtonPad from "./ButtonPad";
-import Fuzz from "../Fuzz";
+import Fuzz from "../pixelRenderers/Fuzz";
 
 export default function ButtonPadLight({
   children,

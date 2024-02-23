@@ -1,7 +1,7 @@
 import { COLORS } from "@/constants/colors";
 import { useState } from "react";
 import { useAccount, useDisconnect, useEnsName } from "wagmi";
-import { WalletOptions } from "../WalletOptions";
+import { WalletOptions } from "./WalletOptions";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import Link from "next/link";

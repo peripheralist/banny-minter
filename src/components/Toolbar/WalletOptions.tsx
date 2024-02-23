@@ -1,5 +1,5 @@
 import { useConnect } from "wagmi";
-import ButtonPad from "./shared/ButtonPad";
+import ButtonPad from "../shared/ButtonPad";
 import Image from "next/image";
 
 export function WalletOptions() {
