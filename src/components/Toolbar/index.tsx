@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
+import MusicPlayer from "../MusicPlayer";
 import Wallet from "./Wallet";
 
 export const TOOLBAR_HEIGHT = 48;
@@ -25,10 +26,13 @@ export default function Index() {
         justifyContent: "space-between",
         alignItems: "baseline",
         padding: 10,
+        gap: 20,
         height: TOOLBAR_HEIGHT,
       }}
     >
-      <div style={{ display: "flex", alignItems: "baseline", gap: 20 }}>
+      <div
+        style={{ display: "flex", flex: 1, alignItems: "baseline", gap: 20 }}
+      >
         <Link href={"/"}>
           <h1
             style={{
@@ -54,6 +58,8 @@ export default function Index() {
           </span>
         )}
       </div>
+
+      {/* <MusicPlayer /> */}
       <Wallet />
     </div>
   );
