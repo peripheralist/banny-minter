@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useContext, useEffect, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
-import CheckBadgeIcon from "../shared/images/CheckBadgeIcon";
 import { AssetType } from "./Controls";
 
 export default function AssetOptionButton({

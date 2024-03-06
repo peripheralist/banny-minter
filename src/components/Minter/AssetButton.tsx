@@ -1,11 +1,7 @@
 import { COLORS } from "@/constants/colors";
 import { useCallback } from "react";
 import ButtonPadLight from "../shared/ButtonPadLight";
-import BackgroundIcon from "../shared/images/BackgroundIcon";
-import BannyBodyIcon from "../shared/images/BannyBodyIcon";
-import HeadgearIcon from "../shared/images/HeadgearIcon";
-import OutfitIcon from "../shared/images/OutfitIcon";
-import SwordIcon from "../shared/images/SwordIcon";
+import IconImage from "../shared/images/IconImage";
 import { AssetType } from "./Controls";
 
 export default function AssetButton({
@@ -18,18 +14,23 @@ export default function AssetButton({
   onClick?: VoidFunction;
 }) {
   const Icon = useCallback(() => {
+    let name = "";
     switch (asset) {
       case "BACKGROUND":
-        return <BackgroundIcon active />;
-      case "BODY":
-        return <BannyBodyIcon active />;
+        name = "background";
+        break;
       case "HEADGEAR":
-        return <HeadgearIcon active />;
+        name = "hat";
+        break;
       case "OUTFIT":
-        return <OutfitIcon active />;
+        name = "shirt";
+        break;
       case "GRIP_RIGHT":
-        return <SwordIcon active />;
+        name = "sword";
+        break;
     }
+
+    return <IconImage name={name} />;
   }, [asset]);
 
   return (
