@@ -22,15 +22,21 @@ export default function Controls({ style }: { style?: CSSProperties }) {
 
   const BannyButtons = useCallback(
     () => (
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 8,
+        }}
+      >
         {ASSETS["BODY"].map((b) => {
           let color = "";
           switch (b) {
-            case "alien.png":
-              color = "#1dbc00";
-              break;
             case "_banny.png":
               color = "#ffc407";
+              break;
+            case "alien.png":
+              color = "#1dbc00";
               break;
             case "orange.png":
               color = "#ea5608";
@@ -56,39 +62,35 @@ export default function Controls({ style }: { style?: CSSProperties }) {
   );
 
   return (
-    <RoundedFrame shadow style={{ height: "100%" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          position: "relative",
-          height: "100%",
-          boxSizing: "border-box",
-          gap: 20,
-          background: "#00000044",
-          ...style,
-        }}
-      >
-        <BannyButtons />
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyItems: "flex-start",
+        position: "relative",
+        height: "100%",
+        boxSizing: "border-box",
+        gap: 10,
+        // background: "#00000044",
+        ...style,
+      }}
+    >
+      <BannyButtons />
 
-        {tabs.map((t) => (
-          <AssetButton
-            key={t}
-            asset={t}
-            active={activeTab === t}
-            onClick={activeTab === t || !setTab ? undefined : () => setTab(t)}
-          />
-        ))}
+      {tabs.map((t) => (
+        <AssetButton
+          key={t}
+          asset={t}
+          active={activeTab === t}
+          onClick={activeTab === t || !setTab ? undefined : () => setTab(t)}
+        />
+      ))}
 
-        <ButtonPad
-          style={{ height: 40, fontSize: "1.4rem" }}
-          onClick={randomize}
-        >
-          RANDOMIZE
-        </ButtonPad>
+      <ButtonPad style={{ height: 40, fontSize: "1.4rem" }} onClick={randomize}>
+        RANDOMIZE
+      </ButtonPad>
 
-        {/* <div
+      {/* <div
           style={{
             position: "absolute",
             top: 0,
@@ -108,7 +110,6 @@ export default function Controls({ style }: { style?: CSSProperties }) {
             background: "#00000064",
           }}
         /> */}
-      </div>
-    </RoundedFrame>
+    </div>
   );
 }

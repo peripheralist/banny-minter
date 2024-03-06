@@ -39,6 +39,7 @@ export default function ButtonPad({
       style={{
         position: "relative",
         userSelect: "none",
+        margin: edge,
         ...style,
       }}
       role="button"

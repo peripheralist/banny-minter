@@ -27,7 +27,7 @@ export default function GridSelector({
 }) {
   const pageSize = useMemo(() => gridRows * gridCols, [gridRows, gridCols]);
   const gridWidth = useMemo(
-    () => IMG_SIZE * gridCols + (gridCols + 1) * 8,
+    () => IMG_SIZE * gridCols + (gridCols + 1) * 10,
     [gridCols]
   );
   const gridHeight = useMemo(
@@ -130,7 +130,7 @@ export default function GridSelector({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 20,
+          gap: 10,
         }}
       >
         <ButtonPad
@@ -169,26 +169,21 @@ export default function GridSelector({
       return (
         <div
           style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
+            gap: 6,
             ...style,
           }}
         >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-              gap: 16,
-            }}
-          >
-            {assetsForPage.map((a) => (
-              <AssetOptionButton
-                key={a}
-                assetType={assetType}
-                asset={a}
-                buttonSize={IMG_SIZE}
-                assetSize={_size}
-              />
-            ))}
-          </div>
+          {assetsForPage.map((a) => (
+            <AssetOptionButton
+              key={a}
+              assetType={assetType}
+              asset={a}
+              buttonSize={IMG_SIZE}
+              assetSize={_size}
+            />
+          ))}
         </div>
       );
     },
@@ -250,7 +245,7 @@ export default function GridSelector({
           style={{
             display: "flex",
             alignItems: "flex-end",
-            gap: 20,
+            gap: 10,
           }}
         >
           <PageSelector />

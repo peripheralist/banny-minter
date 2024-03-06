@@ -25,7 +25,7 @@ export default function Index() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "baseline",
-        padding: 10,
+        padding: "10px 20px",
         gap: 20,
         height: TOOLBAR_HEIGHT,
       }}

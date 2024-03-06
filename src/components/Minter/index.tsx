@@ -80,10 +80,10 @@ export default function Index() {
             height: "100%",
           }}
         >
-          <Controls style={{ padding: 32, height: "100%" }} />
+          <Controls style={{ height: "100%" }} />
 
           <GridSelector
-            style={{ padding: 32, gap: 32 }}
+            style={{ padding: 24 }}
             gridRows={gridRows}
             gridCols={3}
           />
@@ -211,8 +211,6 @@ export default function Index() {
               justifyContent: "center",
               alignItems: "center",
               gap: 20,
-              paddingRight: 6,
-              paddingTop: 6,
             }}
           >
             <ButtonPad
