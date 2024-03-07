@@ -17,11 +17,10 @@
     "graphql": "^16.8.1",
     "juice-sdk-core": "^2.0.15-alpha",
     "juice-sdk-react": "^0.0.19-alpha",
-    "juicebox-metadata-helper": "^0.1.7",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18",
-    "viem": "2.x",
+    "viem": "^1.21.4",
     "wagmi": "^1.x"
   },
   "devDependencies": {
@@ -36,6 +35,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "fs": "^0.0.1-security",
+    "graphql-tag": "^2.12.6",
     "ts-node": "^10.9.2",
     "tsx": "^4.7.0",
     "typescript": "^5"

@@ -1,5 +1,5 @@
 import { BANNYVERSE_PROJECT_ID } from "@/constants/projectId";
-import { NATIVE_TOKEN } from "juice-sdk-core";
+import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
 import {
   useJBContractContext,
   useJbMultiTerminalPay,
@@ -16,9 +16,8 @@ export function useMint({
   tierIds: bigint[];
 }) {
   const { address } = useAccount();
-  const {
-    contracts: { primaryNativeTerminal },
-  } = useJBContractContext();
+  const { contracts } = useJBContractContext();
+  console.log("contracts", contracts);
 
   const metadata = usePreparePayMetadata({
     jb721Delegate: {
@@ -29,19 +28,20 @@ export function useMint({
   const memo = useMemo(() => `Minted tiers ${tierIds.join(", ")}`, [tierIds]);
 
   const { write, isLoading, data } = useJbMultiTerminalPay({
-    address: primaryNativeTerminal?.data,
-    args: address
-      ? [
-          BANNYVERSE_PROJECT_ID,
-          NATIVE_TOKEN,
-          amount,
-          address, // mint to connected wallet
-          BigInt(0),
-          memo,
-          metadata,
-        ]
-      : undefined,
-    value: amount,
+    address: contracts.primaryNativeTerminal?.data ?? undefined,
+    args:
+      address && amount
+        ? [
+            BigInt(BANNYVERSE_PROJECT_ID),
+            NATIVE_TOKEN,
+            amount,
+            address, // mint to connected wallet
+            BigInt(0),
+            memo,
+            metadata ?? DEFAULT_METADATA,
+          ]
+        : undefined,
+    value: amount ?? undefined,
   });
 
   const tx = useWaitForTransaction({
