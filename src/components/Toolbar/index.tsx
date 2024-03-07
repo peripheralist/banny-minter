@@ -46,6 +46,7 @@ export default function Index() {
               display: "block",
               appearance: "none",
               color: "black",
+              lineHeight: 1.25,
             }}
           >
             Bannyverse
