@@ -13,13 +13,13 @@ const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <JBProjectProvider projectId={BigInt(BANNYVERSE_PROJECT_ID)}>
-      <WagmiProvider config={config}>
+    <WagmiProvider config={config}>
+      <JBProjectProvider projectId={BigInt(BANNYVERSE_PROJECT_ID)}>
         <QueryClientProvider client={queryClient}>
           <Toolbar />
           <Component {...pageProps} />
         </QueryClientProvider>
-      </WagmiProvider>
-    </JBProjectProvider>
+      </JBProjectProvider>
+    </WagmiProvider>
   );
 }
