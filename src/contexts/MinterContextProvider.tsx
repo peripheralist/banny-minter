@@ -51,7 +51,7 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   );
 
   const setOutfit = useCallback(
-    (s: string) => {
+    (s: string | undefined) => {
       _setOutfit(s);
       animateOutfit(true).then(() => setOutfitFrame(0));
     },
@@ -59,7 +59,7 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   );
 
   const setBackground = useCallback(
-    (s: string) => {
+    (s: string | undefined) => {
       _setBackground(s);
       animateBackground(true).then(() => setBackgroundFrame(0));
     },

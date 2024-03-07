@@ -1,10 +1,11 @@
 import { COLORS } from "@/constants/colors";
+import Link from "next/link";
 import { useState } from "react";
 import { useAccount, useDisconnect, useEnsName } from "wagmi";
-import { WalletOptions } from "./WalletOptions";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
-import Link from "next/link";
+import { WalletOptions } from "./WalletOptions";
+import FuzzMoment from "../pixelRenderers/FuzzMoment";
 
 export default function Wallet() {
   const [showWalletOptions, setShowWalletOptions] = useState<boolean>();
@@ -22,13 +23,22 @@ export default function Wallet() {
               alignItems: "center",
               gap: 16,
               fontSize: "1.4rem",
-              padding: 12,
+              paddingLeft: 16,
+              paddingRight: 0,
               background: COLORS.pink,
             }}
           >
-            <Link href={`/wallet/${address}`} style={{ color: "white" }}>
-              {ensName ?? <span>0x...{address.substring(38)}</span>}
-            </Link>
+            <FuzzMoment
+              fill="white"
+              width={80}
+              height={16}
+              pixelSize={4}
+              onFinished={
+                <Link href={`/wallet/${address}`} style={{ color: "white" }}>
+                  {ensName ?? <span>0x...{address.substring(38)}</span>}
+                </Link>
+              }
+            />
             <ButtonPad
               style={{ width: 24, height: 24, zIndex: 1 }}
               onClick={() => disconnect()}

@@ -5,6 +5,7 @@ import { useTierPrice } from "@/hooks/useTierPrice";
 import { useContext, useRef } from "react";
 import Fuzz from "../../pixelRenderers/Fuzz";
 import { AssetType } from "../Controls";
+import { formatEther } from "juice-sdk-core";
 
 export default function AssetItem({ assetType }: { assetType: AssetType }) {
   const { body, bodyFrame, background, backgroundFrame, outfit, outfitFrame } =
@@ -46,7 +47,8 @@ export default function AssetItem({ assetType }: { assetType: AssetType }) {
           <Fuzz width={width} height={12} pixelSize={4} fill="white" />
         ) : assetName ? (
           <span>
-            {price.data} ETH {assetName.split(".")[0]}
+            {price.data ? formatEther(price.data) : "--"} ETH{" "}
+            {assetName.split(".")[0]}
           </span>
         ) : (
           "--"

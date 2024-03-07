@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useMemo } from "react";
 import MusicPlayer from "../MusicPlayer";
 import Wallet from "./Wallet";
+import Blinker from "../shared/Blinker";
 
 export const TOOLBAR_HEIGHT = 48;
 
@@ -24,14 +25,19 @@ export default function Index() {
         right: 0,
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "baseline",
+        alignItems: "center",
         padding: "10px 20px",
         gap: 20,
         height: TOOLBAR_HEIGHT,
       }}
     >
       <div
-        style={{ display: "flex", flex: 1, alignItems: "baseline", gap: 20 }}
+        style={{
+          display: "flex",
+          alignItems: "baseline",
+          gap: 20,
+          height: TOOLBAR_HEIGHT,
+        }}
       >
         <Link href={"/"}>
           <h1
@@ -57,6 +63,11 @@ export default function Index() {
             {pathText}
           </span>
         )}
+      </div>
+
+      <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <Blinker />
+        Work in progress
       </div>
 
       {/* <MusicPlayer /> */}

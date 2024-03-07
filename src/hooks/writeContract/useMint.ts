@@ -1,19 +1,18 @@
-import { usePreparePayMetadata } from "@/constants/delegate";
 import { BANNYVERSE_PROJECT_ID } from "@/constants/projectId";
 import { NATIVE_TOKEN } from "juice-sdk-core";
 import {
   useJBContractContext,
-  useJBRulesetMetadata,
   useJbMultiTerminalPay,
+  usePreparePayMetadata,
 } from "juice-sdk-react";
 import { useMemo } from "react";
-import { useAccount, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useWaitForTransaction } from "wagmi";
 
 export function useMint({
   amount,
   tierIds,
 }: {
-  amount: bigint;
+  amount: bigint | null | undefined;
   tierIds: bigint[];
 }) {
   const { address } = useAccount();
@@ -21,11 +20,10 @@ export function useMint({
     contracts: { primaryNativeTerminal },
   } = useJBContractContext();
 
-  const rulesetMetadata = useJBRulesetMetadata();
-
   const metadata = usePreparePayMetadata({
-    tierIdsToMint: tierIds,
-    address: rulesetMetadata.data?.dataHook,
+    jb721Delegate: {
+      tierIdsToMint: tierIds,
+    },
   });
 
   const memo = useMemo(() => `Minted tiers ${tierIds.join(", ")}`, [tierIds]);
@@ -46,7 +44,7 @@ export function useMint({
     value: amount,
   });
 
-  const tx = useWaitForTransactionReceipt({
+  const tx = useWaitForTransaction({
     hash: data?.hash,
   });
 

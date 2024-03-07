@@ -6,10 +6,10 @@ export const MinterContext = createContext<{
   setBody?: (tierId: number) => void;
   bodyFrame?: number;
   outfit?: string;
-  setOutfit?: (s: string) => void;
+  setOutfit?: (s: string | undefined) => void;
   outfitFrame?: number;
   background?: string;
-  setBackground?: (s: string) => void;
+  setBackground?: (s: string | undefined) => void;
   backgroundFrame?: number;
   randomize?: VoidFunction;
   tab: [AssetType, AssetType | undefined];

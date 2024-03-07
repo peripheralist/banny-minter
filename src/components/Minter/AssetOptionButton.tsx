@@ -43,7 +43,7 @@ export default function AssetOptionButton({
   }, [asset, assetType, setOutfit, setBackground, background, outfit]);
 
   return (
-    <ButtonPad fillFg="white" onClick={onClick}>
+    <ButtonPad fillFg="white" onClick={onClick} pressed={active}>
       <div
         style={{
           position: "relative",

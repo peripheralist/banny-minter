@@ -1,7 +1,11 @@
 import { COLORS } from "@/constants/colors";
 import { MinterContext } from "@/contexts/minterContext";
+import { useBodies } from "@/hooks/queries/useBodies";
 import { useTierPrice } from "@/hooks/useTierPrice";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useMint } from "@/hooks/writeContract/useMint";
+import { formatEther } from "juice-sdk-core";
+import { useCallback, useContext, useMemo, useState } from "react";
+import { useAccount } from "wagmi";
 import { TOOLBAR_HEIGHT } from "../Toolbar";
 import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
@@ -12,35 +16,57 @@ import NFTImage from "./NFTImage";
 import Summary from "./Summary";
 
 export default function Index() {
+  const { address } = useAccount();
   const { body } = useContext(MinterContext);
-  const [mintLoading, setMintLoading] = useState<boolean>();
   const [containerHeight, setContainerHeight] = useState<number>(0);
 
+  const bodies = useBodies();
   const bodyPrice = useTierPrice({ assetType: "BODY", tierId: body });
   const totalPrice = bodyPrice.data;
+  const { mint, isLoading: mintLoading } = useMint({
+    amount: totalPrice,
+    tierIds: [...(body ? [BigInt(body)] : [])],
+  });
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
+  const measuredRef = useCallback((node: HTMLDivElement) => {
     const fn = () => {
-      if (!ref.current) return;
-      setContainerHeight(ref.current.offsetHeight);
+      setContainerHeight(node.getBoundingClientRect().height);
     };
 
-    fn();
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
+    if (node !== null) {
+      window.removeEventListener("resize", fn);
+      window.addEventListener("resize", fn);
+      setContainerHeight(node.getBoundingClientRect().height);
+    }
   }, []);
 
-  const gridRows = useMemo(() => {
-    if (containerHeight > 800) return 5;
-    if (containerHeight > 720) return 4;
-    return 3;
-  }, [containerHeight]);
+  const gridRows = useMemo(
+    () => 3 + Math.max(Math.floor((containerHeight - 600) / 128), 0),
+    [containerHeight]
+  );
+
+  if (bodies.loading) {
+    return (
+      <div
+        style={{
+          width: "100vw",
+          height: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 20,
+        }}
+      >
+        <Fuzz width={200} height={200} fill="black" pixelSize={10} />
+        <h1>Loading</h1>
+      </div>
+    );
+  }
 
   return (
     <div
-      ref={ref}
+      ref={measuredRef}
       style={{
         width: "100vw",
         height: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
@@ -59,22 +85,9 @@ export default function Index() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          // justifyContent: "flex-end",
           height: "100%",
         }}
       >
-        {/* <div style={{ textTransform: "uppercase" }}>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "1.6rem",
-              letterSpacing: 6,
-            }}
-          >
-            MINT A BANNY
-          </h1>
-        </div> */}
-
         <div
           style={{
             padding: 0,
@@ -218,42 +231,70 @@ export default function Index() {
               gap: 20,
             }}
           >
-            <ButtonPad
-              style={{
-                width: 150,
-                height: 100,
-                color: "white",
-                fontSize: "3rem",
-              }}
-              fillFg={COLORS.pink}
-              onClick={() => {
-                setMintLoading(true);
+            <RoundedFrame>
+              <ButtonPad
+                disabled={mintLoading || !address}
+                style={{
+                  width: 150,
+                  height: 100,
+                  padding: 1,
+                }}
+                fillFg={COLORS.pink}
+                onClick={() => {
+                  mint();
+                }}
+              >
+                {mintLoading ? (
+                  <Fuzz
+                    width={80}
+                    height={32}
+                    fill="white"
+                    pixelSize={4}
+                    interval={500}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      fontSize: "3rem",
+                    }}
+                  >
+                    <div
+                      style={{
+                        opacity: address ? 1 : 0.25,
+                        color: address ? "white" : "black",
+                      }}
+                    >
+                      Mint
+                    </div>
+                    {!address && (
+                      <div
+                        style={{
+                          fontSize: "1.6rem",
+                          textTransform: "uppercase",
+                          color: "white",
+                        }}
+                      >
+                        No wallet
+                      </div>
+                    )}
+                  </div>
+                )}
+              </ButtonPad>
 
-                setTimeout(() => setMintLoading(false), 2000);
-              }}
-            >
-              {mintLoading ? (
-                <Fuzz
-                  width={80}
-                  height={32}
-                  fill="white"
-                  pixelSize={4}
-                  interval={500}
-                />
-              ) : (
-                "MINT"
-              )}
-            </ButtonPad>
-
-            <div
-              style={{
-                fontSize: "2.4rem",
-                textAlign: "center",
-                fontWeight: "bold",
-              }}
-            >
-              {totalPrice} ETH
-            </div>
+              <div
+                style={{
+                  padding: 8,
+                  fontSize: "2rem",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  background: "#ffffff",
+                }}
+              >
+                {totalPrice ? formatEther(totalPrice).substring(0, 6) : "--"}{" "}
+                ETH
+              </div>
+            </RoundedFrame>
           </div>
         </div>
       </div>

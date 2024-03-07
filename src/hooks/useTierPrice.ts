@@ -1,7 +1,6 @@
 import { AssetType } from "@/components/Minter/Controls";
 import { chainId } from "@/constants/chain";
 import { useQuery } from "@tanstack/react-query";
-import { formatEther } from "juice-sdk-core";
 import { useBodies } from "./queries/useBodies";
 
 export function useTierPrice({
@@ -14,14 +13,14 @@ export function useTierPrice({
   const bodies = useBodies();
 
   return useQuery({
-    queryKey: [`price-${assetType}-${tierId}-${chainId}`],
+    queryKey: [`price-${assetType}-${tierId}-${chainId}-${bodies.loading}`],
     queryFn: () => {
       switch (assetType) {
         case "BODY":
-          const _price = bodies.data?.nfttiers.find(
-            (t) => t.tierId === tierId
-          )?.price;
-          return _price ? formatEther(_price) : null;
+          return (
+            bodies.data?.nfttiers.find((t) => t.tierId === tierId)?.price ||
+            null
+          );
       }
 
       return null;

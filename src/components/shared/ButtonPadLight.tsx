@@ -1,6 +1,6 @@
 import { CSSProperties, PropsWithChildren } from "react";
+import Beacon from "./Beacon";
 import ButtonPad from "./ButtonPad";
-import Fuzz from "../pixelRenderers/Fuzz";
 
 export default function ButtonPadLight({
   children,
@@ -13,6 +13,7 @@ export default function ButtonPadLight({
   onClick?: VoidFunction;
   style?: CSSProperties;
   active?: boolean;
+  pressed?: boolean;
 }>) {
   return (
     <ButtonPad {...props}>
@@ -25,26 +26,7 @@ export default function ButtonPadLight({
           bottom: 4,
         }}
       >
-        <div
-          style={{
-            width: 20,
-            height: 20,
-            background: "black",
-            position: "relative",
-            borderRadius: 2,
-          }}
-        >
-          {active && (
-            <Fuzz
-              style={{ position: "absolute", left: 4, top: 4 }}
-              width={12}
-              height={12}
-              fill="white"
-              interval={500}
-              pixelSize={6}
-            />
-          )}
-        </div>
+        <Beacon on={active} />
       </div>
     </ButtonPad>
   );

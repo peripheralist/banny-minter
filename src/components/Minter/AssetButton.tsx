@@ -39,6 +39,7 @@ export default function AssetButton({
       fillFg={COLORS.banana}
       onClick={onClick}
       active={active}
+      pressed={active}
     >
       <Icon />
     </ButtonPadLight>

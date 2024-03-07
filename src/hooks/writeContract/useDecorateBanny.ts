@@ -1,11 +1,6 @@
-import { ADDRESS } from "@/constants/contracts/addresses";
 import { useCallback } from "react";
-import { useWriteContract } from "wagmi";
-import { ABI } from "./abi";
 
 export function useDecorateBanny() {
-  const { writeContract, ...data } = useWriteContract();
-
   const decorateBanny = useCallback(
     ({
       hook,
@@ -18,15 +13,15 @@ export function useDecorateBanny() {
       worldId: number;
       outfitIds: number[];
     }) => {
-      writeContract({
-        address: ADDRESS.asdf,
-        abi: ABI.asdf,
-        functionName: "decorateBannyWith",
-        args: [hook, nakedBannyId, worldId, outfitIds],
-      });
+      // writeContract({
+      //   address: ADDRESS.asdf,
+      //   abi: ABI.asdf,
+      //   functionName: "decorateBannyWith",
+      //   args: [hook, nakedBannyId, worldId, outfitIds],
+      // });
     },
-    [writeContract]
+    []
   );
 
-  return { decorateBanny, ...data };
+  return { decorateBanny };
 }

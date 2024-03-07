@@ -42,7 +42,7 @@ a, a:visited {
 }
 
 a:hover {
-  opacity: .7;
+  font-weight: bold;
 }
 
 button {

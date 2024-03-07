@@ -13,6 +13,7 @@ import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import AssetOptionButton from "./AssetOptionButton";
 import { AssetType } from "./Controls";
+import Beacon from "../shared/Beacon";
 
 const IMG_SIZE = 120;
 
@@ -35,7 +36,8 @@ export default function GridSelector({
     [gridRows]
   );
 
-  const { tab, background, outfit } = useContext(MinterContext);
+  const { setBackground, setOutfit, tab, background, outfit } =
+    useContext(MinterContext);
 
   const [pageIdx, setPageIdx] = useState<number>(0);
 
@@ -46,7 +48,7 @@ export default function GridSelector({
   }, [activeTab]);
 
   const pagesCount = useMemo(
-    () => Math.ceil(ASSETS[activeTab].length / pageSize),
+    () => (pageSize ? Math.ceil(ASSETS[activeTab].length / pageSize) : 0),
     [activeTab, pageSize]
   );
 
@@ -85,38 +87,19 @@ export default function GridSelector({
       const active = pageIdx === i;
 
       children.push(
-        <div
+        <Beacon
           key={i}
-          style={{
-            width: 12,
-            height: 12,
-            background: "black",
-            position: "relative",
-            borderRadius: 2,
-          }}
           onClick={() => setPageIdx(i)}
-        >
-          <div
-            style={{
-              width: 6,
-              height: 6,
-              position: "absolute",
-              top: 2,
-              left: 2,
-              background: active
-                ? "white"
-                : i === pageIdxOfSelected
-                ? COLORS.pink
-                : "black",
-              borderRadius: 1,
-            }}
-          />
-        </div>
+          on={active || i === pageIdxOfSelected}
+          onColor={
+            active ? "white" : i === pageIdxOfSelected ? COLORS.pink : "white"
+          }
+        />
       );
     }
 
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1 }}>
         {children}
       </div>
     );
@@ -245,11 +228,31 @@ export default function GridSelector({
           style={{
             display: "flex",
             alignItems: "flex-end",
+            justifyContent: "space-between",
             gap: 10,
           }}
         >
           <PageSelector />
           <PageIndicator />
+
+          {((activeTab === "BACKGROUND" && background) ||
+            (activeTab === "OUTFIT" && outfit)) && (
+            <ButtonPad
+              style={{ width: 24, height: 24, zIndex: 1 }}
+              onClick={() => {
+                switch (activeTab) {
+                  case "BACKGROUND":
+                    setBackground?.(undefined);
+                    break;
+                  case "OUTFIT":
+                    setOutfit?.(undefined);
+                    break;
+                }
+              }}
+            >
+              ✖️
+            </ButtonPad>
+          )}
         </div>
       </div>
     </RoundedFrame>
