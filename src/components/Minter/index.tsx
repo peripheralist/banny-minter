@@ -1,18 +1,23 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { COLORS } from "@/constants/colors";
+import { MinterContext } from "@/contexts/minterContext";
+import { useTierPrice } from "@/hooks/useTierPrice";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { TOOLBAR_HEIGHT } from "../Toolbar";
 import Fuzz from "../pixelRenderers/Fuzz";
-import Summary from "./Summary";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import Controls from "./Controls";
 import GridSelector from "./GridSelector";
 import NFTImage from "./NFTImage";
-import PixelShape from "../pixelRenderers/PixelShape";
-import { COLORS } from "@/constants/colors";
-import { TOOLBAR_HEIGHT } from "../Toolbar";
+import Summary from "./Summary";
 
 export default function Index() {
+  const { body } = useContext(MinterContext);
   const [mintLoading, setMintLoading] = useState<boolean>();
   const [containerHeight, setContainerHeight] = useState<number>(0);
+
+  const bodyPrice = useTierPrice({ assetType: "BODY", tierId: body });
+  const totalPrice = bodyPrice.data;
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -247,7 +252,7 @@ export default function Index() {
                 fontWeight: "bold",
               }}
             >
-              4.20 ETH
+              {totalPrice} ETH
             </div>
           </div>
         </div>

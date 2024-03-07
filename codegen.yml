@@ -1,0 +1,21 @@
+overwrite: true
+schema: ${SUBGRAPH_URL}
+documents: 'src/graphql/**/*.graphql'
+generates:
+  src/generated/graphql.tsx:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-resolvers'
+      - 'typescript-react-apollo'
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'
+config:
+  namingConvention:
+    enumValues: keep
+  scalars:
+    BigInt: bigint
+  avoidOptionals:
+    field: true
+  skipTypename: true

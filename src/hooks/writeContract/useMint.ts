@@ -1,9 +1,9 @@
 import { usePreparePayMetadata } from "@/constants/delegate";
-import { BANNYVERSE } from "@/constants/projectId";
+import { BANNYVERSE_PROJECT_ID } from "@/constants/projectId";
 import { NATIVE_TOKEN } from "juice-sdk-core";
 import {
   useJBContractContext,
-  useJBDataHookContext,
+  useJBRulesetMetadata,
   useJbMultiTerminalPay,
 } from "juice-sdk-react";
 import { useMemo } from "react";
@@ -21,13 +21,11 @@ export function useMint({
     contracts: { primaryNativeTerminal },
   } = useJBContractContext();
 
-  const dataHookContext = useJBDataHookContext();
+  const rulesetMetadata = useJBRulesetMetadata();
 
   const metadata = usePreparePayMetadata({
-    jb721Delegate: {
-      tierIdsToMint: tierIds,
-      address: dataHookContext.data?.address,
-    },
+    tierIdsToMint: tierIds,
+    address: rulesetMetadata.data?.dataHook,
   });
 
   const memo = useMemo(() => `Minted tiers ${tierIds.join(", ")}`, [tierIds]);
@@ -36,7 +34,7 @@ export function useMint({
     address: primaryNativeTerminal?.data,
     args: address
       ? [
-          BANNYVERSE,
+          BANNYVERSE_PROJECT_ID,
           NATIVE_TOKEN,
           amount,
           address, // mint to connected wallet

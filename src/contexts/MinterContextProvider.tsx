@@ -7,7 +7,7 @@ import { AssetType } from "@/components/Minter/Controls";
 const { BODY, OUTFIT, BACKGROUND } = ASSETS;
 
 export default function MinterContextProvider({ children }: PropsWithChildren) {
-  const [body, _setBody] = useState<string>(ASSETS["BODY"][0]);
+  const [body, _setBody] = useState<number>(1); // tier id
   const [outfit, _setOutfit] = useState<string>();
   const [background, _setBackground] = useState<string>();
   const [tab, _setTab] = useState<[AssetType, AssetType | undefined]>([
@@ -43,8 +43,8 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   });
 
   const setBody = useCallback(
-    (s: string) => {
-      _setBody(s);
+    (tierId: number) => {
+      _setBody(tierId);
       animateBody(true).then(() => setBodyFrame(0));
     },
     [animateBody, setBodyFrame]
@@ -67,7 +67,7 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   );
 
   const randomize = useCallback(() => {
-    setBody(BODY[Math.floor(Math.random() * BODY.length)]);
+    setBody(Math.floor(Math.random() * 4)); // TODO 4 should depend on assets length
     setOutfit(OUTFIT[Math.floor(Math.random() * OUTFIT.length)]);
     setBackground(BACKGROUND[Math.floor(Math.random() * BACKGROUND.length)]);
   }, [setBody, setOutfit, setBackground]);

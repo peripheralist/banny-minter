@@ -32,25 +32,22 @@ function encodeJB721DelegateV3_4PayMetadata(
  * @todo support buy-back delegate.
  */
 export function usePreparePayMetadata({
-  jb721Delegate,
+  address,
+  tierIdsToMint,
 }: {
-  jb721Delegate?: { address: string; tierIdsToMint: bigint[] };
-} = {}): Hash | null {
-  const dataSource = useJBDataSourceContext();
-  if (
-    dataSource.data?.name !== JBDataSourceName.JB721Delegate ||
-    !jb721Delegate ||
-    jb721Delegate.tierIdsToMint.length === 0
-  ) {
+  address?: string;
+  tierIdsToMint?: bigint[];
+}): Hash | null {
+  if (!tierIdsToMint?.length || !address) {
     return null;
   }
 
   const jb721DelegateMetadata = encodeJB721DelegateV3_4PayMetadata({
-    tierIdsToMint: jb721Delegate.tierIdsToMint,
+    tierIdsToMint,
     allowOverspending: DEFAULT_ALLOW_OVERSPENDING,
   });
 
-  const delegateId = jb721Delegate.address.substring(0, 10); // first 4 bytes of contract address, including 0x prefix
+  const delegateId = address.substring(0, 10); // first 4 bytes of contract address, including 0x prefix
 
   const delegateIds: string[] = [delegateId];
   const metadatas: string[] = [jb721DelegateMetadata];

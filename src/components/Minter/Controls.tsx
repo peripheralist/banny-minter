@@ -1,10 +1,9 @@
 import { ASSETS } from "@/constants/assets";
 import { MinterContext } from "@/contexts/minterContext";
-import { CSSProperties, useCallback, useContext } from "react";
+import { CSSProperties, useContext } from "react";
 import ButtonPad from "../shared/ButtonPad";
-import ButtonPadLight from "../shared/ButtonPadLight";
-import RoundedFrame from "../shared/RoundedFrame";
 import AssetButton from "./AssetButton";
+import BannyButtons from "./BannyButtons";
 
 export type AssetType = keyof typeof ASSETS;
 
@@ -16,50 +15,9 @@ export const tabs: AssetType[] = [
 ];
 
 export default function Controls({ style }: { style?: CSSProperties }) {
-  const { body, setBody, randomize, tab, setTab } = useContext(MinterContext);
+  const { randomize, tab, setTab } = useContext(MinterContext);
 
   const [activeTab] = tab;
-
-  const BannyButtons = useCallback(
-    () => (
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 8,
-        }}
-      >
-        {ASSETS["BODY"].map((b) => {
-          let color = "";
-          switch (b) {
-            case "_banny.png":
-              color = "#ffc407";
-              break;
-            case "alien.png":
-              color = "#1dbc00";
-              break;
-            case "orange.png":
-              color = "#ea5608";
-              break;
-            case "pink.png":
-              color = "#ff5bb3";
-              break;
-          }
-
-          return (
-            <ButtonPadLight
-              key={b}
-              style={{ height: 40, width: 40 }}
-              fillFg={color}
-              onClick={() => setBody?.(b)}
-              active={body === b}
-            />
-          );
-        })}
-      </div>
-    ),
-    [body, setBody]
-  );
 
   return (
     <div

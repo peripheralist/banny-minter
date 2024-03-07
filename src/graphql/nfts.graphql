@@ -1,0 +1,24 @@
+query NFTs($where: NFT_filter) {
+  nfts(where: $where) {
+    tokenId
+    collection {
+      address
+    }
+    tokenUri
+  }
+}
+
+query NFTTiers($where: NFTTier_filter) {
+  nfttiers(where: $where) {
+    id
+    tierId
+    price
+    collection {
+      address
+    }
+    encodedIpfsUri
+    resolvedUri
+    initialSupply
+    remainingSupply
+  }
+}

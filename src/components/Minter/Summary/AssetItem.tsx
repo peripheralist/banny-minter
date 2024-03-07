@@ -1,7 +1,10 @@
-import React, { useContext, useMemo, useRef } from "react";
-import { AssetType } from "../Controls";
+import { TIER_NAMES } from "@/constants/nfts";
 import { MinterContext } from "@/contexts/minterContext";
+import { useBodies } from "@/hooks/queries/useBodies";
+import { useTierPrice } from "@/hooks/useTierPrice";
+import { useContext, useRef } from "react";
 import Fuzz from "../../pixelRenderers/Fuzz";
+import { AssetType } from "../Controls";
 
 export default function AssetItem({ assetType }: { assetType: AssetType }) {
   const { body, bodyFrame, background, backgroundFrame, outfit, outfitFrame } =
@@ -9,26 +12,30 @@ export default function AssetItem({ assetType }: { assetType: AssetType }) {
 
   const ref = useRef<HTMLSpanElement>(null);
 
+  const bodies = useBodies();
+
   const width = ref.current?.clientWidth;
-  let asset: string | undefined = undefined;
+  let assetName: string | undefined = undefined;
+  let tierId: number | undefined = undefined;
   let frame: number | undefined = undefined;
 
   switch (assetType) {
     case "BACKGROUND":
-      asset = background;
+      assetName = background;
       frame = backgroundFrame;
       break;
     case "BODY":
-      asset = body;
+      assetName = body ? TIER_NAMES[body] : undefined; // TODO how to store/display asset names. Tiers have no name. Do we need asset names at all?
+      tierId = body;
       frame = bodyFrame;
       break;
     case "OUTFIT":
-      asset = outfit;
+      assetName = outfit;
       frame = outfitFrame;
       break;
   }
 
-  const price = useMemo(() => 0.69, []);
+  const price = useTierPrice({ assetType, tierId });
 
   return (
     <div
@@ -37,9 +44,9 @@ export default function AssetItem({ assetType }: { assetType: AssetType }) {
       <span ref={ref}>
         {frame && frame !== 1 && width ? (
           <Fuzz width={width} height={12} pixelSize={4} fill="white" />
-        ) : asset ? (
+        ) : assetName ? (
           <span>
-            {price} ETH {asset.split(".")[0]}
+            {price.data} ETH {assetName.split(".")[0]}
           </span>
         ) : (
           "--"

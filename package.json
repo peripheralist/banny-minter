@@ -2,18 +2,22 @@
   "name": "banny-factory",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "compile-assets": "tsx scripts/compile-assets.ts"
+    "compile-assets": "tsx scripts/compile-assets.ts",
+    "codegen": "graphql-code-generator --config codegen.yml -r dotenv/config"
   },
   "dependencies": {
+    "@apollo/client": "^3.9.6",
     "@tanstack/react-query": "^5.22.2",
-    "juice-sdk-core": "^2.0.13-alpha",
-    "juice-sdk-react": "^0.0.14-alpha",
-    "juice-sdk-v4": "^2.0.11-alpha",
+    "apollo-link-scalars": "^4.0.3",
+    "graphql": "^16.8.1",
+    "juice-sdk-core": "^2.0.14-alpha",
+    "juice-sdk-react": "^0.0.17-alpha",
     "juicebox-metadata-helper": "^0.1.7",
     "next": "14.1.0",
     "react": "^18",
@@ -22,6 +26,11 @@
     "wagmi": "^2.5.7"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/introspection": "^4.0.3",
+    "@graphql-codegen/typescript": "^4.0.6",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.0",
+    "@graphql-codegen/typescript-resolvers": "^4.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

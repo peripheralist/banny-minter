@@ -1,13 +1,24 @@
 import { MinterContext } from "@/contexts/minterContext";
 import Image from "next/image";
-import { CSSProperties, useCallback, useContext } from "react";
+import { CSSProperties, useCallback, useContext, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
+import { useBodies } from "@/hooks/queries/useBodies";
 
 const IMG_SIZE = 440;
 
 export default function NFTImage() {
   const { body, outfit, background, bodyFrame, outfitFrame, backgroundFrame } =
     useContext(MinterContext);
+
+  const bodies = useBodies();
+
+  const bodyImgUrl = useMemo(() => {
+    const svg = bodies.data?.nfttiers.find(
+      (t) => t.tierId === body
+    )?.resolvedUri;
+
+    if (svg) return `data:image/svg+xml;base64,${btoa(svg)}`;
+  }, [body, bodies]);
 
   const _Fuzz = useCallback(
     ({ frame, style }: { frame: number | undefined; style?: CSSProperties }) =>
@@ -69,47 +80,48 @@ export default function NFTImage() {
       >
         <_Fuzz
           style={{
-            maskImage: `url(${backgroundUrl})`,
             maskSize: IMG_SIZE,
           }}
           frame={backgroundFrame}
         />
-        {body && bodyUrl && (
-          <Image
-            style={{
-              position: "absolute",
-              // need an offset bc alien body is off-center
-              marginLeft: body === "alien.png" ? IMG_SIZE * 0.035 : 0,
-            }}
-            width={IMG_SIZE * 1.4}
-            height={IMG_SIZE * 1.4}
-            src={bodyUrl}
-            alt={body}
-          />
+        {bodyImgUrl && (
+          <>
+            <Image
+              style={{
+                position: "absolute",
+              }}
+              width={IMG_SIZE}
+              height={IMG_SIZE}
+              src={bodyImgUrl}
+              alt={"body"}
+            />
+            <_Fuzz
+              style={{
+                maskImage: `url(${bodyImgUrl})`,
+                maskSize: IMG_SIZE,
+              }}
+              frame={bodyFrame}
+            />
+          </>
         )}
-        <_Fuzz
-          style={{
-            maskImage: `url(${bodyUrl})`,
-            maskSize: IMG_SIZE * 1.4,
-          }}
-          frame={bodyFrame}
-        />
-        {outfit && outfitUrl && (
-          <Image
-            style={{ position: "absolute" }}
-            width={IMG_SIZE * 1.05}
-            height={IMG_SIZE * 1.05}
-            src={outfitUrl}
-            alt={outfit}
-          />
+        {outfitUrl && (
+          <>
+            <Image
+              style={{ position: "absolute" }}
+              width={IMG_SIZE}
+              height={IMG_SIZE}
+              src={outfitUrl}
+              alt={"outfit"}
+            />
+            <_Fuzz
+              style={{
+                maskImage: `url(${outfitUrl})`,
+                maskSize: IMG_SIZE,
+              }}
+              frame={outfitFrame}
+            />
+          </>
         )}
-        <_Fuzz
-          style={{
-            maskImage: `url(${outfitUrl})`,
-            maskSize: IMG_SIZE,
-          }}
-          frame={outfitFrame}
-        />
       </div>
     </div>
   );
