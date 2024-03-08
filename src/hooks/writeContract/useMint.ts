@@ -17,7 +17,6 @@ export function useMint({
 }) {
   const { address } = useAccount();
   const { contracts } = useJBContractContext();
-  console.log("contracts", contracts);
 
   const metadata = usePreparePayMetadata({
     jb721Delegate: {
@@ -27,8 +26,12 @@ export function useMint({
 
   const memo = useMemo(() => `Minted tiers ${tierIds.join(", ")}`, [tierIds]);
 
+  console.log({ metadata });
+  console.log("contracts", contracts.primaryNativeTerminal.data);
+
   const { write, isLoading, data } = useJbMultiTerminalPay({
-    address: contracts.primaryNativeTerminal?.data ?? undefined,
+    address: "0x3980ae5F6C10aF7628cbf9246932333d6927d7Dc",
+    // address: contracts.primaryNativeTerminal?.data ?? undefined,
     args:
       address && amount
         ? [

@@ -1,9 +1,14 @@
-import { useConnect } from "wagmi";
+import { sepolia, useConnect } from "wagmi";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export function WalletOptions() {
-  const { connectors, connect } = useConnect();
+  const { connectors, connect } = useConnect({
+    connector: new InjectedConnector({
+      chains: [sepolia],
+    }),
+  });
 
   return connectors.map((connector) => (
     <ButtonPad key={connector.id} onClick={() => connect({ connector })}>
