@@ -1,29 +1,6 @@
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_31_32454)">
-<rect x="6" y="10" width="2" height="2" fill="black"/>
-<rect x="8" y="12" width="2" height="2" fill="black"/>
-<rect x="4" y="14" width="2" height="2" fill="black"/>
-<rect x="6" y="12" width="2" height="2" fill="black"/>
-<rect x="2" y="16" width="2" height="2" fill="black"/>
-<rect y="18" width="2" height="2" fill="black"/>
-<rect x="10" y="14" width="2" height="2" fill="black"/>
-<rect x="4" y="8" width="2" height="2" fill="black"/>
-<rect x="8" y="10" width="2" height="2" fill="black"/>
-<rect x="8" y="8" width="2" height="2" fill="black"/>
-<rect x="10" y="10" width="2" height="2" fill="black"/>
-<rect x="10" y="8" width="2" height="2" fill="black"/>
-<rect x="10" y="6" width="2" height="2" fill="black"/>
-<rect x="12" y="8" width="2" height="2" fill="black"/>
-<rect x="12" y="6" width="2" height="2" fill="black"/>
-<rect x="12" y="4" width="2" height="2" fill="black"/>
-<rect x="14" y="6" width="2" height="2" fill="black"/>
-<rect x="14" y="4" width="2" height="2" fill="black"/>
-<rect x="14" y="2" width="2" height="2" fill="black"/>
-<rect x="16" y="4" width="2" height="2" fill="black"/>
-<rect x="16" y="2" width="2" height="2" fill="black"/>
-<rect x="16" width="2" height="2" fill="black"/>
-<rect x="18" y="2" width="2" height="2" fill="black"/>
-<rect x="18" width="2" height="2" fill="black"/>
+<path d="M16 0V2H14V4H12V6H10V8H8V10H6V8H4V10H6V14H4V16H2V18H0V20H2V18H4V16H6V14H10V16H12V14H10V12H12V10H14V8H16V6H18V4H20V0H16Z" fill="black"/>
 </g>
 <defs>
 <clipPath id="clip0_31_32454">

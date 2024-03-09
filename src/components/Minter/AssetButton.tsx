@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { useCallback } from "react";
-import ButtonPadLight from "../shared/ButtonPadLight";
+import ButtonPad from "../shared/ButtonPad";
 import IconImage from "../shared/images/IconImage";
 import { AssetType } from "./Controls";
 
@@ -34,14 +34,13 @@ export default function AssetButton({
   }, [asset]);
 
   return (
-    <ButtonPadLight
+    <ButtonPad
       style={{ width: 100, height: "100%", maxHeight: 100 }}
-      fillFg={COLORS.banana}
+      fillFg={active ? "#ffeecd" : COLORS.banana}
       onClick={onClick}
-      active={active}
       pressed={active}
     >
       <Icon />
-    </ButtonPadLight>
+    </ButtonPad>
   );
 }

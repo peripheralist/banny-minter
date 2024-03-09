@@ -1,7 +1,6 @@
 import { CSSProperties, PropsWithChildren, useCallback, useState } from "react";
 import PixelArc from "../pixelRenderers/PixelArc";
 import RoundedRect from "./RoundedRect";
-import Fuzz from "../pixelRenderers/Fuzz";
 
 export default function ButtonPad({
   children,
@@ -22,34 +21,17 @@ export default function ButtonPad({
   disabled?: boolean;
 }>) {
   const [clicked, setClicked] = useState<boolean>();
-  // const [width, setWidth] = useState<number>();
-  // const [height, setHeight] = useState<number>();
 
   const _onClick = useCallback(() => {
     if (disabled) return;
 
     setClicked(true);
-    onClick?.();
 
     setTimeout(() => {
       setClicked(false);
+      onClick?.();
     }, 100);
   }, [onClick, disabled]);
-
-  // const measuredRef = useCallback((node: HTMLDivElement) => {
-  //   if (!node) return;
-
-  //   const rect = node.getBoundingClientRect();
-
-  //   const fn = () => {
-  //     setWidth(rect.width);
-  //     setHeight(rect.height);
-  //   };
-
-  //   window.removeEventListener("resize", fn);
-  //   window.addEventListener("resize", fn);
-  //   fn();
-  // }, []);
 
   const depth = 6;
   const edge = 6;
@@ -69,7 +51,6 @@ export default function ButtonPad({
       onClick={_onClick}
     >
       <div
-        // ref={measuredRef}
         style={{
           width: "100%",
           height: "100%",
@@ -117,24 +98,6 @@ export default function ButtonPad({
             background: highlightColor,
           }}
         />
-
-        {/* {pressed && width && height && (
-          <Fuzz
-            style={{
-              position: "absolute",
-              inset: 2,
-              borderRadius: 2,
-              overflow: "hidden",
-              zIndex: -1,
-            }}
-            width={width - 4}
-            height={height - 4}
-            density={0.8}
-            fill="#ffffff88"
-            interval={2000}
-            pixelSize={4}
-          />
-        )} */}
 
         <div
           style={{

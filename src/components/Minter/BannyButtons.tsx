@@ -2,6 +2,7 @@ import { MinterContext } from "@/contexts/minterContext";
 import { useBodies } from "@/hooks/queries/useBodies";
 import { useContext } from "react";
 import ButtonPad from "../shared/ButtonPad";
+import ButtonPadLight from "../shared/ButtonPadLight";
 
 export default function BannyButtons() {
   const { body, setBody } = useContext(MinterContext);
@@ -36,12 +37,13 @@ export default function BannyButtons() {
         }
 
         return (
-          <ButtonPad
+          <ButtonPadLight
             key={t.id}
             style={{ height: 40, width: 40 }}
             fillFg={color}
             onClick={() => setBody(t.tierId)}
             pressed={body === t.tierId}
+            active={body === t.tierId}
           />
         );
       })}

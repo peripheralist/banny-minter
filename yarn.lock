@@ -5215,10 +5215,10 @@ juice-sdk-core@^2.0.15-alpha:
     bs58 "^5.0.0"
     fpnum "^0.0.16"
 
-juice-sdk-react@^0.0.19-alpha:
-  version "0.0.19-alpha"
-  resolved "https://registry.yarnpkg.com/juice-sdk-react/-/juice-sdk-react-0.0.19-alpha.tgz#47b1516731a0d27d2b3003f2c3e312efcacac11e"
-  integrity sha512-hACMVVWyQdWTdDmk/EgzGb9NOUWpyMtGgYmvvodJAiW52PcOpFsGtiP8pnP5Tvv4FYxnqNHO3IQrbx2k9644DA==
+juice-sdk-react@^0.0.21-alpha:
+  version "0.0.21-alpha"
+  resolved "https://registry.yarnpkg.com/juice-sdk-react/-/juice-sdk-react-0.0.21-alpha.tgz#8f05180a17907a7cd7e84f32f166db898d7207d5"
+  integrity sha512-sggYwFSIyXWqc5rTEoz52VqJrjbbWVLNCgBJOgMZn2fSvqGF+liS+GgBvMuJmE6nYNyrBweq/qskqslYLYhhIA==
   dependencies:
     fpnum "^0.0.16"
 

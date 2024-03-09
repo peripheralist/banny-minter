@@ -49,7 +49,7 @@ export default function AssetOptionButton({
           position: "relative",
           width: buttonSize,
           height: buttonSize,
-          borderRadius: 4,
+          borderRadius: 2,
           overflow: "hidden",
         }}
       >
