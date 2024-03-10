@@ -1,11 +1,13 @@
 import { BANNYVERSE_PROJECT_ID } from "@/constants/projectId";
 import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
 import {
+  useFind721DataHook,
   useJBContractContext,
   useJbMultiTerminalPay,
   usePreparePayMetadata,
 } from "juice-sdk-react";
 import { useMemo } from "react";
+import { zeroAddress } from "viem";
 import { useAccount, useWaitForTransaction } from "wagmi";
 
 export function useMint({
@@ -17,9 +19,11 @@ export function useMint({
 }) {
   const { address } = useAccount();
   const { contracts } = useJBContractContext();
+  const jb721DataHookQuery = useFind721DataHook();
 
   const metadata = usePreparePayMetadata({
     jb721Hook: {
+      dataHookAddress: jb721DataHookQuery.data ?? zeroAddress,
       tierIdsToMint: tierIds,
     },
   });
