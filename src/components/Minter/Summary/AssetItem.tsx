@@ -1,11 +1,10 @@
-import { TIER_NAMES } from "@/constants/nfts";
 import { MinterContext } from "@/contexts/minterContext";
 import { useBodies } from "@/hooks/queries/useBodies";
 import { useTierPrice } from "@/hooks/useTierPrice";
+import { AssetType } from "@/model/assetType";
+import { formatEther } from "juice-sdk-core";
 import { useContext, useRef } from "react";
 import Fuzz from "../../pixelRenderers/Fuzz";
-import { AssetType } from "../Controls";
-import { formatEther } from "juice-sdk-core";
 
 export default function AssetItem({ assetType }: { assetType: AssetType }) {
   const { body, bodyFrame, background, backgroundFrame, outfit, outfitFrame } =
@@ -26,8 +25,8 @@ export default function AssetItem({ assetType }: { assetType: AssetType }) {
       frame = backgroundFrame;
       break;
     case "BODY":
-      assetName = body ? TIER_NAMES[body] : undefined; // TODO how to store/display asset names. Tiers have no name. Do we need asset names at all?
-      tierId = body;
+      assetName = body?.name;
+      tierId = body?.tierId;
       frame = bodyFrame;
       break;
     case "OUTFIT":

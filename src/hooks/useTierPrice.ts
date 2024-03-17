@@ -1,5 +1,4 @@
-import { AssetType } from "@/components/Minter/Controls";
-import { chainId } from "@/constants/chain";
+import { AssetType } from "@/model/assetType";
 import { useQuery } from "@tanstack/react-query";
 import { useBodies } from "./queries/useBodies";
 
@@ -13,7 +12,7 @@ export function useTierPrice({
   const bodies = useBodies();
 
   return useQuery({
-    queryKey: [`price-${assetType}-${tierId}-${chainId}-${bodies.loading}`],
+    queryKey: [`price-${assetType}-${tierId}-${bodies.loading}`],
     queryFn: () => {
       switch (assetType) {
         case "BODY":

@@ -1,11 +1,9 @@
-import { ASSETS } from "@/constants/assets";
 import { MinterContext } from "@/contexts/minterContext";
+import { AssetType } from "@/model/assetType";
 import { CSSProperties, useContext } from "react";
 import ButtonPad from "../shared/ButtonPad";
 import AssetButton from "./AssetButton";
 import BannyButtons from "./BannyButtons";
-
-export type AssetType = keyof typeof ASSETS;
 
 export const tabs: AssetType[] = [
   "OUTFIT",

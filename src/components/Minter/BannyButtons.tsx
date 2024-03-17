@@ -5,11 +5,11 @@ import ButtonPad from "../shared/ButtonPad";
 import ButtonPadLight from "../shared/ButtonPadLight";
 
 export default function BannyButtons() {
-  const { body, setBody } = useContext(MinterContext);
+  const { body, setBodyTierId } = useContext(MinterContext);
 
   const { data } = useBodies();
 
-  if (!data?.nfttiers || !setBody) return null;
+  if (!data?.nfttiers || !setBodyTierId) return null;
 
   return (
     <div
@@ -41,9 +41,9 @@ export default function BannyButtons() {
             key={t.id}
             style={{ height: 40, width: 40 }}
             fillFg={color}
-            onClick={() => setBody(t.tierId)}
-            pressed={body === t.tierId}
-            active={body === t.tierId}
+            onClick={() => setBodyTierId(t.tierId)}
+            pressed={body?.tierId === t.tierId}
+            active={body?.tierId === t.tierId}
           />
         );
       })}

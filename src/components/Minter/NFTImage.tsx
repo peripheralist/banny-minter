@@ -1,8 +1,9 @@
 import { MinterContext } from "@/contexts/minterContext";
+import { useBodies } from "@/hooks/queries/useBodies";
+import { decodeNFTInfo } from "@/utils/tokenInfo";
 import Image from "next/image";
 import { CSSProperties, useCallback, useContext, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
-import { useBodies } from "@/hooks/queries/useBodies";
 
 const IMG_SIZE = 440;
 
@@ -13,11 +14,11 @@ export default function NFTImage() {
   const bodies = useBodies();
 
   const bodyImgUrl = useMemo(() => {
-    const svg = bodies.data?.nfttiers.find(
-      (t) => t.tierId === body
+    const uri = bodies.data?.nfttiers.find(
+      (t) => t.tierId === body?.tierId
     )?.resolvedUri;
 
-    if (svg) return `data:image/svg+xml;base64,${btoa(svg)}`;
+    return decodeNFTInfo(uri)?.image;
   }, [body, bodies]);
 
   const _Fuzz = useCallback(
@@ -43,7 +44,6 @@ export default function NFTImage() {
     []
   );
 
-  const bodyUrl = body ? `/assets/banny/body/${body}` : undefined;
   const backgroundUrl = background
     ? `/assets/banny/background/${background}`
     : undefined;
@@ -97,7 +97,7 @@ export default function NFTImage() {
             />
             <_Fuzz
               style={{
-                maskImage: `url(${bodyImgUrl})`,
+                maskImage: bodyImgUrl,
                 maskSize: IMG_SIZE,
               }}
               frame={bodyFrame}

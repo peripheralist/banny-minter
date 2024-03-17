@@ -1,6 +1,7 @@
 import { ASSETS } from "@/constants/assets";
 import { COLORS } from "@/constants/colors";
 import { MinterContext } from "@/contexts/minterContext";
+import { AssetType } from "@/model/assetType";
 import {
   CSSProperties,
   useCallback,
@@ -9,11 +10,10 @@ import {
   useMemo,
   useState,
 } from "react";
+import Beacon from "../shared/Beacon";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import AssetOptionButton from "./AssetOptionButton";
-import { AssetType } from "./Controls";
-import Beacon from "../shared/Beacon";
 
 const IMG_SIZE = 120;
 

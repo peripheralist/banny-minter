@@ -1,4 +1,4 @@
-import { BANNYVERSE_PROJECT_ID } from "@/constants/projectId";
+import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
 import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
 import {
   useFind721DataHook,

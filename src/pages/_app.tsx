@@ -1,7 +1,7 @@
-import { BANNYVERSE_PROJECT_ID } from "@/constants/projectId";
+import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
 import "@/styles/globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { JBProjectProvider, JBContractProvider } from "juice-sdk-react";
+import { JBContractProvider, JBProjectProvider } from "juice-sdk-react";
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 import { WagmiConfig } from "wagmi";

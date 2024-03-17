@@ -1,9 +1,10 @@
-import { AssetType } from "@/components/Minter/Controls";
+import { Asset } from "@/model/asset";
+import { AssetType } from "@/model/assetType";
 import { createContext } from "react";
 
 export const MinterContext = createContext<{
-  body?: number;
-  setBody?: (tierId: number) => void;
+  body?: Asset;
+  setBodyTierId?: (tierId: number) => void;
   bodyFrame?: number;
   outfit?: string;
   setOutfit?: (s: string | undefined) => void;

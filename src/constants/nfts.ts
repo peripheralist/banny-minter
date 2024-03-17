@@ -1,14 +1,13 @@
-import { zeroAddress } from "viem";
-import { chainId } from "./chain";
+export const BANNYVERSE_COLLECTION_ID =
+  process.env.NEXT_PUBLIC_BANNYVERSE_COLLECTION_ID!;
 
-export const BANNYVERSE_COLLECTION = {
-  1155511: "0x2df7e6d24396e0af69d51344d10f1d2a30cf6321".toLowerCase(),
-  1: zeroAddress,
-}[chainId];
+if (!BANNYVERSE_COLLECTION_ID) {
+  throw new Error("Missing Bannyverse collection ID");
+}
 
-export const TIER_NAMES: Record<number, string> = {
-  1: "alien banny",
-  2: "pink banny",
-  3: "orange banny",
-  4: "banny",
-};
+export const BANNYVERSE_PROJECT_ID =
+  process.env.NEXT_PUBLIC_BANNYVERSE_PROJECT_ID!;
+
+if (!BANNYVERSE_PROJECT_ID) {
+  throw new Error("Missing Bannyverse projectId");
+}

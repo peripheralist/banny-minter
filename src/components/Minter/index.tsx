@@ -21,12 +21,14 @@ export default function Index() {
   const [containerHeight, setContainerHeight] = useState<number>(0);
 
   const bodies = useBodies();
-  const bodyPrice = useTierPrice({ assetType: "BODY", tierId: body });
+  const bodyPrice = useTierPrice({ assetType: "BODY", tierId: body?.tierId });
   const totalPrice = bodyPrice.data;
-  const { mint, isLoading: mintLoading } = useMint({
+  const { mint, isLoading, tx } = useMint({
     amount: totalPrice,
-    tierIds: [...(body ? [BigInt(body)] : [])],
+    tierIds: [...(body ? [BigInt(body.tierId)] : [])],
   });
+
+  const mintTxPending = isLoading || tx.status === "loading";
 
   const measuredRef = useCallback((node: HTMLDivElement) => {
     const fn = () => {
@@ -233,7 +235,7 @@ export default function Index() {
           >
             <RoundedFrame>
               <ButtonPad
-                disabled={mintLoading || !address}
+                disabled={mintTxPending || !address}
                 style={{
                   width: 150,
                   height: 100,
@@ -244,7 +246,7 @@ export default function Index() {
                   mint();
                 }}
               >
-                {mintLoading ? (
+                {mintTxPending ? (
                   <Fuzz
                     width={80}
                     height={32}

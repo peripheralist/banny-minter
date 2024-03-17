@@ -1,8 +1,8 @@
 import { COLORS } from "@/constants/colors";
+import { AssetType } from "@/model/assetType";
 import { useCallback } from "react";
 import ButtonPad from "../shared/ButtonPad";
 import IconImage from "../shared/images/IconImage";
-import { AssetType } from "./Controls";
 
 export default function AssetButton({
   asset,

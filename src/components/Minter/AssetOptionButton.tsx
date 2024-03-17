@@ -1,11 +1,11 @@
 import { COLORS } from "@/constants/colors";
 import { MinterContext } from "@/contexts/minterContext";
 import { useAnimation } from "@/hooks/useAnimation";
+import { AssetType } from "@/model/assetType";
 import Image from "next/image";
 import { useContext, useEffect, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
-import { AssetType } from "./Controls";
 
 export default function AssetOptionButton({
   asset,

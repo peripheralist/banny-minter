@@ -1,13 +1,15 @@
 import { ASSETS } from "@/constants/assets";
+import { useBodies } from "@/hooks/queries/useBodies";
 import { useAnimation } from "@/hooks/useAnimation";
-import { PropsWithChildren, useCallback, useState } from "react";
+import { AssetType } from "@/model/assetType";
+import { decodeNFTInfo } from "@/utils/tokenInfo";
+import { PropsWithChildren, useCallback, useMemo, useState } from "react";
 import { MinterContext } from "./minterContext";
-import { AssetType } from "@/components/Minter/Controls";
 
-const { BODY, OUTFIT, BACKGROUND } = ASSETS;
+const { OUTFIT, BACKGROUND } = ASSETS;
 
 export default function MinterContextProvider({ children }: PropsWithChildren) {
-  const [body, _setBody] = useState<number>(1); // tier id
+  const [bodyTierId, _setBodyTierId] = useState<number>(1); // tier id
   const [outfit, _setOutfit] = useState<string>();
   const [background, _setBackground] = useState<string>();
   const [tab, _setTab] = useState<[AssetType, AssetType | undefined]>([
@@ -42,9 +44,9 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
     step: 0.2,
   });
 
-  const setBody = useCallback(
+  const setBodyTierId = useCallback(
     (tierId: number) => {
-      _setBody(tierId);
+      _setBodyTierId(tierId);
       animateBody(true).then(() => setBodyFrame(0));
     },
     [animateBody, setBodyFrame]
@@ -67,10 +69,10 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   );
 
   const randomize = useCallback(() => {
-    setBody(Math.floor(Math.random() * 4)); // TODO 4 should depend on assets length
+    setBodyTierId(Math.floor(Math.random() * 4)); // TODO 4 should depend on assets length
     setOutfit(OUTFIT[Math.floor(Math.random() * OUTFIT.length)]);
     setBackground(BACKGROUND[Math.floor(Math.random() * BACKGROUND.length)]);
-  }, [setBody, setOutfit, setBackground]);
+  }, [setBodyTierId, setOutfit, setBackground]);
 
   const setTab = useCallback((t: AssetType) => {
     // Store previous tab in index[1]
@@ -81,11 +83,25 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
     }, 250);
   }, []);
 
+  const bodies = useBodies();
+
+  const body = useMemo(() => {
+    const uri = bodies.data?.nfttiers.find(
+      (t) => t.tierId === bodyTierId
+    )?.resolvedUri;
+
+    const info = decodeNFTInfo(uri);
+
+    if (!info) return undefined;
+
+    return { ...info, tierId: bodyTierId };
+  }, [bodyTierId, bodies]);
+
   return (
     <MinterContext.Provider
       value={{
         body,
-        setBody,
+        setBodyTierId,
         bodyFrame,
         outfit,
         setOutfit,
