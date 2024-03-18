@@ -1,6 +1,5 @@
-import React from "react";
-import { AssetType } from "../Controls";
 import { COLORS } from "@/constants/colors";
+import { AssetType } from "@/model/assetType";
 
 export default function Label({ assetType }: { assetType: AssetType }) {
   return (
