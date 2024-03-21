@@ -68,22 +68,15 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
     [animateBackground, setBackgroundFrame]
   );
 
+  const bodies = useBodies();
+
   const randomize = useCallback(() => {
-    setBodyTierId(Math.floor(Math.random() * 4)); // TODO 4 should depend on assets length
+    setBodyTierId(
+      Math.floor(Math.random() * (bodies.data?.nfttiers.length ?? 0)) + 1
+    );
     setOutfit(OUTFIT[Math.floor(Math.random() * OUTFIT.length)]);
     setBackground(BACKGROUND[Math.floor(Math.random() * BACKGROUND.length)]);
-  }, [setBodyTierId, setOutfit, setBackground]);
-
-  const setTab = useCallback((t: AssetType) => {
-    // Store previous tab in index[1]
-    _setTab(([_t]) => [t, _t]);
-
-    setTimeout(() => {
-      _setTab(([_t]) => [_t, undefined]);
-    }, 250);
-  }, []);
-
-  const bodies = useBodies();
+  }, [setBodyTierId, setOutfit, setBackground, bodies]);
 
   const body = useMemo(() => {
     const uri = bodies.data?.nfttiers.find(
@@ -96,6 +89,15 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
 
     return { ...info, tierId: bodyTierId };
   }, [bodyTierId, bodies]);
+
+  const setTab = useCallback((t: AssetType) => {
+    // Store previous tab in index[1]
+    _setTab(([_t]) => [t, _t]);
+
+    setTimeout(() => {
+      _setTab(([_t]) => [_t, undefined]);
+    }, 250);
+  }, []);
 
   return (
     <MinterContext.Provider
