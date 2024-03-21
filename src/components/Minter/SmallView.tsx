@@ -71,7 +71,6 @@ export default function SmallView() {
     <div
       style={{
         width: "100vw",
-        overflow: "auto",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
