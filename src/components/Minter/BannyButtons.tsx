@@ -1,10 +1,15 @@
 import { MinterContext } from "@/contexts/minterContext";
 import { useBodies } from "@/hooks/queries/useBodies";
-import { useContext } from "react";
-import ButtonPad from "../shared/ButtonPad";
+import { CSSProperties, useContext } from "react";
 import ButtonPadLight from "../shared/ButtonPadLight";
 
-export default function BannyButtons() {
+export default function BannyButtons({
+  style,
+  buttonStyle,
+}: {
+  style?: CSSProperties;
+  buttonStyle?: CSSProperties;
+}) {
   const { body, setBodyTierId } = useContext(MinterContext);
 
   const { data } = useBodies();
@@ -12,13 +17,7 @@ export default function BannyButtons() {
   if (!data?.nfttiers || !setBodyTierId) return null;
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 8,
-      }}
-    >
+    <div style={style}>
       {data.nfttiers.map((t) => {
         let color = "";
         switch (t.tierId) {
@@ -39,7 +38,7 @@ export default function BannyButtons() {
         return (
           <ButtonPadLight
             key={t.id}
-            style={{ height: 40, width: 40 }}
+            style={buttonStyle}
             fillFg={color}
             onClick={() => setBodyTierId(t.tierId)}
             pressed={body?.tierId === t.tierId}

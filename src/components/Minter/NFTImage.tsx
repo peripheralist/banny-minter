@@ -5,9 +5,7 @@ import Image from "next/image";
 import { CSSProperties, useCallback, useContext, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 
-const IMG_SIZE = 440;
-
-export default function NFTImage() {
+export default function NFTImage({ imageSize }: { imageSize: number }) {
   const { body, outfit, background, bodyFrame, outfitFrame, backgroundFrame } =
     useContext(MinterContext);
 
@@ -34,8 +32,8 @@ export default function NFTImage() {
             maskPosition: "center",
             ...style,
           }}
-          width={IMG_SIZE}
-          height={IMG_SIZE}
+          width={imageSize}
+          height={imageSize}
           fill="#ffffff"
           pixelSize={4}
           density={0.75 - frame}
@@ -70,9 +68,9 @@ export default function NFTImage() {
           justifyContent: "center",
           flex: 1,
           backgroundImage: `url(${backgroundUrl})`,
-          width: IMG_SIZE,
-          maxWidth: IMG_SIZE,
-          height: IMG_SIZE,
+          width: imageSize,
+          maxWidth: imageSize,
+          height: imageSize,
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -80,7 +78,7 @@ export default function NFTImage() {
       >
         <_Fuzz
           style={{
-            maskSize: IMG_SIZE,
+            maskSize: imageSize,
           }}
           frame={backgroundFrame}
         />
@@ -90,15 +88,15 @@ export default function NFTImage() {
               style={{
                 position: "absolute",
               }}
-              width={IMG_SIZE}
-              height={IMG_SIZE}
+              width={imageSize}
+              height={imageSize}
               src={bodyImgUrl}
               alt={"body"}
             />
             <_Fuzz
               style={{
                 maskImage: bodyImgUrl,
-                maskSize: IMG_SIZE,
+                maskSize: imageSize,
               }}
               frame={bodyFrame}
             />
@@ -108,15 +106,15 @@ export default function NFTImage() {
           <>
             <Image
               style={{ position: "absolute" }}
-              width={IMG_SIZE}
-              height={IMG_SIZE}
+              width={imageSize}
+              height={imageSize}
               src={outfitUrl}
               alt={"outfit"}
             />
             <_Fuzz
               style={{
                 maskImage: `url(${outfitUrl})`,
-                maskSize: IMG_SIZE,
+                maskSize: imageSize,
               }}
               frame={outfitFrame}
             />

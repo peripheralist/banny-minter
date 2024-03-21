@@ -9508,6 +9508,7 @@ export type NfTsQuery = { nfts: Array<{ tokenId: bigint, tokenUri: string, colle
 
 export type NftTiersQueryVariables = Exact<{
   where?: InputMaybe<NftTier_Filter>;
+  orderBy?: InputMaybe<NftTier_OrderBy>;
 }>;
 
 
@@ -10763,8 +10764,8 @@ export type NfTsLazyQueryHookResult = ReturnType<typeof useNfTsLazyQuery>;
 export type NfTsSuspenseQueryHookResult = ReturnType<typeof useNfTsSuspenseQuery>;
 export type NfTsQueryResult = Apollo.QueryResult<NfTsQuery, NfTsQueryVariables>;
 export const NftTiersDocument = gql`
-    query NFTTiers($where: NFTTier_filter) {
-  nfttiers(where: $where) {
+    query NFTTiers($where: NFTTier_filter, $orderBy: NFTTier_orderBy) {
+  nfttiers(where: $where, orderBy: $orderBy) {
     id
     tierId
     price
@@ -10792,6 +10793,7 @@ export const NftTiersDocument = gql`
  * const { data, loading, error } = useNftTiersQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */

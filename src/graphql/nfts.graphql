@@ -8,8 +8,8 @@ query NFTs($where: NFT_filter) {
   }
 }
 
-query NFTTiers($where: NFTTier_filter) {
-  nfttiers(where: $where) {
+query NFTTiers($where: NFTTier_filter, $orderBy: NFTTier_orderBy) {
+  nfttiers(where: $where, orderBy: $orderBy) {
     id
     tierId
     price

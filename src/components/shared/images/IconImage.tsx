@@ -7,15 +7,19 @@ import { CSSProperties } from "react";
 export default function IconImage({
   name,
   style,
+  size,
 }: {
   name: string;
   style?: CSSProperties;
+  size?: number;
 }) {
+  const _size = size ?? 40;
+
   return (
     <Image
       style={style}
-      width={40}
-      height={40}
+      width={_size}
+      height={_size}
       src={`/assets/${name}.svg`}
       alt={name}
     />

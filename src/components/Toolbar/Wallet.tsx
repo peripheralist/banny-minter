@@ -6,12 +6,15 @@ import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import { WalletOptions } from "./WalletOptions";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
+import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 
 export default function Wallet() {
   const [showWalletOptions, setShowWalletOptions] = useState<boolean>();
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const { data: ensName } = useEnsName({ address });
+
+  const isSmallScreen = useIsSmallScreen();
 
   return (
     <div>
@@ -22,7 +25,7 @@ export default function Wallet() {
               display: "flex",
               alignItems: "center",
               gap: 16,
-              fontSize: "1.4rem",
+              fontSize: isSmallScreen ? "1rem" : "1.4rem",
               paddingLeft: 16,
               paddingRight: 0,
               background: COLORS.pink,
@@ -60,10 +63,10 @@ export default function Wallet() {
       ) : (
         <ButtonPad
           style={{
-            height: 40,
-            width: 120,
+            height: isSmallScreen ? 30 : 40,
+            width: 80,
             color: "white",
-            fontSize: "1.8rem",
+            fontSize: isSmallScreen ? "1.25rem" : "1.4rem",
             textTransform: "uppercase",
           }}
           fillFg={COLORS.pink}

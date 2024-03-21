@@ -3,7 +3,13 @@ import { useBodies } from "@/hooks/queries/useBodies";
 import { useAnimation } from "@/hooks/useAnimation";
 import { AssetType } from "@/model/assetType";
 import { decodeNFTInfo } from "@/utils/tokenInfo";
-import { PropsWithChildren, useCallback, useMemo, useState } from "react";
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { MinterContext } from "./minterContext";
 
 const { OUTFIT, BACKGROUND } = ASSETS;
@@ -69,6 +75,11 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   );
 
   const bodies = useBodies();
+
+  useEffect(() => {
+    if (!bodies.data?.nfttiers) return;
+    _setBodyTierId(bodies.data.nfttiers[0].tierId);
+  }, [bodies]);
 
   const randomize = useCallback(() => {
     setBodyTierId(

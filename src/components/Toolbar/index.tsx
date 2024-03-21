@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import MusicPlayer from "../MusicPlayer";
 import Wallet from "./Wallet";
 import Blinker from "../shared/Blinker";
+import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 
 export const TOOLBAR_HEIGHT = 48;
 
@@ -16,19 +17,20 @@ export default function Index() {
     return null;
   }, [router.pathname]);
 
+  const isSmallScreen = useIsSmallScreen();
+
   return (
     <div
       style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         padding: "10px 20px",
         gap: 20,
         height: TOOLBAR_HEIGHT,
+        ...(isSmallScreen
+          ? { fontSize: "0.8rem" }
+          : { position: "fixed", top: 0, left: 0, right: 0 }),
       }}
     >
       <div
@@ -36,7 +38,6 @@ export default function Index() {
           display: "flex",
           alignItems: "baseline",
           gap: 20,
-          height: TOOLBAR_HEIGHT,
         }}
       >
         <Link href={"/"}>
@@ -66,10 +67,10 @@ export default function Index() {
         )}
       </div>
 
-      <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+      {/* <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
         <Blinker />
         Work in progress
-      </div>
+      </div> */}
 
       {/* <MusicPlayer /> */}
       <Wallet />

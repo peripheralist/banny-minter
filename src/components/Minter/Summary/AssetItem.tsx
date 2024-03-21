@@ -1,5 +1,4 @@
 import { MinterContext } from "@/contexts/minterContext";
-import { useBodies } from "@/hooks/queries/useBodies";
 import { useTierPrice } from "@/hooks/useTierPrice";
 import { AssetType } from "@/model/assetType";
 import { formatEther } from "juice-sdk-core";
@@ -11,8 +10,6 @@ export default function AssetItem({ assetType }: { assetType: AssetType }) {
     useContext(MinterContext);
 
   const ref = useRef<HTMLSpanElement>(null);
-
-  const bodies = useBodies();
 
   const width = ref.current?.clientWidth;
   let assetName: string | undefined = undefined;

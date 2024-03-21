@@ -70,17 +70,6 @@ export default function AssetOptionButton({
           }}
         />
 
-        {/* {active && (
-          <CheckBadgeIcon
-            style={{
-              position: "absolute",
-              bottom: 4,
-              left: 4,
-              zIndex: 1,
-            }}
-          />
-        )} */}
-
         {frame && frame < 1 && (
           <Fuzz
             width={buttonSize}

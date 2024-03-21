@@ -4,6 +4,7 @@ import { CSSProperties, useContext } from "react";
 import ButtonPad from "../shared/ButtonPad";
 import AssetButton from "./AssetButton";
 import BannyButtons from "./BannyButtons";
+import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 
 export const tabs: AssetType[] = [
   "OUTFIT",
@@ -17,6 +18,8 @@ export default function Controls({ style }: { style?: CSSProperties }) {
 
   const [activeTab] = tab;
 
+  const isSmallScreen = useIsSmallScreen();
+
   return (
     <div
       style={{
@@ -27,7 +30,6 @@ export default function Controls({ style }: { style?: CSSProperties }) {
         height: "100%",
         boxSizing: "border-box",
         gap: 10,
-        // background: "#00000044",
         ...style,
       }}
     >
@@ -39,33 +41,13 @@ export default function Controls({ style }: { style?: CSSProperties }) {
           asset={t}
           active={activeTab === t}
           onClick={activeTab === t || !setTab ? undefined : () => setTab(t)}
+          style={isSmallScreen ? { width: 40, height: 40 } : undefined}
         />
       ))}
 
       <ButtonPad style={{ height: 40, fontSize: "1.4rem" }} onClick={randomize}>
         RANDOMIZE
       </ButtonPad>
-
-      {/* <div
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            left: 0,
-            width: 6,
-            background: "#00000064",
-          }}
-          />
-          <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 6,
-            right: 0,
-            height: 6,
-            background: "#00000064",
-          }}
-        /> */}
     </div>
   );
 }

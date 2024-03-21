@@ -15,33 +15,35 @@ import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import AssetOptionButton from "./AssetOptionButton";
 
-const IMG_SIZE = 120;
-
 export default function GridSelector({
   style,
   gridCols,
   gridRows,
+  imageSize,
 }: {
   style?: CSSProperties;
   gridCols: number;
   gridRows: number;
+  imageSize: number;
 }) {
   const pageSize = useMemo(() => gridRows * gridCols, [gridRows, gridCols]);
-  const gridWidth = useMemo(
-    () => IMG_SIZE * gridCols + (gridCols + 1) * 10,
-    [gridCols]
-  );
-  const gridHeight = useMemo(
-    () => IMG_SIZE * gridRows + (gridRows + 1) * 10,
-    [gridRows]
-  );
+
+  const gap = 6;
+
+  // +/-12 accounts for button pad internal margin. idk man. shit's not perferct
+  const gridWidth = useMemo(() => {
+    return (imageSize + 12) * gridCols + (gridCols + 1) * gap - 12;
+  }, [gridCols, imageSize]);
+  const gridHeight = useMemo(() => {
+    return (imageSize + 12) * gridRows + (gridRows + 1) * gap;
+  }, [gridRows, imageSize]);
 
   const { setBackground, setOutfit, tab, background, outfit } =
     useContext(MinterContext);
 
   const [pageIdx, setPageIdx] = useState<number>(0);
 
-  const [activeTab, prevTab] = tab;
+  const [activeTab] = tab;
 
   useEffect(() => {
     setPageIdx(0);
@@ -99,7 +101,15 @@ export default function GridSelector({
     }
 
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1 }}>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          gap: 10,
+        }}
+      >
         {children}
       </div>
     );
@@ -147,14 +157,14 @@ export default function GridSelector({
           break;
       }
 
-      const _size = IMG_SIZE * multiplier;
+      const _size = imageSize * multiplier;
 
       return (
         <div
           style={{
             display: "grid",
             gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-            gap: 6,
+            gap,
             ...style,
           }}
         >
@@ -163,18 +173,14 @@ export default function GridSelector({
               key={a}
               assetType={assetType}
               asset={a}
-              buttonSize={IMG_SIZE}
+              buttonSize={imageSize}
               assetSize={_size}
             />
           ))}
         </div>
       );
     },
-    [
-      assetsForPage,
-      // gridWidth,
-      gridCols,
-    ]
+    [assetsForPage, imageSize, gridCols]
   );
 
   return (
@@ -197,43 +203,20 @@ export default function GridSelector({
             height: gridHeight,
           }}
         >
-          {/* {prevTab && (
-              <AssetGrid
-                assetType={prevTab}
-                style={{
-                  position: "absolute",
-                  animation:
-                    tabs.indexOf(activeTab) > tabs.indexOf(prevTab)
-                      ? "slide-out-left .2s"
-                      : "slide-out-right .2s",
-                }}
-              />
-            )} */}
-          <AssetGrid
-            assetType={activeTab}
-            // style={
-            //   prevTab
-            //     ? {
-            //         animation:
-            //           tabs.indexOf(activeTab) > tabs.indexOf(prevTab)
-            //             ? "slide-in-left .2s"
-            //             : "slide-in-right .2s",
-            //       }
-            //     : undefined
-            // }
-          />
+          <AssetGrid assetType={activeTab} />
         </div>
 
         <div
           style={{
             display: "flex",
             alignItems: "flex-end",
-            justifyContent: "space-between",
             gap: 10,
           }}
         >
           <PageSelector />
-          <PageIndicator />
+          <div style={{ flex: 1 }}>
+            <PageIndicator />
+          </div>
 
           {((activeTab === "BACKGROUND" && background) ||
             (activeTab === "OUTFIT" && outfit)) && (
