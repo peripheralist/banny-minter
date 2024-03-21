@@ -67,10 +67,12 @@ export default function Index() {
         )}
       </div>
 
-      {/* <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-        <Blinker />
-        Work in progress
-      </div> */}
+      {isSmallScreen ? null : (
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <Blinker />
+          Work in progress
+        </div>
+      )}
 
       {/* <MusicPlayer /> */}
       <Wallet />

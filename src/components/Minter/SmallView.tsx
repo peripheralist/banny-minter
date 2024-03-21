@@ -37,12 +37,12 @@ export default function SmallView() {
 
   const windowWidth = useWindowWidth();
   const gridImageSize = useMemo(
-    () => (windowWidth && windowWidth > 600 ? 120 : 90),
+    () => (windowWidth && windowWidth > 600 ? 120 : 80),
     [windowWidth]
   );
   const gridCols = useMemo(
     () =>
-      windowWidth ? Math.floor((windowWidth - 120) / (gridImageSize + 12)) : 3,
+      windowWidth ? Math.floor((windowWidth - 100) / (gridImageSize + 12)) : 3,
     [windowWidth, gridImageSize]
   );
 

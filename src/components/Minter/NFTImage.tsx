@@ -39,7 +39,7 @@ export default function NFTImage({ imageSize }: { imageSize: number }) {
           density={0.75 - frame}
         />
       ),
-    []
+    [imageSize]
   );
 
   const backgroundUrl = background
@@ -95,7 +95,7 @@ export default function NFTImage({ imageSize }: { imageSize: number }) {
             />
             <_Fuzz
               style={{
-                maskImage: bodyImgUrl,
+                maskImage: `url(${bodyImgUrl})`,
                 maskSize: imageSize,
               }}
               frame={bodyFrame}
