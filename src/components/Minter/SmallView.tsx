@@ -46,6 +46,8 @@ export default function SmallView() {
     [windowWidth, gridImageSize]
   );
 
+  const gap = 10;
+
   if (bodies.loading) {
     return (
       <div
@@ -75,14 +77,9 @@ export default function SmallView() {
         flexDirection: "column",
         padding: 20,
         paddingTop: 0,
-        gap: 10,
+        gap,
       }}
     >
-      <BannyButtons
-        style={{ display: "flex", gap: 10 }}
-        buttonStyle={{ height: 40, flex: 1 }}
-      />
-
       <RoundedFrame shadow style={{ width: "100%", height: 320 }}>
         <div
           style={{
@@ -94,7 +91,12 @@ export default function SmallView() {
         </div>
       </RoundedFrame>
 
-      <div style={{ display: "flex", gap: 10 }}>
+      <BannyButtons
+        style={{ display: "flex", gap }}
+        buttonStyle={{ height: 40, flex: 1 }}
+      />
+
+      <div style={{ display: "flex", gap }}>
         {assetTypes.map((t) => (
           <AssetButton
             key={t}
@@ -115,15 +117,13 @@ export default function SmallView() {
       />
 
       <div
-        style={
-          windowWidth && windowWidth < 800
-            ? undefined
-            : {
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: 10,
-              }
-        }
+        style={{
+          display: "grid",
+          gap: 10,
+          gridTemplateColumns: `repeat(${
+            windowWidth && windowWidth < 800 ? 1 : 2
+          }, 1fr)`,
+        }}
       >
         <div
           style={{
