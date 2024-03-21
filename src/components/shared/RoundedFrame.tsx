@@ -15,7 +15,7 @@ export default function RoundedFrame({
     <div style={{ position: "relative", overflow: "hidden", ...style }}>
       <div
         style={{
-          borderRadius: 18,
+          borderRadius: 15,
           overflow: "hidden",
           height: "100%",
           boxSizing: "border-box",
