@@ -79,6 +79,11 @@ export default function SmallView() {
         gap,
       }}
     >
+      <BannyButtons
+        style={{ display: "flex", gap }}
+        buttonStyle={{ height: 40, flex: 1 }}
+      />
+
       <RoundedFrame shadow style={{ width: "100%", height: 320 }}>
         <div
           style={{
@@ -89,11 +94,6 @@ export default function SmallView() {
           <NFTImage imageSize={280} />
         </div>
       </RoundedFrame>
-
-      <BannyButtons
-        style={{ display: "flex", gap }}
-        buttonStyle={{ height: 40, flex: 1 }}
-      />
 
       <div style={{ display: "flex", gap }}>
         {assetTypes.map((t) => (
@@ -118,7 +118,7 @@ export default function SmallView() {
       <div
         style={{
           display: "grid",
-          gap: 10,
+          gap,
           gridTemplateColumns: `repeat(${
             windowWidth && windowWidth < 800 ? 1 : 2
           }, 1fr)`,
@@ -128,7 +128,6 @@ export default function SmallView() {
           style={{
             display: "flex",
             flex: 1,
-            height: "100%",
           }}
         >
           <RoundedFrame style={{ flex: 1, height: "100%" }}>
@@ -136,7 +135,6 @@ export default function SmallView() {
               style={{
                 background: "black",
                 padding: 20,
-                height: "100%",
                 boxSizing: "border-box",
               }}
             >
@@ -180,6 +178,7 @@ export default function SmallView() {
                 >
                   Mint
                 </div>
+
                 {!address && (
                   <div
                     style={{
