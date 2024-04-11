@@ -19,6 +19,19 @@ NEXT_PUBLIC_INFURA_API_KEY= # Infura api key. If not provided, a public provider
 
 4. Serve app: `yarn dev`
 
+> **Useful terms:**
+> * `nft`: Unique minted token.
+> * `tier`: Unique asset that can be minted as an NFT.
+>   * e.g. "Banny Vision Pro", "Punk jacket"
+>   * `tier:nft == 1:N`
+> * `category`: Describes a type of tier asset. 16 total.
+>   * e.g. "headgear", "suitTop"
+>   * `category:tier == 1:N`
+> * `categoryGroup`: Group of similar categories.
+>   * e.g. `body` includes categories `suitTop`, `suitBottom`
+>   * `categoryGroup:category == 1:N`
+>   * An abstraction used by the UI that is *not* recognized by any on-chain smart contract.
+
 ## Infrastructure
 
 ### Subgraph

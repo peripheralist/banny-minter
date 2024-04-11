@@ -1,23 +1,22 @@
 import { COLORS } from "@/constants/colors";
 import { MinterContext } from "@/contexts/minterContext";
 import { useAnimation } from "@/hooks/useAnimation";
-import { Asset } from "@/model/asset";
 import Image from "next/image";
 import { useContext, useEffect, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
+import { Tier } from "@/model/tier";
 
-export default function AssetOptionButton({
-  asset,
+export default function TierSelectorButton({
+  tier,
   buttonSize,
-  assetSize,
+  imageSize,
 }: {
-  asset: Asset;
+  tier: Tier;
   buttonSize: number;
-  assetSize: number;
+  imageSize: number;
 }) {
   const {
-    selectedCategory,
     equipped: { get, set },
   } = useContext(MinterContext);
 
@@ -29,21 +28,13 @@ export default function AssetOptionButton({
   }, [animate]);
 
   const { onClick, active } = useMemo(() => {
-    switch (selectedCategory) {
-      case "head":
-        return {
-          active: get.head?.tierId === asset.tierId,
-          onClick: () => set?.head?.(asset.tierId),
-        };
-      case "suitTop":
-        return {
-          active: get.suitTop?.tierId === asset.tierId,
-          onClick: () => set?.suitTop?.(asset.tierId),
-        };
-    }
+    const { category, tierId } = tier;
 
-    return { active: undefined, onClick: undefined };
-  }, [asset, selectedCategory, get, set]);
+    return {
+      active: get[category]?.tierId === tierId,
+      onClick: () => set?.[category]?.(tierId),
+    };
+  }, [tier, get, set]);
 
   return (
     <ButtonPad fillFg="white" onClick={onClick} pressed={active}>
@@ -56,13 +47,13 @@ export default function AssetOptionButton({
           overflow: "hidden",
         }}
       >
-        {asset.image && (
+        {tier.image && (
           <Image
             style={{ position: "absolute", inset: 0 }}
-            width={assetSize}
-            height={assetSize}
-            src={asset.image}
-            alt={asset.name ?? asset.tierId.toString()}
+            width={imageSize}
+            height={imageSize}
+            src={tier.image}
+            alt={tier.name ?? tier.tierId.toString()}
           />
         )}
 

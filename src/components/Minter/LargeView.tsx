@@ -1,26 +1,26 @@
-import { NFT_CATEGORIES } from "@/constants/nfts";
+import { CATEGORY_GROUP_NAMES } from "@/constants/nfts";
 import { MinterContext } from "@/contexts/minterContext";
-import { useTiers } from "@/hooks/queries/useTiers";
+import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { TOOLBAR_HEIGHT } from "../Toolbar";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
-import AssetCategoryButton from "./AssetCategoryButton";
 import BannyButtons from "./BannyButtons";
-import GridSelector from "./GridSelector";
+import CategoryGroupButton from "./CategoryGroupButton";
+import CategoryGroupGrid from "./CategoryGroupGrid";
 import Loading from "./Loading";
 import MintButton from "./MintButton";
 import NFTImage from "./NFTImage";
 import Summary from "./Summary";
 
 export default function LargeView() {
-  const { loading } = useTiers();
+  const { loading } = useCategorizedTiers();
 
   const {
     equipped: { randomize },
-    selectedCategory,
-    setSelectedCategory,
+    selectedGroup,
+    setSelectedGroup,
   } = useContext(MinterContext);
 
   const [containerHeight, setContainerHeight] = useState<number>(0);
@@ -104,16 +104,16 @@ export default function LargeView() {
               buttonStyle={{ height: 40, width: 40 }}
             />
 
-            {setSelectedCategory
-              ? NFT_CATEGORIES.filter((t) => t !== "body").map((t) => (
-                  <AssetCategoryButton
-                    key={t}
-                    asset={t}
-                    active={selectedCategory === t}
+            {setSelectedGroup
+              ? CATEGORY_GROUP_NAMES.map((g) => (
+                  <CategoryGroupButton
+                    key={g}
+                    group={g}
+                    active={selectedGroup === g}
                     onClick={
-                      selectedCategory === t
+                      selectedGroup === g
                         ? undefined
-                        : () => setSelectedCategory(t)
+                        : () => setSelectedGroup(g)
                     }
                   />
                 ))
@@ -127,7 +127,7 @@ export default function LargeView() {
             </ButtonPad>
           </div>
 
-          <GridSelector
+          <CategoryGroupGrid
             style={{ padding: 24 }}
             gridRows={gridRows}
             gridCols={gridCols}

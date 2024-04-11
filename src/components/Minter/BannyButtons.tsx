@@ -1,5 +1,5 @@
 import { MinterContext } from "@/contexts/minterContext";
-import { useTiers } from "@/hooks/queries/useTiers";
+import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { CSSProperties, useContext } from "react";
 import ButtonPadLight from "../shared/ButtonPadLight";
 
@@ -10,7 +10,7 @@ export default function BannyButtons({
   style?: CSSProperties;
   buttonStyle?: CSSProperties;
 }) {
-  const { tiers } = useTiers();
+  const { tiers } = useCategorizedTiers();
   const {
     equipped: {
       get: { body },

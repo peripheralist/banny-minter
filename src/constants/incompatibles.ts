@@ -1,6 +1,6 @@
-import { NFTCategory } from "./nfts";
+import { Category } from "./nfts";
 
-type CategoryIncompatibles = Partial<Record<NFTCategory, NFTCategory[]>>;
+type CategoryIncompatibles = Partial<Record<Category, Category[]>>;
 
 // If key category is equipped, values should be removed
 // Copied from revert logic in contract
@@ -13,7 +13,7 @@ const _categoryIncompatibles: CategoryIncompatibles = {
 
 // Export incompatibles with all remaining many-to-many relationships
 export const categoryIncompatibles: CategoryIncompatibles = (
-  Object.entries(_categoryIncompatibles) as [NFTCategory, NFTCategory[]][]
+  Object.entries(_categoryIncompatibles) as [Category, Category[]][]
 ).reduce((acc, [k, values]) => {
   values.forEach((v) => {
     if (!acc[v]) {

@@ -12,16 +12,7 @@ if (!BANNYVERSE_PROJECT_ID) {
   throw new Error("Missing Bannyverse projectId");
 }
 
-/**
- * NFT lingo overview:
- *
- * nft: individual token
- * tier: individual asset (many nfts)
- * category: type of asset (many tiers)
- * group: group of similar categories (many categories)
- */
-
-export const NFT_CATEGORY_IDS = {
+export const CATEGORY_IDS = {
   body: 0,
   world: 1,
   backside: 2,
@@ -40,21 +31,49 @@ export const NFT_CATEGORY_IDS = {
   topping: 15,
 } as const;
 
-export type NFTCategory = keyof typeof NFT_CATEGORY_IDS;
+export type Category = keyof typeof CATEGORY_IDS;
 
-export const NFT_CATEGORIES: NFTCategory[] = [
-  "body",
+export const categoryOfId = Object.entries(CATEGORY_IDS).reduce(
+  (acc, [k, v]) => ({
+    ...acc,
+    [v]: k as Category,
+  }),
+  {} as Record<number, Category>
+);
+
+// All categories in SVG layering order, from background to foreground
+export const CATEGORIES: Category[] = [
   "world",
-  "head",
+  "backside",
+  "body",
+  "suitBottom",
   "suitTop",
+  "suit",
+  "onesie",
+  "face",
+  "eyes",
+  "mouth",
+  "head",
+  "headgear",
+  "necklace",
+  "shoe",
+  "fist",
+  "topping",
 ];
 
-export type NFTCategoryGroup = "world" | "head" | "body" | "hand";
+export const CATEGORY_GROUP_NAMES = [
+  "body",
+  "head",
+  "special",
+  "world",
+] as const;
+
+export type CategoryGroup = (typeof CATEGORY_GROUP_NAMES)[number];
 
 // Groups of similar asset categories
-export const NFT_CATEGORY_GROUPS: Record<NFTCategoryGroup, NFTCategory[]> = {
-  head: ["eyes", "face", "head", "headgear", "mouth"],
+export const CATEGORY_GROUPS: Record<CategoryGroup, Category[]> = {
   body: ["necklace", "onesie", "shoe", "suit", "suitBottom", "suitTop"],
-  hand: ["fist"],
+  head: ["eyes", "face", "head", "headgear", "mouth"],
+  special: ["fist", "topping", "backside"],
   world: ["world"],
 };

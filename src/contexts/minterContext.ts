@@ -1,33 +1,37 @@
-import { NFTCategory, NFT_CATEGORIES } from "@/constants/nfts";
+import {
+  Category,
+  CategoryGroup,
+  CATEGORIES,
+} from "@/constants/nfts";
 import { useAnimation } from "@/hooks/useAnimation";
-import { Asset } from "@/model/asset";
+import { Tier } from "@/model/tier";
 import { createContext } from "react";
 
-export type SelectedTierGetters = Record<NFTCategory, Asset | undefined>;
+export type EquippedTiers = Record<Category, Tier | undefined>;
 
-export type SelectedTierSetters = Record<
-  NFTCategory,
+export type EquipTierFns = Record<
+  Category,
   (id: number | undefined) => void
 >;
 
 type Context = {
   equipped: {
-    set?: Partial<SelectedTierSetters>;
-    get: Partial<SelectedTierGetters>;
+    set?: Partial<EquipTierFns>;
+    get: Partial<EquippedTiers>;
     randomize?: VoidFunction;
     totalPrice?: bigint | null;
   };
-  selectedCategory: NFTCategory;
-  setSelectedCategory?: (t: NFTCategory) => void;
-  changeAssetAnimation?: ReturnType<typeof useAnimation> & {
-    category?: NFTCategory;
+  selectedGroup: CategoryGroup;
+  setSelectedGroup?: (g: CategoryGroup) => void;
+  equipCategoryAnimation?: ReturnType<typeof useAnimation> & {
+    category?: Category;
   };
 };
 
 export const MinterContext = createContext<Context>({
-  selectedCategory: "suitTop",
+  selectedGroup: "body",
   equipped: {
-    get: NFT_CATEGORIES.reduce(
+    get: CATEGORIES.reduce(
       (acc, category) => ({
         ...acc,
         [category]: undefined,

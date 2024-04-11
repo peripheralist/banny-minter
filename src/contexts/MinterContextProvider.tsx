@@ -1,6 +1,10 @@
 import { categoryIncompatibles } from "@/constants/incompatibles";
-import { NFTCategory, NFT_CATEGORIES } from "@/constants/nfts";
-import { useTiers } from "@/hooks/queries/useTiers";
+import {
+  Category,
+  CategoryGroup,
+  CATEGORIES,
+} from "@/constants/nfts";
+import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useAnimation } from "@/hooks/useAnimation";
 import {
   PropsWithChildren,
@@ -9,86 +13,80 @@ import {
   useMemo,
   useState,
 } from "react";
-import {
-  MinterContext,
-  SelectedTierGetters,
-  SelectedTierSetters,
-} from "./minterContext";
+import { EquipTierFns, EquippedTiers, MinterContext } from "./minterContext";
 
 export default function MinterContextProvider({ children }: PropsWithChildren) {
-  const [selectedAssetId, setSelectedAssetId] = useState<
-    Partial<Record<NFTCategory, number>>
+  const [equippedTierId, setEquippedTierId] = useState<
+    Partial<Record<Category, number>>
   >({});
-  const [selectedCategory, setSelectedCategory] =
-    useState<NFTCategory>("suitTop");
-  const [animatingCategory, setAnimatingCategory] = useState<NFTCategory>();
+  const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("body");
+  const [animatingCategory, setAnimatingCategory] = useState<Category>();
 
   const animation = useAnimation({
     interval: 100,
     step: 0.2,
   });
 
-  const { tiers } = useTiers();
-
-  useEffect(() => {
-    // set default body
-    if (!tiers?.body) return;
-    setSelectedAssetId((_) => ({ ..._, body: tiers.body[0].tierId }));
-  }, [tiers?.body]);
+  const { tiers } = useCategorizedTiers();
 
   const get = useMemo(
     () =>
-      NFT_CATEGORIES.reduce(
+      CATEGORIES.reduce(
         (acc, category) => ({
           ...acc,
           [category]: tiers?.[category].find(
-            (t) => t.tierId === selectedAssetId[category]
+            (t) => t.tierId === equippedTierId[category]
           ),
         }),
-        {} as SelectedTierGetters
+        {} as EquippedTiers
       ),
-    [selectedAssetId, tiers]
+    [equippedTierId, tiers]
   );
 
   const set = useMemo(() => {
-    function tierIdSetter(category: NFTCategory) {
-      return (tierId: number | undefined) => {
-        setSelectedAssetId((_ids) => ({
+    const tierIdSetter =
+      (category: Category) => (tierId: number | undefined) => {
+        setEquippedTierId((_ids) => ({
           ..._ids,
           // Set new tierId for category
           [category]: tierId,
-          // Remove any incompatible assets
+          // Remove any incompatible tiers
           ...categoryIncompatibles[category]?.reduce(
-            (acc, incompatible) => ({
+            (acc, incompatibleTier) => ({
               ...acc,
-              [incompatible]: undefined,
+              [incompatibleTier]: undefined,
             }),
             {}
           ),
         }));
 
-        // Don't animate if removing asset
+        // Don't animate if unequiping tier
         if (!tierId || !animation) return;
         setAnimatingCategory(category);
         animation.animate(true).then(() => animation.setFrame(0));
       };
-    }
 
     // Define setter function for each NFT category
-    return NFT_CATEGORIES.reduce(
+    return CATEGORIES.reduce(
       (acc, category) => ({
         ...acc,
         [category]: tierIdSetter(category),
       }),
-      {} as SelectedTierSetters
+      {} as EquipTierFns
     );
   }, [animation]);
+
+  useEffect(() => {
+    // default equip first body tier
+    if (!tiers?.body || !set || get.body) return;
+    set.body(tiers.body[0].tierId);
+  }, [tiers?.body, set, get]);
 
   const randomize = useCallback(() => {
     if (!tiers) return;
 
     // randomize all category tier ids
-    NFT_CATEGORIES.forEach((c) => {
+    CATEGORIES.forEach((c) => {
       if (!tiers[c].length) return;
 
       set[c](Math.floor(Math.random() * tiers[c].length) + 1);
@@ -101,7 +99,7 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
     // Sum price of all selected assets
     return Object.entries(tiers).reduce((acc, [category, tiers]) => {
       const tier = tiers.find(
-        (t) => t.tierId === get[category as NFTCategory]?.tierId
+        (t) => t.tierId === get[category as Category]?.tierId
       );
 
       return tier?.price ? acc + tier.price : acc;
@@ -117,9 +115,9 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
           randomize,
           totalPrice,
         },
-        selectedCategory,
-        setSelectedCategory,
-        changeAssetAnimation: {
+        selectedGroup,
+        setSelectedGroup,
+        equipCategoryAnimation: {
           ...animation,
           category: animatingCategory,
         },

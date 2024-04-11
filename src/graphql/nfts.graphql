@@ -19,6 +19,7 @@ fragment TierData on NFTTier {
   resolvedUri
   initialSupply
   remainingSupply
+  category
 }
 
 query NFTTiers($where: NFTTier_filter, $orderBy: NFTTier_orderBy) {

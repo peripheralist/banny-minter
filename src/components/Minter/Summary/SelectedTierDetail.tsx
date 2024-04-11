@@ -1,31 +1,31 @@
-import { NFTCategory } from "@/constants/nfts";
+import { Category } from "@/constants/nfts";
 import { MinterContext } from "@/contexts/minterContext";
 import { formatEther } from "juice-sdk-core";
 import { useContext, useMemo, useRef } from "react";
 import Fuzz from "../../pixelRenderers/Fuzz";
 
-export default function SelectedAssetDetail({
+export default function SelectedTierDetail({
   category,
 }: {
-  category: NFTCategory;
+  category: Category;
 }) {
   const {
     equipped: { get },
-    changeAssetAnimation,
+    equipCategoryAnimation,
   } = useContext(MinterContext);
 
   const ref = useRef<HTMLSpanElement>(null);
 
   const width = ref.current?.clientWidth;
 
-  const asset = useMemo(() => get[category], [get, category]);
+  const tier = useMemo(() => get[category], [get, category]);
 
   const frame = useMemo(
     () =>
-      changeAssetAnimation?.category === category
-        ? changeAssetAnimation.frame
+      equipCategoryAnimation?.category === category
+        ? equipCategoryAnimation.frame
         : undefined,
-    [category, changeAssetAnimation]
+    [category, equipCategoryAnimation]
   );
 
   return (
@@ -33,9 +33,9 @@ export default function SelectedAssetDetail({
       <span ref={ref}>
         {frame && frame !== 1 && width ? (
           <Fuzz width={width} height={12} pixelSize={4} fill="white" />
-        ) : asset?.name ? (
+        ) : tier?.name ? (
           <span>
-            {asset.price ? formatEther(asset.price) : "--"} ETH {asset.name}
+            {tier.price ? formatEther(tier.price) : "--"} ETH {tier.name}
           </span>
         ) : (
           "--"

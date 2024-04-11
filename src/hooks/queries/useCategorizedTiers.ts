@@ -1,14 +1,14 @@
 import { apolloClient } from "@/constants/apollo";
-import { BANNYVERSE_COLLECTION_ID, NFTCategory } from "@/constants/nfts";
+import { BANNYVERSE_COLLECTION_ID, Category } from "@/constants/nfts";
 import { NftTier_OrderBy, useAllNftTiersQuery } from "@/generated/graphql";
-import { Asset } from "@/model/asset";
-import { parseAsset } from "@/utils/parseAsset";
+import { Tier } from "@/model/tier";
+import { parseTier } from "@/utils/parseTier";
 import { useMemo } from "react";
 
 /**
  * @returns All NFT tiers mapped to their respective category
  */
-export function useTiers() {
+export function useCategorizedTiers() {
   const { data: tiers, ...props } = useAllNftTiersQuery({
     client: apolloClient,
     variables: {
@@ -23,9 +23,9 @@ export function useTiers() {
         ? Object.entries(tiers).reduce(
             (acc, [k, tiers]) => ({
               ...acc,
-              [k]: tiers.map(parseAsset),
+              [k]: tiers.map(parseTier),
             }),
-            {} as Record<NFTCategory, Asset[]>
+            {} as Record<Category, Tier[]>
           )
         : undefined,
     [tiers]

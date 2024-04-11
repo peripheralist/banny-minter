@@ -1,5 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { NFTCategory } from "@/constants/nfts";
+import { Category, CategoryGroup } from "@/constants/nfts";
 import { CSSProperties, useCallback } from "react";
 import ButtonPad from "../shared/ButtonPad";
 import IconImage from "../shared/images/IconImage";
@@ -9,14 +9,14 @@ import IconImage from "../shared/images/IconImage";
  * @param param0
  * @returns
  */
-export default function AssetCategoryButton({
-  asset,
+export default function CategoryGroupButton({
+  group,
   active,
   onClick,
   style,
   size,
 }: {
-  asset: NFTCategory;
+  group: CategoryGroup;
   active?: boolean;
   onClick?: VoidFunction;
   style?: CSSProperties;
@@ -24,17 +24,17 @@ export default function AssetCategoryButton({
 }) {
   const Icon = useCallback(() => {
     let name = "";
-    switch (asset) {
+    switch (group) {
       case "world":
         name = "background";
         break;
-      case "suitTop":
+      case "body":
         name = "shirt";
         break;
     }
 
     return <IconImage name={name} size={size} />;
-  }, [asset, size]);
+  }, [group, size]);
 
   return (
     <ButtonPad

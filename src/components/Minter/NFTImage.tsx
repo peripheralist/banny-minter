@@ -1,35 +1,16 @@
-import { NFTCategory } from "@/constants/nfts";
+import { CATEGORIES } from "@/constants/nfts";
 import { MinterContext } from "@/contexts/minterContext";
 import Image from "next/image";
 import { CSSProperties, useCallback, useContext } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 
-const orderedLayers: NFTCategory[] = [
-  "world",
-  "backside",
-  "body",
-  "suitBottom",
-  "suitTop",
-  "suit",
-  "onesie",
-  "face",
-  "eyes",
-  "mouth",
-  "head",
-  "headgear",
-  "necklace",
-  "shoe",
-  "fist",
-  "topping",
-];
-
 export default function NFTImage({ imageSize }: { imageSize: number }) {
   const {
     equipped: { get },
-    changeAssetAnimation,
+    equipCategoryAnimation,
   } = useContext(MinterContext);
 
-  const animationCategory = changeAssetAnimation?.category;
+  const animationCategory = equipCategoryAnimation?.category;
 
   const _Fuzz = useCallback(
     ({ frame, style }: { frame: number | undefined; style?: CSSProperties }) =>
@@ -46,7 +27,7 @@ export default function NFTImage({ imageSize }: { imageSize: number }) {
           }}
           width={imageSize}
           height={imageSize}
-          fill="#ffffff"
+          fill="white"
           pixelSize={4}
           density={0.75 - frame}
         />
@@ -73,10 +54,10 @@ export default function NFTImage({ imageSize }: { imageSize: number }) {
           height: imageSize,
         }}
       >
-        {orderedLayers.map((l) => {
-          const src = get[l]?.image;
+        {CATEGORIES.map((c) => {
+          const tier = get[c];
 
-          if (!src) return null;
+          if (!tier?.image) return null;
 
           return (
             <>
@@ -86,16 +67,16 @@ export default function NFTImage({ imageSize }: { imageSize: number }) {
                 }}
                 width={imageSize}
                 height={imageSize}
-                src={src}
-                alt={l}
+                src={tier.image}
+                alt={`${c}: ${tier.name}`}
               />
-              {animationCategory === l ? (
+              {animationCategory === c ? (
                 <_Fuzz
                   style={{
-                    maskImage: src,
+                    maskImage: tier.image,
                     maskSize: imageSize,
                   }}
-                  frame={changeAssetAnimation?.frame}
+                  frame={equipCategoryAnimation?.frame}
                 />
               ) : null}
             </>

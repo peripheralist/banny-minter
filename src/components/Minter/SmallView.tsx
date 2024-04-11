@@ -1,7 +1,7 @@
 import { COLORS } from "@/constants/colors";
-import { NFT_CATEGORIES } from "@/constants/nfts";
+import { CATEGORY_GROUP_NAMES } from "@/constants/nfts";
 import { MinterContext } from "@/contexts/minterContext";
-import { useTiers } from "@/hooks/queries/useTiers";
+import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useMint } from "@/hooks/writeContract/useMint";
 import { formatEther } from "juice-sdk-core";
@@ -11,9 +11,9 @@ import { TOOLBAR_HEIGHT } from "../Toolbar";
 import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
-import AssetCategoryButton from "./AssetCategoryButton";
 import BannyButtons from "./BannyButtons";
-import GridSelector from "./GridSelector";
+import CategoryGroupButton from "./CategoryGroupButton";
+import CategoryGroupGrid from "./CategoryGroupGrid";
 import NFTImage from "./NFTImage";
 import Summary from "./Summary";
 
@@ -21,11 +21,11 @@ export default function SmallView() {
   const { address } = useAccount();
   const {
     equipped: { get, totalPrice },
-    selectedCategory,
-    setSelectedCategory,
+    selectedGroup,
+    setSelectedGroup,
   } = useContext(MinterContext);
 
-  const { loading } = useTiers();
+  const { loading } = useCategorizedTiers();
 
   const { mint, isLoading, tx } = useMint({
     amount: totalPrice,
@@ -94,26 +94,22 @@ export default function SmallView() {
         </div>
       </RoundedFrame>
 
-      {setSelectedCategory && (
+      {setSelectedGroup && (
         <div style={{ display: "flex", gap }}>
-          {NFT_CATEGORIES.filter((t) => t !== "body").map((t) => (
-            <AssetCategoryButton
-              key={t}
-              asset={t}
-              active={selectedCategory === t}
+          {CATEGORY_GROUP_NAMES.map((g) => (
+            <CategoryGroupButton
+              key={g}
+              group={g}
+              active={selectedGroup === g}
               onClick={
-                selectedCategory === t
-                  ? undefined
-                  : () => setSelectedCategory(t)
+                selectedGroup === g ? undefined : () => setSelectedGroup(g)
               }
-              size={24}
-              style={{ height: 40, flex: 1 }}
             />
           ))}
         </div>
       )}
 
-      <GridSelector
+      <CategoryGroupGrid
         style={{ padding: 24 }}
         gridRows={3}
         gridCols={gridCols}
