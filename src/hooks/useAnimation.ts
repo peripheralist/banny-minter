@@ -1,6 +1,10 @@
 import { useCallback, useState } from "react";
 
-export function useAnimation(props?: { interval?: number; step?: number }) {
+export function useAnimation(props?: {
+  interval?: number;
+  step?: number;
+  onDone?: VoidFunction;
+}) {
   const [frame, setFrame] = useState<number>(0);
 
   const animate = useCallback(
@@ -23,7 +27,7 @@ export function useAnimation(props?: { interval?: number; step?: number }) {
             return val;
           });
         }, interval);
-      });
+      }).then(props?.onDone);
     },
     [props]
   );

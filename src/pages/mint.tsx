@@ -1,7 +1,6 @@
-import React from "react";
 import Minter from "@/components/Minter";
-import Head from "next/head";
 import MinterContextProvider from "@/contexts/MinterContextProvider";
+import Head from "next/head";
 
 export default function Mint() {
   return (

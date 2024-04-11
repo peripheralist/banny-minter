@@ -4,21 +4,26 @@ import PixelArc from "../pixelRenderers/PixelArc";
 export default function RoundedFrame({
   children,
   shadow,
+  containerStyle,
   style,
 }: PropsWithChildren<{
   shadow?: boolean;
+  containerStyle?: CSSProperties;
   style?: CSSProperties;
 }>) {
   const r = 8;
 
   return (
-    <div style={{ position: "relative", overflow: "hidden", ...style }}>
+    <div
+      style={{ position: "relative", overflow: "hidden", ...containerStyle }}
+    >
       <div
         style={{
           borderRadius: 15,
           overflow: "hidden",
           height: "100%",
           boxSizing: "border-box",
+          ...style,
         }}
       >
         {children}

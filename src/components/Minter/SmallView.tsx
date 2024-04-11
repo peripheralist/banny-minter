@@ -1,8 +1,8 @@
-import { assetTypes } from "@/constants/assetTypes";
 import { COLORS } from "@/constants/colors";
+import { NFT_CATEGORIES } from "@/constants/nfts";
 import { MinterContext } from "@/contexts/minterContext";
-import { useBodies } from "@/hooks/queries/useBodies";
-import { useTierPrice } from "@/hooks/useTierPrice";
+import { useTiers } from "@/hooks/queries/useTiers";
+import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useMint } from "@/hooks/writeContract/useMint";
 import { formatEther } from "juice-sdk-core";
 import { useContext, useMemo } from "react";
@@ -11,26 +11,25 @@ import { TOOLBAR_HEIGHT } from "../Toolbar";
 import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
-import AssetButton from "./AssetButton";
+import AssetCategoryButton from "./AssetCategoryButton";
 import BannyButtons from "./BannyButtons";
 import GridSelector from "./GridSelector";
 import NFTImage from "./NFTImage";
 import Summary from "./Summary";
-import { useWindowWidth } from "@/hooks/useWindowWidth";
 
 export default function SmallView() {
   const { address } = useAccount();
-  const { body, tab, setTab } = useContext(MinterContext);
+  const {
+    equipped: { get, totalPrice },
+    selectedCategory,
+    setSelectedCategory,
+  } = useContext(MinterContext);
 
-  const [activeTab] = tab;
+  const { loading } = useTiers();
 
-  const bodies = useBodies();
-
-  const bodyPrice = useTierPrice({ assetType: "BODY", tierId: body?.tierId });
-  const totalPrice = bodyPrice.data;
   const { mint, isLoading, tx } = useMint({
     amount: totalPrice,
-    tierIds: [...(body ? [BigInt(body.tierId)] : [])],
+    tierIds: [...(get.body ? [BigInt(get.body.tierId)] : [])],
   });
 
   const mintTxPending = isLoading || tx.status === "loading";
@@ -48,7 +47,7 @@ export default function SmallView() {
 
   const gap = 10;
 
-  if (bodies.loading) {
+  if (loading) {
     return (
       <div
         style={{
@@ -84,7 +83,7 @@ export default function SmallView() {
         buttonStyle={{ height: 40, flex: 1 }}
       />
 
-      <RoundedFrame shadow style={{ width: "100%", height: 320 }}>
+      <RoundedFrame shadow containerStyle={{ width: "100%", height: 320 }}>
         <div
           style={{
             height: "100%",
@@ -95,18 +94,24 @@ export default function SmallView() {
         </div>
       </RoundedFrame>
 
-      <div style={{ display: "flex", gap }}>
-        {assetTypes.map((t) => (
-          <AssetButton
-            key={t}
-            asset={t}
-            active={activeTab === t}
-            onClick={activeTab === t || !setTab ? undefined : () => setTab(t)}
-            size={24}
-            style={{ height: 40, flex: 1 }}
-          />
-        ))}
-      </div>
+      {setSelectedCategory && (
+        <div style={{ display: "flex", gap }}>
+          {NFT_CATEGORIES.filter((t) => t !== "body").map((t) => (
+            <AssetCategoryButton
+              key={t}
+              asset={t}
+              active={selectedCategory === t}
+              onClick={
+                selectedCategory === t
+                  ? undefined
+                  : () => setSelectedCategory(t)
+              }
+              size={24}
+              style={{ height: 40, flex: 1 }}
+            />
+          ))}
+        </div>
+      )}
 
       <GridSelector
         style={{ padding: 24 }}
@@ -130,7 +135,7 @@ export default function SmallView() {
             flex: 1,
           }}
         >
-          <RoundedFrame style={{ flex: 1, height: "100%" }}>
+          <RoundedFrame containerStyle={{ flex: 1, height: "100%" }}>
             <div
               style={{
                 background: "black",

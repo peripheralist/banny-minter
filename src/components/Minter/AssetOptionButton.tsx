@@ -1,7 +1,7 @@
 import { COLORS } from "@/constants/colors";
 import { MinterContext } from "@/contexts/minterContext";
 import { useAnimation } from "@/hooks/useAnimation";
-import { AssetType } from "@/model/assetType";
+import { Asset } from "@/model/asset";
 import Image from "next/image";
 import { useContext, useEffect, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
@@ -9,17 +9,17 @@ import ButtonPad from "../shared/ButtonPad";
 
 export default function AssetOptionButton({
   asset,
-  assetType,
   buttonSize,
   assetSize,
 }: {
-  asset: string;
-  assetType: AssetType;
+  asset: Asset;
   buttonSize: number;
   assetSize: number;
 }) {
-  const { outfit, background, setOutfit, setBackground, tab } =
-    useContext(MinterContext);
+  const {
+    selectedCategory,
+    equipped: { get, set },
+  } = useContext(MinterContext);
 
   const { animate, frame } = useAnimation({ step: 0.125 });
 
@@ -29,18 +29,21 @@ export default function AssetOptionButton({
   }, [animate]);
 
   const { onClick, active } = useMemo(() => {
-    switch (assetType) {
-      case "BACKGROUND":
+    switch (selectedCategory) {
+      case "head":
         return {
-          active: background === asset,
-          onClick: () => setBackground?.(asset),
+          active: get.head?.tierId === asset.tierId,
+          onClick: () => set?.head?.(asset.tierId),
         };
-      case "OUTFIT":
-        return { active: outfit === asset, onClick: () => setOutfit?.(asset) };
+      case "suitTop":
+        return {
+          active: get.suitTop?.tierId === asset.tierId,
+          onClick: () => set?.suitTop?.(asset.tierId),
+        };
     }
 
     return { active: undefined, onClick: undefined };
-  }, [asset, assetType, setOutfit, setBackground, background, outfit]);
+  }, [asset, selectedCategory, get, set]);
 
   return (
     <ButtonPad fillFg="white" onClick={onClick} pressed={active}>
@@ -53,13 +56,15 @@ export default function AssetOptionButton({
           overflow: "hidden",
         }}
       >
-        <Image
-          style={{ position: "absolute", inset: 0 }}
-          width={assetSize}
-          height={assetSize}
-          src={`/assets/banny/${assetType.toLowerCase()}/${asset}`}
-          alt={asset}
-        />
+        {asset.image && (
+          <Image
+            style={{ position: "absolute", inset: 0 }}
+            width={assetSize}
+            height={assetSize}
+            src={asset.image}
+            alt={asset.name ?? asset.tierId.toString()}
+          />
+        )}
 
         <div
           style={{

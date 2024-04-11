@@ -1,7 +1,6 @@
-import { ASSETS } from "@/constants/assets";
 import { COLORS } from "@/constants/colors";
 import { MinterContext } from "@/contexts/minterContext";
-import { AssetType } from "@/model/assetType";
+import { useTiers } from "@/hooks/queries/useTiers";
 import {
   CSSProperties,
   useCallback,
@@ -26,6 +25,13 @@ export default function GridSelector({
   gridRows: number;
   imageSize: number;
 }) {
+  const { tiers } = useTiers();
+
+  const {
+    selectedCategory,
+    equipped: { get, set },
+  } = useContext(MinterContext);
+
   const pageSize = useMemo(() => gridRows * gridCols, [gridRows, gridCols]);
 
   const gap = 6;
@@ -38,49 +44,34 @@ export default function GridSelector({
     return (imageSize + 12) * gridRows + (gridRows + 1) * gap;
   }, [gridRows, imageSize]);
 
-  const { setBackground, setOutfit, tab, background, outfit } =
-    useContext(MinterContext);
-
   const [pageIdx, setPageIdx] = useState<number>(0);
-
-  const [activeTab] = tab;
 
   useEffect(() => {
     setPageIdx(0);
-  }, [activeTab]);
+  }, [selectedCategory]);
 
-  const pagesCount = useMemo(
-    () => (pageSize ? Math.ceil(ASSETS[activeTab].length / pageSize) : 0),
-    [activeTab, pageSize]
+  const pagesCount = useMemo(() => {
+    const count = tiers?.[selectedCategory]?.length;
+
+    return pageSize && count ? Math.ceil(count / pageSize) : 0;
+  }, [selectedCategory, pageSize, tiers]);
+
+  const assetsForPage = useMemo(
+    () =>
+      tiers?.[selectedCategory]?.slice(
+        pageIdx * pageSize,
+        (pageIdx + 1) * pageSize
+      ),
+    [pageIdx, selectedCategory, pageSize, tiers]
   );
 
-  const assetsForPage = useMemo(() => {
-    return ASSETS[activeTab].slice(
-      pageIdx * pageSize,
-      (pageIdx + 1) * pageSize
-    );
-  }, [pageIdx, activeTab, pageSize]);
-
   const pageIdxOfSelected = useMemo(() => {
-    switch (activeTab) {
-      case "BACKGROUND":
-        return background
-          ? Math.floor(
-              ASSETS["BACKGROUND"].indexOf(
-                background as (typeof ASSETS)["BACKGROUND"][number]
-              ) / pageSize
-            )
-          : undefined;
-      case "OUTFIT":
-        return outfit
-          ? Math.floor(
-              ASSETS["OUTFIT"].indexOf(
-                outfit as (typeof ASSETS)["OUTFIT"][number]
-              ) / pageSize
-            )
-          : undefined;
-    }
-  }, [activeTab, background, outfit, pageSize]);
+    const idx = tiers?.[selectedCategory]?.findIndex(
+      (t) => t.tierId === get[selectedCategory]?.tierId
+    );
+
+    return idx ? Math.floor(idx / pageSize) : undefined;
+  }, [selectedCategory, pageSize, tiers, get]);
 
   const PageIndicator = useCallback(() => {
     const children: JSX.Element[] = [];
@@ -145,14 +136,14 @@ export default function GridSelector({
   }, [pagesCount]);
 
   const AssetGrid = useCallback(
-    ({ assetType, style }: { assetType: AssetType; style?: CSSProperties }) => {
+    ({ style }: { style?: CSSProperties }) => {
       let multiplier = 1;
 
-      switch (assetType) {
-        case "BACKGROUND":
+      switch (selectedCategory) {
+        case "world":
           multiplier = 1;
           break;
-        case "OUTFIT":
+        case "head":
           multiplier = 1.1;
           break;
       }
@@ -168,10 +159,9 @@ export default function GridSelector({
             ...style,
           }}
         >
-          {assetsForPage.map((a) => (
+          {assetsForPage?.map((a) => (
             <AssetOptionButton
-              key={a}
-              assetType={assetType}
+              key={a.tierId}
               asset={a}
               buttonSize={imageSize}
               assetSize={_size}
@@ -180,11 +170,14 @@ export default function GridSelector({
         </div>
       );
     },
-    [assetsForPage, imageSize, gridCols]
+    [assetsForPage, imageSize, gridCols, selectedCategory]
   );
 
   return (
-    <RoundedFrame style={{ height: "100%", boxSizing: "border-box" }} shadow>
+    <RoundedFrame
+      containerStyle={{ height: "100%", boxSizing: "border-box" }}
+      shadow
+    >
       <div
         style={{
           display: "flex",
@@ -203,7 +196,7 @@ export default function GridSelector({
             height: gridHeight,
           }}
         >
-          <AssetGrid assetType={activeTab} />
+          <AssetGrid />
         </div>
 
         <div
@@ -218,20 +211,10 @@ export default function GridSelector({
             <PageIndicator />
           </div>
 
-          {((activeTab === "BACKGROUND" && background) ||
-            (activeTab === "OUTFIT" && outfit)) && (
+          {get[selectedCategory] && (
             <ButtonPad
               style={{ width: 24, height: 24, zIndex: 1 }}
-              onClick={() => {
-                switch (activeTab) {
-                  case "BACKGROUND":
-                    setBackground?.(undefined);
-                    break;
-                  case "OUTFIT":
-                    setOutfit?.(undefined);
-                    break;
-                }
-              }}
+              onClick={() => set?.[selectedCategory]?.(undefined)}
             >
               ✖️
             </ButtonPad>

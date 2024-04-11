@@ -1,8 +1,7 @@
-import { ASSETS } from "@/constants/assets";
-import { useBodies } from "@/hooks/queries/useBodies";
+import { categoryIncompatibles } from "@/constants/incompatibles";
+import { NFTCategory, NFT_CATEGORIES } from "@/constants/nfts";
+import { useTiers } from "@/hooks/queries/useTiers";
 import { useAnimation } from "@/hooks/useAnimation";
-import { AssetType } from "@/model/assetType";
-import { decodeNFTInfo } from "@/utils/tokenInfo";
 import {
   PropsWithChildren,
   useCallback,
@@ -10,121 +9,120 @@ import {
   useMemo,
   useState,
 } from "react";
-import { MinterContext } from "./minterContext";
-
-const { OUTFIT, BACKGROUND } = ASSETS;
+import {
+  MinterContext,
+  SelectedTierGetters,
+  SelectedTierSetters,
+} from "./minterContext";
 
 export default function MinterContextProvider({ children }: PropsWithChildren) {
-  const [bodyTierId, _setBodyTierId] = useState<number>(1); // tier id
-  const [outfit, _setOutfit] = useState<string>();
-  const [background, _setBackground] = useState<string>();
-  const [tab, _setTab] = useState<[AssetType, AssetType | undefined]>([
-    "OUTFIT",
-    undefined,
-  ]);
+  const [selectedAssetId, setSelectedAssetId] = useState<
+    Partial<Record<NFTCategory, number>>
+  >({});
+  const [selectedCategory, setSelectedCategory] =
+    useState<NFTCategory>("suitTop");
+  const [animatingCategory, setAnimatingCategory] = useState<NFTCategory>();
 
-  const {
-    animate: animateBody,
-    frame: bodyFrame,
-    setFrame: setBodyFrame,
-  } = useAnimation({
+  const animation = useAnimation({
     interval: 100,
     step: 0.2,
   });
 
-  const {
-    animate: animateOutfit,
-    frame: outfitFrame,
-    setFrame: setOutfitFrame,
-  } = useAnimation({
-    interval: 100,
-    step: 0.2,
-  });
-
-  const {
-    animate: animateBackground,
-    frame: backgroundFrame,
-    setFrame: setBackgroundFrame,
-  } = useAnimation({
-    interval: 100,
-    step: 0.2,
-  });
-
-  const setBodyTierId = useCallback(
-    (tierId: number) => {
-      _setBodyTierId(tierId);
-      animateBody(true).then(() => setBodyFrame(0));
-    },
-    [animateBody, setBodyFrame]
-  );
-
-  const setOutfit = useCallback(
-    (s: string | undefined) => {
-      _setOutfit(s);
-      animateOutfit(true).then(() => setOutfitFrame(0));
-    },
-    [animateOutfit, setOutfitFrame]
-  );
-
-  const setBackground = useCallback(
-    (s: string | undefined) => {
-      _setBackground(s);
-      animateBackground(true).then(() => setBackgroundFrame(0));
-    },
-    [animateBackground, setBackgroundFrame]
-  );
-
-  const bodies = useBodies();
+  const { tiers } = useTiers();
 
   useEffect(() => {
-    if (!bodies.data?.nfttiers) return;
-    _setBodyTierId(bodies.data.nfttiers[0].tierId);
-  }, [bodies]);
+    // set default body
+    if (!tiers?.body) return;
+    setSelectedAssetId((_) => ({ ..._, body: tiers.body[0].tierId }));
+  }, [tiers?.body]);
+
+  const get = useMemo(
+    () =>
+      NFT_CATEGORIES.reduce(
+        (acc, category) => ({
+          ...acc,
+          [category]: tiers?.[category].find(
+            (t) => t.tierId === selectedAssetId[category]
+          ),
+        }),
+        {} as SelectedTierGetters
+      ),
+    [selectedAssetId, tiers]
+  );
+
+  const set = useMemo(() => {
+    function tierIdSetter(category: NFTCategory) {
+      return (tierId: number | undefined) => {
+        setSelectedAssetId((_ids) => ({
+          ..._ids,
+          // Set new tierId for category
+          [category]: tierId,
+          // Remove any incompatible assets
+          ...categoryIncompatibles[category]?.reduce(
+            (acc, incompatible) => ({
+              ...acc,
+              [incompatible]: undefined,
+            }),
+            {}
+          ),
+        }));
+
+        // Don't animate if removing asset
+        if (!tierId || !animation) return;
+        setAnimatingCategory(category);
+        animation.animate(true).then(() => animation.setFrame(0));
+      };
+    }
+
+    // Define setter function for each NFT category
+    return NFT_CATEGORIES.reduce(
+      (acc, category) => ({
+        ...acc,
+        [category]: tierIdSetter(category),
+      }),
+      {} as SelectedTierSetters
+    );
+  }, [animation]);
 
   const randomize = useCallback(() => {
-    setBodyTierId(
-      Math.floor(Math.random() * (bodies.data?.nfttiers.length ?? 0)) + 1
-    );
-    setOutfit(OUTFIT[Math.floor(Math.random() * OUTFIT.length)]);
-    setBackground(BACKGROUND[Math.floor(Math.random() * BACKGROUND.length)]);
-  }, [setBodyTierId, setOutfit, setBackground, bodies]);
+    if (!tiers) return;
 
-  const body = useMemo(() => {
-    const uri = bodies.data?.nfttiers.find(
-      (t) => t.tierId === bodyTierId
-    )?.resolvedUri;
+    // randomize all category tier ids
+    NFT_CATEGORIES.forEach((c) => {
+      if (!tiers[c].length) return;
 
-    const info = decodeNFTInfo(uri);
+      set[c](Math.floor(Math.random() * tiers[c].length) + 1);
+    });
+  }, [set, tiers]);
 
-    if (!info) return undefined;
+  const totalPrice = useMemo(() => {
+    if (!tiers) return null;
 
-    return { ...info, tierId: bodyTierId };
-  }, [bodyTierId, bodies]);
+    // Sum price of all selected assets
+    return Object.entries(tiers).reduce((acc, [category, tiers]) => {
+      const tier = tiers.find(
+        (t) => t.tierId === get[category as NFTCategory]?.tierId
+      );
 
-  const setTab = useCallback((t: AssetType) => {
-    // Store previous tab in index[1]
-    _setTab(([_t]) => [t, _t]);
-
-    setTimeout(() => {
-      _setTab(([_t]) => [_t, undefined]);
-    }, 250);
-  }, []);
+      return tier?.price ? acc + tier.price : acc;
+    }, BigInt(0));
+  }, [tiers, get]);
 
   return (
     <MinterContext.Provider
       value={{
-        body,
-        setBodyTierId,
-        bodyFrame,
-        outfit,
-        setOutfit,
-        outfitFrame,
-        background,
-        setBackground,
-        backgroundFrame,
-        randomize,
-        tab,
-        setTab,
+        equipped: {
+          get,
+          set,
+          randomize,
+          totalPrice,
+        },
+        selectedCategory,
+        setSelectedCategory,
+        changeAssetAnimation: {
+          ...animation,
+          category: animatingCategory,
+        },
       }}
     >
       {children}

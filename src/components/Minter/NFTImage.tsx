@@ -1,23 +1,35 @@
+import { NFTCategory } from "@/constants/nfts";
 import { MinterContext } from "@/contexts/minterContext";
-import { useBodies } from "@/hooks/queries/useBodies";
-import { decodeNFTInfo } from "@/utils/tokenInfo";
 import Image from "next/image";
-import { CSSProperties, useCallback, useContext, useMemo } from "react";
+import { CSSProperties, useCallback, useContext } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 
+const orderedLayers: NFTCategory[] = [
+  "world",
+  "backside",
+  "body",
+  "suitBottom",
+  "suitTop",
+  "suit",
+  "onesie",
+  "face",
+  "eyes",
+  "mouth",
+  "head",
+  "headgear",
+  "necklace",
+  "shoe",
+  "fist",
+  "topping",
+];
+
 export default function NFTImage({ imageSize }: { imageSize: number }) {
-  const { body, outfit, background, bodyFrame, outfitFrame, backgroundFrame } =
-    useContext(MinterContext);
+  const {
+    equipped: { get },
+    changeAssetAnimation,
+  } = useContext(MinterContext);
 
-  const bodies = useBodies();
-
-  const bodyImgUrl = useMemo(() => {
-    const uri = bodies.data?.nfttiers.find(
-      (t) => t.tierId === body?.tierId
-    )?.resolvedUri;
-
-    return decodeNFTInfo(uri)?.image;
-  }, [body, bodies]);
+  const animationCategory = changeAssetAnimation?.category;
 
   const _Fuzz = useCallback(
     ({ frame, style }: { frame: number | undefined; style?: CSSProperties }) =>
@@ -42,11 +54,6 @@ export default function NFTImage({ imageSize }: { imageSize: number }) {
     [imageSize]
   );
 
-  const backgroundUrl = background
-    ? `/assets/banny/background/${background}`
-    : undefined;
-  const outfitUrl = outfit ? `/assets/banny/outfit/${outfit}` : undefined;
-
   return (
     <div
       style={{
@@ -56,70 +63,44 @@ export default function NFTImage({ imageSize }: { imageSize: number }) {
         justifyContent: "center",
         height: "100%",
         width: "100%",
-        // border: "4px solid black",
         boxSizing: "border-box",
       }}
     >
       <div
         style={{
           position: "relative",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1,
-          backgroundImage: `url(${backgroundUrl})`,
           width: imageSize,
-          maxWidth: imageSize,
           height: imageSize,
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
         }}
       >
-        <_Fuzz
-          style={{
-            maskSize: imageSize,
-          }}
-          frame={backgroundFrame}
-        />
-        {bodyImgUrl && (
-          <>
-            <Image
-              style={{
-                position: "absolute",
-              }}
-              width={imageSize}
-              height={imageSize}
-              src={bodyImgUrl}
-              alt={"body"}
-            />
-            <_Fuzz
-              style={{
-                maskImage: `url(${bodyImgUrl})`,
-                maskSize: imageSize,
-              }}
-              frame={bodyFrame}
-            />
-          </>
-        )}
-        {outfitUrl && (
-          <>
-            <Image
-              style={{ position: "absolute" }}
-              width={imageSize}
-              height={imageSize}
-              src={outfitUrl}
-              alt={"outfit"}
-            />
-            <_Fuzz
-              style={{
-                maskImage: `url(${outfitUrl})`,
-                maskSize: imageSize,
-              }}
-              frame={outfitFrame}
-            />
-          </>
-        )}
+        {orderedLayers.map((l) => {
+          const src = get[l]?.image;
+
+          if (!src) return null;
+
+          return (
+            <>
+              <Image
+                style={{
+                  position: "absolute",
+                }}
+                width={imageSize}
+                height={imageSize}
+                src={src}
+                alt={l}
+              />
+              {animationCategory === l ? (
+                <_Fuzz
+                  style={{
+                    maskImage: src,
+                    maskSize: imageSize,
+                  }}
+                  frame={changeAssetAnimation?.frame}
+                />
+              ) : null}
+            </>
+          );
+        })}
       </div>
     </div>
   );

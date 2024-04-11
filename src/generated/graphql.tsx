@@ -18,7 +18,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   BigDecimal: { input: any; output: any; }
-  BigInt: { input: bigint; output: bigint; }
+  BigInt: { input: any; output: any; }
   Bytes: { input: any; output: any; }
   Int8: { input: any; output: any; }
 };
@@ -1002,7 +1002,7 @@ export enum DeployEtherc20SplitsPayerEvent_OrderBy {
 }
 
 export type DeployedErc20Event = {
-  address: Maybe<Scalars['Bytes']['output']>;
+  address: Scalars['Bytes']['output'];
   caller: Scalars['Bytes']['output'];
   from: Scalars['Bytes']['output'];
   id: Scalars['ID']['output'];
@@ -1396,7 +1396,6 @@ export type DistributeReservedTokensEvent = {
   from: Scalars['Bytes']['output'];
   fundingCycleNumber: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
-  memo: Scalars['String']['output'];
   project: Project;
   projectId: Scalars['Int']['output'];
   splitDistributions: Array<DistributeToReservedTokenSplitEvent>;
@@ -1472,26 +1471,6 @@ export type DistributeReservedTokensEvent_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  memo?: InputMaybe<Scalars['String']['input']>;
-  memo_contains?: InputMaybe<Scalars['String']['input']>;
-  memo_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  memo_ends_with?: InputMaybe<Scalars['String']['input']>;
-  memo_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  memo_gt?: InputMaybe<Scalars['String']['input']>;
-  memo_gte?: InputMaybe<Scalars['String']['input']>;
-  memo_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  memo_lt?: InputMaybe<Scalars['String']['input']>;
-  memo_lte?: InputMaybe<Scalars['String']['input']>;
-  memo_not?: InputMaybe<Scalars['String']['input']>;
-  memo_not_contains?: InputMaybe<Scalars['String']['input']>;
-  memo_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  memo_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  memo_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  memo_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  memo_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  memo_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  memo_starts_with?: InputMaybe<Scalars['String']['input']>;
-  memo_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
   or?: InputMaybe<Array<InputMaybe<DistributeReservedTokensEvent_Filter>>>;
   project?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['Int']['input']>;
@@ -1558,7 +1537,6 @@ export enum DistributeReservedTokensEvent_OrderBy {
   from = 'from',
   fundingCycleNumber = 'fundingCycleNumber',
   id = 'id',
-  memo = 'memo',
   project = 'project',
   projectId = 'projectId',
   project__contributorsCount = 'project__contributorsCount',
@@ -2222,7 +2200,6 @@ export enum DistributeToReservedTokenSplitEvent_OrderBy {
   distributeReservedTokensEvent__from = 'distributeReservedTokensEvent__from',
   distributeReservedTokensEvent__fundingCycleNumber = 'distributeReservedTokensEvent__fundingCycleNumber',
   distributeReservedTokensEvent__id = 'distributeReservedTokensEvent__id',
-  distributeReservedTokensEvent__memo = 'distributeReservedTokensEvent__memo',
   distributeReservedTokensEvent__projectId = 'distributeReservedTokensEvent__projectId',
   distributeReservedTokensEvent__timestamp = 'distributeReservedTokensEvent__timestamp',
   distributeReservedTokensEvent__tokenCount = 'distributeReservedTokensEvent__tokenCount',
@@ -3821,7 +3798,7 @@ export enum NftCollection_OrderBy {
 export type NftTier = {
   allowOwnerMint: Scalars['Boolean']['output'];
   cannotBeRemoved: Scalars['Boolean']['output'];
-  category: Maybe<Scalars['Int']['output']>;
+  category: Scalars['Int']['output'];
   collection: NftCollection;
   createdAt: Scalars['Int']['output'];
   encodedIpfsUri: Maybe<Scalars['Bytes']['output']>;
@@ -3830,8 +3807,8 @@ export type NftTier = {
   nfts: Array<Nft>;
   price: Scalars['BigInt']['output'];
   remainingSupply: Scalars['BigInt']['output'];
-  reserveBeneficiary: Maybe<Scalars['Bytes']['output']>;
-  reserveFrequency: Maybe<Scalars['BigInt']['output']>;
+  reserveBeneficiary: Scalars['Bytes']['output'];
+  reserveFrequency: Scalars['BigInt']['output'];
   resolvedUri: Maybe<Scalars['String']['output']>;
   tierId: Scalars['Int']['output'];
   transfersPausable: Scalars['Boolean']['output'];
@@ -4641,6 +4618,117 @@ export enum PayEvent_OrderBy {
   txHash = 'txHash'
 }
 
+export type PermissionsHolder = {
+  account: Scalars['Bytes']['output'];
+  id: Scalars['ID']['output'];
+  operator: Scalars['Bytes']['output'];
+  permissions: Array<Scalars['BigInt']['output']>;
+  project: Project;
+  projectId: Scalars['Int']['output'];
+};
+
+export type PermissionsHolder_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  account?: InputMaybe<Scalars['Bytes']['input']>;
+  account_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  account_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  account_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  account_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  account_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  account_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  account_not?: InputMaybe<Scalars['Bytes']['input']>;
+  account_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  account_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  and?: InputMaybe<Array<InputMaybe<PermissionsHolder_Filter>>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  operator?: InputMaybe<Scalars['Bytes']['input']>;
+  operator_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  operator_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  operator_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  operator_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  operator_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  operator_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  operator_not?: InputMaybe<Scalars['Bytes']['input']>;
+  operator_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  operator_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<PermissionsHolder_Filter>>>;
+  permissions?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  permissions_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  permissions_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  permissions_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  permissions_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  permissions_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  project?: InputMaybe<Scalars['String']['input']>;
+  projectId?: InputMaybe<Scalars['Int']['input']>;
+  projectId_gt?: InputMaybe<Scalars['Int']['input']>;
+  projectId_gte?: InputMaybe<Scalars['Int']['input']>;
+  projectId_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  projectId_lt?: InputMaybe<Scalars['Int']['input']>;
+  projectId_lte?: InputMaybe<Scalars['Int']['input']>;
+  projectId_not?: InputMaybe<Scalars['Int']['input']>;
+  projectId_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  project_?: InputMaybe<Project_Filter>;
+  project_contains?: InputMaybe<Scalars['String']['input']>;
+  project_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  project_ends_with?: InputMaybe<Scalars['String']['input']>;
+  project_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  project_gt?: InputMaybe<Scalars['String']['input']>;
+  project_gte?: InputMaybe<Scalars['String']['input']>;
+  project_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  project_lt?: InputMaybe<Scalars['String']['input']>;
+  project_lte?: InputMaybe<Scalars['String']['input']>;
+  project_not?: InputMaybe<Scalars['String']['input']>;
+  project_not_contains?: InputMaybe<Scalars['String']['input']>;
+  project_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  project_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  project_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  project_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  project_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  project_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  project_starts_with?: InputMaybe<Scalars['String']['input']>;
+  project_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum PermissionsHolder_OrderBy {
+  account = 'account',
+  id = 'id',
+  operator = 'operator',
+  permissions = 'permissions',
+  project = 'project',
+  projectId = 'projectId',
+  project__contributorsCount = 'project__contributorsCount',
+  project__createdAt = 'project__createdAt',
+  project__createdWithinTrendingWindow = 'project__createdWithinTrendingWindow',
+  project__creator = 'project__creator',
+  project__currentBalance = 'project__currentBalance',
+  project__deployer = 'project__deployer',
+  project__handle = 'project__handle',
+  project__id = 'project__id',
+  project__latestFundingCycle = 'project__latestFundingCycle',
+  project__metadata = 'project__metadata',
+  project__nftsMintedCount = 'project__nftsMintedCount',
+  project__owner = 'project__owner',
+  project__paymentsCount = 'project__paymentsCount',
+  project__projectId = 'project__projectId',
+  project__redeemCount = 'project__redeemCount',
+  project__redeemVolume = 'project__redeemVolume',
+  project__redeemVolumeUSD = 'project__redeemVolumeUSD',
+  project__tokenSupply = 'project__tokenSupply',
+  project__trendingPaymentsCount = 'project__trendingPaymentsCount',
+  project__trendingScore = 'project__trendingScore',
+  project__trendingVolume = 'project__trendingVolume',
+  project__volume = 'project__volume',
+  project__volumeUSD = 'project__volumeUSD'
+}
+
 export type PrintReservesEvent = {
   beneficiary: Scalars['Bytes']['output'];
   beneficiaryTicketAmount: Scalars['BigInt']['output'];
@@ -4852,6 +4940,7 @@ export type Project = {
   participants: Array<Participant>;
   payEvents: Array<PayEvent>;
   paymentsCount: Scalars['Int']['output'];
+  permissionsHolders: Array<PermissionsHolder>;
   printReservesEvents: Array<PrintReservesEvent>;
   projectEvents: Array<ProjectEvent>;
   projectId: Scalars['Int']['output'];
@@ -5032,6 +5121,15 @@ export type ProjectPayEventsArgs = {
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<PayEvent_Filter>;
+};
+
+
+export type ProjectPermissionsHoldersArgs = {
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<PermissionsHolder_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PermissionsHolder_Filter>;
 };
 
 
@@ -5903,7 +6001,6 @@ export enum ProjectEvent_OrderBy {
   distributeReservedTokensEvent__from = 'distributeReservedTokensEvent__from',
   distributeReservedTokensEvent__fundingCycleNumber = 'distributeReservedTokensEvent__fundingCycleNumber',
   distributeReservedTokensEvent__id = 'distributeReservedTokensEvent__id',
-  distributeReservedTokensEvent__memo = 'distributeReservedTokensEvent__memo',
   distributeReservedTokensEvent__projectId = 'distributeReservedTokensEvent__projectId',
   distributeReservedTokensEvent__timestamp = 'distributeReservedTokensEvent__timestamp',
   distributeReservedTokensEvent__tokenCount = 'distributeReservedTokensEvent__tokenCount',
@@ -6052,7 +6149,6 @@ export enum ProjectEvent_OrderBy {
   redeemEvent__from = 'redeemEvent__from',
   redeemEvent__holder = 'redeemEvent__holder',
   redeemEvent__id = 'redeemEvent__id',
-  redeemEvent__memo = 'redeemEvent__memo',
   redeemEvent__metadata = 'redeemEvent__metadata',
   redeemEvent__projectId = 'redeemEvent__projectId',
   redeemEvent__returnAmount = 'redeemEvent__returnAmount',
@@ -6100,13 +6196,13 @@ export enum ProjectEvent_OrderBy {
   useAllowanceEvent__distributedAmount = 'useAllowanceEvent__distributedAmount',
   useAllowanceEvent__distributedAmountUSD = 'useAllowanceEvent__distributedAmountUSD',
   useAllowanceEvent__from = 'useAllowanceEvent__from',
-  useAllowanceEvent__fundingCycleConfiguration = 'useAllowanceEvent__fundingCycleConfiguration',
-  useAllowanceEvent__fundingCycleNumber = 'useAllowanceEvent__fundingCycleNumber',
   useAllowanceEvent__id = 'useAllowanceEvent__id',
   useAllowanceEvent__memo = 'useAllowanceEvent__memo',
   useAllowanceEvent__netDistributedamount = 'useAllowanceEvent__netDistributedamount',
   useAllowanceEvent__netDistributedamountUSD = 'useAllowanceEvent__netDistributedamountUSD',
   useAllowanceEvent__projectId = 'useAllowanceEvent__projectId',
+  useAllowanceEvent__rulesetCycleNumber = 'useAllowanceEvent__rulesetCycleNumber',
+  useAllowanceEvent__rulesetId = 'useAllowanceEvent__rulesetId',
   useAllowanceEvent__timestamp = 'useAllowanceEvent__timestamp',
   useAllowanceEvent__txHash = 'useAllowanceEvent__txHash',
   v1ConfigureEvent = 'v1ConfigureEvent',
@@ -6298,6 +6394,7 @@ export type Project_Filter = {
   paymentsCount_lte?: InputMaybe<Scalars['Int']['input']>;
   paymentsCount_not?: InputMaybe<Scalars['Int']['input']>;
   paymentsCount_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  permissionsHolders_?: InputMaybe<PermissionsHolder_Filter>;
   printReservesEvents_?: InputMaybe<PrintReservesEvent_Filter>;
   projectEvents_?: InputMaybe<ProjectEvent_Filter>;
   projectId?: InputMaybe<Scalars['Int']['input']>;
@@ -6420,6 +6517,7 @@ export enum Project_OrderBy {
   participants = 'participants',
   payEvents = 'payEvents',
   paymentsCount = 'paymentsCount',
+  permissionsHolders = 'permissionsHolders',
   printReservesEvents = 'printReservesEvents',
   projectEvents = 'projectEvents',
   projectId = 'projectId',
@@ -6640,6 +6738,8 @@ export type Query = {
   participants: Array<Participant>;
   payEvent: Maybe<PayEvent>;
   payEvents: Array<PayEvent>;
+  permissionsHolder: Maybe<PermissionsHolder>;
+  permissionsHolders: Array<PermissionsHolder>;
   printReservesEvent: Maybe<PrintReservesEvent>;
   printReservesEvents: Array<PrintReservesEvent>;
   project: Maybe<Project>;
@@ -7105,6 +7205,24 @@ export type QueryPayEventsArgs = {
 };
 
 
+export type QueryPermissionsHolderArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryPermissionsHoldersArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<PermissionsHolder_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<PermissionsHolder_Filter>;
+};
+
+
 export type QueryPrintReservesEventArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID']['input'];
@@ -7337,7 +7455,6 @@ export type RedeemEvent = {
   from: Scalars['Bytes']['output'];
   holder: Scalars['Bytes']['output'];
   id: Scalars['ID']['output'];
-  memo: Maybe<Scalars['String']['output']>;
   metadata: Maybe<Scalars['Bytes']['output']>;
   project: Project;
   projectId: Scalars['Int']['output'];
@@ -7407,26 +7524,6 @@ export type RedeemEvent_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  memo?: InputMaybe<Scalars['String']['input']>;
-  memo_contains?: InputMaybe<Scalars['String']['input']>;
-  memo_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  memo_ends_with?: InputMaybe<Scalars['String']['input']>;
-  memo_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  memo_gt?: InputMaybe<Scalars['String']['input']>;
-  memo_gte?: InputMaybe<Scalars['String']['input']>;
-  memo_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  memo_lt?: InputMaybe<Scalars['String']['input']>;
-  memo_lte?: InputMaybe<Scalars['String']['input']>;
-  memo_not?: InputMaybe<Scalars['String']['input']>;
-  memo_not_contains?: InputMaybe<Scalars['String']['input']>;
-  memo_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  memo_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  memo_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  memo_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  memo_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  memo_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  memo_starts_with?: InputMaybe<Scalars['String']['input']>;
-  memo_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
   metadata?: InputMaybe<Scalars['Bytes']['input']>;
   metadata_contains?: InputMaybe<Scalars['Bytes']['input']>;
   metadata_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -7510,7 +7607,6 @@ export enum RedeemEvent_OrderBy {
   from = 'from',
   holder = 'holder',
   id = 'id',
-  memo = 'memo',
   metadata = 'metadata',
   project = 'project',
   projectId = 'projectId',
@@ -7791,6 +7887,8 @@ export type Subscription = {
   participants: Array<Participant>;
   payEvent: Maybe<PayEvent>;
   payEvents: Array<PayEvent>;
+  permissionsHolder: Maybe<PermissionsHolder>;
+  permissionsHolders: Array<PermissionsHolder>;
   printReservesEvent: Maybe<PrintReservesEvent>;
   printReservesEvents: Array<PrintReservesEvent>;
   project: Maybe<Project>;
@@ -8252,6 +8350,24 @@ export type SubscriptionPayEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<PayEvent_Filter>;
+};
+
+
+export type SubscriptionPermissionsHolderArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionPermissionsHoldersArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<PermissionsHolder_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<PermissionsHolder_Filter>;
 };
 
 
@@ -8727,14 +8843,14 @@ export type UseAllowanceEvent = {
   distributedAmount: Scalars['BigInt']['output'];
   distributedAmountUSD: Maybe<Scalars['BigInt']['output']>;
   from: Scalars['Bytes']['output'];
-  fundingCycleConfiguration: Scalars['BigInt']['output'];
-  fundingCycleNumber: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   memo: Scalars['String']['output'];
   netDistributedamount: Scalars['BigInt']['output'];
   netDistributedamountUSD: Maybe<Scalars['BigInt']['output']>;
   project: Project;
   projectId: Scalars['Int']['output'];
+  rulesetCycleNumber: Scalars['Int']['output'];
+  rulesetId: Scalars['BigInt']['output'];
   timestamp: Scalars['Int']['output'];
   txHash: Scalars['Bytes']['output'];
 };
@@ -8805,22 +8921,6 @@ export type UseAllowanceEvent_Filter = {
   from_not?: InputMaybe<Scalars['Bytes']['input']>;
   from_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   from_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-  fundingCycleConfiguration?: InputMaybe<Scalars['BigInt']['input']>;
-  fundingCycleConfiguration_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  fundingCycleConfiguration_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  fundingCycleConfiguration_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  fundingCycleConfiguration_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  fundingCycleConfiguration_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  fundingCycleConfiguration_not?: InputMaybe<Scalars['BigInt']['input']>;
-  fundingCycleConfiguration_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  fundingCycleNumber?: InputMaybe<Scalars['Int']['input']>;
-  fundingCycleNumber_gt?: InputMaybe<Scalars['Int']['input']>;
-  fundingCycleNumber_gte?: InputMaybe<Scalars['Int']['input']>;
-  fundingCycleNumber_in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  fundingCycleNumber_lt?: InputMaybe<Scalars['Int']['input']>;
-  fundingCycleNumber_lte?: InputMaybe<Scalars['Int']['input']>;
-  fundingCycleNumber_not?: InputMaybe<Scalars['Int']['input']>;
-  fundingCycleNumber_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -8895,6 +8995,22 @@ export type UseAllowanceEvent_Filter = {
   project_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
   project_starts_with?: InputMaybe<Scalars['String']['input']>;
   project_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  rulesetCycleNumber?: InputMaybe<Scalars['Int']['input']>;
+  rulesetCycleNumber_gt?: InputMaybe<Scalars['Int']['input']>;
+  rulesetCycleNumber_gte?: InputMaybe<Scalars['Int']['input']>;
+  rulesetCycleNumber_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  rulesetCycleNumber_lt?: InputMaybe<Scalars['Int']['input']>;
+  rulesetCycleNumber_lte?: InputMaybe<Scalars['Int']['input']>;
+  rulesetCycleNumber_not?: InputMaybe<Scalars['Int']['input']>;
+  rulesetCycleNumber_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  rulesetId?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  rulesetId_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_not?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   timestamp?: InputMaybe<Scalars['Int']['input']>;
   timestamp_gt?: InputMaybe<Scalars['Int']['input']>;
   timestamp_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -8923,8 +9039,6 @@ export enum UseAllowanceEvent_OrderBy {
   distributedAmount = 'distributedAmount',
   distributedAmountUSD = 'distributedAmountUSD',
   from = 'from',
-  fundingCycleConfiguration = 'fundingCycleConfiguration',
-  fundingCycleNumber = 'fundingCycleNumber',
   id = 'id',
   memo = 'memo',
   netDistributedamount = 'netDistributedamount',
@@ -8954,6 +9068,8 @@ export enum UseAllowanceEvent_OrderBy {
   project__trendingVolume = 'project__trendingVolume',
   project__volume = 'project__volume',
   project__volumeUSD = 'project__volumeUSD',
+  rulesetCycleNumber = 'rulesetCycleNumber',
+  rulesetId = 'rulesetId',
   timestamp = 'timestamp',
   txHash = 'txHash'
 }
@@ -9504,7 +9620,9 @@ export type NfTsQueryVariables = Exact<{
 }>;
 
 
-export type NfTsQuery = { nfts: Array<{ tokenId: bigint, tokenUri: string, collection: { address: any } }> };
+export type NfTsQuery = { nfts: Array<{ tokenId: any, tokenUri: string, collection: { address: any } }> };
+
+export type TierDataFragment = { id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } };
 
 export type NftTiersQueryVariables = Exact<{
   where?: InputMaybe<NftTier_Filter>;
@@ -9512,7 +9630,15 @@ export type NftTiersQueryVariables = Exact<{
 }>;
 
 
-export type NftTiersQuery = { nfttiers: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: bigint, remainingSupply: bigint, collection: { address: any } }> };
+export type NftTiersQuery = { nfttiers: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }> };
+
+export type AllNftTiersQueryVariables = Exact<{
+  orderBy?: InputMaybe<NftTier_OrderBy>;
+  collection?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type AllNftTiersQuery = { body: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, world: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, face: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, eyes: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, headgear: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, onesie: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, shoe: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, fist: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }>, topping: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, collection: { address: any } }> };
 
 
 
@@ -9668,6 +9794,9 @@ export type ResolversTypes = {
   PayEvent: ResolverTypeWrapper<PayEvent>;
   PayEvent_filter: PayEvent_Filter;
   PayEvent_orderBy: PayEvent_OrderBy;
+  PermissionsHolder: ResolverTypeWrapper<PermissionsHolder>;
+  PermissionsHolder_filter: PermissionsHolder_Filter;
+  PermissionsHolder_orderBy: PermissionsHolder_OrderBy;
   PrintReservesEvent: ResolverTypeWrapper<PrintReservesEvent>;
   PrintReservesEvent_filter: PrintReservesEvent_Filter;
   PrintReservesEvent_orderBy: PrintReservesEvent_OrderBy;
@@ -9772,6 +9901,8 @@ export type ResolversParentTypes = {
   Participant_filter: Participant_Filter;
   PayEvent: PayEvent;
   PayEvent_filter: PayEvent_Filter;
+  PermissionsHolder: PermissionsHolder;
+  PermissionsHolder_filter: PermissionsHolder_Filter;
   PrintReservesEvent: PrintReservesEvent;
   PrintReservesEvent_filter: PrintReservesEvent_Filter;
   Project: Project;
@@ -9917,7 +10048,7 @@ export type DeployEtherc20SplitsPayerEventResolvers<ContextType = any, ParentTyp
 };
 
 export type DeployedErc20EventResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeployedERC20Event'] = ResolversParentTypes['DeployedERC20Event']> = {
-  address?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
+  address?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   caller?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   from?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -9957,7 +10088,6 @@ export type DistributeReservedTokensEventResolvers<ContextType = any, ParentType
   from?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   fundingCycleNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  memo?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   splitDistributions?: Resolver<Array<ResolversTypes['DistributeToReservedTokenSplitEvent']>, ParentType, ContextType, RequireFields<DistributeReservedTokensEventSplitDistributionsArgs, 'first' | 'skip'>>;
@@ -10186,7 +10316,7 @@ export type NftCollectionResolvers<ContextType = any, ParentType extends Resolve
 export type NftTierResolvers<ContextType = any, ParentType extends ResolversParentTypes['NFTTier'] = ResolversParentTypes['NFTTier']> = {
   allowOwnerMint?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   cannotBeRemoved?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  category?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  category?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   collection?: Resolver<ResolversTypes['NFTCollection'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   encodedIpfsUri?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
@@ -10195,8 +10325,8 @@ export type NftTierResolvers<ContextType = any, ParentType extends ResolversPare
   nfts?: Resolver<Array<ResolversTypes['NFT']>, ParentType, ContextType, RequireFields<NftTierNftsArgs, 'first' | 'skip'>>;
   price?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   remainingSupply?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  reserveBeneficiary?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  reserveFrequency?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  reserveBeneficiary?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  reserveFrequency?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   resolvedUri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tierId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   transfersPausable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -10236,6 +10366,16 @@ export type PayEventResolvers<ContextType = any, ParentType extends ResolversPar
   projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   txHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PermissionsHolderResolvers<ContextType = any, ParentType extends ResolversParentTypes['PermissionsHolder'] = ResolversParentTypes['PermissionsHolder']> = {
+  account?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  operator?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  permissions?: Resolver<Array<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -10287,6 +10427,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   participants?: Resolver<Array<ResolversTypes['Participant']>, ParentType, ContextType, RequireFields<ProjectParticipantsArgs, 'first' | 'skip'>>;
   payEvents?: Resolver<Array<ResolversTypes['PayEvent']>, ParentType, ContextType, RequireFields<ProjectPayEventsArgs, 'first' | 'skip'>>;
   paymentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  permissionsHolders?: Resolver<Array<ResolversTypes['PermissionsHolder']>, ParentType, ContextType, RequireFields<ProjectPermissionsHoldersArgs, 'first' | 'skip'>>;
   printReservesEvents?: Resolver<Array<ResolversTypes['PrintReservesEvent']>, ParentType, ContextType, RequireFields<ProjectPrintReservesEventsArgs, 'first' | 'skip'>>;
   projectEvents?: Resolver<Array<ResolversTypes['ProjectEvent']>, ParentType, ContextType, RequireFields<ProjectProjectEventsArgs, 'first' | 'skip'>>;
   projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -10417,6 +10558,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   participants?: Resolver<Array<ResolversTypes['Participant']>, ParentType, ContextType, RequireFields<QueryParticipantsArgs, 'first' | 'skip' | 'subgraphError'>>;
   payEvent?: Resolver<Maybe<ResolversTypes['PayEvent']>, ParentType, ContextType, RequireFields<QueryPayEventArgs, 'id' | 'subgraphError'>>;
   payEvents?: Resolver<Array<ResolversTypes['PayEvent']>, ParentType, ContextType, RequireFields<QueryPayEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  permissionsHolder?: Resolver<Maybe<ResolversTypes['PermissionsHolder']>, ParentType, ContextType, RequireFields<QueryPermissionsHolderArgs, 'id' | 'subgraphError'>>;
+  permissionsHolders?: Resolver<Array<ResolversTypes['PermissionsHolder']>, ParentType, ContextType, RequireFields<QueryPermissionsHoldersArgs, 'first' | 'skip' | 'subgraphError'>>;
   printReservesEvent?: Resolver<Maybe<ResolversTypes['PrintReservesEvent']>, ParentType, ContextType, RequireFields<QueryPrintReservesEventArgs, 'id' | 'subgraphError'>>;
   printReservesEvents?: Resolver<Array<ResolversTypes['PrintReservesEvent']>, ParentType, ContextType, RequireFields<QueryPrintReservesEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'id' | 'subgraphError'>>;
@@ -10451,7 +10594,6 @@ export type RedeemEventResolvers<ContextType = any, ParentType extends Resolvers
   from?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   holder?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  memo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -10530,6 +10672,8 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   participants?: SubscriptionResolver<Array<ResolversTypes['Participant']>, "participants", ParentType, ContextType, RequireFields<SubscriptionParticipantsArgs, 'first' | 'skip' | 'subgraphError'>>;
   payEvent?: SubscriptionResolver<Maybe<ResolversTypes['PayEvent']>, "payEvent", ParentType, ContextType, RequireFields<SubscriptionPayEventArgs, 'id' | 'subgraphError'>>;
   payEvents?: SubscriptionResolver<Array<ResolversTypes['PayEvent']>, "payEvents", ParentType, ContextType, RequireFields<SubscriptionPayEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  permissionsHolder?: SubscriptionResolver<Maybe<ResolversTypes['PermissionsHolder']>, "permissionsHolder", ParentType, ContextType, RequireFields<SubscriptionPermissionsHolderArgs, 'id' | 'subgraphError'>>;
+  permissionsHolders?: SubscriptionResolver<Array<ResolversTypes['PermissionsHolder']>, "permissionsHolders", ParentType, ContextType, RequireFields<SubscriptionPermissionsHoldersArgs, 'first' | 'skip' | 'subgraphError'>>;
   printReservesEvent?: SubscriptionResolver<Maybe<ResolversTypes['PrintReservesEvent']>, "printReservesEvent", ParentType, ContextType, RequireFields<SubscriptionPrintReservesEventArgs, 'id' | 'subgraphError'>>;
   printReservesEvents?: SubscriptionResolver<Array<ResolversTypes['PrintReservesEvent']>, "printReservesEvents", ParentType, ContextType, RequireFields<SubscriptionPrintReservesEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   project?: SubscriptionResolver<Maybe<ResolversTypes['Project']>, "project", ParentType, ContextType, RequireFields<SubscriptionProjectArgs, 'id' | 'subgraphError'>>;
@@ -10587,14 +10731,14 @@ export type UseAllowanceEventResolvers<ContextType = any, ParentType extends Res
   distributedAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   distributedAmountUSD?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   from?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  fundingCycleConfiguration?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  fundingCycleNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   memo?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   netDistributedamount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   netDistributedamountUSD?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rulesetCycleNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rulesetId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   txHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -10694,6 +10838,7 @@ export type Resolvers<ContextType = any> = {
   NFTTier?: NftTierResolvers<ContextType>;
   Participant?: ParticipantResolvers<ContextType>;
   PayEvent?: PayEventResolvers<ContextType>;
+  PermissionsHolder?: PermissionsHolderResolvers<ContextType>;
   PrintReservesEvent?: PrintReservesEventResolvers<ContextType>;
   Project?: ProjectResolvers<ContextType>;
   ProjectCreateEvent?: ProjectCreateEventResolvers<ContextType>;
@@ -10718,7 +10863,20 @@ export type DirectiveResolvers<ContextType = any> = {
   subgraphId?: SubgraphIdDirectiveResolver<any, any, ContextType>;
 };
 
-
+export const TierDataFragmentDoc = gql`
+    fragment TierData on NFTTier {
+  id
+  tierId
+  price
+  collection {
+    address
+  }
+  encodedIpfsUri
+  resolvedUri
+  initialSupply
+  remainingSupply
+}
+    `;
 export const NfTsDocument = gql`
     query NFTs($where: NFT_filter) {
   nfts(where: $where) {
@@ -10766,19 +10924,10 @@ export type NfTsQueryResult = Apollo.QueryResult<NfTsQuery, NfTsQueryVariables>;
 export const NftTiersDocument = gql`
     query NFTTiers($where: NFTTier_filter, $orderBy: NFTTier_orderBy) {
   nfttiers(where: $where, orderBy: $orderBy) {
-    id
-    tierId
-    price
-    collection {
-      address
-    }
-    encodedIpfsUri
-    resolvedUri
-    initialSupply
-    remainingSupply
+    ...TierData
   }
 }
-    `;
+    ${TierDataFragmentDoc}`;
 
 /**
  * __useNftTiersQuery__
@@ -10813,3 +10962,125 @@ export type NftTiersQueryHookResult = ReturnType<typeof useNftTiersQuery>;
 export type NftTiersLazyQueryHookResult = ReturnType<typeof useNftTiersLazyQuery>;
 export type NftTiersSuspenseQueryHookResult = ReturnType<typeof useNftTiersSuspenseQuery>;
 export type NftTiersQueryResult = Apollo.QueryResult<NftTiersQuery, NftTiersQueryVariables>;
+export const AllNftTiersDocument = gql`
+    query AllNFTTiers($orderBy: NFTTier_orderBy, $collection: String) {
+  body: nfttiers(where: {category: 0, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  world: nfttiers(
+    where: {category: 1, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  backside: nfttiers(
+    where: {category: 2, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  necklace: nfttiers(
+    where: {category: 3, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  head: nfttiers(where: {category: 4, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  face: nfttiers(where: {category: 5, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  eyes: nfttiers(where: {category: 6, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  mouth: nfttiers(
+    where: {category: 7, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  headgear: nfttiers(
+    where: {category: 8, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  onesie: nfttiers(
+    where: {category: 9, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  shoe: nfttiers(
+    where: {category: 10, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  suit: nfttiers(
+    where: {category: 11, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  suitBottom: nfttiers(
+    where: {category: 12, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  suitTop: nfttiers(
+    where: {category: 13, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  fist: nfttiers(
+    where: {category: 14, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  topping: nfttiers(
+    where: {category: 15, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+}
+    ${TierDataFragmentDoc}`;
+
+/**
+ * __useAllNftTiersQuery__
+ *
+ * To run a query within a React component, call `useAllNftTiersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllNftTiersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllNftTiersQuery({
+ *   variables: {
+ *      orderBy: // value for 'orderBy'
+ *      collection: // value for 'collection'
+ *   },
+ * });
+ */
+export function useAllNftTiersQuery(baseOptions?: Apollo.QueryHookOptions<AllNftTiersQuery, AllNftTiersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllNftTiersQuery, AllNftTiersQueryVariables>(AllNftTiersDocument, options);
+      }
+export function useAllNftTiersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllNftTiersQuery, AllNftTiersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllNftTiersQuery, AllNftTiersQueryVariables>(AllNftTiersDocument, options);
+        }
+export function useAllNftTiersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AllNftTiersQuery, AllNftTiersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AllNftTiersQuery, AllNftTiersQueryVariables>(AllNftTiersDocument, options);
+        }
+export type AllNftTiersQueryHookResult = ReturnType<typeof useAllNftTiersQuery>;
+export type AllNftTiersLazyQueryHookResult = ReturnType<typeof useAllNftTiersLazyQuery>;
+export type AllNftTiersSuspenseQueryHookResult = ReturnType<typeof useAllNftTiersSuspenseQuery>;
+export type AllNftTiersQueryResult = Apollo.QueryResult<AllNftTiersQuery, AllNftTiersQueryVariables>;

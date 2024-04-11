@@ -4261,10 +4261,10 @@ foreground-child@^3.1.0:
     cross-spawn "^7.0.0"
     signal-exit "^4.0.1"
 
-fpnum@^0.0.16:
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/fpnum/-/fpnum-0.0.16.tgz#210b18d591ae1ca15082868de7d046a89fad7ab0"
-  integrity sha512-XjBPC1TG0E6zAy71Tgm4g9RRSi+/EI6KysGP/PyyRjr+gMvXubS1oSs3NLsT4dnOA+bY1vP0L4Y4DIGz/wemaQ==
+fpnum@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/fpnum/-/fpnum-1.0.0.tgz#6f4e46d955632cad29100a48e45051f1c6436169"
+  integrity sha512-Sx8ciUp26NLM+OTNXrYm3Kq/8KCAiCFrvYMD3tcA7hjOemQ5Lpwuu7NKTElFiX5UCe83xk62BmJ6vfG/6SD2Yg==
 
 fs.realpath@^1.0.0:
   version "1.0.0"
@@ -5207,20 +5207,18 @@ jsonparse@^1.2.0:
     object.assign "^4.1.4"
     object.values "^1.1.6"
 
-juice-sdk-core@^2.0.22-alpha:
-  version "2.0.22-alpha"
-  resolved "https://registry.yarnpkg.com/juice-sdk-core/-/juice-sdk-core-2.0.22-alpha.tgz#60c20f9eb98faee1bc2ec2873039792fc0dab7da"
-  integrity sha512-TR1ovO4Xaab+L98o+2e/odEzQrCiVCgoP0E/DNDktczMhIn6LkA/p7h9A4SXuHoTQpjuf2D0KjwE8VGklqNCzw==
+juice-sdk-core@^4.0.0-alpha:
+  version "4.0.0-alpha"
+  resolved "https://registry.yarnpkg.com/juice-sdk-core/-/juice-sdk-core-4.0.0-alpha.tgz#ec84e322fc40caa1f732625f46df237a97bd41c5"
+  integrity sha512-CJzkidad/xRhtmiQ5iLe82yMWzjkSJtZRqypZZ+JcERYaz/KgVwhOLKoKN0xC0JSsb4/YpINp34gxlNF3ooijw==
   dependencies:
     bs58 "^5.0.0"
-    fpnum "^0.0.16"
+    fpnum "^1.0.0"
 
-juice-sdk-react@^0.0.27-alpha:
-  version "0.0.27-alpha"
-  resolved "https://registry.yarnpkg.com/juice-sdk-react/-/juice-sdk-react-0.0.27-alpha.tgz#ea2793b963c16e95330753727cb1cc635dbd0039"
-  integrity sha512-1aGza8mXCLmAnMCirbZAedyc1x11O9shldMBN91RfIL8Pk+ipNFZ/Ic/nIl3/+ubo12SveqysUtOxPh0u6US9Q==
-  dependencies:
-    fpnum "^0.0.16"
+juice-sdk-react@^1.0.2-alpha:
+  version "1.0.2-alpha"
+  resolved "https://registry.yarnpkg.com/juice-sdk-react/-/juice-sdk-react-1.0.2-alpha.tgz#100ba201e9cba4282c8f5268b32e5d8ab4bbb77f"
+  integrity sha512-B6A7ga2MzKmZxTEwQGeoJaJBYfRIajonL4RQOeap3MXlp/lh7owPs64HXd6qr7+QoxkVRLU3SCa1VFcKkVf7nQ==
 
 keccak@^3.0.1:
   version "3.0.4"

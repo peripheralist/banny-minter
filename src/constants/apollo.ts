@@ -10,24 +10,26 @@ import { IntrospectionQuery, buildClientSchema } from "graphql";
 import introspectionResult from "../../graphql.schema.json";
 import { subgraphUri } from "./subgraph";
 
-// const typesMap: FunctionsMap = {
-//   BigInt: {
-//     serialize: (parsed: unknown): string | null => {
-//       return parsed !== null ? (parsed as bigint).toString() : null;
-//     },
-//     parseValue: (raw: unknown): bigint | null => {
-//       if (raw === undefined || raw === null) return null;
+const typesMap: FunctionsMap = {
+  BigInt: {
+    serialize: (parsed: unknown): string | null => {
+      // convert bigints to strings
+      return parsed !== null ? (parsed as bigint).toString() : null;
+    },
+    parseValue: (raw: unknown): bigint | null => {
+      // convert bigint-typed strings to bigints
+      if (raw === undefined || raw === null) return null;
 
-//       return BigInt(raw as string);
-//     },
-//   },
-// };
+      return BigInt(raw as string);
+    },
+  },
+};
 
 const schema = buildClientSchema(
   introspectionResult as unknown as IntrospectionQuery
 );
 
-const scalarsLink = withScalars({ schema });
+const scalarsLink = withScalars({ schema, typesMap });
 const httpLink = new HttpLink({ uri: subgraphUri });
 
 const paginationConfig: FieldPolicy = {

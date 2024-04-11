@@ -7,7 +7,6 @@
     "build": "yarn codegen && next build",
     "start": "next start",
     "lint": "next lint",
-    "compile-assets": "tsx scripts/compile-assets.ts",
     "codegen": "graphql-code-generator --config codegen.yml -r dotenv/config"
   },
   "dependencies": {
@@ -15,8 +14,8 @@
     "@tanstack/react-query": "^5.22.2",
     "apollo-link-scalars": "^4.0.3",
     "graphql": "^16.8.1",
-    "juice-sdk-core": "^2.0.22-alpha",
-    "juice-sdk-react": "^0.0.27-alpha",
+    "juice-sdk-core": "^4.0.0-alpha",
+    "juice-sdk-react": "^1.0.2-alpha",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18",

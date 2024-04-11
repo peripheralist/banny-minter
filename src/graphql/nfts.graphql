@@ -8,17 +8,72 @@ query NFTs($where: NFT_filter) {
   }
 }
 
+fragment TierData on NFTTier {
+  id
+  tierId
+  price
+  collection {
+    address
+  }
+  encodedIpfsUri
+  resolvedUri
+  initialSupply
+  remainingSupply
+}
+
 query NFTTiers($where: NFTTier_filter, $orderBy: NFTTier_orderBy) {
   nfttiers(where: $where, orderBy: $orderBy) {
-    id
-    tierId
-    price
-    collection {
-      address
-    }
-    encodedIpfsUri
-    resolvedUri
-    initialSupply
-    remainingSupply
+    ...TierData
+  }
+}
+
+query AllNFTTiers($orderBy: NFTTier_orderBy, $collection: String) {
+  body: nfttiers(where: {category: 0, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  world: nfttiers(where: {category: 1, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  backside: nfttiers(where: {category: 2, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  necklace: nfttiers(where: {category: 3, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  head: nfttiers(where: {category: 4, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  face: nfttiers(where: {category: 5, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  eyes: nfttiers(where: {category: 6, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  mouth: nfttiers(where: {category: 7, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  headgear: nfttiers(where: {category: 8, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  onesie: nfttiers(where: {category: 9, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  shoe: nfttiers(where: {category: 10, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  suit: nfttiers(where: {category: 11, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  suitBottom: nfttiers(where: {category: 12, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  suitTop: nfttiers(where: {category: 13, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  fist: nfttiers(where: {category: 14, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  topping: nfttiers(where: {category: 15, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
   }
 }

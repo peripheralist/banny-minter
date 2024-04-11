@@ -1,17 +1,22 @@
 import { COLORS } from "@/constants/colors";
-import { AssetType } from "@/model/assetType";
+import { NFTCategory } from "@/constants/nfts";
 import { CSSProperties, useCallback } from "react";
 import ButtonPad from "../shared/ButtonPad";
 import IconImage from "../shared/images/IconImage";
 
-export default function AssetButton({
+/**
+ * Button for selecting
+ * @param param0
+ * @returns
+ */
+export default function AssetCategoryButton({
   asset,
   active,
   onClick,
   style,
   size,
 }: {
-  asset: AssetType;
+  asset: NFTCategory;
   active?: boolean;
   onClick?: VoidFunction;
   style?: CSSProperties;
@@ -20,17 +25,11 @@ export default function AssetButton({
   const Icon = useCallback(() => {
     let name = "";
     switch (asset) {
-      case "BACKGROUND":
+      case "world":
         name = "background";
         break;
-      case "HEADGEAR":
-        name = "hat";
-        break;
-      case "OUTFIT":
+      case "suitTop":
         name = "shirt";
-        break;
-      case "GRIP_RIGHT":
-        name = "sword";
         break;
     }
 
