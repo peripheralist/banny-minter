@@ -7,13 +7,14 @@ export default function Fuzz({
   density,
   ...props
 }: {
+  interval?: number;
+  pixelSize?: number;
+  density?: number;
+  getSvg?: (svg: string) => void;
   width: number;
   height: number;
-  pixelSize?: number;
   fill: CSSProperties["fill"];
   style?: CSSProperties;
-  interval?: number;
-  density?: number;
 }) {
   const [, setRand] = useState(0);
 

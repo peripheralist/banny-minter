@@ -12,19 +12,25 @@ export function useAnimation(props?: {
       const step = props?.step ?? 0.1;
       const interval = props?.interval ?? 100;
 
-      setFrame((f) =>
-        forward ? Math.min(f + step, 1) : Math.max(f - step, 0)
-      );
+      function getNextFrame(f: number) {
+        return forward ? Math.min(f + step, 1) : Math.max(f - step, 0);
+      }
+
+      // Initial change before interval begins
+      setFrame(getNextFrame);
 
       return new Promise((r) => {
         const id = setInterval(() => {
           setFrame((f) => {
-            const val = forward ? Math.min(f + step, 1) : Math.max(f - step, 0);
-            if (forward ? val === 1 : val === 0) {
+            const _frame = getNextFrame(f);
+
+            if (forward ? _frame === 1 : _frame === 0) {
+              // finished
               clearInterval(id);
               r(true);
             }
-            return val;
+
+            return _frame;
           });
         }, interval);
       }).then(props?.onDone);

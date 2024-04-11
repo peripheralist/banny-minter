@@ -2,6 +2,13 @@ import Beacon from "@/components/shared/Beacon";
 import { COLORS } from "@/constants/colors";
 import { useMemo } from "react";
 
+/**
+ * Renders a list of icons for each page, showing which page is selected and which pages have equipped tiers.
+ * @param pagesCount Number of pages
+ * @param pageIdx Index of selected page
+ * @param setPageIdx Function called when a page's icon is clicked.
+ * @param pageIdxsOfSelected List of indexes of pages that include equipped tiers.
+ */
 export default function PageIndicator({
   pagesCount,
   pageIdx,

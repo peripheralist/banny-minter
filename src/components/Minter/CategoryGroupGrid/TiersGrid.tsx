@@ -3,6 +3,12 @@ import { Tier } from "@/model/tier";
 import React, { CSSProperties, useCallback } from "react";
 import TierSelectorButton from "../TierSelectorButton";
 
+/**
+ * Renders a grid of tiers, with size multipliers for different categories.
+ * @param tiers Tiers to render
+ * @param imageSize Base size of images
+ * @param style CSS style
+ */
 export default function TiersGrid({
   tiers,
   imageSize,
@@ -19,6 +25,7 @@ export default function TiersGrid({
       let multiplier = 1;
 
       switch (c) {
+        // TODO
         case "head":
           multiplier = 1.1;
           break;

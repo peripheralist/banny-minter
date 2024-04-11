@@ -1,7 +1,10 @@
 import ButtonPad from "@/components/shared/ButtonPad";
 import { COLORS } from "@/constants/colors";
 
-export default function PageArrowButtons({
+/**
+ * Renders next and previous arrow buttons.
+ */
+export default function NextPrevButtons({
   onClickPrev,
   onClickNext,
 }: {

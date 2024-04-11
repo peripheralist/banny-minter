@@ -7,6 +7,7 @@ export default function PixelShape({
   fill,
   style,
   pixelSize,
+  getSvg,
 }: {
   plot: (x: number, y: number) => boolean;
   width: number;
@@ -14,6 +15,7 @@ export default function PixelShape({
   fill: CSSProperties["fill"];
   style?: CSSProperties;
   pixelSize?: number;
+  getSvg?: (svg: string) => void;
 }) {
   const p = useMemo(() => pixelSize ?? 2, [pixelSize]);
 
@@ -29,8 +31,10 @@ export default function PixelShape({
       }
     }
 
+    getSvg?.(data);
+
     return data;
-  }, [width, height, p, plot, fill]);
+  }, [width, height, p, plot, fill, getSvg]);
 
   return (
     <div

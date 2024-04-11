@@ -30,10 +30,12 @@ export default function TierSelectorButton({
   const { onClick, active } = useMemo(() => {
     const { category, tierId } = tier;
 
-    return {
-      active: get[category]?.tierId === tierId,
-      onClick: () => set?.[category]?.(tierId),
-    };
+    const active = get[category]?.tierId === tierId;
+
+    // Equip, or unequip if already equipped
+    const onClick = () => set?.[category]?.(active ? undefined : tierId);
+
+    return { active, onClick };
   }, [tier, get, set]);
 
   return (

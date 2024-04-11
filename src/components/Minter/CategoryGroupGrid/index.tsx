@@ -12,20 +12,27 @@ import {
 } from "react";
 import ButtonPad from "../../shared/ButtonPad";
 import RoundedFrame from "../../shared/RoundedFrame";
-import PageArrowButtons from "./PageArrowButtons";
+import NextPrevButtons from "./NextPrevButtons";
 import PageIndicator from "./PageIndicator";
 import TiersGrid from "./TiersGrid";
 
+/**
+ * Renders a paged grid of all tiers within a category group, that can be equipped or unequipped by clicking..
+ * @param gridCols Number of grid columns
+ * @param gridRows Number of grid rows
+ * @param imageSize Base size of tier asset images in grid. May be scaled up based on tier category.
+ * @param style CSS Style
+ */
 export default function CategoryGroupGrid({
-  style,
   gridCols,
   gridRows,
   imageSize,
+  style,
 }: {
-  style?: CSSProperties;
   gridCols: number;
   gridRows: number;
   imageSize: number;
+  style?: CSSProperties;
 }) {
   const { tiers } = useCategorizedTiers();
 
@@ -142,22 +149,26 @@ export default function CategoryGroupGrid({
             gap: 10,
           }}
         >
-          <PageArrowButtons
-            onClickNext={() =>
-              setPageIdx((i) => (i === pagesCount - 1 ? 0 : i + 1))
-            }
-            onClickPrev={() =>
-              setPageIdx((i) => (i === 0 ? pagesCount - 1 : i - 1))
-            }
-          />
-          <div style={{ flex: 1 }}>
-            <PageIndicator
-              pageIdx={pageIdx}
-              pageIdxsOfSelected={pageIdxsOfSelected}
-              setPageIdx={setPageIdx}
-              pagesCount={pagesCount}
-            />
-          </div>
+          {pagesCount > 1 && (
+            <>
+              <NextPrevButtons
+                onClickNext={() =>
+                  setPageIdx((i) => (i === pagesCount - 1 ? 0 : i + 1))
+                }
+                onClickPrev={() =>
+                  setPageIdx((i) => (i === 0 ? pagesCount - 1 : i - 1))
+                }
+              />
+              <div style={{ flex: 1 }}>
+                <PageIndicator
+                  pageIdx={pageIdx}
+                  pageIdxsOfSelected={pageIdxsOfSelected}
+                  setPageIdx={setPageIdx}
+                  pagesCount={pagesCount}
+                />
+              </div>
+            </>
+          )}
 
           {hasSelectedTiers && (
             <ButtonPad

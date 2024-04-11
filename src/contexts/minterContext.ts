@@ -24,7 +24,8 @@ type Context = {
   selectedGroup: CategoryGroup;
   setSelectedGroup?: (g: CategoryGroup) => void;
   equipCategoryAnimation?: ReturnType<typeof useAnimation> & {
-    category?: Category;
+    equipping?: Category;
+    unequipping?: Category;
   };
 };
 
