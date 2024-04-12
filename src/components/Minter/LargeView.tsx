@@ -11,8 +11,8 @@ import CategoryGroupButton from "./CategoryGroupButton";
 import CategoryGroupGrid from "./CategoryGroupGrid";
 import Loading from "./Loading";
 import MintButton from "./MintButton";
-import NFTImage from "./NFTImage";
 import Summary from "./Summary";
+import NFTImage from "./NFTImage";
 
 export default function LargeView() {
   const { loading } = useCategorizedTiers();
