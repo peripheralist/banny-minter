@@ -20,11 +20,11 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   const [unequippingCategory, setUnequippingCategory] = useState<Category>();
 
   const equipAnimation = useAnimation({
-    interval: 60,
+    interval: 80,
     step: 0.25,
   });
   const unequipAnimation = useAnimation({
-    interval: 60,
+    interval: 80,
     step: 0.25,
   });
 

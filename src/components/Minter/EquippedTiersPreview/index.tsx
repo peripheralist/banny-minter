@@ -3,7 +3,11 @@ import { MinterContext } from "@/contexts/minterContext";
 import { useContext, useMemo } from "react";
 import { useFuzz } from "@/hooks/useFuzz";
 
-export default function EquippedTiersPreview({ imageSize }: { imageSize: number }) {
+export default function EquippedTiersPreview({
+  imageSize,
+}: {
+  imageSize: number;
+}) {
   return (
     <div
       style={{

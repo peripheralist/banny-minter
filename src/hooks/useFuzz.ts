@@ -29,7 +29,7 @@ export function useFuzz({
     const p = pixelSize ?? 2;
 
     function update() {
-      let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg"><style>rect{fill:${fill};</style>`;
+      let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg">`;
 
       const _width = width / p;
       const _height = height / p;
@@ -37,17 +37,8 @@ export function useFuzz({
       for (let i = 0; i < _width * _height * (density ?? 0.5); i++) {
         svg += `<rect x="${Math.floor(Math.random() * _width) * p}" y="${
           Math.floor(Math.random() * _height) * p
-        }" width="${p}" height="${p}" />`;
+        }" width="${p}" height="${p}" fill="${fill}" />`;
       }
-
-      // for (let y = 0; y <= height; y += p) {
-      //   for (let x = 0; x <= width; x += p) {
-      //     const _y = height - y;
-      //     if (Math.random() < (density ?? 0.5)) {
-      //       svg += `<rect x="${x}" y="${_y}" width="${p}" height="${p}" fill="${fill}"/>`;
-      //     }
-      //   }
-      // }
 
       svg += "</svg>";
 

@@ -39,6 +39,8 @@ export default function PageIndicator({
         />
       );
     }
+
+    return _children;
   }, [pageIdxsOfSelected, setPageIdx, pageIdx, pagesCount]);
 
   return (

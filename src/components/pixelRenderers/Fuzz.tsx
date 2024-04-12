@@ -1,9 +1,8 @@
-import React, { CSSProperties, useEffect, useState } from "react";
-import PixelShape from "./PixelShape";
+import { useFuzz } from "@/hooks/useFuzz";
+import { CSSProperties } from "react";
 
 export default function Fuzz({
-  interval,
-  pixelSize,
+  style,
   density,
   ...props
 }: {
@@ -16,23 +15,9 @@ export default function Fuzz({
   fill: CSSProperties["fill"];
   style?: CSSProperties;
 }) {
-  const [, setRand] = useState(0);
+  const fuzz = useFuzz({ ...props, density: density ?? 0.75, enabled: true });
 
-  const p = pixelSize ?? 2;
+  if (!fuzz) return null;
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      setRand(Math.random());
-    }, interval ?? 120);
-
-    return () => clearInterval(id);
-  }, [interval]);
-
-  return (
-    <PixelShape
-      {...props}
-      pixelSize={p}
-      plot={() => Math.random() < (density ?? 0.5)}
-    />
-  );
+  return <div style={style} dangerouslySetInnerHTML={{ __html: fuzz }} />;
 }

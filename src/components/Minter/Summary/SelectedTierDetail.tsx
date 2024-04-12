@@ -20,25 +20,21 @@ export default function SelectedTierDetail({
 
   const tier = useMemo(() => get[category], [get, category]);
 
-  const frame = useMemo(
-    () =>
-      equipAnimation?.category === category
-        ? equipAnimation.frame
-        : undefined,
-    [category, equipAnimation]
+  const showFuzz = useMemo(
+    () => equipAnimation?.category === category && width,
+    [category, equipAnimation?.category, width]
   );
 
   return (
     <div style={{ display: "inline-flex", color: "white" }}>
       <span ref={ref}>
-        {frame && frame !== 1 && width ? (
-          <Fuzz width={width} height={12} pixelSize={4} fill="white" />
-        ) : tier?.name ? (
-          <span>
-            {tier.price ? formatEther(tier.price) : "--"} ETH {tier.name}
-          </span>
+        {showFuzz ? (
+          <Fuzz width={width!} height={12} pixelSize={4} fill="white" />
         ) : (
-          "--"
+          <span>
+            {tier?.price ? formatEther(tier.price) : "--"} ETH{" "}
+            {tier?.name ? tier.name : "--"}
+          </span>
         )}
       </span>
     </div>
