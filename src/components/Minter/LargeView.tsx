@@ -12,7 +12,7 @@ import CategoryGroupGrid from "./CategoryGroupGrid";
 import Loading from "./Loading";
 import MintButton from "./MintButton";
 import Summary from "./Summary";
-import NFTImage from "./NFTImage";
+import EquippedTiersPreview from "./EquippedTiersPreview";
 
 export default function LargeView() {
   const { loading } = useCategorizedTiers();
@@ -154,7 +154,7 @@ export default function LargeView() {
               background: "white",
             }}
           >
-            <NFTImage imageSize={440} />
+            <EquippedTiersPreview imageSize={440} />
           </div>
         </RoundedFrame>
 

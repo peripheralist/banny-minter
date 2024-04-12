@@ -14,7 +14,7 @@ import RoundedFrame from "../shared/RoundedFrame";
 import BannyButtons from "./BannyButtons";
 import CategoryGroupButton from "./CategoryGroupButton";
 import CategoryGroupGrid from "./CategoryGroupGrid";
-import NFTImage from "./NFTImage";
+import EquippedTiersPreview from "./EquippedTiersPreview";
 import Summary from "./Summary";
 
 export default function SmallView() {
@@ -90,7 +90,7 @@ export default function SmallView() {
             background: "white",
           }}
         >
-          <NFTImage imageSize={280} />
+          <EquippedTiersPreview imageSize={280} />
         </div>
       </RoundedFrame>
 
