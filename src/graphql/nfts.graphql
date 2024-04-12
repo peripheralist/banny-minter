@@ -17,6 +17,7 @@ fragment TierData on NFTTier {
   }
   encodedIpfsUri
   resolvedUri
+  svg
   initialSupply
   remainingSupply
   category

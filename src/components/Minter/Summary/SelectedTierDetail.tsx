@@ -11,7 +11,7 @@ export default function SelectedTierDetail({
 }) {
   const {
     equipped: { get },
-    equipCategoryAnimation,
+    equipAnimation,
   } = useContext(MinterContext);
 
   const ref = useRef<HTMLSpanElement>(null);
@@ -22,10 +22,10 @@ export default function SelectedTierDetail({
 
   const frame = useMemo(
     () =>
-      equipCategoryAnimation?.category === category
-        ? equipCategoryAnimation.frame
+      equipAnimation?.category === category
+        ? equipAnimation.frame
         : undefined,
-    [category, equipCategoryAnimation]
+    [category, equipAnimation]
   );
 
   return (

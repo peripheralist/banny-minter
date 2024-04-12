@@ -3808,8 +3808,9 @@ export type NftTier = {
   price: Scalars['BigInt']['output'];
   remainingSupply: Scalars['BigInt']['output'];
   reserveBeneficiary: Scalars['Bytes']['output'];
-  reserveFrequency: Scalars['BigInt']['output'];
+  reserveFrequency: Scalars['Int']['output'];
   resolvedUri: Maybe<Scalars['String']['output']>;
+  svg: Maybe<Scalars['String']['output']>;
   tierId: Scalars['Int']['output'];
   transfersPausable: Scalars['Boolean']['output'];
   votingUnits: Scalars['BigInt']['output'];
@@ -3927,14 +3928,14 @@ export type NftTier_Filter = {
   reserveBeneficiary_not?: InputMaybe<Scalars['Bytes']['input']>;
   reserveBeneficiary_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   reserveBeneficiary_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-  reserveFrequency?: InputMaybe<Scalars['BigInt']['input']>;
-  reserveFrequency_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  reserveFrequency_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  reserveFrequency_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  reserveFrequency_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  reserveFrequency_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  reserveFrequency_not?: InputMaybe<Scalars['BigInt']['input']>;
-  reserveFrequency_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  reserveFrequency?: InputMaybe<Scalars['Int']['input']>;
+  reserveFrequency_gt?: InputMaybe<Scalars['Int']['input']>;
+  reserveFrequency_gte?: InputMaybe<Scalars['Int']['input']>;
+  reserveFrequency_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  reserveFrequency_lt?: InputMaybe<Scalars['Int']['input']>;
+  reserveFrequency_lte?: InputMaybe<Scalars['Int']['input']>;
+  reserveFrequency_not?: InputMaybe<Scalars['Int']['input']>;
+  reserveFrequency_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
   resolvedUri?: InputMaybe<Scalars['String']['input']>;
   resolvedUri_contains?: InputMaybe<Scalars['String']['input']>;
   resolvedUri_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -3955,6 +3956,26 @@ export type NftTier_Filter = {
   resolvedUri_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
   resolvedUri_starts_with?: InputMaybe<Scalars['String']['input']>;
   resolvedUri_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  svg?: InputMaybe<Scalars['String']['input']>;
+  svg_contains?: InputMaybe<Scalars['String']['input']>;
+  svg_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  svg_ends_with?: InputMaybe<Scalars['String']['input']>;
+  svg_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  svg_gt?: InputMaybe<Scalars['String']['input']>;
+  svg_gte?: InputMaybe<Scalars['String']['input']>;
+  svg_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  svg_lt?: InputMaybe<Scalars['String']['input']>;
+  svg_lte?: InputMaybe<Scalars['String']['input']>;
+  svg_not?: InputMaybe<Scalars['String']['input']>;
+  svg_not_contains?: InputMaybe<Scalars['String']['input']>;
+  svg_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  svg_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  svg_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  svg_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  svg_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  svg_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  svg_starts_with?: InputMaybe<Scalars['String']['input']>;
+  svg_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
   tierId?: InputMaybe<Scalars['Int']['input']>;
   tierId_gt?: InputMaybe<Scalars['Int']['input']>;
   tierId_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -3998,6 +4019,7 @@ export enum NftTier_OrderBy {
   reserveBeneficiary = 'reserveBeneficiary',
   reserveFrequency = 'reserveFrequency',
   resolvedUri = 'resolvedUri',
+  svg = 'svg',
   tierId = 'tierId',
   transfersPausable = 'transfersPausable',
   votingUnits = 'votingUnits'
@@ -4196,6 +4218,7 @@ export enum Nft_OrderBy {
   tier__reserveBeneficiary = 'tier__reserveBeneficiary',
   tier__reserveFrequency = 'tier__reserveFrequency',
   tier__resolvedUri = 'tier__resolvedUri',
+  tier__svg = 'tier__svg',
   tier__tierId = 'tier__tierId',
   tier__transfersPausable = 'tier__transfersPausable',
   tier__votingUnits = 'tier__votingUnits',
@@ -9622,7 +9645,7 @@ export type NfTsQueryVariables = Exact<{
 
 export type NfTsQuery = { nfts: Array<{ tokenId: any, tokenUri: string, collection: { address: any } }> };
 
-export type TierDataFragment = { id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } };
+export type TierDataFragment = { id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } };
 
 export type NftTiersQueryVariables = Exact<{
   where?: InputMaybe<NftTier_Filter>;
@@ -9630,7 +9653,7 @@ export type NftTiersQueryVariables = Exact<{
 }>;
 
 
-export type NftTiersQuery = { nfttiers: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }> };
+export type NftTiersQuery = { nfttiers: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }> };
 
 export type AllNftTiersQueryVariables = Exact<{
   orderBy?: InputMaybe<NftTier_OrderBy>;
@@ -9638,7 +9661,7 @@ export type AllNftTiersQueryVariables = Exact<{
 }>;
 
 
-export type AllNftTiersQuery = { body: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, world: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, face: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, eyes: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, headgear: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, onesie: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, shoe: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, fist: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, topping: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }> };
+export type AllNftTiersQuery = { body: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, world: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, face: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, eyes: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, headgear: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, onesie: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, shoe: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, fist: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, topping: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }> };
 
 
 
@@ -10326,8 +10349,9 @@ export type NftTierResolvers<ContextType = any, ParentType extends ResolversPare
   price?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   remainingSupply?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   reserveBeneficiary?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  reserveFrequency?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  reserveFrequency?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   resolvedUri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  svg?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tierId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   transfersPausable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   votingUnits?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -10873,6 +10897,7 @@ export const TierDataFragmentDoc = gql`
   }
   encodedIpfsUri
   resolvedUri
+  svg
   initialSupply
   remainingSupply
   category

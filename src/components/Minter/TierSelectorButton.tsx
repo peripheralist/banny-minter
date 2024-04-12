@@ -50,12 +50,12 @@ export default function TierSelectorButton({
         }}
       >
         {tier.image && (
-          <Image
+          <object
             style={{ position: "absolute", inset: 0 }}
             width={imageSize}
             height={imageSize}
-            src={tier.image}
-            alt={tier.name ?? tier.tierId.toString()}
+            data={tier.image}
+            type="image/svg+xml"
           />
         )}
 

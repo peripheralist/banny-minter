@@ -1,18 +1,11 @@
-import {
-  Category,
-  CategoryGroup,
-  CATEGORIES,
-} from "@/constants/nfts";
+import { Category, CategoryGroup, CATEGORIES } from "@/constants/nfts";
 import { useAnimation } from "@/hooks/useAnimation";
 import { Tier } from "@/model/tier";
 import { createContext } from "react";
 
 export type EquippedTiers = Record<Category, Tier | undefined>;
 
-export type EquipTierFns = Record<
-  Category,
-  (id: number | undefined) => void
->;
+export type EquipTierFns = Record<Category, (id: number | undefined) => void>;
 
 type Context = {
   equipped: {
@@ -23,9 +16,11 @@ type Context = {
   };
   selectedGroup: CategoryGroup;
   setSelectedGroup?: (g: CategoryGroup) => void;
-  equipCategoryAnimation?: ReturnType<typeof useAnimation> & {
-    equipping?: Category;
-    unequipping?: Category;
+  equipAnimation?: ReturnType<typeof useAnimation> & {
+    category?: Category;
+  };
+  unequipAnimation?: ReturnType<typeof useAnimation> & {
+    category?: Category;
   };
 };
 

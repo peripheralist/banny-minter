@@ -31,6 +31,8 @@ export default function PixelShape({
       }
     }
 
+    data += "</svg>";
+
     getSvg?.(data);
 
     return data;

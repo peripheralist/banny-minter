@@ -1,5 +1,5 @@
 import { categoryIncompatibles } from "@/constants/incompatibles";
-import { Category, CategoryGroup, CATEGORIES } from "@/constants/nfts";
+import { CATEGORIES, Category, CategoryGroup } from "@/constants/nfts";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useAnimation } from "@/hooks/useAnimation";
 import {
@@ -19,9 +19,13 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   const [equippingCategory, setEquippingCategory] = useState<Category>();
   const [unequippingCategory, setUnequippingCategory] = useState<Category>();
 
-  const animation = useAnimation({
-    interval: 100,
-    step: 0.2,
+  const equipAnimation = useAnimation({
+    interval: 60,
+    step: 0.25,
+  });
+  const unequipAnimation = useAnimation({
+    interval: 60,
+    step: 0.25,
   });
 
   const { tiers } = useCategorizedTiers();
@@ -60,16 +64,16 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
           }));
 
           setEquippingCategory(category);
-          animation.animate(true).then(() => {
-            animation.setFrame(0);
+          equipAnimation.animate(true).then(() => {
+            equipAnimation.setFrame(0);
             setEquippingCategory(undefined);
           });
         } else {
           // Unequip
           setUnequippingCategory(category);
 
-          animation.animate(true).then(() => {
-            animation.setFrame(0);
+          unequipAnimation.animate(true).then(() => {
+            unequipAnimation.setFrame(0);
             setUnequippingCategory(undefined);
             setEquippedTierId((_ids) => ({
               ..._ids,
@@ -88,11 +92,11 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
       }),
       {} as EquipTierFns
     );
-  }, [animation]);
+  }, [equipAnimation, unequipAnimation]);
 
   useEffect(() => {
     // default equip first body tier
-    if (!tiers?.body || !set || get.body) return;
+    if (!tiers?.body.length || !set || get.body) return;
     set.body(tiers.body[0].tierId);
   }, [tiers?.body, set, get]);
 
@@ -131,10 +135,13 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
         },
         selectedGroup,
         setSelectedGroup,
-        equipCategoryAnimation: {
-          ...animation,
-          equipping: equippingCategory,
-          unequipping: unequippingCategory,
+        equipAnimation: {
+          ...equipAnimation,
+          category: equippingCategory,
+        },
+        unequipAnimation: {
+          ...unequipAnimation,
+          category: unequippingCategory,
         },
       }}
     >

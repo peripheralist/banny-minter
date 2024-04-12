@@ -14,6 +14,7 @@ export const parseTier = (
         category: categoryOfId[tier.category],
         tierId: tier.tierId,
         price: tier.price,
+        svg: tier.svg ?? undefined,
       }
     : undefined;
 };

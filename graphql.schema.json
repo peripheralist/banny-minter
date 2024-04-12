@@ -44330,7 +44330,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "BigInt",
+                "name": "Int",
                 "ofType": null
               }
             },
@@ -44339,6 +44339,18 @@
           },
           {
             "name": "resolvedUri",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg",
             "description": null,
             "args": [],
             "type": {
@@ -45810,7 +45822,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "BigInt",
+              "name": "Int",
               "ofType": null
             },
             "defaultValue": null,
@@ -45822,7 +45834,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "BigInt",
+              "name": "Int",
               "ofType": null
             },
             "defaultValue": null,
@@ -45834,7 +45846,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "BigInt",
+              "name": "Int",
               "ofType": null
             },
             "defaultValue": null,
@@ -45852,7 +45864,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "BigInt",
+                  "name": "Int",
                   "ofType": null
                 }
               }
@@ -45866,7 +45878,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "BigInt",
+              "name": "Int",
               "ofType": null
             },
             "defaultValue": null,
@@ -45878,7 +45890,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "BigInt",
+              "name": "Int",
               "ofType": null
             },
             "defaultValue": null,
@@ -45890,7 +45902,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "BigInt",
+              "name": "Int",
               "ofType": null
             },
             "defaultValue": null,
@@ -45908,7 +45920,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "BigInt",
+                  "name": "Int",
                   "ofType": null
                 }
               }
@@ -46163,6 +46175,262 @@
           },
           {
             "name": "resolvedUri_starts_with_nocase",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_contains",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_contains_nocase",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_ends_with",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_ends_with_nocase",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_gt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_gte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_lt",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_lte",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_not",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_not_contains",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_not_contains_nocase",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_not_ends_with",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_not_ends_with_nocase",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_not_in",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_not_starts_with",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_not_starts_with_nocase",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_starts_with",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg_starts_with_nocase",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -46590,6 +46858,12 @@
           },
           {
             "name": "resolvedUri",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "svg",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -48680,6 +48954,12 @@
           },
           {
             "name": "tier__resolvedUri",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tier__svg",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
