@@ -57,25 +57,22 @@ query AllNFTTiers($orderBy: NFTTier_orderBy, $collection: String) {
   headgear: nfttiers(where: {category: 8, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  onesie: nfttiers(where: {category: 9, collection: $collection}, orderBy: $orderBy) {
+  shoe: nfttiers(where: {category: 9, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  shoe: nfttiers(where: {category: 10, collection: $collection}, orderBy: $orderBy) {
+  suit: nfttiers(where: {category: 10, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  suit: nfttiers(where: {category: 11, collection: $collection}, orderBy: $orderBy) {
+  suitBottom: nfttiers(where: {category: 11, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  suitBottom: nfttiers(where: {category: 12, collection: $collection}, orderBy: $orderBy) {
+  suitTop: nfttiers(where: {category: 12, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  suitTop: nfttiers(where: {category: 13, collection: $collection}, orderBy: $orderBy) {
+  fist: nfttiers(where: {category: 13, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  fist: nfttiers(where: {category: 14, collection: $collection}, orderBy: $orderBy) {
-    ...TierData
-  }
-  topping: nfttiers(where: {category: 15, collection: $collection}, orderBy: $orderBy) {
+  topping: nfttiers(where: {category: 14, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
 }

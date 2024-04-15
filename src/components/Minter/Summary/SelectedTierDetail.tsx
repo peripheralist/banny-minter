@@ -9,16 +9,13 @@ export default function SelectedTierDetail({
 }: {
   category: Category;
 }) {
-  const {
-    equipped: { get },
-    equipAnimation,
-  } = useContext(MinterContext);
+  const { equipped, equipAnimation } = useContext(MinterContext);
 
   const ref = useRef<HTMLSpanElement>(null);
 
   const width = ref.current?.clientWidth;
 
-  const tier = useMemo(() => get[category], [get, category]);
+  const tier = useMemo(() => equipped[category], [equipped, category]);
 
   const showFuzz = useMemo(
     () => equipAnimation?.category === category && width,
@@ -26,17 +23,21 @@ export default function SelectedTierDetail({
   );
 
   return (
-    <div style={{ display: "inline-flex", color: "white" }}>
-      <span ref={ref}>
-        {showFuzz ? (
-          <Fuzz width={width!} height={12} pixelSize={4} fill="white" />
-        ) : (
-          <span>
-            {tier?.price ? formatEther(tier.price) : "--"} ETH{" "}
-            {tier?.name ? tier.name : "--"}
-          </span>
-        )}
-      </span>
-    </div>
+    <span ref={ref} style={{ color: "white", width: "100%" }}>
+      {showFuzz ? (
+        <Fuzz width={width!} height={12} pixelSize={4} fill="white" />
+      ) : (
+        <div
+          style={{
+            width: "100%",
+            display: "inline-flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <span>{tier?.name ? tier.name : "--"}</span>
+          <span>{tier?.price ? formatEther(tier.price) : "--"} ETH </span>
+        </div>
+      )}
+    </span>
   );
 }

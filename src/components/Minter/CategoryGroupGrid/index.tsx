@@ -36,10 +36,7 @@ export default function CategoryGroupGrid({
 }) {
   const { tiers } = useCategorizedTiers();
 
-  const {
-    selectedGroup,
-    equipped: { get, set },
-  } = useContext(MinterContext);
+  const { selectedGroup, equipped, equip } = useContext(MinterContext);
 
   const pageSize = useMemo(() => gridRows * gridCols, [gridRows, gridCols]);
 
@@ -89,12 +86,12 @@ export default function CategoryGroupGrid({
     const idxs: number[] = [];
 
     categories.forEach((c) => {
-      const idx = allTiers?.findIndex((t) => t.tierId === get[c]?.tierId);
+      const idx = allTiers?.findIndex((t) => t.tierId === equipped[c]?.tierId);
       if (idx && idx > -1) idxs.push(Math.floor(idx / pageSize));
     });
 
     return idxs;
-  }, [pageSize, allTiers, get, categories]);
+  }, [pageSize, allTiers, equipped, categories]);
 
   const hasSelectedTiers = useMemo(
     () => !!pageIdxsOfSelected.length,
@@ -104,9 +101,9 @@ export default function CategoryGroupGrid({
   const unequipAllTiersForGroup = useCallback(
     () =>
       categories.forEach((c) => {
-        if (get[c]) set?.[c]?.(undefined);
+        if (equipped[c]) equip?.[c]?.(undefined);
       }),
-    [categories, get, set]
+    [categories, equipped, equip]
   );
 
   return (

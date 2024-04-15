@@ -9661,7 +9661,7 @@ export type AllNftTiersQueryVariables = Exact<{
 }>;
 
 
-export type AllNftTiersQuery = { body: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, world: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, face: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, eyes: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, headgear: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, onesie: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, shoe: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, fist: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, topping: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }> };
+export type AllNftTiersQuery = { body: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, world: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, face: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, eyes: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, headgear: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, shoe: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, fist: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, topping: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }> };
 
 
 
@@ -11032,44 +11032,35 @@ export const AllNftTiersDocument = gql`
   ) {
     ...TierData
   }
-  onesie: nfttiers(
-    where: {category: 9, collection: $collection}
-    orderBy: $orderBy
-  ) {
+  shoe: nfttiers(where: {category: 9, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  shoe: nfttiers(
+  suit: nfttiers(
     where: {category: 10, collection: $collection}
     orderBy: $orderBy
   ) {
     ...TierData
   }
-  suit: nfttiers(
+  suitBottom: nfttiers(
     where: {category: 11, collection: $collection}
     orderBy: $orderBy
   ) {
     ...TierData
   }
-  suitBottom: nfttiers(
+  suitTop: nfttiers(
     where: {category: 12, collection: $collection}
     orderBy: $orderBy
   ) {
     ...TierData
   }
-  suitTop: nfttiers(
+  fist: nfttiers(
     where: {category: 13, collection: $collection}
     orderBy: $orderBy
   ) {
     ...TierData
   }
-  fist: nfttiers(
-    where: {category: 14, collection: $collection}
-    orderBy: $orderBy
-  ) {
-    ...TierData
-  }
   topping: nfttiers(
-    where: {category: 15, collection: $collection}
+    where: {category: 14, collection: $collection}
     orderBy: $orderBy
   ) {
     ...TierData

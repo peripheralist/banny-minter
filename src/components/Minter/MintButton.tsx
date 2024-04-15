@@ -11,13 +11,11 @@ import RoundedFrame from "../shared/RoundedFrame";
 export default function MintButton() {
   const { address } = useAccount();
 
-  const {
-    equipped: { get, totalPrice },
-  } = useContext(MinterContext);
+  const { equipped, totalEquippedPrice } = useContext(MinterContext);
 
   const { mint, isLoading, tx } = useMint({
-    amount: totalPrice,
-    tierIds: [...(get.body ? [BigInt(get.body.tierId)] : [])],
+    amount: totalEquippedPrice,
+    tierIds: [...(equipped.body ? [BigInt(equipped.body.tierId)] : [])],
   });
 
   const mintTxPending = isLoading || tx.status === "loading";
@@ -82,7 +80,7 @@ export default function MintButton() {
           background: "#ffffff",
         }}
       >
-        {totalPrice ? formatEther(totalPrice) : "--"} ETH
+        {totalEquippedPrice ? formatEther(totalEquippedPrice) : "--"} ETH
       </div>
     </RoundedFrame>
   );

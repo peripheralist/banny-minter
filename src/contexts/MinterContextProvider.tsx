@@ -30,25 +30,25 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
 
   const { tiers } = useCategorizedTiers();
 
-  const get = useMemo(
+  const equipped = useMemo(
     () =>
-      CATEGORIES.reduce(
-        (acc, category) => ({
+      CATEGORIES.reduce((acc, category) => {
+        const equippedTierForCategory = tiers?.[category].find(
+          (t) => t.tierId === equippedTierId[category]
+        );
+
+        return {
           ...acc,
-          [category]: tiers?.[category].find(
-            (t) => t.tierId === equippedTierId[category]
-          ),
-        }),
-        {} as EquippedTiers
-      ),
+          [category]: equippedTierForCategory,
+        };
+      }, {} as EquippedTiers),
     [equippedTierId, tiers]
   );
 
-  const set = useMemo(() => {
+  const equip = useMemo(() => {
     const tierIdSetter =
       (category: Category) => (tierId: number | undefined) => {
-        if (tierId) {
-          // Equip tier
+        const handleEquip = () => {
           setEquippedTierId((_ids) => ({
             ..._ids,
             // Set new tierId for category
@@ -68,20 +68,24 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
             equipAnimation.setFrame(0);
             setEquippingCategory(undefined);
           });
-        } else {
-          // Unequip
-          setUnequippingCategory(category);
+        };
 
+        const handleUnequip = () => {
+          setUnequippingCategory(category);
           unequipAnimation.animate(true).then(() => {
             unequipAnimation.setFrame(0);
             setUnequippingCategory(undefined);
+
             setEquippedTierId((_ids) => ({
               ..._ids,
               // unequip category
               [category]: undefined,
             }));
           });
-        }
+        };
+
+        if (tierId) handleEquip();
+        else handleUnequip();
       };
 
     // Define setter function for each NFT category
@@ -96,43 +100,41 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     // default equip first body tier
-    if (!tiers?.body.length || !set || get.body) return;
-    set.body(tiers.body[0].tierId);
-  }, [tiers?.body, set, get]);
+    if (!tiers?.body.length || !equip || equipped.body) return;
+    equip.body(tiers.body[0].tierId);
+  }, [tiers?.body, equipped, equip]);
 
-  const randomize = useCallback(() => {
+  const equipRandom = useCallback(() => {
     if (!tiers) return;
 
     // randomize all category tier ids
     CATEGORIES.forEach((c) => {
       if (!tiers[c].length) return;
 
-      set[c](Math.floor(Math.random() * tiers[c].length) + 1);
+      equip[c](Math.floor(Math.random() * tiers[c].length) + 1);
     });
-  }, [set, tiers]);
+  }, [equip, tiers]);
 
-  const totalPrice = useMemo(() => {
+  const totalEquippedPrice = useMemo(() => {
     if (!tiers) return null;
 
     // Sum price of all selected assets
     return Object.entries(tiers).reduce((acc, [category, tiers]) => {
       const tier = tiers.find(
-        (t) => t.tierId === get[category as Category]?.tierId
+        (t) => t.tierId === equipped[category as Category]?.tierId
       );
 
       return tier?.price ? acc + tier.price : acc;
     }, BigInt(0));
-  }, [tiers, get]);
+  }, [tiers, equipped]);
 
   return (
     <MinterContext.Provider
       value={{
-        equipped: {
-          get,
-          set,
-          randomize,
-          totalPrice,
-        },
+        equipped,
+        equip,
+        equipRandom,
+        totalEquippedPrice,
         selectedGroup,
         setSelectedGroup,
         equipAnimation: {

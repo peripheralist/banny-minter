@@ -17,11 +17,8 @@ import EquippedTiersPreview from "./EquippedTiersPreview";
 export default function LargeView() {
   const { loading } = useCategorizedTiers();
 
-  const {
-    equipped: { randomize },
-    selectedGroup,
-    setSelectedGroup,
-  } = useContext(MinterContext);
+  const { equipRandom, selectedGroup, setSelectedGroup } =
+    useContext(MinterContext);
 
   const [containerHeight, setContainerHeight] = useState<number>(0);
 
@@ -121,7 +118,7 @@ export default function LargeView() {
 
             <ButtonPad
               style={{ height: 40, fontSize: "1.4rem" }}
-              onClick={randomize}
+              onClick={equipRandom}
             >
               RANDOMIZE
             </ButtonPad>

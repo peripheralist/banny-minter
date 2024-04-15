@@ -8,12 +8,10 @@ export type EquippedTiers = Record<Category, Tier | undefined>;
 export type EquipTierFns = Record<Category, (id: number | undefined) => void>;
 
 type Context = {
-  equipped: {
-    set?: Partial<EquipTierFns>;
-    get: Partial<EquippedTiers>;
-    randomize?: VoidFunction;
-    totalPrice?: bigint | null;
-  };
+  equipped: Partial<EquippedTiers>;
+  equip?: Partial<EquipTierFns>;
+  equipRandom?: VoidFunction;
+  totalEquippedPrice?: bigint | null;
   selectedGroup: CategoryGroup;
   setSelectedGroup?: (g: CategoryGroup) => void;
   equipAnimation?: ReturnType<typeof useAnimation> & {
@@ -26,13 +24,11 @@ type Context = {
 
 export const MinterContext = createContext<Context>({
   selectedGroup: "body",
-  equipped: {
-    get: CATEGORIES.reduce(
-      (acc, category) => ({
-        ...acc,
-        [category]: undefined,
-      }),
-      {}
-    ),
-  },
+  equipped: CATEGORIES.reduce(
+    (acc, category) => ({
+      ...acc,
+      [category]: undefined,
+    }),
+    {}
+  ),
 });

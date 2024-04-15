@@ -6,11 +6,9 @@ import { useContext } from "react";
 import SelectedTierDetail from "./SelectedTierDetail";
 
 export default function Index() {
-  const {
-    equipped: { get },
-  } = useContext(MinterContext);
+  const { equipped } = useContext(MinterContext);
 
-  const equippedCategories = CATEGORIES.filter((c) => !!get[c]);
+  const equippedCategories = CATEGORIES.filter((c) => !!equipped[c]);
 
   return (
     <RoundedFrame containerStyle={{ width: "100%", height: "100%" }}>

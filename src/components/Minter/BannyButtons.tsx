@@ -12,10 +12,8 @@ export default function BannyButtons({
 }) {
   const { tiers } = useCategorizedTiers();
   const {
-    equipped: {
-      get: { body },
-      set,
-    },
+    equipped: { body },
+    equip,
   } = useContext(MinterContext);
 
   if (!tiers?.body) return null;
@@ -46,7 +44,7 @@ export default function BannyButtons({
             key={t.tierId}
             style={buttonStyle}
             fillFg={color}
-            onClick={() => set?.body?.(t.tierId)}
+            onClick={() => equip?.body?.(t.tierId)}
             pressed={active}
             active={active}
           />

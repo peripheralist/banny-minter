@@ -16,9 +16,7 @@ export default function TierSelectorButton({
   buttonSize: number;
   imageSize: number;
 }) {
-  const {
-    equipped: { get, set },
-  } = useContext(MinterContext);
+  const { equipped, equip } = useContext(MinterContext);
 
   const { animate, frame } = useAnimation({ step: 0.125 });
 
@@ -30,13 +28,13 @@ export default function TierSelectorButton({
   const { onClick, active } = useMemo(() => {
     const { category, tierId } = tier;
 
-    const active = get[category]?.tierId === tierId;
+    const active = equipped[category]?.tierId === tierId;
 
     // Equip, or unequip if already equipped
-    const onClick = () => set?.[category]?.(active ? undefined : tierId);
+    const onClick = () => equip?.[category]?.(active ? undefined : tierId);
 
     return { active, onClick };
-  }, [tier, get, set]);
+  }, [tier, equipped, equip]);
 
   return (
     <ButtonPad fillFg="white" onClick={onClick} pressed={active}>

@@ -19,17 +19,14 @@ import Summary from "./Summary";
 
 export default function SmallView() {
   const { address } = useAccount();
-  const {
-    equipped: { get, totalPrice },
-    selectedGroup,
-    setSelectedGroup,
-  } = useContext(MinterContext);
+  const { equipped, totalEquippedPrice, selectedGroup, setSelectedGroup } =
+    useContext(MinterContext);
 
   const { loading } = useCategorizedTiers();
 
   const { mint, isLoading, tx } = useMint({
-    amount: totalPrice,
-    tierIds: [...(get.body ? [BigInt(get.body.tierId)] : [])],
+    amount: totalEquippedPrice,
+    tierIds: [...(equipped.body ? [BigInt(equipped.body.tierId)] : [])],
   });
 
   const mintTxPending = isLoading || tx.status === "loading";
@@ -204,7 +201,10 @@ export default function SmallView() {
               background: "#ffffff",
             }}
           >
-            {totalPrice ? formatEther(totalPrice).substring(0, 6) : "--"} ETH
+            {totalEquippedPrice
+              ? formatEther(totalEquippedPrice).substring(0, 6)
+              : "--"}{" "}
+            ETH
           </div>
         </RoundedFrame>
       </div>

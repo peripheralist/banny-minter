@@ -36,11 +36,8 @@ export default function EquippedTiersPreview({
 }
 
 function ImageLayer({ category, size }: { category: Category; size: number }) {
-  const {
-    equipped: { get },
-    equipAnimation,
-    unequipAnimation,
-  } = useContext(MinterContext);
+  const { equipped, equipAnimation, unequipAnimation } =
+    useContext(MinterContext);
 
   const isEquipping = useMemo(
     () => equipAnimation?.category === category,
@@ -69,7 +66,7 @@ function ImageLayer({ category, size }: { category: Category; size: number }) {
     density: 0.75 - (equipAnimation?.frame ?? 0),
   });
 
-  const tier = useMemo(() => get[category], [get, category]);
+  const tier = useMemo(() => equipped[category], [equipped, category]);
 
   if (!tier?.svg || !tier.image) return null;
 
@@ -93,7 +90,7 @@ function ImageLayer({ category, size }: { category: Category; size: number }) {
       width={size}
       height={size}
       data={
-        category === "body" && !get.face
+        category === "body" && !equipped.face
           ? tier.image
           : `data:image/svg+xml;base64,${btoa(tier.svg)}`
       }
