@@ -5,8 +5,7 @@ type CategoryIncompatibles = Partial<Record<Category, Category[]>>;
 // If key category is equipped, values should be removed
 // Copied from revert logic in contract
 const _categoryIncompatibles: CategoryIncompatibles = {
-  head: ["face", "eyes", "mouth", "headgear"],
-  face: ["eyes", "mouth"],
+  head: ["glasses", "mouth", "headTop"],
   suit: ["suitTop", "suitBottom"],
 };
 

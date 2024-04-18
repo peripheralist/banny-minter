@@ -11,12 +11,9 @@ import RoundedFrame from "../shared/RoundedFrame";
 export default function MintButton() {
   const { address } = useAccount();
 
-  const { equipped, totalEquippedPrice } = useContext(MinterContext);
+  const { totalEquippedPrice } = useContext(MinterContext);
 
-  const { mint, isLoading, tx } = useMint({
-    amount: totalEquippedPrice,
-    tierIds: [...(equipped.body ? [BigInt(equipped.body.tierId)] : [])],
-  });
+  const { mint, isLoading, tx } = useMint();
 
   const mintTxPending = isLoading || tx.status === "loading";
 

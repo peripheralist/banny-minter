@@ -13,21 +13,20 @@ if (!BANNYVERSE_PROJECT_ID) {
 }
 
 export const CATEGORY_IDS = {
-  body: 0,
+  naked: 0,
   world: 1,
   backside: 2,
   necklace: 3,
   head: 4,
-  face: 5,
-  eyes: 6,
-  mouth: 7,
-  headgear: 8,
-  shoe: 9,
-  suit: 10,
-  suitBottom: 11,
-  suitTop: 12,
-  fist: 13,
-  topping: 14,
+  glasses: 5,
+  mouth: 6,
+  legs: 7,
+  suit: 8,
+  suitBottom: 9,
+  suitTop: 10,
+  headTop: 11,
+  fist: 12,
+  topping: 13,
 } as const;
 
 export type Category = keyof typeof CATEGORY_IDS;
@@ -42,36 +41,35 @@ export const categoryOfId = Object.entries(CATEGORY_IDS).reduce(
 
 // All categories in SVG layering order, from background to foreground
 export const CATEGORIES: Category[] = [
+  "naked",
   "world",
   "backside",
-  "body",
+  "necklace",
+  "head",
+  "glasses",
+  "mouth",
+  "legs",
   "suitBottom",
   "suitTop",
   "suit",
-  "face",
-  "eyes",
-  "mouth",
-  "head",
-  "headgear",
-  "necklace",
-  "shoe",
+  "headTop",
   "fist",
   "topping",
 ];
 
 export const CATEGORY_GROUP_NAMES = [
-  "body",
   "head",
+  "body",
   "special",
   "world",
 ] as const;
 
 export type CategoryGroup = (typeof CATEGORY_GROUP_NAMES)[number];
 
-// Groups of similar asset categories
+// Groups of similar asset categories, not including body
 export const CATEGORY_GROUPS: Record<CategoryGroup, Category[]> = {
-  body: ["necklace", "shoe", "suit", "suitBottom", "suitTop"],
-  head: ["eyes", "face", "head", "headgear", "mouth"],
+  body: ["necklace", "legs", "suit", "suitBottom", "suitTop"],
+  head: ["glasses", "head", "headTop", "mouth"],
   special: ["fist", "topping", "backside"],
   world: ["world"],
 };

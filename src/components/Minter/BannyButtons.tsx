@@ -12,15 +12,15 @@ export default function BannyButtons({
 }) {
   const { tiers } = useCategorizedTiers();
   const {
-    equipped: { body },
+    equipped: { naked },
     equip,
   } = useContext(MinterContext);
 
-  if (!tiers?.body) return null;
+  if (!tiers?.naked) return null;
 
   return (
     <div style={style}>
-      {tiers.body.map((t) => {
+      {tiers.naked.map((t) => {
         let color = "";
         switch (t.tierId) {
           case 1:
@@ -37,14 +37,14 @@ export default function BannyButtons({
             break;
         }
 
-        const active = body?.tierId === t.tierId;
+        const active = naked?.tierId === t.tierId;
 
         return (
           <ButtonPadLight
             key={t.tierId}
             style={buttonStyle}
             fillFg={color}
-            onClick={() => equip?.body?.(t.tierId)}
+            onClick={() => equip?.naked?.(t.tierId)}
             pressed={active}
             active={active}
           />

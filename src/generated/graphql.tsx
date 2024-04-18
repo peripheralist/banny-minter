@@ -9661,7 +9661,7 @@ export type AllNftTiersQueryVariables = Exact<{
 }>;
 
 
-export type AllNftTiersQuery = { body: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, world: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, face: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, eyes: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, headgear: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, shoe: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, fist: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, topping: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }> };
+export type AllNftTiersQuery = { naked: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, world: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, glasses: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, legs: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, headTop: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, fist: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, topping: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }> };
 
 
 
@@ -10990,7 +10990,10 @@ export type NftTiersSuspenseQueryHookResult = ReturnType<typeof useNftTiersSuspe
 export type NftTiersQueryResult = Apollo.QueryResult<NftTiersQuery, NftTiersQueryVariables>;
 export const AllNftTiersDocument = gql`
     query AllNFTTiers($orderBy: NFTTier_orderBy, $collection: String) {
-  body: nfttiers(where: {category: 0, collection: $collection}, orderBy: $orderBy) {
+  naked: nfttiers(
+    where: {category: 0, collection: $collection}
+    orderBy: $orderBy
+  ) {
     ...TierData
   }
   world: nfttiers(
@@ -11014,53 +11017,50 @@ export const AllNftTiersDocument = gql`
   head: nfttiers(where: {category: 4, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  face: nfttiers(where: {category: 5, collection: $collection}, orderBy: $orderBy) {
-    ...TierData
-  }
-  eyes: nfttiers(where: {category: 6, collection: $collection}, orderBy: $orderBy) {
+  glasses: nfttiers(
+    where: {category: 5, collection: $collection}
+    orderBy: $orderBy
+  ) {
     ...TierData
   }
   mouth: nfttiers(
-    where: {category: 7, collection: $collection}
+    where: {category: 6, collection: $collection}
     orderBy: $orderBy
   ) {
     ...TierData
   }
-  headgear: nfttiers(
-    where: {category: 8, collection: $collection}
-    orderBy: $orderBy
-  ) {
+  legs: nfttiers(where: {category: 7, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  shoe: nfttiers(where: {category: 9, collection: $collection}, orderBy: $orderBy) {
-    ...TierData
-  }
-  suit: nfttiers(
-    where: {category: 10, collection: $collection}
-    orderBy: $orderBy
-  ) {
+  suit: nfttiers(where: {category: 8, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
   suitBottom: nfttiers(
-    where: {category: 11, collection: $collection}
+    where: {category: 9, collection: $collection}
     orderBy: $orderBy
   ) {
     ...TierData
   }
   suitTop: nfttiers(
-    where: {category: 12, collection: $collection}
+    where: {category: 10, collection: $collection}
+    orderBy: $orderBy
+  ) {
+    ...TierData
+  }
+  headTop: nfttiers(
+    where: {category: 11, collection: $collection}
     orderBy: $orderBy
   ) {
     ...TierData
   }
   fist: nfttiers(
-    where: {category: 13, collection: $collection}
+    where: {category: 12, collection: $collection}
     orderBy: $orderBy
   ) {
     ...TierData
   }
   topping: nfttiers(
-    where: {category: 14, collection: $collection}
+    where: {category: 13, collection: $collection}
     orderBy: $orderBy
   ) {
     ...TierData

@@ -5,6 +5,6 @@ export type Tier = {
   tierId: number;
   name: string | undefined;
   image: string | undefined;
-  svg: string | undefined;
+  svg: (styles?: string) => string | null;
   price: bigint;
 };

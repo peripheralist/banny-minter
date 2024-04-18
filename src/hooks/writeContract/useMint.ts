@@ -1,4 +1,5 @@
-import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
+import { BANNYVERSE_PROJECT_ID, CATEGORIES } from "@/constants/nfts";
+import { MinterContext } from "@/contexts/minterContext";
 import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
 import {
   useFind721DataHook,
@@ -6,20 +7,24 @@ import {
   useJbMultiTerminalPay,
   usePreparePayMetadata,
 } from "juice-sdk-react";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { zeroAddress } from "viem";
 import { useAccount, useWaitForTransaction } from "wagmi";
 
-export function useMint({
-  amount,
-  tierIds,
-}: {
-  amount: bigint | null | undefined;
-  tierIds: bigint[];
-}) {
+export function useMint() {
   const { address } = useAccount();
   const { contracts } = useJBContractContext();
   const jb721DataHookQuery = useFind721DataHook();
+
+  const { equipped, totalEquippedPrice } = useContext(MinterContext);
+
+  const tierIds = useMemo(
+    () =>
+      CATEGORIES.filter((c) => !!equipped[c]).map((c) =>
+        BigInt(equipped[c]!.tierId)
+      ),
+    [equipped]
+  );
 
   const metadata = usePreparePayMetadata({
     jb721Hook: {
@@ -33,18 +38,18 @@ export function useMint({
   const { write, isLoading, data } = useJbMultiTerminalPay({
     address: contracts.primaryNativeTerminal?.data ?? undefined,
     args:
-      address && amount
+      address && totalEquippedPrice
         ? [
             BigInt(BANNYVERSE_PROJECT_ID),
             NATIVE_TOKEN,
-            amount,
+            totalEquippedPrice,
             address, // mint to connected wallet
             BigInt(0),
             memo,
             metadata ?? DEFAULT_METADATA,
           ]
         : undefined,
-    value: amount ?? undefined,
+    value: totalEquippedPrice ?? undefined,
   });
 
   const tx = useWaitForTransaction({

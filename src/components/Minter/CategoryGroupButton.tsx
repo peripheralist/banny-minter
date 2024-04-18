@@ -31,6 +31,12 @@ export default function CategoryGroupButton({
       case "body":
         name = "shirt";
         break;
+      case "special":
+        name = "sword";
+        break;
+      case "head":
+        name = "head";
+        break;
     }
 
     return <IconImage name={name} size={size} />;
@@ -38,12 +44,19 @@ export default function CategoryGroupButton({
 
   return (
     <ButtonPad
-      style={{ width: 100, height: "100%", maxHeight: 100, ...style }}
+      style={{
+        width: 100,
+        height: "100%",
+        maxHeight: 100,
+        ...style,
+      }}
       fillFg={active ? "#ffeecd" : COLORS.banana}
       onClick={onClick}
       pressed={active}
     >
-      <Icon />
+      <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+        <Icon />
+      </div>
     </ButtonPad>
   );
 }

@@ -19,15 +19,12 @@ import Summary from "./Summary";
 
 export default function SmallView() {
   const { address } = useAccount();
-  const { equipped, totalEquippedPrice, selectedGroup, setSelectedGroup } =
+  const { totalEquippedPrice, selectedGroup, setSelectedGroup } =
     useContext(MinterContext);
 
   const { loading } = useCategorizedTiers();
 
-  const { mint, isLoading, tx } = useMint({
-    amount: totalEquippedPrice,
-    tierIds: [...(equipped.body ? [BigInt(equipped.body.tierId)] : [])],
-  });
+  const { mint, isLoading, tx } = useMint();
 
   const mintTxPending = isLoading || tx.status === "loading";
 

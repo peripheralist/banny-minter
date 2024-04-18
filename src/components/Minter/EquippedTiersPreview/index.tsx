@@ -1,7 +1,8 @@
 import { CATEGORIES, Category } from "@/constants/nfts";
+import { DEFAULT_SVG } from "@/constants/svgDefaults";
 import { MinterContext } from "@/contexts/minterContext";
-import { useContext, useMemo } from "react";
 import { useFuzz } from "@/hooks/useFuzz";
+import { CSSProperties, useCallback, useContext, useMemo } from "react";
 
 export default function EquippedTiersPreview({
   imageSize,
@@ -11,26 +12,15 @@ export default function EquippedTiersPreview({
   return (
     <div
       style={{
-        position: "relative",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         height: "100%",
-        width: "100%",
-        boxSizing: "border-box",
       }}
     >
-      <div
-        style={{
-          position: "relative",
-          width: imageSize,
-          height: imageSize,
-        }}
-      >
-        {CATEGORIES.map((c) => (
-          <ImageLayer key={c} category={c} size={imageSize} />
-        ))}
-      </div>
+      {CATEGORIES.map((c) => (
+        <ImageLayer key={c} category={c} size={imageSize} />
+      ))}
     </div>
   );
 }
@@ -38,6 +28,8 @@ export default function EquippedTiersPreview({
 function ImageLayer({ category, size }: { category: Category; size: number }) {
   const { equipped, equipAnimation, unequipAnimation } =
     useContext(MinterContext);
+
+  const { naked, necklace, mouth } = equipped;
 
   const isEquipping = useMemo(
     () => equipAnimation?.category === category,
@@ -68,32 +60,64 @@ function ImageLayer({ category, size }: { category: Category; size: number }) {
 
   const tier = useMemo(() => equipped[category], [equipped, category]);
 
-  if (!tier?.svg || !tier.image) return null;
+  const fuzzMask = useCallback(
+    (fuzz: string | undefined) =>
+      fuzz
+        ? {
+            maskImage: `url(data:image/svg+xml;base64,${btoa(fuzz)})`,
+            maskSize: size,
+          }
+        : {},
+    [size]
+  );
+
+  const SvgObject = useCallback(
+    ({ svg, style }: { svg: string | undefined; style?: CSSProperties }) =>
+      svg ? (
+        <object
+          style={{ position: "absolute", ...style }}
+          width={size}
+          height={size}
+          data={`data:image/svg+xml;base64,${btoa(svg)}`}
+        />
+      ) : null,
+    [size]
+  );
+
+  const svg = useMemo(() => tier?.svg?.(), [tier]);
+
+  const NakedDefaultSvgs = useCallback(() => {
+    if (category !== "naked") return null;
+
+    let children: JSX.Element[] = [];
+
+    // always add eyes
+    if (naked?.tierId === 1) {
+      children.push(<SvgObject svg={DEFAULT_SVG.eyesAlien} />);
+    } else {
+      children.push(<SvgObject svg={DEFAULT_SVG.eyes} />);
+    }
+
+    if (!necklace) {
+      children.push(<SvgObject svg={DEFAULT_SVG.necklace} />);
+    }
+
+    if (!mouth) {
+      children.push(<SvgObject svg={DEFAULT_SVG.mouth} />);
+    }
+
+    return children;
+  }, [naked, necklace, mouth, SvgObject, category]);
+
+  if (!svg || !tier?.image) return null;
 
   return (
-    <object
-      style={{
-        position: "absolute",
-        ...(unequipFuzz
-          ? {
-              maskImage: `url(data:image/svg+xml;base64,${btoa(unequipFuzz)})`,
-              maskSize: size,
-            }
-          : {}),
-        ...(equipFuzz
-          ? {
-              maskImage: `url(data:image/svg+xml;base64,${btoa(equipFuzz)})`,
-              maskSize: size,
-            }
-          : {}),
-      }}
-      width={size}
-      height={size}
-      data={
-        category === "body" && !equipped.face
-          ? tier.image
-          : `data:image/svg+xml;base64,${btoa(tier.svg)}`
-      }
-    />
+    <>
+      <SvgObject
+        style={{ ...fuzzMask(equipFuzz), ...fuzzMask(unequipFuzz) }}
+        svg={svg}
+      />
+      <NakedDefaultSvgs />
+    </>
   );
 }

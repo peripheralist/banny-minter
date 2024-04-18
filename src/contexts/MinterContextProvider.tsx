@@ -15,7 +15,7 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   const [equippedTierId, setEquippedTierId] = useState<
     Partial<Record<Category, number>>
   >({});
-  const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("body");
+  const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("head");
   const [equippingCategory, setEquippingCategory] = useState<Category>();
   const [unequippingCategory, setUnequippingCategory] = useState<Category>();
 
@@ -100,9 +100,9 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     // default equip first body tier
-    if (!tiers?.body.length || !equip || equipped.body) return;
-    equip.body(tiers.body[0].tierId);
-  }, [tiers?.body, equipped, equip]);
+    if (!tiers?.naked.length || !equip || equipped.naked) return;
+    equip.naked(tiers.naked[0].tierId);
+  }, [tiers?.naked, equipped, equip]);
 
   const equipRandom = useCallback(() => {
     if (!tiers) return;
