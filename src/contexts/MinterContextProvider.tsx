@@ -11,6 +11,8 @@ import {
 } from "react";
 import { MinterContext } from "./minterContext";
 
+export const EQUIP_DURATION_MILLIS = 320;
+
 export default function MinterContextProvider({ children }: PropsWithChildren) {
   const [equippedTierId, setEquippedTierId] = useState<
     Partial<Record<Category, number>>
@@ -55,7 +57,10 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
           }));
 
           setEquippingCategory(category);
-          setTimeout(() => setEquippingCategory(undefined), 400);
+          setTimeout(
+            () => setEquippingCategory(undefined),
+            EQUIP_DURATION_MILLIS
+          );
         };
 
         const handleUnequip = () => {
@@ -68,7 +73,7 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
               [category]: undefined,
             }));
             setUnequippingCategory(undefined);
-          }, 400);
+          }, EQUIP_DURATION_MILLIS);
         };
 
         if (tierId) handleEquip();

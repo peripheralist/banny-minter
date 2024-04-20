@@ -4,6 +4,7 @@ import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { EquippedTiers } from "@/model/tier";
 import { useEffect, useMemo, useState } from "react";
 import EquippedTiersPreview from "../EquippedTiersPreview";
+import { EQUIP_DURATION_MILLIS } from "@/contexts/MinterContextProvider";
 
 export default function TiersDemo({
   size,
@@ -90,7 +91,7 @@ export default function TiersDemo({
           ),
         };
       });
-    }, 1000);
+    }, EQUIP_DURATION_MILLIS * 3);
 
     return () => clearInterval(id);
   }, [tiers]);

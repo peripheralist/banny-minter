@@ -1,7 +1,8 @@
 import { Category } from "@/constants/nfts";
 import { MinterContext } from "@/contexts/minterContext";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { formatEther } from "juice-sdk-core";
-import { useContext, useMemo, useRef } from "react";
+import { useContext, useMemo } from "react";
 import Fuzz from "../../pixelRenderers/Fuzz";
 
 export default function SelectedTierDetail({
@@ -9,23 +10,21 @@ export default function SelectedTierDetail({
 }: {
   category: Category;
 }) {
-  const { equipped, equipAnimation } = useContext(MinterContext);
+  const { equipped, equippingCategory } = useContext(MinterContext);
 
-  const ref = useRef<HTMLSpanElement>(null);
-
-  const width = ref.current?.clientWidth;
+  const { measuredRef, width } = useMeasuredRef();
 
   const tier = useMemo(() => equipped[category], [equipped, category]);
 
   const showFuzz = useMemo(
-    () => equipAnimation?.category === category && width,
-    [category, equipAnimation?.category, width]
+    () => equippingCategory === category && width,
+    [category, equippingCategory, width]
   );
 
   return (
-    <span ref={ref} style={{ color: "white", width: "100%" }}>
+    <span ref={measuredRef} style={{ color: "white", width: "100%" }}>
       {showFuzz ? (
-        <Fuzz width={width!} height={12} pixelSize={4} fill="white" />
+        <Fuzz width={width} height={12} pixelSize={4} fill="white" />
       ) : (
         <div
           style={{

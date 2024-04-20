@@ -1,8 +1,11 @@
 import { Category } from "@/constants/nfts";
 import { DEFAULT_SVG } from "@/constants/svgDefaults";
+import { EQUIP_DURATION_MILLIS } from "@/contexts/MinterContextProvider";
 import { useFuzz } from "@/hooks/useFuzz";
 import { EquippedTiers } from "@/model/tier";
 import { CSSProperties, useCallback, useMemo } from "react";
+
+const fuzzStepCount = 4;
 
 export function TierPreview({
   equipped,
@@ -35,20 +38,32 @@ export function TierPreview({
     fill: "white",
   };
 
+  const steps = useMemo(() => {
+    const _steps: number[] = [];
+
+    for (let i = 1; i <= fuzzStepCount; i++) {
+      _steps.push(0.2 * i);
+    }
+
+    return _steps;
+  }, []);
+
+  const interval = useMemo(() => EQUIP_DURATION_MILLIS / fuzzStepCount, []);
+
   const equipFuzz = useFuzz({
     ...fuzzConfig,
     enabled: isEquipping,
-    interval: 100,
+    interval,
     pixelSize,
-    steps: [0.2, 0.4, 0.6, 0.8],
+    steps: steps,
   });
 
   const unequipFuzz = useFuzz({
     ...fuzzConfig,
     enabled: isUnEquipping,
-    interval: 100,
+    interval,
     pixelSize,
-    steps: [0.8, 0.6, 0.4, 0.2],
+    steps: [...steps].reverse(),
   });
 
   const fuzzMask = useCallback(
