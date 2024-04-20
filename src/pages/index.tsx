@@ -46,7 +46,7 @@ export default function Home() {
             </div>
           )}
           <Link
-            style={{ position: "fixed", right: 30, bottom: 30 }}
+            style={{ position: "fixed", right: 20, bottom: 20 }}
             href={"/mint"}
           >
             <ButtonPad
