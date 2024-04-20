@@ -1,7 +1,7 @@
 import { categoryIncompatibles } from "@/constants/incompatibles";
 import { CATEGORIES, Category, CategoryGroup } from "@/constants/nfts";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
-import { useAnimation } from "@/hooks/useAnimation";
+import { EquipTierFns, EquippedTiers } from "@/model/tier";
 import {
   PropsWithChildren,
   useCallback,
@@ -9,7 +9,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { EquipTierFns, EquippedTiers, MinterContext } from "./minterContext";
+import { MinterContext } from "./minterContext";
 
 export default function MinterContextProvider({ children }: PropsWithChildren) {
   const [equippedTierId, setEquippedTierId] = useState<
@@ -18,15 +18,6 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("head");
   const [equippingCategory, setEquippingCategory] = useState<Category>();
   const [unequippingCategory, setUnequippingCategory] = useState<Category>();
-
-  const equipAnimation = useAnimation({
-    interval: 80,
-    step: 0.25,
-  });
-  const unequipAnimation = useAnimation({
-    interval: 80,
-    step: 0.25,
-  });
 
   const { tiers } = useCategorizedTiers();
 
@@ -64,24 +55,20 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
           }));
 
           setEquippingCategory(category);
-          equipAnimation.animate(true).then(() => {
-            equipAnimation.setFrame(0);
-            setEquippingCategory(undefined);
-          });
+          setTimeout(() => setEquippingCategory(undefined), 400);
         };
 
         const handleUnequip = () => {
           setUnequippingCategory(category);
-          unequipAnimation.animate(true).then(() => {
-            unequipAnimation.setFrame(0);
-            setUnequippingCategory(undefined);
 
+          setTimeout(() => {
             setEquippedTierId((_ids) => ({
               ..._ids,
               // unequip category
               [category]: undefined,
             }));
-          });
+            setUnequippingCategory(undefined);
+          }, 400);
         };
 
         if (tierId) handleEquip();
@@ -96,7 +83,7 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
       }),
       {} as EquipTierFns
     );
-  }, [equipAnimation, unequipAnimation]);
+  }, []);
 
   useEffect(() => {
     // default equip first body tier
@@ -137,14 +124,8 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
         totalEquippedPrice,
         selectedGroup,
         setSelectedGroup,
-        equipAnimation: {
-          ...equipAnimation,
-          category: equippingCategory,
-        },
-        unequipAnimation: {
-          ...unequipAnimation,
-          category: unequippingCategory,
-        },
+        equippingCategory,
+        unequippingCategory,
       }}
     >
       {children}

@@ -9,16 +9,22 @@ import RoundedFrame from "../shared/RoundedFrame";
 import BannyButtons from "./BannyButtons";
 import CategoryGroupButton from "./CategoryGroupButton";
 import CategoryGroupGrid from "./CategoryGroupGrid";
+import EquippedTiersPreview from "../EquippedTiersPreview";
 import Loading from "./Loading";
 import MintButton from "./MintButton";
 import Summary from "./Summary";
-import EquippedTiersPreview from "./EquippedTiersPreview";
 
 export default function LargeView() {
   const { loading } = useCategorizedTiers();
 
-  const { equipRandom, selectedGroup, setSelectedGroup } =
-    useContext(MinterContext);
+  const {
+    equipped,
+    equippingCategory,
+    unequippingCategory,
+    equipRandom,
+    selectedGroup,
+    setSelectedGroup,
+  } = useContext(MinterContext);
 
   const [containerHeight, setContainerHeight] = useState<number>(0);
 
@@ -151,7 +157,13 @@ export default function LargeView() {
               background: "white",
             }}
           >
-            <EquippedTiersPreview imageSize={440} />
+            <EquippedTiersPreview
+              size={440}
+              pixelSize={4}
+              equipped={equipped}
+              equippingCategory={equippingCategory}
+              unequippingCategory={unequippingCategory}
+            />
           </div>
         </RoundedFrame>
 

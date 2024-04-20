@@ -14,13 +14,19 @@ import RoundedFrame from "../shared/RoundedFrame";
 import BannyButtons from "./BannyButtons";
 import CategoryGroupButton from "./CategoryGroupButton";
 import CategoryGroupGrid from "./CategoryGroupGrid";
-import EquippedTiersPreview from "./EquippedTiersPreview";
+import EquippedTiersPreview from "../EquippedTiersPreview";
 import Summary from "./Summary";
 
 export default function SmallView() {
   const { address } = useAccount();
-  const { totalEquippedPrice, selectedGroup, setSelectedGroup } =
-    useContext(MinterContext);
+  const {
+    equipped,
+    equippingCategory,
+    unequippingCategory,
+    totalEquippedPrice,
+    selectedGroup,
+    setSelectedGroup,
+  } = useContext(MinterContext);
 
   const { loading } = useCategorizedTiers();
 
@@ -84,7 +90,13 @@ export default function SmallView() {
             background: "white",
           }}
         >
-          <EquippedTiersPreview imageSize={280} />
+          <EquippedTiersPreview
+            size={280}
+            pixelSize={4}
+            equipped={equipped}
+            equippingCategory={equippingCategory}
+            unequippingCategory={unequippingCategory}
+          />
         </div>
       </RoundedFrame>
 

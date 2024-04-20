@@ -8,3 +8,7 @@ export type Tier = {
   svg: (styles?: string) => string | null;
   price: bigint;
 };
+
+export type EquippedTiers = Record<Category, Tier | undefined>;
+
+export type EquipTierFns = Record<Category, (id: number | undefined) => void>;

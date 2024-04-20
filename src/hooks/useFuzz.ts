@@ -1,56 +1,106 @@
+import { useQuery } from "@tanstack/react-query";
 import { CSSProperties, useEffect, useMemo, useState } from "react";
 
 export function useFuzz({
   enabled,
   interval,
   pixelSize,
-  density,
   width,
   height,
   fill,
+  steps,
+  loop,
 }: {
   enabled?: boolean;
   interval?: number;
   pixelSize?: number;
-  density?: number;
-  getSvg?: (svg: string) => void;
   width: number;
   height: number;
   fill: CSSProperties["fill"];
+  steps: number[]; // array of densities for each frame
+  loop?: boolean;
 }) {
-  const [fuzz, setFuzz] = useState<string>();
+  const [idx, setIdx] = useState<number>();
 
-  useEffect(() => {
-    if (!enabled) {
-      setFuzz(undefined);
-      return;
-    }
+  const { data: variations } = useQuery({
+    queryKey: ["fuzz", width, height, fill, pixelSize, steps],
+    queryFn: () => {
+      const p = pixelSize ?? 2;
 
-    const p = pixelSize ?? 2;
+      let _variations: string[] = [];
 
-    function update() {
-      let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg">`;
+      for (const density of steps) {
+        if (density < 0 || density > 1) {
+          throw new Error("Step must be between 0 and 1");
+        }
 
-      const _width = width / p;
-      const _height = height / p;
+        let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg">`;
 
-      for (let i = 0; i < _width * _height * (density ?? 0.5); i++) {
-        svg += `<rect x="${Math.floor(Math.random() * _width) * p}" y="${
-          Math.floor(Math.random() * _height) * p
-        }" width="${p}" height="${p}" fill="${fill}" />`;
+        const _width = width / p;
+        const _height = height / p;
+
+        for (let i = 0; i < _width * _height * density; i++) {
+          svg += `<rect x="${Math.floor(Math.random() * _width) * p}" y="${
+            Math.floor(Math.random() * _height) * p
+          }" width="${p}" height="${p}" fill="${fill}" />`;
+        }
+
+        svg += "</svg>";
+
+        _variations.push(svg);
       }
 
-      svg += "</svg>";
+      return _variations;
+    },
+  });
 
-      setFuzz(svg);
+  useEffect(() => {
+    if (!variations) return;
+
+    const _interval = interval ?? 120;
+
+    if (loop) {
+      setIdx(0);
+
+      // run repeatedly
+      const id = setInterval(
+        () =>
+          setIdx((i) =>
+            i === undefined || i === variations.length - 1 ? 0 : i + 1
+          ),
+        _interval
+      );
+
+      return () => clearInterval(id);
     }
 
-    update();
+    if (enabled) {
+      setIdx(0);
 
-    const id = setInterval(update, interval ?? 120);
+      // run once
+      const id = setInterval(
+        () =>
+          setIdx((i) => {
+            if (i === undefined) return 0;
+            if (i === variations.length - 1) {
+              clearInterval(id);
+              return undefined;
+            }
+            return i + 1;
+          }),
+        _interval
+      );
 
-    return () => clearInterval(id);
-  }, [interval, width, height, fill, density, pixelSize, enabled]);
+      return () => clearInterval(id);
+    }
+
+    setIdx(undefined);
+  }, [enabled, variations, loop, interval]);
+
+  const fuzz = useMemo(
+    () => (idx !== undefined && variations ? variations[idx] : undefined),
+    [variations, idx]
+  );
 
   return fuzz;
 }

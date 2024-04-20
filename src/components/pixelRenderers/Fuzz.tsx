@@ -1,5 +1,7 @@
 import { useFuzz } from "@/hooks/useFuzz";
-import { CSSProperties } from "react";
+import { CSSProperties, useMemo } from "react";
+
+const STEP_COUNT = 5;
 
 export default function Fuzz({
   style,
@@ -15,7 +17,23 @@ export default function Fuzz({
   fill: CSSProperties["fill"];
   style?: CSSProperties;
 }) {
-  const fuzz = useFuzz({ ...props, density: density ?? 0.75, enabled: true });
+  const steps = useMemo(() => {
+    const _density = density ?? 0.75;
+
+    let _steps: number[] = [];
+    for (let i = 0; i < STEP_COUNT; i++) {
+      _steps.push(_density);
+    }
+
+    return _steps;
+  }, [density]);
+
+  const fuzz = useFuzz({
+    ...props,
+    steps,
+    loop: true,
+    enabled: true,
+  });
 
   if (!fuzz) return null;
 

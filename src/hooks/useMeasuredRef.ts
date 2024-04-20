@@ -21,4 +21,6 @@ export function useMeasuredRef() {
       setHeight(rect.height);
     }
   }, []);
+
+  return { measuredRef, width, height };
 }
