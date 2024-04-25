@@ -4,10 +4,12 @@ export function decodeNFTInfo(uri: string | null | undefined) {
   try {
     const base64 = uri.split("base64,")[1];
 
+    const jsonStr = atob(base64).replace("],", ""); // temp hack
+
     const json: {
       image: string;
-      name: string;
-    } = JSON.parse(atob(base64));
+      productName: string;
+    } = JSON.parse(jsonStr);
 
     return json;
   } catch (e) {
