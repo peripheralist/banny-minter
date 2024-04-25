@@ -42,8 +42,8 @@ export const categoryOfId = Object.entries(CATEGORY_IDS).reduce(
 // All categories in SVG layering order, from background to foreground
 export const CATEGORIES: Category[] = [
   "world",
-  "naked",
   "backside",
+  "naked",
   "head",
   "glasses",
   "mouth",
