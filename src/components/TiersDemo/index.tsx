@@ -20,9 +20,15 @@ export default function TiersDemo({
 
   const { tiers } = useCategorizedTiers();
 
+  // exclude some categories
+  const filteredCategories = useMemo(
+    () => CATEGORIES.filter((c) => c !== "world"),
+    []
+  );
+
   const equipped = useMemo(
     () =>
-      CATEGORIES.reduce((acc, category) => {
+      filteredCategories.reduce((acc, category) => {
         const equippedTierForCategory = tiers?.[category].find(
           (t) => t.tierId === equippedTierId[category]
         );
@@ -32,7 +38,7 @@ export default function TiersDemo({
           [category]: equippedTierForCategory,
         };
       }, {} as EquippedTiers),
-    [equippedTierId, tiers]
+    [equippedTierId, tiers, filteredCategories]
   );
 
   useEffect(() => {
@@ -51,7 +57,9 @@ export default function TiersDemo({
         let __category = c;
         while (__category === c || !__category) {
           __category =
-            CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+            filteredCategories[
+              Math.floor(Math.random() * filteredCategories.length)
+            ];
         }
 
         _category = __category;
@@ -94,7 +102,7 @@ export default function TiersDemo({
     }, EQUIP_DURATION_MILLIS * 3);
 
     return () => clearInterval(id);
-  }, [tiers]);
+  }, [tiers, filteredCategories]);
 
   return (
     <EquippedTiersPreview
