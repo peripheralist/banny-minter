@@ -4,7 +4,7 @@ export function decodeNFTInfo(uri: string | null | undefined) {
   try {
     const base64 = uri.split("base64,")[1];
 
-    const jsonStr = atob(base64).replace("],", ""); // temp hack
+    const jsonStr = atob(base64);
 
     const json: {
       image: string;
