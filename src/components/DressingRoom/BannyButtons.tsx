@@ -1,4 +1,4 @@
-import { MinterContext } from "@/contexts/minterContext";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { CSSProperties, useContext } from "react";
 import ButtonPadLight from "../shared/ButtonPadLight";
@@ -14,7 +14,7 @@ export default function BannyButtons({
   const {
     equipped: { naked },
     equip,
-  } = useContext(MinterContext);
+  } = useContext(EquipmentContext);
 
   if (!tiers?.naked) return null;
 

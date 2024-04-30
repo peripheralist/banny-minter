@@ -1,5 +1,5 @@
 import { BANNYVERSE_PROJECT_ID, CATEGORIES } from "@/constants/nfts";
-import { MinterContext } from "@/contexts/minterContext";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
 import {
   useFind721DataHook,
@@ -16,7 +16,7 @@ export function useMint() {
   const { contracts } = useJBContractContext();
   const jb721DataHookQuery = useFind721DataHook();
 
-  const { equipped, totalEquippedPrice } = useContext(MinterContext);
+  const { equipped, totalEquippedPrice } = useContext(EquipmentContext);
 
   const tierIds = useMemo(
     () =>

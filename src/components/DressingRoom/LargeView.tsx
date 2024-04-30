@@ -1,22 +1,18 @@
 import { CATEGORY_GROUP_NAMES } from "@/constants/nfts";
-import { MinterContext } from "@/contexts/minterContext";
-import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useCallback, useContext, useMemo, useState } from "react";
+import EquippedTiersPreview from "../EquippedTiersPreview";
 import { TOOLBAR_HEIGHT } from "../Toolbar";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import BannyButtons from "./BannyButtons";
 import CategoryGroupButton from "./CategoryGroupButton";
 import CategoryGroupGrid from "./CategoryGroupGrid";
-import EquippedTiersPreview from "../EquippedTiersPreview";
-import Loading from "./Loading";
 import MintButton from "./MintButton";
 import Summary from "./Summary";
 
-export default function LargeView() {
-  const { loading } = useCategorizedTiers();
-
+export default function LargeView({ button }: { button: JSX.Element }) {
   const {
     equipped,
     equippingCategory,
@@ -24,7 +20,7 @@ export default function LargeView() {
     equipRandom,
     selectedGroup,
     setSelectedGroup,
-  } = useContext(MinterContext);
+  } = useContext(EquipmentContext);
 
   const [containerHeight, setContainerHeight] = useState<number>(0);
 
@@ -50,8 +46,6 @@ export default function LargeView() {
     () => (windowWidth && windowWidth < 1200 ? 2 : 3),
     [windowWidth]
   );
-
-  if (loading) return <Loading />;
 
   return (
     <div
@@ -178,7 +172,7 @@ export default function LargeView() {
             <Summary />
           </div>
 
-          <MintButton />
+          {button}
         </div>
       </div>
     </div>

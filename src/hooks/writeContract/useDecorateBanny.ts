@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { writeContract } from "wagmi/actions";
 
 export function useDecorateBanny() {
   const decorateBanny = useCallback(
@@ -12,16 +13,17 @@ export function useDecorateBanny() {
       nakedBannyId: number;
       worldId: number;
       outfitIds: number[];
-    }) => {
-      // writeContract({
-      //   address: ADDRESS.asdf,
-      //   abi: ABI.asdf,
-      //   functionName: "decorateBannyWith",
-      //   args: [hook, nakedBannyId, worldId, outfitIds],
-      // });
-    },
+    }) =>
+      writeContract({
+        address: "0xASDF", // TODO
+        abi: [
+          "function decorateBannyWith(address,uint256,uint256,uint256[]) external nonpayable",
+        ],
+        functionName: "decorateBannyWith",
+        args: [hook, nakedBannyId, worldId, outfitIds],
+      }),
     []
   );
 
-  return { decorateBanny };
+  return decorateBanny;
 }

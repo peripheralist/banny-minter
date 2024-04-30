@@ -1,10 +1,43 @@
 query NFTs($where: NFT_filter) {
   nfts(where: $where) {
     tokenId
+    owner {
+      address
+    }
     collection {
       address
     }
     tokenUri
+    category
+    tier {
+      id
+      tierId
+    }
+  }
+}
+
+query DecoratedBanny($tokenId: ID!) {
+  decoratedBanny(id: $tokenId) {
+    id
+    nft {
+      owner {
+        address
+      }
+    }
+    naked
+    world
+    backside
+    necklace
+    head
+    glasses
+    mouth
+    legs
+    suit
+    suitBottom
+    suitTop
+    headTop
+    fist
+    topping
   }
 }
 

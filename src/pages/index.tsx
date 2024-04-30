@@ -1,7 +1,7 @@
-import Loading from "@/components/Minter/Loading";
 import TiersDemo from "@/components/TiersDemo";
 import { TOOLBAR_HEIGHT } from "@/components/Toolbar";
 import ButtonPad from "@/components/shared/ButtonPad";
+import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import Head from "next/head";
@@ -39,7 +39,7 @@ export default function Home() {
           }}
         >
           {loading ? (
-            <Loading />
+            <FullscreenLoading />
           ) : (
             <div style={{ height: size }}>
               <TiersDemo size={size} pixelSize={8} />

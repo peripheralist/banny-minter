@@ -1,5 +1,5 @@
 import { Category, CATEGORY_GROUPS } from "@/constants/nfts";
-import { MinterContext } from "@/contexts/minterContext";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { Tier } from "@/model/tier";
 import {
@@ -36,7 +36,7 @@ export default function CategoryGroupGrid({
 }) {
   const { tiers } = useCategorizedTiers();
 
-  const { selectedGroup, equipped, equip } = useContext(MinterContext);
+  const { selectedGroup, equipped, equip } = useContext(EquipmentContext);
 
   const pageSize = useMemo(() => gridRows * gridCols, [gridRows, gridCols]);
 

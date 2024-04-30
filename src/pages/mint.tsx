@@ -1,8 +1,13 @@
-import Minter from "@/components/Minter";
-import MinterContextProvider from "@/contexts/MinterContextProvider";
+import DressingRoom from "@/components/DressingRoom";
+import MintButton from "@/components/DressingRoom/MintButton";
+import FullscreenLoading from "@/components/shared/FullscreenLoading";
+import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
+import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import Head from "next/head";
 
 export default function Mint() {
+  const { tiers } = useCategorizedTiers();
+
   return (
     <>
       <Head>
@@ -13,9 +18,16 @@ export default function Mint() {
       </Head>
 
       <main>
-        <MinterContextProvider>
-          <Minter />
-        </MinterContextProvider>
+        {tiers ? (
+          <EquipmentContextProvider
+            availableTiers={tiers}
+            defaultEquippedTierIds={{ naked: tiers.naked[0].tierId }}
+          >
+            <DressingRoom button={<MintButton />} />
+          </EquipmentContextProvider>
+        ) : (
+          <FullscreenLoading />
+        )}
       </main>
     </>
   );

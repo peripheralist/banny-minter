@@ -1,7 +1,7 @@
 import { apolloClient } from "@/constants/apollo";
 import { BANNYVERSE_COLLECTION_ID, Category } from "@/constants/nfts";
 import { NftTier_OrderBy, useAllNftTiersQuery } from "@/generated/graphql";
-import { Tier } from "@/model/tier";
+import { Tier, Tiers } from "@/model/tier";
 import { parseTier } from "@/utils/parseTier";
 import { useMemo } from "react";
 
@@ -17,7 +17,7 @@ export function useCategorizedTiers() {
     },
   });
 
-  const _tiers = useMemo(
+  const _tiers: Tiers | undefined = useMemo(
     () =>
       tiers
         ? Object.entries(tiers).reduce(

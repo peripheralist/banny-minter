@@ -1,12 +1,12 @@
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import { COLORS } from "@/constants/colors";
 import { CATEGORIES } from "@/constants/nfts";
-import { MinterContext } from "@/contexts/minterContext";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useContext } from "react";
 import SelectedTierDetail from "./SelectedTierDetail";
 
 export default function Index() {
-  const { equipped } = useContext(MinterContext);
+  const { equipped } = useContext(EquipmentContext);
 
   const equippedCategories = CATEGORIES.filter((c) => !!equipped[c]);
 

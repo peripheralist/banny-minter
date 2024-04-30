@@ -1,7 +1,7 @@
 import { TOOLBAR_HEIGHT } from "@/components/Toolbar";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import { useNftsOf } from "@/hooks/queries/useNftsOf";
-import { decodeNFTInfo } from "@/utils/tokenInfo";
+import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { isAddress } from "viem";

@@ -2,7 +2,7 @@ import React from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 import { TOOLBAR_HEIGHT } from "../Toolbar";
 
-export default function Loading() {
+export default function FullscreenLoading() {
   return (
     <div
       style={{

@@ -1,5 +1,5 @@
 import { Category } from "@/constants/nfts";
-import { MinterContext } from "@/contexts/minterContext";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { formatEther } from "juice-sdk-core";
 import { useContext, useMemo } from "react";
@@ -10,7 +10,7 @@ export default function SelectedTierDetail({
 }: {
   category: Category;
 }) {
-  const { equipped, equippingCategory } = useContext(MinterContext);
+  const { equipped, equippingCategory } = useContext(EquipmentContext);
 
   const { measuredRef, width } = useMeasuredRef();
 

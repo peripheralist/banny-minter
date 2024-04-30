@@ -1,5 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { MinterContext } from "@/contexts/minterContext";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 import { Tier } from "@/model/tier";
 import { useContext, useMemo } from "react";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
@@ -14,7 +14,7 @@ export default function TierSelectorButton({
   buttonSize: number;
   imageSize: number;
 }) {
-  const { equipped, equip } = useContext(MinterContext);
+  const { equipped, equip } = useContext(EquipmentContext);
 
   const { onClick, active } = useMemo(() => {
     const { category, tierId } = tier;

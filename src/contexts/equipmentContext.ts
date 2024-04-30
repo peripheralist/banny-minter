@@ -13,7 +13,7 @@ type Context = {
   unequippingCategory?: Category;
 };
 
-export const MinterContext = createContext<Context>({
+export const EquipmentContext = createContext<Context>({
   selectedGroup: "body",
   equipped: CATEGORIES.reduce(
     (acc, category) => ({

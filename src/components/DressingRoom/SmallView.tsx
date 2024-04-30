@@ -1,23 +1,21 @@
 import { COLORS } from "@/constants/colors";
 import { CATEGORY_GROUP_NAMES } from "@/constants/nfts";
-import { MinterContext } from "@/contexts/minterContext";
-import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useMint } from "@/hooks/writeContract/useMint";
 import { formatEther } from "juice-sdk-core";
 import { useContext, useMemo } from "react";
 import { useAccount } from "wagmi";
-import { TOOLBAR_HEIGHT } from "../Toolbar";
+import EquippedTiersPreview from "../EquippedTiersPreview";
 import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import BannyButtons from "./BannyButtons";
 import CategoryGroupButton from "./CategoryGroupButton";
 import CategoryGroupGrid from "./CategoryGroupGrid";
-import EquippedTiersPreview from "../EquippedTiersPreview";
 import Summary from "./Summary";
 
-export default function SmallView() {
+export default function SmallView({ button }: { button: JSX.Element }) {
   const { address } = useAccount();
   const {
     equipped,
@@ -26,9 +24,7 @@ export default function SmallView() {
     totalEquippedPrice,
     selectedGroup,
     setSelectedGroup,
-  } = useContext(MinterContext);
-
-  const { loading } = useCategorizedTiers();
+  } = useContext(EquipmentContext);
 
   const { mint, isLoading, tx } = useMint();
 
@@ -46,25 +42,6 @@ export default function SmallView() {
   );
 
   const gap = 10;
-
-  if (loading) {
-    return (
-      <div
-        style={{
-          width: "100vw",
-          height: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 20,
-        }}
-      >
-        <Fuzz width={200} height={200} fill="black" pixelSize={10} />
-        <h1>Loading</h1>
-      </div>
-    );
-  }
 
   return (
     <div
@@ -150,72 +127,7 @@ export default function SmallView() {
           </RoundedFrame>
         </div>
 
-        <RoundedFrame>
-          <ButtonPad
-            disabled={mintTxPending || !address}
-            style={{
-              height: 80,
-              padding: 1,
-            }}
-            fillFg={COLORS.pink}
-            onClick={() => {
-              mint();
-            }}
-          >
-            {mintTxPending ? (
-              <Fuzz
-                width={80}
-                height={32}
-                fill="white"
-                pixelSize={4}
-                interval={500}
-              />
-            ) : (
-              <div
-                style={{
-                  textAlign: "center",
-                  fontSize: "3rem",
-                }}
-              >
-                <div
-                  style={{
-                    opacity: address ? 1 : 0.25,
-                    color: address ? "white" : "black",
-                  }}
-                >
-                  Mint
-                </div>
-
-                {!address && (
-                  <div
-                    style={{
-                      fontSize: "1.6rem",
-                      textTransform: "uppercase",
-                      color: "white",
-                    }}
-                  >
-                    No wallet
-                  </div>
-                )}
-              </div>
-            )}
-          </ButtonPad>
-
-          <div
-            style={{
-              padding: 8,
-              fontSize: "2rem",
-              textAlign: "center",
-              fontWeight: "bold",
-              background: "#ffffff",
-            }}
-          >
-            {totalEquippedPrice
-              ? formatEther(totalEquippedPrice).substring(0, 6)
-              : "--"}{" "}
-            ETH
-          </div>
-        </RoundedFrame>
+        {button}
       </div>
     </div>
   );

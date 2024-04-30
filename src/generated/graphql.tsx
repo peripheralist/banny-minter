@@ -18,7 +18,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   BigDecimal: { input: any; output: any; }
-  BigInt: { input: any; output: any; }
+  BigInt: { input: bigint; output: bigint; }
   Bytes: { input: any; output: any; }
   Int8: { input: any; output: any; }
 };
@@ -623,6 +623,197 @@ export enum ConfigureEvent_OrderBy {
   timestamp = 'timestamp',
   txHash = 'txHash',
   weight = 'weight'
+}
+
+export type DecoratedBanny = {
+  backside: Maybe<Scalars['BigInt']['output']>;
+  fist: Maybe<Scalars['BigInt']['output']>;
+  glasses: Maybe<Scalars['BigInt']['output']>;
+  head: Maybe<Scalars['BigInt']['output']>;
+  headTop: Maybe<Scalars['BigInt']['output']>;
+  id: Scalars['ID']['output'];
+  legs: Maybe<Scalars['BigInt']['output']>;
+  mouth: Maybe<Scalars['BigInt']['output']>;
+  naked: Maybe<Scalars['BigInt']['output']>;
+  necklace: Maybe<Scalars['BigInt']['output']>;
+  nft: Nft;
+  suit: Maybe<Scalars['BigInt']['output']>;
+  suitBottom: Maybe<Scalars['BigInt']['output']>;
+  suitTop: Maybe<Scalars['BigInt']['output']>;
+  topping: Maybe<Scalars['BigInt']['output']>;
+  world: Maybe<Scalars['BigInt']['output']>;
+};
+
+export type DecoratedBanny_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<DecoratedBanny_Filter>>>;
+  backside?: InputMaybe<Scalars['BigInt']['input']>;
+  backside_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  backside_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  backside_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  backside_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  backside_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  backside_not?: InputMaybe<Scalars['BigInt']['input']>;
+  backside_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  fist?: InputMaybe<Scalars['BigInt']['input']>;
+  fist_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  fist_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  fist_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  fist_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  fist_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  fist_not?: InputMaybe<Scalars['BigInt']['input']>;
+  fist_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  glasses?: InputMaybe<Scalars['BigInt']['input']>;
+  glasses_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  glasses_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  glasses_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  glasses_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  glasses_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  glasses_not?: InputMaybe<Scalars['BigInt']['input']>;
+  glasses_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  head?: InputMaybe<Scalars['BigInt']['input']>;
+  headTop?: InputMaybe<Scalars['BigInt']['input']>;
+  headTop_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  headTop_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  headTop_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  headTop_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  headTop_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  headTop_not?: InputMaybe<Scalars['BigInt']['input']>;
+  headTop_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  head_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  head_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  head_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  head_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  head_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  head_not?: InputMaybe<Scalars['BigInt']['input']>;
+  head_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  legs?: InputMaybe<Scalars['BigInt']['input']>;
+  legs_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  legs_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  legs_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  legs_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  legs_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  legs_not?: InputMaybe<Scalars['BigInt']['input']>;
+  legs_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  mouth?: InputMaybe<Scalars['BigInt']['input']>;
+  mouth_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  mouth_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  mouth_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  mouth_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  mouth_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  mouth_not?: InputMaybe<Scalars['BigInt']['input']>;
+  mouth_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  naked?: InputMaybe<Scalars['BigInt']['input']>;
+  naked_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  naked_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  naked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  naked_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  naked_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  naked_not?: InputMaybe<Scalars['BigInt']['input']>;
+  naked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  necklace?: InputMaybe<Scalars['BigInt']['input']>;
+  necklace_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  necklace_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  necklace_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  necklace_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  necklace_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  necklace_not?: InputMaybe<Scalars['BigInt']['input']>;
+  necklace_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  nft?: InputMaybe<Scalars['String']['input']>;
+  nft_?: InputMaybe<Nft_Filter>;
+  nft_contains?: InputMaybe<Scalars['String']['input']>;
+  nft_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  nft_ends_with?: InputMaybe<Scalars['String']['input']>;
+  nft_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  nft_gt?: InputMaybe<Scalars['String']['input']>;
+  nft_gte?: InputMaybe<Scalars['String']['input']>;
+  nft_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  nft_lt?: InputMaybe<Scalars['String']['input']>;
+  nft_lte?: InputMaybe<Scalars['String']['input']>;
+  nft_not?: InputMaybe<Scalars['String']['input']>;
+  nft_not_contains?: InputMaybe<Scalars['String']['input']>;
+  nft_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  nft_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  nft_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  nft_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  nft_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  nft_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  nft_starts_with?: InputMaybe<Scalars['String']['input']>;
+  nft_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  or?: InputMaybe<Array<InputMaybe<DecoratedBanny_Filter>>>;
+  suit?: InputMaybe<Scalars['BigInt']['input']>;
+  suitBottom?: InputMaybe<Scalars['BigInt']['input']>;
+  suitBottom_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  suitBottom_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  suitBottom_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  suitBottom_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  suitBottom_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  suitBottom_not?: InputMaybe<Scalars['BigInt']['input']>;
+  suitBottom_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  suitTop?: InputMaybe<Scalars['BigInt']['input']>;
+  suitTop_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  suitTop_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  suitTop_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  suitTop_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  suitTop_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  suitTop_not?: InputMaybe<Scalars['BigInt']['input']>;
+  suitTop_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  suit_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  suit_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  suit_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  suit_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  suit_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  suit_not?: InputMaybe<Scalars['BigInt']['input']>;
+  suit_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  topping?: InputMaybe<Scalars['BigInt']['input']>;
+  topping_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  topping_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  topping_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  topping_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  topping_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  topping_not?: InputMaybe<Scalars['BigInt']['input']>;
+  topping_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  world?: InputMaybe<Scalars['BigInt']['input']>;
+  world_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  world_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  world_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  world_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  world_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  world_not?: InputMaybe<Scalars['BigInt']['input']>;
+  world_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+};
+
+export enum DecoratedBanny_OrderBy {
+  backside = 'backside',
+  fist = 'fist',
+  glasses = 'glasses',
+  head = 'head',
+  headTop = 'headTop',
+  id = 'id',
+  legs = 'legs',
+  mouth = 'mouth',
+  naked = 'naked',
+  necklace = 'necklace',
+  nft = 'nft',
+  nft__category = 'nft__category',
+  nft__id = 'nft__id',
+  nft__projectId = 'nft__projectId',
+  nft__tokenId = 'nft__tokenId',
+  nft__tokenUri = 'nft__tokenUri',
+  suit = 'suit',
+  suitBottom = 'suitBottom',
+  suitTop = 'suitTop',
+  topping = 'topping',
+  world = 'world'
 }
 
 export type DeployEtherc20ProjectPayerEvent = {
@@ -3616,6 +3807,7 @@ export enum MintTokensEvent_OrderBy {
 }
 
 export type Nft = {
+  category: Scalars['BigInt']['output'];
   collection: NftCollection;
   id: Scalars['ID']['output'];
   owner: Participant;
@@ -4029,6 +4221,14 @@ export type Nft_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Nft_Filter>>>;
+  category?: InputMaybe<Scalars['BigInt']['input']>;
+  category_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  category_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  category_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  category_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  category_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  category_not?: InputMaybe<Scalars['BigInt']['input']>;
+  category_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   collection?: InputMaybe<Scalars['String']['input']>;
   collection_?: InputMaybe<NftCollection_Filter>;
   collection_contains?: InputMaybe<Scalars['String']['input']>;
@@ -4161,6 +4361,7 @@ export type Nft_Filter = {
 };
 
 export enum Nft_OrderBy {
+  category = 'category',
   collection = 'collection',
   collection__address = 'collection__address',
   collection__createdAt = 'collection__createdAt',
@@ -6719,6 +6920,8 @@ export type Query = {
   burnEvents: Array<BurnEvent>;
   configureEvent: Maybe<ConfigureEvent>;
   configureEvents: Array<ConfigureEvent>;
+  decoratedBannies: Array<DecoratedBanny>;
+  decoratedBanny: Maybe<DecoratedBanny>;
   deployETHERC20ProjectPayerEvent: Maybe<DeployEtherc20ProjectPayerEvent>;
   deployETHERC20ProjectPayerEvents: Array<DeployEtherc20ProjectPayerEvent>;
   deployETHERC20SplitsPayerEvent: Maybe<DeployEtherc20SplitsPayerEvent>;
@@ -6847,6 +7050,24 @@ export type QueryConfigureEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<ConfigureEvent_Filter>;
+};
+
+
+export type QueryDecoratedBanniesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<DecoratedBanny_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<DecoratedBanny_Filter>;
+};
+
+
+export type QueryDecoratedBannyArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -7868,6 +8089,8 @@ export type Subscription = {
   burnEvents: Array<BurnEvent>;
   configureEvent: Maybe<ConfigureEvent>;
   configureEvents: Array<ConfigureEvent>;
+  decoratedBannies: Array<DecoratedBanny>;
+  decoratedBanny: Maybe<DecoratedBanny>;
   deployETHERC20ProjectPayerEvent: Maybe<DeployEtherc20ProjectPayerEvent>;
   deployETHERC20ProjectPayerEvents: Array<DeployEtherc20ProjectPayerEvent>;
   deployETHERC20SplitsPayerEvent: Maybe<DeployEtherc20SplitsPayerEvent>;
@@ -7995,6 +8218,24 @@ export type SubscriptionConfigureEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<ConfigureEvent_Filter>;
+};
+
+
+export type SubscriptionDecoratedBanniesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<DecoratedBanny_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<DecoratedBanny_Filter>;
+};
+
+
+export type SubscriptionDecoratedBannyArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -9643,9 +9884,16 @@ export type NfTsQueryVariables = Exact<{
 }>;
 
 
-export type NfTsQuery = { nfts: Array<{ tokenId: any, tokenUri: string, collection: { address: any } }> };
+export type NfTsQuery = { nfts: Array<{ tokenId: bigint, tokenUri: string, category: bigint, owner: { address: any }, collection: { address: any }, tier: { id: string, tierId: number } }> };
 
-export type TierDataFragment = { id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } };
+export type DecoratedBannyQueryVariables = Exact<{
+  tokenId: Scalars['ID']['input'];
+}>;
+
+
+export type DecoratedBannyQuery = { decoratedBanny: { id: string, naked: bigint | null, world: bigint | null, backside: bigint | null, necklace: bigint | null, head: bigint | null, glasses: bigint | null, mouth: bigint | null, legs: bigint | null, suit: bigint | null, suitBottom: bigint | null, suitTop: bigint | null, headTop: bigint | null, fist: bigint | null, topping: bigint | null, nft: { owner: { address: any } } } | null };
+
+export type TierDataFragment = { id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } };
 
 export type NftTiersQueryVariables = Exact<{
   where?: InputMaybe<NftTier_Filter>;
@@ -9653,7 +9901,7 @@ export type NftTiersQueryVariables = Exact<{
 }>;
 
 
-export type NftTiersQuery = { nfttiers: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }> };
+export type NftTiersQuery = { nfttiers: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }> };
 
 export type AllNftTiersQueryVariables = Exact<{
   orderBy?: InputMaybe<NftTier_OrderBy>;
@@ -9661,7 +9909,7 @@ export type AllNftTiersQueryVariables = Exact<{
 }>;
 
 
-export type AllNftTiersQuery = { naked: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, world: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, glasses: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, legs: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, headTop: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, fist: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }>, topping: Array<{ id: string, tierId: number, price: any, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: any, remainingSupply: any, category: number, collection: { address: any } }> };
+export type AllNftTiersQuery = { naked: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, world: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, glasses: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, legs: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, headTop: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, fist: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, topping: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }> };
 
 
 
@@ -9749,6 +9997,9 @@ export type ResolversTypes = {
   ConfigureEvent: ResolverTypeWrapper<ConfigureEvent>;
   ConfigureEvent_filter: ConfigureEvent_Filter;
   ConfigureEvent_orderBy: ConfigureEvent_OrderBy;
+  DecoratedBanny: ResolverTypeWrapper<DecoratedBanny>;
+  DecoratedBanny_filter: DecoratedBanny_Filter;
+  DecoratedBanny_orderBy: DecoratedBanny_OrderBy;
   DeployETHERC20ProjectPayerEvent: ResolverTypeWrapper<DeployEtherc20ProjectPayerEvent>;
   DeployETHERC20ProjectPayerEvent_filter: DeployEtherc20ProjectPayerEvent_Filter;
   DeployETHERC20ProjectPayerEvent_orderBy: DeployEtherc20ProjectPayerEvent_OrderBy;
@@ -9878,6 +10129,8 @@ export type ResolversParentTypes = {
   Bytes: Scalars['Bytes']['output'];
   ConfigureEvent: ConfigureEvent;
   ConfigureEvent_filter: ConfigureEvent_Filter;
+  DecoratedBanny: DecoratedBanny;
+  DecoratedBanny_filter: DecoratedBanny_Filter;
   DeployETHERC20ProjectPayerEvent: DeployEtherc20ProjectPayerEvent;
   DeployETHERC20ProjectPayerEvent_filter: DeployEtherc20ProjectPayerEvent_Filter;
   DeployETHERC20SplitsPayerEvent: DeployEtherc20SplitsPayerEvent;
@@ -10031,6 +10284,26 @@ export type ConfigureEventResolvers<ContextType = any, ParentType extends Resolv
   timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   txHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   weight?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DecoratedBannyResolvers<ContextType = any, ParentType extends ResolversParentTypes['DecoratedBanny'] = ResolversParentTypes['DecoratedBanny']> = {
+  backside?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  fist?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  glasses?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  head?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  headTop?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  legs?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  mouth?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  naked?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  necklace?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  nft?: Resolver<ResolversTypes['NFT'], ParentType, ContextType>;
+  suit?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  suitBottom?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  suitTop?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  topping?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  world?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -10312,6 +10585,7 @@ export type MintTokensEventResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type NftResolvers<ContextType = any, ParentType extends ResolversParentTypes['NFT'] = ResolversParentTypes['NFT']> = {
+  category?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   collection?: Resolver<ResolversTypes['NFTCollection'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['Participant'], ParentType, ContextType>;
@@ -10540,6 +10814,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   burnEvents?: Resolver<Array<ResolversTypes['BurnEvent']>, ParentType, ContextType, RequireFields<QueryBurnEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   configureEvent?: Resolver<Maybe<ResolversTypes['ConfigureEvent']>, ParentType, ContextType, RequireFields<QueryConfigureEventArgs, 'id' | 'subgraphError'>>;
   configureEvents?: Resolver<Array<ResolversTypes['ConfigureEvent']>, ParentType, ContextType, RequireFields<QueryConfigureEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  decoratedBannies?: Resolver<Array<ResolversTypes['DecoratedBanny']>, ParentType, ContextType, RequireFields<QueryDecoratedBanniesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  decoratedBanny?: Resolver<Maybe<ResolversTypes['DecoratedBanny']>, ParentType, ContextType, RequireFields<QueryDecoratedBannyArgs, 'id' | 'subgraphError'>>;
   deployETHERC20ProjectPayerEvent?: Resolver<Maybe<ResolversTypes['DeployETHERC20ProjectPayerEvent']>, ParentType, ContextType, RequireFields<QueryDeployEtherc20ProjectPayerEventArgs, 'id' | 'subgraphError'>>;
   deployETHERC20ProjectPayerEvents?: Resolver<Array<ResolversTypes['DeployETHERC20ProjectPayerEvent']>, ParentType, ContextType, RequireFields<QueryDeployEtherc20ProjectPayerEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   deployETHERC20SplitsPayerEvent?: Resolver<Maybe<ResolversTypes['DeployETHERC20SplitsPayerEvent']>, ParentType, ContextType, RequireFields<QueryDeployEtherc20SplitsPayerEventArgs, 'id' | 'subgraphError'>>;
@@ -10654,6 +10930,8 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   burnEvents?: SubscriptionResolver<Array<ResolversTypes['BurnEvent']>, "burnEvents", ParentType, ContextType, RequireFields<SubscriptionBurnEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   configureEvent?: SubscriptionResolver<Maybe<ResolversTypes['ConfigureEvent']>, "configureEvent", ParentType, ContextType, RequireFields<SubscriptionConfigureEventArgs, 'id' | 'subgraphError'>>;
   configureEvents?: SubscriptionResolver<Array<ResolversTypes['ConfigureEvent']>, "configureEvents", ParentType, ContextType, RequireFields<SubscriptionConfigureEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  decoratedBannies?: SubscriptionResolver<Array<ResolversTypes['DecoratedBanny']>, "decoratedBannies", ParentType, ContextType, RequireFields<SubscriptionDecoratedBanniesArgs, 'first' | 'skip' | 'subgraphError'>>;
+  decoratedBanny?: SubscriptionResolver<Maybe<ResolversTypes['DecoratedBanny']>, "decoratedBanny", ParentType, ContextType, RequireFields<SubscriptionDecoratedBannyArgs, 'id' | 'subgraphError'>>;
   deployETHERC20ProjectPayerEvent?: SubscriptionResolver<Maybe<ResolversTypes['DeployETHERC20ProjectPayerEvent']>, "deployETHERC20ProjectPayerEvent", ParentType, ContextType, RequireFields<SubscriptionDeployEtherc20ProjectPayerEventArgs, 'id' | 'subgraphError'>>;
   deployETHERC20ProjectPayerEvents?: SubscriptionResolver<Array<ResolversTypes['DeployETHERC20ProjectPayerEvent']>, "deployETHERC20ProjectPayerEvents", ParentType, ContextType, RequireFields<SubscriptionDeployEtherc20ProjectPayerEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   deployETHERC20SplitsPayerEvent?: SubscriptionResolver<Maybe<ResolversTypes['DeployETHERC20SplitsPayerEvent']>, "deployETHERC20SplitsPayerEvent", ParentType, ContextType, RequireFields<SubscriptionDeployEtherc20SplitsPayerEventArgs, 'id' | 'subgraphError'>>;
@@ -10840,6 +11118,7 @@ export type Resolvers<ContextType = any> = {
   BurnEvent?: BurnEventResolvers<ContextType>;
   Bytes?: GraphQLScalarType;
   ConfigureEvent?: ConfigureEventResolvers<ContextType>;
+  DecoratedBanny?: DecoratedBannyResolvers<ContextType>;
   DeployETHERC20ProjectPayerEvent?: DeployEtherc20ProjectPayerEventResolvers<ContextType>;
   DeployETHERC20SplitsPayerEvent?: DeployEtherc20SplitsPayerEventResolvers<ContextType>;
   DeployedERC20Event?: DeployedErc20EventResolvers<ContextType>;
@@ -10907,10 +11186,18 @@ export const NfTsDocument = gql`
     query NFTs($where: NFT_filter) {
   nfts(where: $where) {
     tokenId
+    owner {
+      address
+    }
     collection {
       address
     }
     tokenUri
+    category
+    tier {
+      id
+      tierId
+    }
   }
 }
     `;
@@ -10947,6 +11234,65 @@ export type NfTsQueryHookResult = ReturnType<typeof useNfTsQuery>;
 export type NfTsLazyQueryHookResult = ReturnType<typeof useNfTsLazyQuery>;
 export type NfTsSuspenseQueryHookResult = ReturnType<typeof useNfTsSuspenseQuery>;
 export type NfTsQueryResult = Apollo.QueryResult<NfTsQuery, NfTsQueryVariables>;
+export const DecoratedBannyDocument = gql`
+    query DecoratedBanny($tokenId: ID!) {
+  decoratedBanny(id: $tokenId) {
+    id
+    nft {
+      owner {
+        address
+      }
+    }
+    naked
+    world
+    backside
+    necklace
+    head
+    glasses
+    mouth
+    legs
+    suit
+    suitBottom
+    suitTop
+    headTop
+    fist
+    topping
+  }
+}
+    `;
+
+/**
+ * __useDecoratedBannyQuery__
+ *
+ * To run a query within a React component, call `useDecoratedBannyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDecoratedBannyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDecoratedBannyQuery({
+ *   variables: {
+ *      tokenId: // value for 'tokenId'
+ *   },
+ * });
+ */
+export function useDecoratedBannyQuery(baseOptions: Apollo.QueryHookOptions<DecoratedBannyQuery, DecoratedBannyQueryVariables> & ({ variables: DecoratedBannyQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DecoratedBannyQuery, DecoratedBannyQueryVariables>(DecoratedBannyDocument, options);
+      }
+export function useDecoratedBannyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DecoratedBannyQuery, DecoratedBannyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DecoratedBannyQuery, DecoratedBannyQueryVariables>(DecoratedBannyDocument, options);
+        }
+export function useDecoratedBannySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DecoratedBannyQuery, DecoratedBannyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DecoratedBannyQuery, DecoratedBannyQueryVariables>(DecoratedBannyDocument, options);
+        }
+export type DecoratedBannyQueryHookResult = ReturnType<typeof useDecoratedBannyQuery>;
+export type DecoratedBannyLazyQueryHookResult = ReturnType<typeof useDecoratedBannyLazyQuery>;
+export type DecoratedBannySuspenseQueryHookResult = ReturnType<typeof useDecoratedBannySuspenseQuery>;
+export type DecoratedBannyQueryResult = Apollo.QueryResult<DecoratedBannyQuery, DecoratedBannyQueryVariables>;
 export const NftTiersDocument = gql`
     query NFTTiers($where: NFTTier_filter, $orderBy: NFTTier_orderBy) {
   nfttiers(where: $where, orderBy: $orderBy) {

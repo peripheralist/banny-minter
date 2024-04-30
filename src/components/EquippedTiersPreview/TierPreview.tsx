@@ -1,6 +1,6 @@
 import { Category } from "@/constants/nfts";
 import { DEFAULT_SVG } from "@/constants/svgDefaults";
-import { EQUIP_DURATION_MILLIS } from "@/contexts/MinterContextProvider";
+import { EQUIP_DURATION_MILLIS } from "@/contexts/EquipmentContextProvider";
 import { useFuzz } from "@/hooks/useFuzz";
 import { EquippedTiers } from "@/model/tier";
 import { CSSProperties, useCallback, useMemo } from "react";

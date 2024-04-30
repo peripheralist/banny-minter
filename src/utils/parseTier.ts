@@ -1,7 +1,7 @@
 import { categoryOfId } from "@/constants/nfts";
 import { NftTiersQuery } from "@/generated/graphql";
 import { Tier } from "@/model/tier";
-import { decodeNFTInfo } from "./tokenInfo";
+import { decodeNFTInfo } from "./decodeNftInfo";
 
 export const parseTier = (
   tier: NftTiersQuery["nfttiers"][number]

@@ -1,7 +1,6 @@
 import { categoryIncompatibles } from "@/constants/incompatibles";
 import { CATEGORIES, Category, CategoryGroup } from "@/constants/nfts";
-import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
-import { EquipTierFns, EquippedTiers } from "@/model/tier";
+import { EquipTierFns, EquippedTiers, Tiers } from "@/model/tier";
 import {
   PropsWithChildren,
   useCallback,
@@ -9,11 +8,18 @@ import {
   useMemo,
   useState,
 } from "react";
-import { MinterContext } from "./minterContext";
+import { EquipmentContext } from "./equipmentContext";
 
 export const EQUIP_DURATION_MILLIS = 320;
 
-export default function MinterContextProvider({ children }: PropsWithChildren) {
+export default function EquipmentContextProvider({
+  children,
+  availableTiers,
+  defaultEquippedTierIds,
+}: PropsWithChildren<{
+  availableTiers: Tiers;
+  defaultEquippedTierIds?: Partial<Record<Category, number>>;
+}>) {
   const [equippedTierId, setEquippedTierId] = useState<
     Partial<Record<Category, number>>
   >({});
@@ -21,12 +27,10 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   const [equippingCategory, setEquippingCategory] = useState<Category>();
   const [unequippingCategory, setUnequippingCategory] = useState<Category>();
 
-  const { tiers } = useCategorizedTiers();
-
   const equipped = useMemo(
     () =>
       CATEGORIES.reduce((acc, category) => {
-        const equippedTierForCategory = tiers?.[category].find(
+        const equippedTierForCategory = availableTiers?.[category].find(
           (t) => t.tierId === equippedTierId[category]
         );
 
@@ -35,7 +39,7 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
           [category]: equippedTierForCategory,
         };
       }, {} as EquippedTiers),
-    [equippedTierId, tiers]
+    [equippedTierId, availableTiers]
   );
 
   const equip = useMemo(() => {
@@ -91,37 +95,40 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
   }, []);
 
   useEffect(() => {
-    // default equip first body tier
-    if (!tiers?.naked.length || !equip || equipped.naked) return;
-    equip.naked(tiers.naked[0].tierId);
-  }, [tiers?.naked, equipped, equip]);
+    if (defaultEquippedTierIds) {
+      setEquippedTierId(defaultEquippedTierIds);
+    }
+  }, [defaultEquippedTierIds]);
 
   const equipRandom = useCallback(() => {
-    if (!tiers) return;
+    if (!availableTiers) return;
 
     // randomize all category tier ids
     CATEGORIES.forEach((c) => {
-      if (!tiers[c].length) return;
+      if (!availableTiers[c].length) return;
 
-      equip[c](Math.floor(Math.random() * tiers[c].length) + 1);
+      equip[c](Math.floor(Math.random() * availableTiers[c].length) + 1);
     });
-  }, [equip, tiers]);
+  }, [equip, availableTiers]);
 
   const totalEquippedPrice = useMemo(() => {
-    if (!tiers) return null;
+    if (!availableTiers) return null;
 
     // Sum price of all selected assets
-    return Object.entries(tiers).reduce((acc, [category, tiers]) => {
-      const tier = tiers.find(
-        (t) => t.tierId === equipped[category as Category]?.tierId
-      );
+    return Object.entries(availableTiers).reduce(
+      (acc, [category, tiersOfCategory]) => {
+        const tier = tiersOfCategory.find(
+          (t) => t.tierId === equipped[category as Category]?.tierId
+        );
 
-      return tier?.price ? acc + tier.price : acc;
-    }, BigInt(0));
-  }, [tiers, equipped]);
+        return tier?.price ? acc + tier.price : acc;
+      },
+      BigInt(0)
+    );
+  }, [availableTiers, equipped]);
 
   return (
-    <MinterContext.Provider
+    <EquipmentContext.Provider
       value={{
         equipped,
         equip,
@@ -134,6 +141,6 @@ export default function MinterContextProvider({ children }: PropsWithChildren) {
       }}
     >
       {children}
-    </MinterContext.Provider>
+    </EquipmentContext.Provider>
   );
 }
