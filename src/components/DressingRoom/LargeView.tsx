@@ -12,7 +12,13 @@ import CategoryGroupGrid from "./CategoryGroupGrid";
 import MintButton from "./MintButton";
 import Summary from "./Summary";
 
-export default function LargeView({ button }: { button: JSX.Element }) {
+export default function LargeView({
+  button,
+  includeBannyButtons,
+}: {
+  button: JSX.Element;
+  includeBannyButtons?: boolean;
+}) {
   const {
     equipped,
     equippingCategory,
@@ -92,14 +98,16 @@ export default function LargeView({ button }: { button: JSX.Element }) {
               gap: 10,
             }}
           >
-            <BannyButtons
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 8,
-              }}
-              buttonStyle={{ height: 40, width: 40 }}
-            />
+            {includeBannyButtons && (
+              <BannyButtons
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 8,
+                }}
+                buttonStyle={{ height: 40, width: 40 }}
+              />
+            )}
 
             {setSelectedGroup
               ? CATEGORY_GROUP_NAMES.map((g) => (

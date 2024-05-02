@@ -1,34 +1,28 @@
-import { COLORS } from "@/constants/colors";
 import { CATEGORY_GROUP_NAMES } from "@/constants/nfts";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
-import { useMint } from "@/hooks/writeContract/useMint";
-import { formatEther } from "juice-sdk-core";
 import { useContext, useMemo } from "react";
-import { useAccount } from "wagmi";
 import EquippedTiersPreview from "../EquippedTiersPreview";
-import Fuzz from "../pixelRenderers/Fuzz";
-import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import BannyButtons from "./BannyButtons";
 import CategoryGroupButton from "./CategoryGroupButton";
 import CategoryGroupGrid from "./CategoryGroupGrid";
 import Summary from "./Summary";
 
-export default function SmallView({ button }: { button: JSX.Element }) {
-  const { address } = useAccount();
+export default function SmallView({
+  button,
+  includeBannyButtons,
+}: {
+  button: JSX.Element;
+  includeBannyButtons?: boolean;
+}) {
   const {
     equipped,
     equippingCategory,
     unequippingCategory,
-    totalEquippedPrice,
     selectedGroup,
     setSelectedGroup,
   } = useContext(EquipmentContext);
-
-  const { mint, isLoading, tx } = useMint();
-
-  const mintTxPending = isLoading || tx.status === "loading";
 
   const windowWidth = useWindowWidth();
   const gridImageSize = useMemo(
@@ -55,10 +49,12 @@ export default function SmallView({ button }: { button: JSX.Element }) {
         gap,
       }}
     >
-      <BannyButtons
-        style={{ display: "flex", gap }}
-        buttonStyle={{ height: 40, flex: 1 }}
-      />
+      {includeBannyButtons && (
+        <BannyButtons
+          style={{ display: "flex", gap }}
+          buttonStyle={{ height: 40, flex: 1 }}
+        />
+      )}
 
       <RoundedFrame shadow containerStyle={{ width: "100%", height: 320 }}>
         <div
