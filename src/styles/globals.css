@@ -32,7 +32,7 @@ body {
   margin: 0;
   /* background: skyblue; */
   /* background: #cde; */
-  background: #f8b431;
+  /* background: #f8b431; banny yellow */
   /* background: #D98F02; */
 }
 
@@ -96,3 +96,16 @@ button {
 }
 
 /* box-shadow: 4px 4px #00000044; */
+
+@keyframes slide-right {
+	0% {
+		transform: translate(0, 0)
+	}
+	100% {
+		transform: translate(1000%, 0)
+	}
+}
+
+.slide-right {
+  animation: slide-right 120s linear;
+}

@@ -1,7 +1,9 @@
 import TiersDemo from "@/components/TiersDemo";
 import { TOOLBAR_HEIGHT } from "@/components/Toolbar";
 import ButtonPad from "@/components/shared/ButtonPad";
+import CloudSky from "@/components/shared/CloudSky";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
+import { COLORS } from "@/constants/colors";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import Head from "next/head";
@@ -33,32 +35,72 @@ export default function Home() {
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
             justifyContent: "center",
             height: "100vh",
+            background: "skyblue",
           }}
         >
           {loading ? (
             <FullscreenLoading />
           ) : (
-            <div style={{ height: size }}>
+            <div style={{ height: size, zIndex: 2, paddingLeft: 20 }}>
+              <div
+                style={{
+                  position: "fixed",
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  height: "22%",
+                  background: COLORS.banana,
+                }}
+              />
+
               <TiersDemo size={size} pixelSize={8} />
             </div>
           )}
-          <Link
-            style={{ position: "fixed", right: 20, bottom: 20 }}
-            href={"/mint"}
+
+          <div
+            style={{
+              position: "fixed",
+              bottom: 30,
+              left: 0,
+              right: 0,
+              zIndex: 2,
+            }}
           >
-            <ButtonPad
+            <Link
               style={{
-                width: 120,
-                height: 80,
-                fontSize: "2rem",
+                margin: "0px auto",
+                background: "red",
+                zIndex: 1,
               }}
+              href={"/mint"}
             >
-              MINT
-            </ButtonPad>
-          </Link>
+              <ButtonPad
+                style={{
+                  width: 180,
+                  height: 60,
+                  fontSize: "2rem",
+                  margin: "0 auto",
+                  fontWeight: "bold",
+                }}
+              >
+                Start
+              </ButtonPad>
+            </Link>
+          </div>
+
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              bottom: "40%",
+              top: "10%",
+              zIndex: 1,
+            }}
+          >
+            <CloudSky />
+          </div>
         </div>
       </main>
     </>

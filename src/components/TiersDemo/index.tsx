@@ -99,7 +99,7 @@ export default function TiersDemo({
           ),
         };
       });
-    }, EQUIP_DURATION_MILLIS * 3);
+    }, EQUIP_DURATION_MILLIS * 8);
 
     return () => clearInterval(id);
   }, [tiers, filteredCategories]);

@@ -97,17 +97,17 @@ export function TierPreview({
 
     // always add eyes
     if (equipped.naked?.tierId === 1) {
-      children.push(<SvgObject svg={DEFAULT_SVG.eyesAlien} />);
+      children.push(<SvgObject key="eyes" svg={DEFAULT_SVG.eyesAlien} />);
     } else {
-      children.push(<SvgObject svg={DEFAULT_SVG.eyes} />);
+      children.push(<SvgObject key="eyes" svg={DEFAULT_SVG.eyes} />);
     }
 
     if (!equipped.necklace) {
-      children.push(<SvgObject svg={DEFAULT_SVG.necklace} />);
+      children.push(<SvgObject key="necklace" svg={DEFAULT_SVG.necklace} />);
     }
 
     if (!equipped.mouth) {
-      children.push(<SvgObject svg={DEFAULT_SVG.mouth} />);
+      children.push(<SvgObject key="mouth" svg={DEFAULT_SVG.mouth} />);
     }
 
     return children;

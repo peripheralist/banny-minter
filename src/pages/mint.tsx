@@ -1,6 +1,7 @@
 import DressingRoom from "@/components/DressingRoom";
 import MintButton from "@/components/DressingRoom/MintButton";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
+import { COLORS } from "@/constants/colors";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import Head from "next/head";
@@ -14,6 +15,7 @@ export default function Mint() {
         <title>Mint a Banny</title>
         <meta name="description" content="Mint a Banny" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>{`body { background: ${COLORS.banana} }`}</style>
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
 
