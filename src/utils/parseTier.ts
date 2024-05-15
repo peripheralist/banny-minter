@@ -15,20 +15,7 @@ export const parseTier = (
         category: categoryOfId[tier.category],
         tierId: tier.tierId,
         price: tier.price,
-        svg: tier.svg
-          ? (styles?: string) => {
-              const { svg } = tier;
-              if (!styles || !svg) return svg;
-
-              const idx = svg.indexOf(">");
-              if (!idx) return svg;
-
-              const parts = [svg.substring(0, idx), svg.substring(idx + 1)];
-
-              if (!parts) return svg;
-              return `${parts[0]}><style>${styles}</style>${parts[1]}`;
-            }
-          : () => null,
+        svg: tier.svg?.includes("<script") ? null : tier.svg, // crude injected script protection
       }
     : undefined;
 };

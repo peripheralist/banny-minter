@@ -80,11 +80,9 @@ export function TierPreview({
   const SvgObject = useCallback(
     ({ svg, style }: { svg: string | undefined; style?: CSSProperties }) =>
       svg ? (
-        <object
-          style={{ position: "absolute", ...style }}
-          width={size}
-          height={size}
-          data={`data:image/svg+xml;base64,${btoa(svg)}`}
+        <div
+          style={{ position: "absolute", ...style, width: size, height: size }}
+          dangerouslySetInnerHTML={{ __html: svg }} // we should NOT be doing this, but so far it's the only way to
         />
       ) : null,
     [size]
@@ -113,7 +111,7 @@ export function TierPreview({
     return children;
   }, [category, equipped.naked, equipped.necklace, equipped.mouth, SvgObject]);
 
-  const svg = useMemo(() => equipped[category]?.svg?.(), [equipped, category]);
+  const svg = useMemo(() => equipped[category]?.svg, [equipped, category]);
 
   if (!svg) return null;
 

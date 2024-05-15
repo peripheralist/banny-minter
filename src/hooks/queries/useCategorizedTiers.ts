@@ -20,13 +20,26 @@ export function useCategorizedTiers() {
   const _tiers: Tiers | undefined = useMemo(
     () =>
       tiers
-        ? Object.entries(tiers).reduce(
-            (acc, [k, tiers]) => ({
+        ? Object.entries(tiers).reduce((acc, [k, tiers]) => {
+            const _tiers = tiers.map(parseTier);
+            _tiers.forEach((t) => {
+              const svg = t?.svg;
+              if (!svg) return;
+
+              const imgHref = '<image href="';
+              if (!svg.includes(imgHref)) return;
+
+              let embeddedImageUrl = svg.split(imgHref)[1];
+              embeddedImageUrl = embeddedImageUrl.split('"')[0];
+              const img = new Image();
+              img.src = embeddedImageUrl;
+            });
+
+            return {
               ...acc,
-              [k]: tiers.map(parseTier),
-            }),
-            {} as Record<Category, Tier[]>
-          )
+              [k]: _tiers,
+            };
+          }, {} as Record<Category, Tier[]>)
         : undefined,
     [tiers]
   );

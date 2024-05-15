@@ -1,5 +1,5 @@
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import RandCloud from "./images/Cloud";
 
 export default function CloudSky() {
@@ -7,47 +7,38 @@ export default function CloudSky() {
 
   const { measuredRef, width, height } = useMeasuredRef();
 
-  const initialCount = useMemo(() => Math.floor(width / 100), [width]);
-
-  // setup initial clouds
   useEffect(() => {
+    const count = Math.floor(width / 100);
     let _clouds = [];
 
-    for (let i = 0; i < initialCount; i++) {
-      _clouds.push(
-        <RandCloud
-          key={i}
-          left={Math.round((width * i) / initialCount) * (Math.random() + 0.5)}
-          top={Math.round(Math.random() * height)}
-        />
-      );
+    const tops: number[] = [];
+    for (let i = 0; i < count; i++) {
+      let top = height * (i / count);
+      top = Math.ceil(top / 20) * 20;
+      tops.push(top); // round to nearest 20
+    }
+    shuffleArray(tops);
+
+    for (let i = 0; i < count; i++) {
+      let left = Math.round(width * (i / count));
+      left = Math.ceil(left / 20) * 20;
+      const top = tops[i];
+      _clouds.push(<RandCloud key={i} initialX={left} y={top} />);
     }
 
     setClouds(_clouds);
-  }, [initialCount, width, height]);
-
-  useEffect(() => {
-    function addCloud() {
-      setClouds((c) => [
-        ...c,
-        <RandCloud
-          key={c?.length + 1}
-          left={-200}
-          top={Math.round(Math.random() * height)}
-        />,
-      ]);
-    }
-
-    addCloud();
-
-    const interval = setInterval(addCloud, 12000);
-
-    return () => clearInterval(interval);
-  }, [height]);
+  }, [width, height]);
 
   return (
     <div ref={measuredRef} style={{ width: "100%", height: "100%" }}>
       {clouds}
     </div>
   );
+}
+
+function shuffleArray(array: unknown[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
 }

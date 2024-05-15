@@ -1,30 +1,43 @@
 import Image from "next/image";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export default function RandCloud({
-  left,
-  top,
+  y,
+  initialX,
 }: {
-  left: number;
-  top: number;
+  y: number;
+  initialX: number;
 }) {
-  // const [top, setTop] = useState<number>();
-  // const [left, setLeft] = useState<number>();
+  const [parentHeight, setParentHeight] = useState<number>(initialX);
+  const [x, setX] = useState<number>(initialX);
 
   const cloudId = useMemo(() => Math.floor(Math.random() * 8), []);
 
-  // const ref = useCallback((node: HTMLImageElement | null) => {
-  //   const parent = node?.parentElement;
+  const ref = useCallback((node: HTMLImageElement | null) => {
+    if (!node) return;
 
-  //   if (!parent) return;
+    if (node.parentElement) setParentHeight(node.parentElement.clientHeight);
 
-  //   setTop(
-  //     Math.round(
-  //       Math.random() * parent.clientHeight * 0.5 + parent.clientHeight * 0.25
-  //     )
-  //   );
-  //   setLeft(Math.round(Math.random() * parent.clientWidth));
-  // }, []);
+    setInterval(() => {
+      const { left, width } = node.getBoundingClientRect();
+
+      if (left && left > window.innerWidth) {
+        setX(-width);
+      }
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    let stepSize = (parentHeight - y) / 50; // clouds move faster at top than bottom
+
+    stepSize = Math.ceil(stepSize / 2) * 2;
+
+    const interval = setInterval(() => {
+      setX((_x) => _x + stepSize);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [y, parentHeight]);
 
   const { width, height } = useMemo(() => {
     switch (cloudId) {
@@ -34,7 +47,7 @@ export default function RandCloud({
       case 3:
         return { width: 48, height: 24 };
       case 2:
-        return { width: 64, height: 32 };
+        return { width: 64, height: 24 };
       case 4:
         return { width: 32, height: 16 };
       case 5:
@@ -49,9 +62,9 @@ export default function RandCloud({
 
   return (
     <Image
-      className="slide-right"
-      // ref={ref}
-      style={{ position: "absolute", top, left, objectFit: "contain" }}
+      // className="slide-right"
+      ref={ref}
+      style={{ position: "absolute", top: y, left: x, objectFit: "contain" }}
       width={width * 2.5}
       height={height * 2.5}
       alt={`cloud-${cloudId}`}

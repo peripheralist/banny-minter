@@ -15,10 +15,15 @@ export function useMeasuredRef() {
     };
 
     if (node !== null) {
-      window.removeEventListener("resize", fn);
+      document.addEventListener("resize", fn);
       window.addEventListener("resize", fn);
       setWidth(rect.width);
       setHeight(rect.height);
+
+      return () => {
+        window.removeEventListener("resize", fn);
+        document.removeEventListener("resize", fn);
+      };
     }
   }, []);
 

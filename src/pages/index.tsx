@@ -37,7 +37,9 @@ export default function Home() {
             flexDirection: "column",
             justifyContent: "center",
             height: "100vh",
-            background: "skyblue",
+            // background: "skyblue",
+            backgroundImage:
+              "linear-gradient(to bottom, deepskyblue, skyblue, white)",
           }}
         >
           {loading ? (
@@ -97,6 +99,7 @@ export default function Home() {
               bottom: "40%",
               top: "10%",
               zIndex: 1,
+              opacity: loading ? 0 : 1,
             }}
           >
             <CloudSky />
