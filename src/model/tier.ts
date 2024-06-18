@@ -7,6 +7,8 @@ export type Tier = {
   image: string | undefined;
   svg: string | null;
   price: bigint;
+  initialSupply: bigint;
+  remainingSupply: bigint;
 };
 
 export type Tiers = Record<Category, Tier[]>;

@@ -1,7 +1,7 @@
 import { COLORS } from "@/constants/colors";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { Tier } from "@/model/tier";
-import { useContext, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
 
@@ -27,6 +27,49 @@ export default function TierSelectorButton({
     return { active, onClick };
   }, [tier, equipped, equip]);
 
+  const isSoldOut = useMemo(
+    () => tier.remainingSupply <= BigInt(0),
+    [tier.remainingSupply]
+  );
+
+  const RemainingSupply = useCallback(() => {
+    if (isSoldOut) {
+      return (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: "bold",
+            fontSize: "1.65rem",
+          }}
+        >
+          SOLD OUT
+        </div>
+      );
+    } else {
+      return (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 2,
+            left: 0,
+            right: 0,
+            textAlign: "center",
+            fontSize: "0.875rem",
+          }}
+        >
+          <span style={{ fontWeight: 900 }}>
+            {tier.remainingSupply.toString()}
+          </span>
+          <span style={{ opacity: 0.5 }}>/{tier.initialSupply.toString()}</span>
+        </div>
+      );
+    }
+  }, [isSoldOut, tier.initialSupply, tier.remainingSupply]);
+
   return (
     <ButtonPad fillFg="white" onClick={onClick} pressed={active}>
       <div
@@ -40,7 +83,12 @@ export default function TierSelectorButton({
       >
         {tier.image && (
           <object
-            style={{ position: "absolute", inset: 0 }}
+            style={{
+              position: "absolute",
+              bottom: 5,
+              objectFit: "fill",
+              objectPosition: "50% top",
+            }}
             width={imageSize}
             height={imageSize}
             data={tier.image}
@@ -54,8 +102,11 @@ export default function TierSelectorButton({
             inset: 0,
             border: "4px solid",
             borderColor: active ? COLORS.pink : "white",
+            background: isSoldOut ? "#ffffff88" : "transparent",
           }}
         />
+
+        <RemainingSupply />
 
         <FuzzMoment
           width={buttonSize}

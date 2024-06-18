@@ -15,6 +15,8 @@ export const parseTier = (
         category: categoryOfId[tier.category],
         tierId: tier.tierId,
         price: tier.price,
+        initialSupply: tier.initialSupply,
+        remainingSupply: tier.remainingSupply,
         svg: tier.svg?.includes("<script") ? null : tier.svg, // crude injected script protection
       }
     : undefined;

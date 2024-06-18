@@ -24,12 +24,13 @@ export default function TiersGrid({
 
       let multiplier = 1;
 
-      switch (c) {
-        // TODO
-        case "head":
-          multiplier = 1.1;
-          break;
-      }
+      // // TODO
+      // switch (c) {
+      //   case "head":
+      //   case "headTop":
+      //     multiplier = 1.8;
+      //     break;
+      // }
 
       return imageSize * multiplier;
     },
