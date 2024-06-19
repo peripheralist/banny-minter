@@ -18,7 +18,7 @@ export default function MintButton() {
 
   const isSmallScreen = useIsSmallScreen();
 
-  const mintTxPending = isLoading || tx.status === "loading";
+  const mintTxPending = isLoading || tx.status === "pending";
 
   if (isSmallScreen)
     return (

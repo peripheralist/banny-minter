@@ -30,7 +30,8 @@ export default function DecorateButton() {
       nakedBannyId: equipped.naked.tierId,
       worldId: equipped.world.tierId,
       outfitIds,
-    }).then(() => setPending(false));
+    });
+    // TODO how to setPending(false)?
   }, [equipped, decorateBanny]);
 
   return (
