@@ -3,20 +3,19 @@ import { EquipmentContext } from "@/contexts/equipmentContext";
 import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
 import {
   useFind721DataHook,
-  useJBContractContext,
-  useJbMultiTerminalPay,
   usePreparePayMetadata,
+  useWriteJbMultiTerminalPay,
 } from "juice-sdk-react";
-import { useContext, useMemo } from "react";
-import { zeroAddress } from "viem";
-import { useAccount, useWaitForTransaction } from "wagmi";
+import { useCallback, useContext, useMemo } from "react";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 
 export function useMint() {
   const { address } = useAccount();
-  const { contracts } = useJBContractContext();
   const jb721DataHookQuery = useFind721DataHook();
 
   const { equipped, totalEquippedPrice } = useContext(EquipmentContext);
+
+  const jb721DataHookQueryAddress = jb721DataHookQuery.data as `0x${string}`;
 
   const tierIds = useMemo(
     () =>
@@ -28,33 +27,43 @@ export function useMint() {
 
   const metadata = usePreparePayMetadata({
     jb721Hook: {
-      dataHookAddress: jb721DataHookQuery.data ?? zeroAddress,
+      dataHookAddress: jb721DataHookQueryAddress,
       tierIdsToMint: tierIds,
     },
   });
 
   const memo = useMemo(() => `Minted tiers ${tierIds.join(", ")}`, [tierIds]);
 
-  const { write, isLoading, data } = useJbMultiTerminalPay({
-    address: contracts.primaryNativeTerminal?.data ?? undefined,
-    args:
-      address && totalEquippedPrice
-        ? [
-            BigInt(BANNYVERSE_PROJECT_ID),
-            NATIVE_TOKEN,
-            totalEquippedPrice,
-            address, // mint to connected wallet
-            BigInt(0),
-            memo,
-            metadata ?? DEFAULT_METADATA,
-          ]
-        : undefined,
-    value: totalEquippedPrice ?? undefined,
+  const { writeContract, isPending, data } = useWriteJbMultiTerminalPay();
+
+  const pay = useCallback(() => {
+    if (!address || !totalEquippedPrice) return;
+
+    writeContract({
+      address: jb721DataHookQueryAddress,
+      args: [
+        BigInt(BANNYVERSE_PROJECT_ID),
+        NATIVE_TOKEN,
+        totalEquippedPrice,
+        address, // mint to connected wallet
+        BigInt(0),
+        memo,
+        metadata ?? DEFAULT_METADATA,
+      ],
+      value: totalEquippedPrice ?? undefined,
+    });
+  }, [
+    writeContract,
+    totalEquippedPrice,
+    address,
+    memo,
+    metadata,
+    jb721DataHookQueryAddress,
+  ]);
+
+  const tx = useWaitForTransactionReceipt({
+    hash: data,
   });
 
-  const tx = useWaitForTransaction({
-    hash: data?.hash,
-  });
-
-  return { mint: write, isLoading, tx, data };
+  return { mint: pay, isLoading: isPending, tx };
 }

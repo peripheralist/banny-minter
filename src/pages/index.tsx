@@ -7,6 +7,7 @@ import { COLORS } from "@/constants/colors";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 
@@ -15,8 +16,8 @@ export default function Home() {
 
   const { measuredRef, height } = useMeasuredRef();
 
-  const size = useMemo(
-    () => Math.round(height - TOOLBAR_HEIGHT - 100),
+  const demoSize = useMemo(
+    () => Math.round((height - TOOLBAR_HEIGHT) * 0.9),
     [height]
   );
 
@@ -34,76 +35,104 @@ export default function Home() {
           ref={measuredRef}
           style={{
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
             height: "100vh",
-            // background: "skyblue",
-            backgroundImage:
-              "linear-gradient(to bottom, deepskyblue, skyblue, white)",
+            background: "#00A6FF",
           }}
         >
-          {loading ? (
-            <FullscreenLoading />
-          ) : (
-            <div style={{ height: size, zIndex: 2, paddingLeft: 20 }}>
-              <div
-                style={{
-                  position: "fixed",
-                  bottom: 0,
-                  right: 0,
-                  left: 0,
-                  height: "22%",
-                  background: COLORS.banana,
-                }}
-              />
-
-              <TiersDemo size={size} pixelSize={8} />
-            </div>
-          )}
-
-          <div
-            style={{
-              position: "fixed",
-              bottom: 30,
-              left: 0,
-              right: 0,
-              zIndex: 2,
-            }}
-          >
-            <Link
-              style={{
-                margin: "0px auto",
-                background: "red",
-                zIndex: 1,
-              }}
-              href={"/mint"}
-            >
-              <ButtonPad
-                style={{
-                  width: 180,
-                  height: 60,
-                  fontSize: "2rem",
-                  margin: "0 auto",
-                  fontWeight: "bold",
-                }}
-              >
-                Start
-              </ButtonPad>
-            </Link>
-          </div>
-
           <div
             style={{
               position: "fixed",
               inset: 0,
-              bottom: "40%",
+              bottom: "70%",
               top: "10%",
-              zIndex: 1,
               opacity: loading ? 0 : 1,
             }}
           >
             <CloudSky />
           </div>
+
+          <div
+            style={{
+              position: "fixed",
+              bottom: 0,
+              right: 0,
+              left: 0,
+              height: "52.5%",
+              background: "#EFD27C",
+            }}
+          />
+
+          <div
+            style={{
+              position: "fixed",
+              width: "100vw",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Image
+              src="/assets/musa_1.svg"
+              alt="Musa 1"
+              height={height}
+              width={height / 2}
+            />
+            <Image
+              src="/assets/musa_2.svg"
+              alt="Musa 2"
+              height={height}
+              width={height / 2}
+            />
+          </div>
+
+          {loading ? (
+            <div style={{ zIndex: 1 }}>
+              <FullscreenLoading />
+            </div>
+          ) : (
+            <div style={{ paddingLeft: 20 }}>
+              <Image
+                style={{
+                  position: "fixed",
+                  bottom: "11%",
+                  left: 0,
+                  right: 0,
+                  margin: "0 auto",
+                }}
+                src="/assets/banny_shadow.svg"
+                alt="shadow"
+                height={height / 6}
+                width={height / 3}
+              />
+
+              <Link
+                style={{
+                  margin: "0px auto",
+                  background: "red",
+                }}
+                href={"/mint"}
+              >
+                <ButtonPad
+                  style={{
+                    position: "fixed",
+                    bottom: "6%",
+                    left: 0,
+                    right: 0,
+                    width: 180,
+                    height: 60,
+                    fontSize: "2rem",
+                    margin: "0 auto",
+                    fontWeight: "bold",
+                    zIndex: 10,
+                  }}
+                >
+                  Play
+                </ButtonPad>
+              </Link>
+
+              <TiersDemo size={demoSize} pixelSize={8} />
+            </div>
+          )}
         </div>
       </main>
     </>
