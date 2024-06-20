@@ -3,6 +3,7 @@ import { EquipmentContext } from "@/contexts/equipmentContext";
 import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
 import {
   useFind721DataHook,
+  useJBContractContext,
   usePreparePayMetadata,
   useWriteJbMultiTerminalPay,
 } from "juice-sdk-react";
@@ -10,8 +11,14 @@ import { useCallback, useContext, useMemo } from "react";
 import { useAccount, useTransactionReceipt } from "wagmi";
 
 export function useMint() {
-  const { address } = useAccount();
+  const { address: connectedWalletAddress } = useAccount();
+  const { contracts } = useJBContractContext();
   const jb721DataHookQuery = useFind721DataHook();
+
+  console.log(
+    "Hath thou a terminal addy?",
+    contracts.primaryNativeTerminal.data
+  );
 
   const { equipped, totalEquippedPrice } = useContext(EquipmentContext);
 
@@ -41,15 +48,24 @@ export function useMint() {
   } = useWriteJbMultiTerminalPay();
 
   const pay = useCallback(() => {
-    if (!address || !totalEquippedPrice) return;
+    const terminalAddress = contracts.primaryNativeTerminal.data;
+
+    if (!connectedWalletAddress || !terminalAddress || !totalEquippedPrice) {
+      console.error("Missing something smh", {
+        connectedWalletAddress,
+        terminalAddress,
+        totalEquippedPrice,
+      });
+      return;
+    }
 
     writeContract({
-      address: jb721DataHookQueryAddress,
+      address: terminalAddress,
       args: [
         BigInt(BANNYVERSE_PROJECT_ID),
         NATIVE_TOKEN,
         totalEquippedPrice,
-        address, // mint to connected wallet
+        connectedWalletAddress, // mint to connected wallet
         BigInt(0),
         memo,
         metadata ?? DEFAULT_METADATA,
@@ -59,10 +75,10 @@ export function useMint() {
   }, [
     writeContract,
     totalEquippedPrice,
-    address,
+    connectedWalletAddress,
     memo,
     metadata,
-    jb721DataHookQueryAddress,
+    contracts.primaryNativeTerminal.data,
   ]);
 
   const tx = useTransactionReceipt({
