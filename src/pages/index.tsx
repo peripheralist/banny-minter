@@ -3,6 +3,7 @@ import { TOOLBAR_HEIGHT } from "@/components/Toolbar";
 import ButtonPad from "@/components/shared/ButtonPad";
 import CloudSky from "@/components/shared/CloudSky";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
+import LoadingBanny from "@/components/shared/LoadingBanny";
 import { COLORS } from "@/constants/colors";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
@@ -36,6 +37,7 @@ export default function Home() {
           style={{
             display: "flex",
             justifyContent: "center",
+            alignItems: "center",
             height: "100vh",
             background: "#00A6FF",
           }}
@@ -86,8 +88,8 @@ export default function Home() {
           </div>
 
           {loading ? (
-            <div style={{ zIndex: 1 }}>
-              <FullscreenLoading />
+            <div style={{ paddingLeft: 20 }}>
+              <LoadingBanny size={demoSize} />
             </div>
           ) : (
             <div style={{ paddingLeft: 20 }}>

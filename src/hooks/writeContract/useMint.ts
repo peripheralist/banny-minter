@@ -7,7 +7,7 @@ import {
   useWriteJbMultiTerminalPay,
 } from "juice-sdk-react";
 import { useCallback, useContext, useMemo } from "react";
-import { useAccount, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useTransactionReceipt } from "wagmi";
 
 export function useMint() {
   const { address } = useAccount();
@@ -34,7 +34,11 @@ export function useMint() {
 
   const memo = useMemo(() => `Minted tiers ${tierIds.join(", ")}`, [tierIds]);
 
-  const { writeContract, isPending, data } = useWriteJbMultiTerminalPay();
+  const {
+    writeContract,
+    isPending,
+    data: hash, // I think?
+  } = useWriteJbMultiTerminalPay();
 
   const pay = useCallback(() => {
     if (!address || !totalEquippedPrice) return;
@@ -61,8 +65,8 @@ export function useMint() {
     jb721DataHookQueryAddress,
   ]);
 
-  const tx = useWaitForTransactionReceipt({
-    hash: data,
+  const tx = useTransactionReceipt({
+    hash,
   });
 
   return { mint: pay, isLoading: isPending, tx };

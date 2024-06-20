@@ -1,5 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { EquipmentContext } from "@/contexts/equipmentContext";
+import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 import { useMint } from "@/hooks/writeContract/useMint";
 import { formatEther } from "juice-sdk-core";
 import { useContext } from "react";
@@ -7,7 +8,6 @@ import { useAccount } from "wagmi";
 import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
-import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 
 export default function MintButton() {
   const { address } = useAccount();
@@ -18,7 +18,7 @@ export default function MintButton() {
 
   const isSmallScreen = useIsSmallScreen();
 
-  const mintTxPending = isLoading || tx.status === "pending";
+  const mintTxPending = isLoading || tx.isLoading;
 
   if (isSmallScreen)
     return (
