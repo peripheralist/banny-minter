@@ -11,6 +11,7 @@ import CategoryGroupButton from "./CategoryGroupButton";
 import CategoryGroupGrid from "./CategoryGroupGrid";
 import MintButton from "./MintButton";
 import Summary from "./Summary";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 
 export default function LargeView({
   button,
@@ -28,19 +29,12 @@ export default function LargeView({
     setSelectedGroup,
   } = useContext(EquipmentContext);
 
-  const [containerHeight, setContainerHeight] = useState<number>(0);
-
-  const measuredRef = useCallback((node: HTMLDivElement) => {
-    const fn = () => {
-      setContainerHeight(node.getBoundingClientRect().height);
-    };
-
-    if (node !== null) {
-      window.removeEventListener("resize", fn);
-      window.addEventListener("resize", fn);
-      setContainerHeight(node.getBoundingClientRect().height);
-    }
-  }, []);
+  const { measuredRef, height: containerHeight } = useMeasuredRef();
+  const {
+    measuredRef: previewRef,
+    height: previewHeight,
+    width: previewWidth,
+  } = useMeasuredRef();
 
   const gridRows = useMemo(
     () => 3 + Math.max(Math.floor((containerHeight - 600) / 128), 0),
@@ -58,15 +52,15 @@ export default function LargeView({
       ref={measuredRef}
       style={{
         width: "100vw",
-        height: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
-        marginTop: TOOLBAR_HEIGHT,
+        height: `calc(100vh - ${TOOLBAR_HEIGHT + 10}px)`,
+        marginTop: TOOLBAR_HEIGHT + 10,
         overflow: "hidden",
         minHeight: 600,
         boxSizing: "border-box",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-end",
-        padding: 32,
+        padding: 10,
       }}
     >
       <div
@@ -82,7 +76,7 @@ export default function LargeView({
             padding: 0,
             display: "flex",
             alignItems: "flex-end",
-            gap: 24,
+            gap: 10,
             boxSizing: "border-box",
             height: "100%",
           }}
@@ -148,19 +142,20 @@ export default function LargeView({
           justifyContent: "flex-end",
           flex: 1,
           height: "100%",
-          marginLeft: 24,
-          gap: 24,
+          marginLeft: 10,
+          gap: 10,
         }}
       >
         <RoundedFrame shadow containerStyle={{ width: "100%", height: "100%" }}>
           <div
+            ref={previewRef}
             style={{
               height: "100%",
               background: "white",
             }}
           >
             <EquippedTiersPreview
-              size={440}
+              size={Math.min(previewHeight, previewWidth) * 0.92}
               pixelSize={4}
               equipped={equipped}
               equippingCategory={equippingCategory}
@@ -173,7 +168,7 @@ export default function LargeView({
           style={{
             display: "flex",
             alignItems: "stretch",
-            gap: 32,
+            gap: 10,
           }}
         >
           <div style={{ flex: 1 }}>

@@ -50,7 +50,7 @@ export default function CategoryGroupButton({
         maxHeight: 100,
         ...style,
       }}
-      fillFg={active ? "#ffeecd" : COLORS.banana}
+      fillFg={active ? "#fff4de" : COLORS.bananaLite}
       onClick={onClick}
       pressed={active}
     >

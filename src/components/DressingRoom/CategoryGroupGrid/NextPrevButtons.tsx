@@ -19,12 +19,13 @@ export default function NextPrevButtons({
         display: "flex",
         alignItems: "center",
         gap: 10,
+        fontWeight: "bold",
       }}
     >
-      <ButtonPad style={style} fillFg={COLORS.banana} onClick={onClickPrev}>
+      <ButtonPad style={style} fillFg={COLORS.bananaLite} onClick={onClickPrev}>
         {"<"}
       </ButtonPad>
-      <ButtonPad style={style} fillFg={COLORS.banana} onClick={onClickNext}>
+      <ButtonPad style={style} fillFg={COLORS.bananaLite} onClick={onClickNext}>
         {">"}
       </ButtonPad>
     </div>

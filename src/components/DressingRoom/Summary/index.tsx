@@ -11,12 +11,12 @@ export default function Index() {
   const equippedCategories = CATEGORIES.filter((c) => !!equipped[c]);
 
   return (
-    <RoundedFrame containerStyle={{ width: "100%", height: "100%" }}>
+    <RoundedFrame shadow containerStyle={{ width: "100%", height: "100%" }}>
       <div
         style={{
           textTransform: "uppercase",
           height: "100%",
-          background: "black",
+          background: "#000000c8",
           padding: 20,
         }}
       >

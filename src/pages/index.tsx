@@ -1,25 +1,103 @@
 import TiersDemo from "@/components/TiersDemo";
-import { TOOLBAR_HEIGHT } from "@/components/Toolbar";
 import ButtonPad from "@/components/shared/ButtonPad";
 import CloudSky from "@/components/shared/CloudSky";
-import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import LoadingBanny from "@/components/shared/LoadingBanny";
-import { COLORS } from "@/constants/colors";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 export default function Home() {
+  const [heroScroll, setHeroScroll] = useState<number>(0);
+
   const { loading } = useCategorizedTiers();
 
-  const { measuredRef, height } = useMeasuredRef();
+  const { measuredRef, height: screenHeight } = useMeasuredRef();
 
   const demoSize = useMemo(
-    () => Math.round((height - TOOLBAR_HEIGHT) * 0.9),
-    [height]
+    () => Math.round(screenHeight * 0.85),
+    [screenHeight]
+  );
+
+  useEffect(() => {
+    const fn = () => setHeroScroll(window.scrollY / screenHeight);
+
+    window.addEventListener("scroll", fn);
+
+    return () => window.removeEventListener("scroll", fn);
+  }, [screenHeight]);
+
+  const NumberedText = useCallback(
+    ({ n, children }: PropsWithChildren<{ n: number }>) => (
+      <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
+        <h4 style={{ fontSize: "3.2rem", lineHeight: 1, margin: 0 }}>{n}</h4>
+        <p style={{ fontSize: "2.4rem", margin: 0 }}>{children}</p>
+      </div>
+    ),
+    []
+  );
+
+  const Background = useCallback(
+    () => (
+      <>
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            bottom: "70%",
+            top: "10%",
+            zIndex: -2,
+            opacity: 0.85,
+          }}
+        >
+          <CloudSky />
+        </div>
+
+        <div
+          style={{
+            position: "fixed",
+            bottom: 0,
+            right: 0,
+            left: 0,
+            height: "52.5%",
+            background: "#EFD27C",
+            zIndex: -1,
+          }}
+        />
+
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            display: "flex",
+            justifyContent: "space-between",
+            zIndex: -1,
+          }}
+        >
+          <Image
+            src="/assets/musa_1.svg"
+            alt="Musa 1"
+            height={screenHeight}
+            width={screenHeight / 2}
+          />
+          <Image
+            src="/assets/musa_2.svg"
+            alt="Musa 2"
+            height={screenHeight}
+            width={screenHeight / 2}
+          />
+        </div>
+      </>
+    ),
+    [screenHeight]
   );
 
   return (
@@ -28,113 +106,146 @@ export default function Home() {
         <title>Banny Factory</title>
         <meta name="description" content="Banny factory" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+          {/* sky */}
+          {`html { background: #00A6FF; }`}
+        </style>
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
 
       <main>
+        <Background />
+
+        <Image
+          style={{
+            position: "fixed",
+            bottom: "10.5%",
+            left: 0,
+            right: 0,
+            margin: "0 auto",
+            zIndex: -1,
+            opacity: (1 - heroScroll) ** 15,
+          }}
+          src="/assets/banny_shadow.svg"
+          alt="shadow"
+          height={screenHeight / 6}
+          width={screenHeight / 3}
+        />
+
+        <Link
+          style={{
+            margin: "0px auto",
+            background: "red",
+          }}
+          href={"/mint"}
+        >
+          <ButtonPad
+            style={{
+              position: "fixed",
+              bottom: "6vh",
+              left: 0,
+              right: 0,
+              width: 180,
+              height: 48,
+              fontSize: "2rem",
+              margin: "0 auto",
+              fontWeight: "bold",
+              zIndex: 10,
+            }}
+          >
+            Play
+          </ButtonPad>
+        </Link>
+
+        <div
+          style={{
+            position: "fixed",
+            bottom: "0.5vh",
+            left: 0,
+            right: 0,
+            textAlign: "center",
+            fontSize: "2rem",
+            margin: "0 auto",
+            fontWeight: "bold",
+            transform: "rotate(90deg)",
+            opacity: (1 - heroScroll) ** 15,
+          }}
+        >
+          {">"}
+        </div>
+
         <div
           ref={measuredRef}
           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
             height: "100vh",
-            background: "#00A6FF",
+            overflow: "scroll",
           }}
         >
-          <div
+          <h1
             style={{
               position: "fixed",
-              inset: 0,
-              bottom: "70%",
-              top: "10%",
-              opacity: loading ? 0 : 1,
-            }}
-          >
-            <CloudSky />
-          </div>
-
-          <div
-            style={{
-              position: "fixed",
-              bottom: 0,
-              right: 0,
               left: 0,
-              height: "52.5%",
-              background: "#EFD27C",
-            }}
-          />
-
-          <div
-            style={{
-              position: "fixed",
-              width: "100vw",
-              display: "flex",
-              justifyContent: "space-between",
+              right: 0,
+              top: 0,
+              textAlign: "center",
+              color: "black",
+              fontSize: "6rem",
+              letterSpacing: 24,
+              lineHeight: 0,
             }}
           >
-            <Image
-              src="/assets/musa_1.svg"
-              alt="Musa 1"
-              height={height}
-              width={height / 2}
-            />
-            <Image
-              src="/assets/musa_2.svg"
-              alt="Musa 2"
-              height={height}
-              width={height / 2}
-            />
-          </div>
+            BANNYVERSE
+          </h1>
 
-          {loading ? (
-            <div style={{ paddingLeft: 20 }}>
-              <LoadingBanny size={demoSize} />
-            </div>
-          ) : (
-            <div style={{ paddingLeft: 20 }}>
-              <Image
+          <div style={{ opacity: 1 - heroScroll * 3 }}>
+            {loading ? (
+              <div
                 style={{
-                  position: "fixed",
-                  bottom: "11%",
-                  left: 0,
-                  right: 0,
-                  margin: "0 auto",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100vw",
+                  height: "100vh",
+                  paddingLeft: "1%",
                 }}
-                src="/assets/banny_shadow.svg"
-                alt="shadow"
-                height={height / 6}
-                width={height / 3}
-              />
-
-              <Link
-                style={{
-                  margin: "0px auto",
-                  background: "red",
-                }}
-                href={"/mint"}
               >
-                <ButtonPad
-                  style={{
-                    position: "fixed",
-                    bottom: "6%",
-                    left: 0,
-                    right: 0,
-                    width: 180,
-                    height: 60,
-                    fontSize: "2rem",
-                    margin: "0 auto",
-                    fontWeight: "bold",
-                    zIndex: 10,
-                  }}
-                >
-                  Play
-                </ButtonPad>
-              </Link>
+                <LoadingBanny size={demoSize} />
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100vw",
+                  height: "100vh",
+                  paddingLeft: "1%",
+                }}
+              >
+                <TiersDemo size={demoSize} pixelSize={8} />
+              </div>
+            )}
+          </div>
+        </div>
 
-              <TiersDemo size={demoSize} pixelSize={8} />
-            </div>
-          )}
+        <div
+          style={{
+            width: "36vw",
+            margin: "0 auto",
+            paddingBottom: "18vh",
+            display: "flex",
+            flexDirection: "column",
+            gap: 30,
+            opacity: (heroScroll - 0.25) * 4,
+          }}
+        >
+          <NumberedText n={1}>Pick your Naked Banny</NumberedText>
+          <NumberedText n={2}>
+            Style them with limited edition seasonal outfits
+          </NumberedText>
+          <NumberedText n={3}>
+            Take part in the fruituristic economic experiment of $BANNY
+          </NumberedText>
         </div>
       </main>
     </>

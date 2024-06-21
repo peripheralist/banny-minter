@@ -1,6 +1,5 @@
-import { Category } from "@/constants/nfts";
 import { Tier } from "@/model/tier";
-import React, { CSSProperties, useCallback } from "react";
+import { CSSProperties } from "react";
 import TierSelectorButton from "../TierSelectorButton";
 
 /**
@@ -18,25 +17,6 @@ export default function TiersGrid({
   imageSize: number | undefined;
   style?: CSSProperties;
 }) {
-  const categoryMultipliedSize = useCallback(
-    (c: Category) => {
-      if (!imageSize) return 0;
-
-      let multiplier = 1;
-
-      // // TODO
-      // switch (c) {
-      //   case "head":
-      //   case "headTop":
-      //     multiplier = 1.8;
-      //     break;
-      // }
-
-      return imageSize * multiplier;
-    },
-    [imageSize]
-  );
-
   return (
     <div
       style={{
@@ -46,12 +26,7 @@ export default function TiersGrid({
     >
       {imageSize &&
         tiers?.map((t) => (
-          <TierSelectorButton
-            key={t.tierId}
-            tier={t}
-            buttonSize={imageSize}
-            imageSize={categoryMultipliedSize(t.category)}
-          />
+          <TierSelectorButton key={t.tierId} tier={t} buttonSize={imageSize} />
         ))}
     </div>
   );

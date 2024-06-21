@@ -1,13 +1,11 @@
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
-import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import RandCloud from "./images/Cloud";
 
 export default function CloudSky() {
-  const [clouds, setClouds] = useState<JSX.Element[]>([]);
-
   const { measuredRef, width, height } = useMeasuredRef();
 
-  useEffect(() => {
+  const Clouds = useCallback(() => {
     const count = Math.floor(width / 100);
     let _clouds = [];
 
@@ -26,12 +24,12 @@ export default function CloudSky() {
       _clouds.push(<RandCloud key={i} initialX={left} y={top} />);
     }
 
-    setClouds(_clouds);
-  }, [width, height]);
+    return _clouds;
+  }, [height, width]);
 
   return (
     <div ref={measuredRef} style={{ width: "100%", height: "100%" }}>
-      {clouds}
+      <Clouds />
     </div>
   );
 }

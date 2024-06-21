@@ -16,8 +16,8 @@ export function WalletOptions() {
         }}
       >
         <FuzzMoment
-          height={16}
-          width={80}
+          height={12}
+          width={52}
           fill="black"
           onFinished={<span>{connector.name}</span>}
           pixelSize={4}

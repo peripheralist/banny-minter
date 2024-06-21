@@ -17,6 +17,7 @@ export function useMint() {
 
   console.log(
     "Hath thou a terminal addy?",
+    { contracts },
     contracts.primaryNativeTerminal.data
   );
 

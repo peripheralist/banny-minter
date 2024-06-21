@@ -4,7 +4,10 @@ import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import { COLORS } from "@/constants/colors";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
+import dynamic from "next/dynamic";
 import Head from "next/head";
+
+const Toolbar = dynamic(() => import("@/components/Toolbar"), { ssr: false });
 
 export default function Mint() {
   const { tiers } = useCategorizedTiers();
@@ -20,6 +23,8 @@ export default function Mint() {
       </Head>
 
       <main>
+        <Toolbar />
+
         {tiers ? (
           <EquipmentContextProvider
             availableTiers={tiers}

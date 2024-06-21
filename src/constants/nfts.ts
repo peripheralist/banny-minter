@@ -1,3 +1,5 @@
+import { Tier } from "@/model/tier";
+
 export const BANNYVERSE_COLLECTION_ID = process.env
   .NEXT_PUBLIC_BANNYVERSE_COLLECTION_ID as `0x${string}`;
 
@@ -73,3 +75,11 @@ export const CATEGORY_GROUPS: Record<CategoryGroup, Category[]> = {
   special: ["fist", "topping", "backside"],
   world: ["world"],
 };
+
+// export const groupOfCategory = Object.entries(CATEGORY_GROUPS).reduce(
+//   (acc, [k, v]) => ({
+//     ...acc,
+//     ...v.reduce((_acc, curr) => ({ ..._acc, [curr]: k }), {}),
+//   }),
+//   {} as Record<Category, CategoryGroup>
+// );

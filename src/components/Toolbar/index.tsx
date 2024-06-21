@@ -1,12 +1,11 @@
+import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
-import MusicPlayer from "../MusicPlayer";
-import Wallet from "./Wallet";
 import Blinker from "../shared/Blinker";
-import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
+import Wallet from "./Wallet";
 
-export const TOOLBAR_HEIGHT = 48;
+export const TOOLBAR_HEIGHT = 50;
 
 export default function Index() {
   const router = useRouter();
@@ -25,7 +24,7 @@ export default function Index() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "10px 20px",
+        padding: 10,
         gap: 20,
         height: TOOLBAR_HEIGHT,
         ...(isSmallScreen
@@ -38,6 +37,7 @@ export default function Index() {
           display: "flex",
           alignItems: "baseline",
           gap: 20,
+          flex: 1,
         }}
       >
         <Link href={"/"}>
@@ -47,10 +47,12 @@ export default function Index() {
               display: "block",
               appearance: "none",
               color: "black",
-              lineHeight: 1.25,
+              fontSize: "3.6rem",
+              lineHeight: 0,
+              letterSpacing: 4,
             }}
           >
-            Bannyverse
+            BANNYVERSE
           </h1>
         </Link>
 
