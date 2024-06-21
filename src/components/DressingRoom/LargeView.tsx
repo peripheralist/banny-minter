@@ -37,7 +37,7 @@ export default function LargeView({
   } = useMeasuredRef();
 
   const gridRows = useMemo(
-    () => 3 + Math.max(Math.floor((containerHeight - 600) / 128), 0),
+    () => Math.max(Math.floor((containerHeight - 120) / 150), 0),
     [containerHeight]
   );
 
@@ -52,8 +52,8 @@ export default function LargeView({
       ref={measuredRef}
       style={{
         width: "100vw",
-        height: `calc(100vh - ${TOOLBAR_HEIGHT + 10}px)`,
-        marginTop: TOOLBAR_HEIGHT + 10,
+        height: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
+        marginTop: TOOLBAR_HEIGHT,
         overflow: "hidden",
         minHeight: 600,
         boxSizing: "border-box",

@@ -54,7 +54,7 @@ export default function Wallet() {
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <WalletOptions />
           <ButtonPad
-            style={{ width: 24, height: 24 }}
+            style={{ width: 24, height: 24, marginBottom: 10 }}
             onClick={() => setShowWalletOptions(false)}
           >
             ✖️
@@ -63,11 +63,12 @@ export default function Wallet() {
       ) : (
         <ButtonPad
           style={{
-            height: isSmallScreen ? 30 : 40,
-            width: 80,
+            height: 32,
+            width: 88,
             color: "white",
-            fontSize: isSmallScreen ? "1.25rem" : "1.4rem",
+            fontSize: "1.4rem",
             textTransform: "uppercase",
+            marginBottom: 10,
           }}
           fillFg={COLORS.pink}
           onClick={() => setShowWalletOptions(true)}

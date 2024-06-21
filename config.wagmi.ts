@@ -18,18 +18,18 @@
 // });
 
 import { createConfig, http } from "wagmi";
-import { mainnet, sepolia } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 // import { injected } from "wagmi/connectors";
 
 export const config = createConfig({
-  chains: [mainnet, sepolia],
+  chains: [sepolia],
   // connectors: [
   //   injected(),
   //   // TODO walletConnect({ projectId: 69 }),
   //   // Unsure if this is needed except for walletConnect. Even when connectors is undefined, metamask is still an option
   // ],
   transports: {
-    [mainnet.id]: http(),
+    // [mainnet.id]: http(),
     [sepolia.id]: http(),
   },
 });
