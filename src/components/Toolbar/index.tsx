@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import Blinker from "../shared/Blinker";
+import CurrentChain from "./CurrentChain";
 import Wallet from "./Wallet";
 
 export const TOOLBAR_HEIGHT = 50;
@@ -77,6 +78,7 @@ export default function Index() {
       )}
 
       {/* <MusicPlayer /> */}
+      <CurrentChain />
       <Wallet />
     </div>
   );

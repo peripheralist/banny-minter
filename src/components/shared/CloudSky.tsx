@@ -1,19 +1,19 @@
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
-import { useCallback } from "react";
+import { useMemo } from "react";
 import RandCloud from "./images/Cloud";
 
 export default function CloudSky() {
   const { measuredRef, width, height } = useMeasuredRef();
 
-  const Clouds = useCallback(() => {
+  const clouds = useMemo(() => {
     const count = Math.floor(width / 100);
     let _clouds = [];
 
     const tops: number[] = [];
     for (let i = 0; i < count; i++) {
       let top = height * (i / count);
-      top = Math.ceil(top / 20) * 20;
-      tops.push(top); // round to nearest 20
+      top = Math.ceil(top / 20) * 20; // round to nearest 20
+      tops.push(top);
     }
     shuffleArray(tops);
 
@@ -24,12 +24,12 @@ export default function CloudSky() {
       _clouds.push(<RandCloud key={i} initialX={left} y={top} />);
     }
 
-    return _clouds;
+    return <>{_clouds}</>;
   }, [height, width]);
 
   return (
     <div ref={measuredRef} style={{ width: "100%", height: "100%" }}>
-      <Clouds />
+      {clouds}
     </div>
   );
 }

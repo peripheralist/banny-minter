@@ -1,4 +1,4 @@
-import { apolloClient } from "@/constants/apollo";
+import { useApolloClient } from "@/constants/apollo";
 import { BANNYVERSE_COLLECTION_ID, Category } from "@/constants/nfts";
 import { NftTier_OrderBy, useAllNftTiersQuery } from "@/generated/graphql";
 import { Tier, Tiers } from "@/model/tier";
@@ -9,6 +9,8 @@ import { useMemo } from "react";
  * @returns All NFT tiers mapped to their respective category
  */
 export function useCategorizedTiers() {
+  const apolloClient = useApolloClient();
+
   const { data: tiers, ...props } = useAllNftTiersQuery({
     client: apolloClient,
     variables: {

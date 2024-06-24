@@ -1,7 +1,8 @@
 import { CATEGORY_GROUP_NAMES } from "@/constants/nfts";
 import { EquipmentContext } from "@/contexts/equipmentContext";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useContext, useMemo } from "react";
 import EquippedTiersPreview from "../EquippedTiersPreview";
 import { TOOLBAR_HEIGHT } from "../Toolbar";
 import ButtonPad from "../shared/ButtonPad";
@@ -9,9 +10,7 @@ import RoundedFrame from "../shared/RoundedFrame";
 import BannyButtons from "./BannyButtons";
 import CategoryGroupButton from "./CategoryGroupButton";
 import CategoryGroupGrid from "./CategoryGroupGrid";
-import MintButton from "./MintButton";
 import Summary from "./Summary";
-import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 
 export default function LargeView({
   button,

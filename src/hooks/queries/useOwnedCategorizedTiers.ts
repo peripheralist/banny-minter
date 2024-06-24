@@ -1,11 +1,13 @@
-import { apolloClient } from "@/constants/apollo";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { Tiers } from "@/model/tier";
 import { useMemo } from "react";
 import { useCategorizedTiers } from "./useCategorizedTiers";
+import { useApolloClient } from "@/constants/apollo";
 
 export function useOwnedCategorizedTiers(wallet: string | undefined) {
+  const apolloClient = useApolloClient();
+
   const { data: nfts, loading: nftsLoading } = useNfTsQuery({
     client: apolloClient,
     variables: {

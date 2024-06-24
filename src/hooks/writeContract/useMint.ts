@@ -15,12 +15,6 @@ export function useMint() {
   const { contracts } = useJBContractContext();
   const jb721DataHookQuery = useFind721DataHook();
 
-  console.log(
-    "Hath thou a terminal addy?",
-    { contracts },
-    contracts.primaryNativeTerminal.data
-  );
-
   const { equipped, totalEquippedPrice } = useContext(EquipmentContext);
 
   const jb721DataHookQueryAddress = jb721DataHookQuery.data as `0x${string}`;

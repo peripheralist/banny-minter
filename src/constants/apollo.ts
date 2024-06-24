@@ -1,14 +1,15 @@
+import { useSubgraphUri } from "@/hooks/useSubgraphUri";
 import {
   ApolloClient,
   ApolloLink,
-  FieldPolicy,
   HttpLink,
   InMemoryCache,
 } from "@apollo/client";
+import { useQuery } from "@tanstack/react-query";
 import { FunctionsMap, withScalars } from "apollo-link-scalars";
 import { IntrospectionQuery, buildClientSchema } from "graphql";
 import introspectionResult from "../../graphql.schema.json";
-import { subgraphUri } from "./subgraph";
+import { useMemo } from "react";
 
 const typesMap: FunctionsMap = {
   BigInt: {
@@ -30,7 +31,6 @@ const schema = buildClientSchema(
 );
 
 const scalarsLink = withScalars({ schema, typesMap });
-const httpLink = new HttpLink({ uri: subgraphUri });
 
 // const paginationConfig: FieldPolicy = {
 //   // Create a new cache list when the `keyArgs` variables change. Otherwise apply the below `merge` function to any existing cached list, even if other variables change like `first` or `skip`. This strategy enables infinite paging for unique lists while still preventing cached data from being unexpectedly included in query results, especially when updating the `where` argument to filter by properties of entities.
@@ -54,16 +54,25 @@ const httpLink = new HttpLink({ uri: subgraphUri });
 //   },
 // };
 
-export const apolloClient = new ApolloClient({
-  cache: new InMemoryCache({
-    // typePolicies: {
-    //   Query: {
-    //     fields: {
-    //       nfts: paginationConfig,
-    //       nftTiers: paginationConfig,
-    //     },
-    //   },
-    // },
-  }),
-  link: ApolloLink.from([scalarsLink, httpLink]),
-});
+export const useApolloClient = () => {
+  const subgraphUri = useSubgraphUri();
+
+  const client = useMemo(() => {
+    const httpLink = new HttpLink({ uri: subgraphUri });
+    return new ApolloClient({
+      cache: new InMemoryCache({
+        // typePolicies: {
+        //   Query: {
+        //     fields: {
+        //       nfts: paginationConfig,
+        //       nftTiers: paginationConfig,
+        //     },
+        //   },
+        // },
+      }),
+      link: ApolloLink.from([scalarsLink, httpLink]),
+    });
+  }, [subgraphUri]);
+
+  return client;
+};

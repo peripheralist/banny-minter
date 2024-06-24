@@ -62,7 +62,6 @@ export default function RandCloud({
 
   return (
     <Image
-      // className="slide-right"
       ref={ref}
       style={{ position: "absolute", top: y, left: x, objectFit: "contain" }}
       width={width * 2.5}

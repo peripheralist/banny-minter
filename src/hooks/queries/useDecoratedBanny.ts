@@ -1,7 +1,9 @@
-import { apolloClient } from "@/constants/apollo";
+import { useApolloClient } from "@/constants/apollo";
 import { useDecoratedBannyQuery } from "@/generated/graphql";
 
 export function useDecoratedBanny(tokenId: number | undefined) {
+  const apolloClient = useApolloClient();
+
   return useDecoratedBannyQuery({
     client: apolloClient,
     variables: {
