@@ -106,14 +106,21 @@ export default function Home() {
         <title>Banny Factory</title>
         <meta name="description" content="Banny factory" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style>
-          {/* sky */}
-          {`html { background: #00A6FF; }`}
-        </style>
+        <style>{`#sky { background-image: linear-gradient(#00A6FF,#b3e4ff); }`}</style>
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
 
       <main>
+        <div
+          id="sky"
+          style={{
+            position: "fixed",
+            width: "100vw",
+            height: "100vh",
+            zIndex: -2,
+          }}
+        />
+
         <Background />
 
         <Image
