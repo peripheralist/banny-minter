@@ -3,12 +3,15 @@ import Fuzz from "@/components/pixelRenderers/Fuzz";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import { COLORS } from "@/constants/colors";
 import { useNftsOf } from "@/hooks/queries/useNftsOf";
-import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { isAddress } from "viem";
 import { useEnsName } from "wagmi";
+import DressedBannyNftImage from "./DressedBannyNftImage";
+import TierImage from "@/components/shared/TierImage";
+import { parseTier } from "@/utils/parseTier";
+import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 
 const Toolbar = dynamic(() => import("@/components/Toolbar"), { ssr: false });
 
@@ -26,6 +29,8 @@ export default function Index() {
   if (!address || Array.isArray(address) || !isAddress(address)) {
     return <div>Bad route</div>;
   }
+
+  console.log("asdf", nfts.data?.nfts);
 
   return (
     <div>
@@ -75,27 +80,30 @@ export default function Index() {
                   <Fuzz height={120} width={120} pixelSize={8} fill="black" />
                 </div>
               ) : nfts.data?.nfts.length ? (
-                nfts.data.nfts.map((n) => {
-                  const src = decodeNFTInfo(n.tokenUri)?.image;
-                  if (!src) return null;
-                  return (
-                    <Link
-                      key={n.tokenId}
-                      href={
-                        n.tier.tierId <= 4
-                          ? `/banny/${n.tokenId}`
-                          : `/asset/${n.tokenId}`
-                      }
-                    >
-                      <object
-                        style={{ pointerEvents: "none" }}
-                        width={200}
-                        height={200}
-                        data={src}
-                      />
+                nfts.data.nfts.map((nft) =>
+                  nft.tier.category === 0 ? (
+                    <Link key={nft.tokenId} href={`/banny/${nft.tokenId}`}>
+                      <div style={{ pointerEvents: "none" }}>
+                        <DressedBannyNftImage size={200} nft={nft} />
+                      </div>
                     </Link>
-                  );
-                })
+                  ) : (
+                    <Link key={nft.tokenId} href={`/asset/${nft.tokenId}`}>
+                      <div
+                        style={{
+                          width: 200,
+                          height: 200,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          pointerEvents: "none",
+                        }}
+                      >
+                        <TierImage tier={parseTier(nft.tier)} size={160} />
+                      </div>
+                    </Link>
+                  )
+                )
               ) : (
                 <div
                   style={{

@@ -4,6 +4,7 @@ import { Tier } from "@/model/tier";
 import { useCallback, useContext, useMemo } from "react";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
+import TierImage from "../shared/TierImage";
 
 export default function TierSelectorButton({
   tier,
@@ -29,86 +30,6 @@ export default function TierSelectorButton({
     () => tier.remainingSupply <= BigInt(0),
     [tier.remainingSupply]
   );
-
-  const TierImage = useCallback(() => {
-    if (!tier.image) return null;
-
-    switch (tier.category) {
-      case "glasses":
-      case "headTop":
-      case "mouth":
-      case "head":
-        return (
-          <object
-            style={{
-              position: "absolute",
-              top: "-16%",
-              left: "-35%",
-            }}
-            width={buttonSize * 2}
-            height={buttonSize * 2}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
-      case "legs":
-      case "suitBottom":
-        return (
-          <object
-            style={{
-              position: "absolute",
-              top: "-110%",
-              left: "-60%",
-              bottom: 0,
-            }}
-            width={buttonSize * 2.25}
-            height={buttonSize * 2.25}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
-      case "suitTop":
-        return (
-          <object
-            style={{
-              position: "absolute",
-              top: "-64%",
-              left: "-30%",
-              bottom: 0,
-            }}
-            width={buttonSize * 1.8}
-            height={buttonSize * 1.8}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
-      case "necklace":
-        return (
-          <object
-            style={{
-              position: "absolute",
-              top: "-70%",
-              left: "-45%",
-              bottom: 0,
-            }}
-            width={buttonSize * 2.4}
-            height={buttonSize * 2.25}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
-      default:
-        return (
-          <object
-            style={{ position: "absolute", top: "-10%", left: "-4%" }}
-            width={buttonSize * 1.2}
-            height={buttonSize * 1.2}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
-    }
-  }, [tier, buttonSize]);
 
   const RemainingSupply = useCallback(() => {
     if (isSoldOut) {
@@ -155,7 +76,7 @@ export default function TierSelectorButton({
             overflow: "hidden",
           }}
         >
-          <TierImage />
+          <TierImage tier={tier} size={buttonSize} />
 
           <div
             style={{

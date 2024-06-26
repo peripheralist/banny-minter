@@ -80,9 +80,9 @@ export function TierPreview({
   const SvgObject = useCallback(
     ({ svg, style }: { svg: string | undefined; style?: CSSProperties }) =>
       svg ? (
-        <div
+        <object
           style={{ position: "absolute", ...style, width: size, height: size }}
-          dangerouslySetInnerHTML={{ __html: svg }} // we should NOT be doing this, but so far it's the only way to
+          data={`data:image/svg+xml;base64,${btoa(svg)}`}
         />
       ) : null,
     [size]

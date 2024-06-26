@@ -9879,12 +9879,14 @@ export enum _SubgraphErrorPolicy_ {
   deny = 'deny'
 }
 
+export type TierDataFragment = { id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } };
+
 export type NfTsQueryVariables = Exact<{
   where?: InputMaybe<Nft_Filter>;
 }>;
 
 
-export type NfTsQuery = { nfts: Array<{ tokenId: bigint, tokenUri: string, category: bigint, owner: { address: any }, collection: { address: any }, tier: { id: string, tierId: number } }> };
+export type NfTsQuery = { nfts: Array<{ tokenId: bigint, tokenUri: string, category: bigint, owner: { address: any }, collection: { address: any }, tier: { id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } } }> };
 
 export type DecoratedBannyQueryVariables = Exact<{
   tokenId: Scalars['ID']['input'];
@@ -9892,8 +9894,6 @@ export type DecoratedBannyQueryVariables = Exact<{
 
 
 export type DecoratedBannyQuery = { decoratedBanny: { id: string, naked: bigint | null, world: bigint | null, backside: bigint | null, necklace: bigint | null, head: bigint | null, glasses: bigint | null, mouth: bigint | null, legs: bigint | null, suit: bigint | null, suitBottom: bigint | null, suitTop: bigint | null, headTop: bigint | null, fist: bigint | null, topping: bigint | null, nft: { owner: { address: any } } } | null };
-
-export type TierDataFragment = { id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } };
 
 export type NftTiersQueryVariables = Exact<{
   where?: InputMaybe<NftTier_Filter>;
@@ -11195,12 +11195,11 @@ export const NfTsDocument = gql`
     tokenUri
     category
     tier {
-      id
-      tierId
+      ...TierData
     }
   }
 }
-    `;
+    ${TierDataFragmentDoc}`;
 
 /**
  * __useNfTsQuery__

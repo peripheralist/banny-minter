@@ -14,10 +14,12 @@ export default function EquippedTiersPreview({
   return (
     <div
       style={{
+        position: "relative",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: "100%",
+        height: props.size,
+        width: props.size,
       }}
     >
       {CATEGORIES.map((c) => (

@@ -1,3 +1,18 @@
+fragment TierData on NFTTier {
+  id
+  tierId
+  price
+  collection {
+    address
+  }
+  encodedIpfsUri
+  resolvedUri
+  svg
+  initialSupply
+  remainingSupply
+  category
+}
+
 query NFTs($where: NFT_filter) {
   nfts(where: $where) {
     tokenId
@@ -10,8 +25,7 @@ query NFTs($where: NFT_filter) {
     tokenUri
     category
     tier {
-      id
-      tierId
+      ...TierData
     }
   }
 }
@@ -39,21 +53,6 @@ query DecoratedBanny($tokenId: ID!) {
     fist
     topping
   }
-}
-
-fragment TierData on NFTTier {
-  id
-  tierId
-  price
-  collection {
-    address
-  }
-  encodedIpfsUri
-  resolvedUri
-  svg
-  initialSupply
-  remainingSupply
-  category
 }
 
 query NFTTiers($where: NFTTier_filter, $orderBy: NFTTier_orderBy) {
