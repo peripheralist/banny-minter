@@ -13,7 +13,7 @@ export default function Index() {
 
   const pathText = useMemo(() => {
     if (router.pathname.includes("mint")) return "MINT";
-    if (router.pathname.includes("wallet")) return "WALLET";
+    if (router.pathname.includes("closet")) return "CLOSET";
     return null;
   }, [router.pathname]);
 

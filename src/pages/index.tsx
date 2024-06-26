@@ -1,4 +1,5 @@
 import TiersDemo from "@/components/TiersDemo";
+import AlertBanner from "@/components/shared/AlertBanner";
 import ButtonPad from "@/components/shared/ButtonPad";
 import CloudSky from "@/components/shared/CloudSky";
 import LoadingBanny from "@/components/shared/LoadingBanny";

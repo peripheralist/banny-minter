@@ -1,4 +1,5 @@
 import { BANNYVERSE_PROJECT_ID, CATEGORIES } from "@/constants/nfts";
+import { AlertContext } from "@/contexts/alertContext";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
 import {
@@ -7,13 +8,15 @@ import {
   usePreparePayMetadata,
   useWriteJbMultiTerminalPay,
 } from "juice-sdk-react";
-import { useCallback, useContext, useMemo } from "react";
+import { useCallback, useContext, useEffect, useMemo } from "react";
 import { useAccount, useTransactionReceipt } from "wagmi";
 
 export function useMint() {
   const { address: connectedWalletAddress } = useAccount();
   const { contracts } = useJBContractContext();
   const jb721DataHookQuery = useFind721DataHook();
+
+  const { setAlert } = useContext(AlertContext);
 
   const { equipped, totalEquippedPrice } = useContext(EquipmentContext);
 
@@ -79,6 +82,20 @@ export function useMint() {
   const tx = useTransactionReceipt({
     hash,
   });
+
+  useEffect(() => {
+    switch (tx.status) {
+      case "success":
+        setAlert?.("Minted!", {
+          label: "Go to closet",
+          href: `/closet/${connectedWalletAddress}`,
+        });
+        break;
+      case "error":
+        setAlert?.("Error minting");
+        break;
+    }
+  }, [tx.status, setAlert, connectedWalletAddress]);
 
   return { mint: pay, isLoading: isPending, tx };
 }
