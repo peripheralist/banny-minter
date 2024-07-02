@@ -1,8 +1,7 @@
-import AlertBanner from "@/components/shared/AlertBanner";
+import Modal from "@/components/shared/Modal";
 import Link from "next/link";
 import { PropsWithChildren, useCallback, useMemo, useState } from "react";
 import { AlertContext, Href } from "./alertContext";
-import { COLORS } from "@/constants/colors";
 
 export default function AlertContextProvider({ children }: PropsWithChildren) {
   const [_alert, _setAlert] = useState<string>();
@@ -32,12 +31,13 @@ export default function AlertContextProvider({ children }: PropsWithChildren) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          gap: 10,
         }}
       >
         <div style={{ fontSize: "2rem", textAlign: "center" }}>{_alert}</div>
 
         {_href && (
-          <div style={{ fontSize: "1.65rem", marginTop: 10 }} onClick={reset}>
+          <div style={{ fontSize: "1.65rem" }} onClick={reset}>
             <Link href={_href.href}>
               {">"} {_href.label}
             </Link>
@@ -48,15 +48,12 @@ export default function AlertContextProvider({ children }: PropsWithChildren) {
           onClick={reset}
           style={{
             position: "absolute",
-            fontSize: "1.65rem",
-            color: COLORS.pink,
-            textTransform: "uppercase",
-            top: "120%",
-            fontWeight: "bold",
-            padding: 10,
+            left: 5,
+            top: 0,
+            fontSize: "2rem",
           }}
         >
-          Close
+          ⨯
         </div>
       </div>
     );
@@ -72,7 +69,9 @@ export default function AlertContextProvider({ children }: PropsWithChildren) {
     >
       {children}
 
-      {content && <AlertBanner>{content}</AlertBanner>}
+      <Modal open={!!content} onClose={() => reset()}>
+        {content}
+      </Modal>
     </AlertContext.Provider>
   );
 }

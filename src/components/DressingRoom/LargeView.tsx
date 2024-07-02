@@ -150,7 +150,11 @@ export default function LargeView({
             ref={previewRef}
             style={{
               height: "100%",
+              width: "100%",
               background: "white",
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
             }}
           >
             <EquippedTiersPreview

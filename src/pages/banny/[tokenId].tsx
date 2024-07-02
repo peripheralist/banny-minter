@@ -1,16 +1,11 @@
-import DressingRoom from "@/components/DressingRoom";
-import DecorateButton from "@/components/DressingRoom/DecorateButton";
-import EquippedTiersPreview from "@/components/EquippedTiersPreview";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
-import { Category } from "@/constants/nfts";
-import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
-import { EquipmentContext } from "@/contexts/equipmentContext";
-import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
-import { useDecoratedBanny } from "@/hooks/queries/useDecoratedBanny";
-import { useOwnedCategorizedTiers } from "@/hooks/queries/useOwnedCategorizedTiers";
+import { useApolloClient } from "@/constants/apollo";
+import { useNfTsQuery } from "@/generated/graphql";
+import DressOwnedBanny from "@/pages/banny/DressOwnedBanny";
 import { useRouter } from "next/router";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { useAccount } from "wagmi";
+import PreviewUnownedBanny from "./PreviewUnownedBanny";
 
 export default function Index() {
   const { address } = useAccount();
@@ -19,69 +14,25 @@ export default function Index() {
 
   const tokenId = router.query.tokenId as string | undefined;
 
-  const _tokenId =
-    !tokenId || isNaN(parseInt(tokenId)) ? undefined : parseInt(tokenId);
+  const _tokenId = !tokenId || isNaN(parseInt(tokenId)) ? 0 : parseInt(tokenId);
 
-  const { tiers: allTiers } = useCategorizedTiers();
+  const client = useApolloClient();
 
-  const { tiers: ownedTiers, loading: tiersLoading } =
-    useOwnedCategorizedTiers(address);
-
-  const { data: banny, loading: bannyLoading } = useDecoratedBanny(_tokenId);
-
-  const equippedTierIds = useMemo(() => {
-    if (!banny?.decoratedBanny || !allTiers) return;
-
-    const { id, ...categories } = banny.decoratedBanny;
-
-    return Object.entries(categories).reduce((acc, [category, tierId]) => {
-      const _category = category as Category;
-
-      const tierIdOfCategory = allTiers[_category].find(
-        (t) => BigInt(t.tierId) === tierId
-      )?.tierId;
-
-      return tierIdOfCategory
-        ? {
-            ...acc,
-            [_category]: tierIdOfCategory,
-          }
-        : acc;
-    }, {} as Partial<Record<Category, number>>);
-  }, [banny, allTiers]);
+  const { data: nft, loading: nftsLoading } = useNfTsQuery({
+    client,
+    variables: {
+      where: { tokenId: _tokenId as unknown as bigint },
+    },
+  });
 
   const isOwner = useMemo(
-    () => address === banny?.decoratedBanny?.nft.owner.address,
-    [address, banny]
+    () => address?.toLowerCase() === nft?.nfts[0].owner.address.toLowerCase(),
+    [address, nft]
   );
 
-  if (!equippedTierIds || !allTiers || !_tokenId) return null;
+  if (nftsLoading) return <FullscreenLoading />;
 
-  if (tiersLoading || bannyLoading) return <FullscreenLoading />;
+  if (isOwner) return <DressOwnedBanny bannyNft={nft?.nfts[0]} />;
 
-  if (isOwner && ownedTiers) {
-    return (
-      <EquipmentContextProvider
-        availableTiers={ownedTiers}
-        defaultEquippedTierIds={equippedTierIds}
-      >
-        <DressingRoom button={<DecorateButton />} />
-      </EquipmentContextProvider>
-    );
-  }
-
-  return (
-    <EquipmentContextProvider
-      availableTiers={allTiers}
-      defaultEquippedTierIds={equippedTierIds}
-    >
-      <UnOwnedBannyPreview />
-    </EquipmentContextProvider>
-  );
-}
-
-function UnOwnedBannyPreview() {
-  const { equipped } = useContext(EquipmentContext);
-
-  return <EquippedTiersPreview size={400} equipped={equipped} />;
+  return <PreviewUnownedBanny bannyNft={nft?.nfts[0]} size={400} />;
 }

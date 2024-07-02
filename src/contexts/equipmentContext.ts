@@ -1,5 +1,5 @@
 import { CATEGORIES, Category, CategoryGroup } from "@/constants/nfts";
-import { EquipTierFns, EquippedTiers } from "@/model/tier";
+import { EquipTierFns, EquippedTiers, Tiers } from "@/model/tier";
 import { createContext } from "react";
 
 type Context = {
@@ -11,6 +11,7 @@ type Context = {
   setSelectedGroup?: (g: CategoryGroup) => void;
   equippingCategory?: Category;
   unequippingCategory?: Category;
+  availableTiers?: Tiers;
 };
 
 export const EquipmentContext = createContext<Context>({

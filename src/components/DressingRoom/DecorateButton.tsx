@@ -54,16 +54,18 @@ export default function DecorateButton() {
         <div
           style={{
             textAlign: "center",
-            fontSize: "3rem",
+            fontSize: "2.4rem",
           }}
         >
           <div
             style={{
               opacity: address ? 1 : 0.25,
+              padding: 10,
+              minWidth: 120,
               color: address ? "white" : "black",
             }}
           >
-            Decorate
+            Dress
           </div>
 
           {!address && (

@@ -1,19 +1,13 @@
-import EquippedTiersPreview from "@/components/EquippedTiersPreview";
-import Fuzz from "@/components/pixelRenderers/Fuzz";
 import { CATEGORIES } from "@/constants/nfts";
 import { NfTsQuery } from "@/generated/graphql";
-import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { EquippedTiers } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { useMemo } from "react";
+import { useCategorizedTiers } from "./queries/useCategorizedTiers";
 
-export default function DressedBannyNftImage({
-  nft,
-  size,
-}: {
-  nft: NfTsQuery["nfts"][number] | undefined;
-  size: number;
-}) {
+export function useBannyEquippedTiers(
+  nft: NfTsQuery["nfts"][number] | undefined
+) {
   const allTiers = useCategorizedTiers();
 
   const equippedTiers = useMemo(() => {
@@ -37,9 +31,5 @@ export default function DressedBannyNftImage({
     return equipped as EquippedTiers;
   }, [nft, allTiers]);
 
-  if (!equippedTiers || allTiers.loading) {
-    return <Fuzz fill="#ccc" width={size} height={size} pixelSize={4} />;
-  }
-
-  return <EquippedTiersPreview equipped={equippedTiers} size={size} />;
+  return equippedTiers;
 }

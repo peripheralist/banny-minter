@@ -1,6 +1,7 @@
 import { Tier } from "@/model/tier";
 import { CSSProperties } from "react";
 import TierSelectorButton from "../TierSelectorButton";
+import FuzzMoment from "@/components/pixelRenderers/FuzzMoment";
 
 /**
  * Renders a grid of tiers, with size multipliers for different categories.
@@ -17,6 +18,15 @@ export default function TiersGrid({
   imageSize: number | undefined;
   style?: CSSProperties;
 }) {
+  if (!imageSize) return null;
+
+  if (!tiers?.length)
+    return (
+      <div style={{ fontSize: "1.875rem", whiteSpace: "pre" }}>
+        No items available
+      </div>
+    );
+
   return (
     <div
       style={{
@@ -24,10 +34,9 @@ export default function TiersGrid({
         ...style,
       }}
     >
-      {imageSize &&
-        tiers?.map((t) => (
-          <TierSelectorButton key={t.tierId} tier={t} buttonSize={imageSize} />
-        ))}
+      {tiers.map((t) => (
+        <TierSelectorButton key={t.tierId} tier={t} buttonSize={imageSize} />
+      ))}
     </div>
   );
 }

@@ -5,17 +5,32 @@ import { useMemo } from "react";
 import Blinker from "../shared/Blinker";
 import CurrentChain from "./CurrentChain";
 import Wallet from "./Wallet";
+import { useEnsName } from "wagmi";
 
 export const TOOLBAR_HEIGHT = 50;
 
 export default function Index() {
   const router = useRouter();
 
+  const address = router.query["address"] as `0x${string}`;
+
+  const { data: ensName } = useEnsName({ address });
+
+  const formattedAddress = ensName
+    ? ensName
+    : address
+    ? `${address.substring(0, 6)}...${address.slice(38)}`
+    : undefined;
+
   const pathText = useMemo(() => {
-    if (router.pathname.includes("mint")) return "MINT";
-    if (router.pathname.includes("closet")) return "CLOSET";
+    if (router.pathname.includes("mint")) {
+      return "SHOP";
+    }
+    if (router.pathname.includes("closet")) {
+      return `${formattedAddress}'s closet`;
+    }
     return null;
-  }, [router.pathname]);
+  }, [router.pathname, formattedAddress]);
 
   const isSmallScreen = useIsSmallScreen();
 

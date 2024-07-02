@@ -1,17 +1,16 @@
 import { TOOLBAR_HEIGHT } from "@/components/Toolbar";
 import Fuzz from "@/components/pixelRenderers/Fuzz";
 import RoundedFrame from "@/components/shared/RoundedFrame";
+import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
 import { useNftsOf } from "@/hooks/queries/useNftsOf";
+import { parseTier } from "@/utils/parseTier";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useCallback } from "react";
 import { isAddress } from "viem";
-import { useEnsName } from "wagmi";
 import DressedBannyNftImage from "./DressedBannyNftImage";
-import TierImage from "@/components/shared/TierImage";
-import { parseTier } from "@/utils/parseTier";
-import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 
 const Toolbar = dynamic(() => import("@/components/Toolbar"), { ssr: false });
 
@@ -22,15 +21,29 @@ export default function Index() {
 
   const address = router.query.address as `0x${string}` | undefined;
 
-  const { data: ensName } = useEnsName({ address });
-
   const nfts = useNftsOf(address);
+
+  const TokenId = useCallback(
+    ({ tokenId }: { tokenId: bigint }) => (
+      <div
+        style={{
+          position: "absolute",
+          bottom: -12,
+          left: 10,
+          right: 10,
+          color: "#00000088",
+          textAlign: "center",
+        }}
+      >
+        #{tokenId.toString()}
+      </div>
+    ),
+    []
+  );
 
   if (!address || Array.isArray(address) || !isAddress(address)) {
     return <div>Bad route</div>;
   }
-
-  console.log("asdf", nfts.data?.nfts);
 
   return (
     <div>
@@ -45,18 +58,20 @@ export default function Index() {
         }}
       >
         <style>{`body { background: ${COLORS.banana} }`}</style>
-        <h1>
+        {/* <h1>
           {ensName ?? address}
           {"'"}s Closet
-        </h1>
+        </h1> */}
 
-        <div>
+        <div style={{ marginTop: 20 }}>
           <RoundedFrame
             shadow
             style={{
-              height: `calc(84vh - ${TOOLBAR_HEIGHT}px)`,
+              height: `calc(100vh - ${TOOLBAR_HEIGHT + 40}px)`,
               overflow: "scroll",
               background: "white",
+              padding: 10,
+              paddingBottom: 30,
             }}
           >
             <div
@@ -65,6 +80,7 @@ export default function Index() {
                 display:
                   nfts.loading || !nfts.data?.nfts.length ? "block" : "grid",
                 gridTemplateColumns: `repeat(4, 1fr)`,
+                gap: 20,
               }}
             >
               {nfts.loading ? (
@@ -83,8 +99,11 @@ export default function Index() {
                 nfts.data.nfts.map((nft) =>
                   nft.tier.category === 0 ? (
                     <Link key={nft.tokenId} href={`/banny/${nft.tokenId}`}>
-                      <div style={{ pointerEvents: "none" }}>
+                      <div
+                        style={{ pointerEvents: "none", position: "relative" }}
+                      >
                         <DressedBannyNftImage size={200} nft={nft} />
+                        <TokenId tokenId={nft.tokenId} />
                       </div>
                     </Link>
                   ) : (
@@ -97,9 +116,11 @@ export default function Index() {
                           alignItems: "center",
                           justifyContent: "center",
                           pointerEvents: "none",
+                          position: "relative",
                         }}
                       >
                         <TierImage tier={parseTier(nft.tier)} size={160} />
+                        <TokenId tokenId={nft.tokenId} />
                       </div>
                     </Link>
                   )

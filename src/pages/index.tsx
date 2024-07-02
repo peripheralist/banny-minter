@@ -1,8 +1,8 @@
 import TiersDemo from "@/components/TiersDemo";
-import AlertBanner from "@/components/shared/AlertBanner";
 import ButtonPad from "@/components/shared/ButtonPad";
 import CloudSky from "@/components/shared/CloudSky";
 import LoadingBanny from "@/components/shared/LoadingBanny";
+import { COLORS } from "@/constants/colors";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import Head from "next/head";
@@ -15,9 +15,11 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useAccount } from "wagmi";
 
 export default function Home() {
   const [heroScroll, setHeroScroll] = useState<number>(0);
+  const { address } = useAccount();
 
   const { loading } = useCategorizedTiers();
 
@@ -140,30 +142,50 @@ export default function Home() {
           width={screenHeight / 3}
         />
 
-        <Link
+        <div
           style={{
-            margin: "0px auto",
-            background: "red",
+            display: "flex",
+            justifyContent: "center",
+            gap: 20,
+            position: "fixed",
+            bottom: "6vh",
+            left: 0,
+            right: 0,
+            zIndex: 10,
           }}
-          href={"/mint"}
         >
-          <ButtonPad
-            style={{
-              position: "fixed",
-              bottom: "6vh",
-              left: 0,
-              right: 0,
-              width: 180,
-              height: 48,
-              fontSize: "2rem",
-              margin: "0 auto",
-              fontWeight: "bold",
-              zIndex: 10,
-            }}
-          >
-            Play
-          </ButtonPad>
-        </Link>
+          <Link href={"/mint"}>
+            <ButtonPad
+              style={{
+                width: 180,
+                height: 48,
+                fontSize: "2rem",
+                margin: "0 auto",
+                fontWeight: "bold",
+              }}
+            >
+              Shop
+            </ButtonPad>
+          </Link>
+
+          {address ? (
+            <Link href={`/closet/${address}`}>
+              <ButtonPad
+                fillFg={COLORS.pink}
+                style={{
+                  width: 180,
+                  height: 48,
+                  fontSize: "2rem",
+                  margin: "0 auto",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              >
+                Closet
+              </ButtonPad>
+            </Link>
+          ) : null}
+        </div>
 
         <div
           style={{
@@ -247,9 +269,9 @@ export default function Home() {
             opacity: (heroScroll - 0.25) * 4,
           }}
         >
-          <NumberedText n={1}>Pick your Naked Banny</NumberedText>
+          <NumberedText n={1}>Shop for Bannys and accessories</NumberedText>
           <NumberedText n={2}>
-            Style them with limited edition seasonal outfits
+            Dress and redress Bannys in your Closet
           </NumberedText>
           <NumberedText n={3}>
             Take part in the fruituristic economic experiment of $BANNY

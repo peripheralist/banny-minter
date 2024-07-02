@@ -1,3 +1,4 @@
+import { mannequinSvg } from "@/constants/mannequinSvg";
 import { Category } from "@/constants/nfts";
 import { DEFAULT_SVG } from "@/constants/svgDefaults";
 import { EQUIP_DURATION_MILLIS } from "@/contexts/EquipmentContextProvider";
@@ -93,19 +94,28 @@ export function TierPreview({
 
     let children: JSX.Element[] = [];
 
-    // always add eyes
-    if (equipped.naked?.tierId === 1) {
-      children.push(<SvgObject key="eyes" svg={DEFAULT_SVG.eyesAlien} />);
+    if (!equipped.naked) {
+      children.push(<SvgObject key="mannequin" svg={mannequinSvg} />);
     } else {
-      children.push(<SvgObject key="eyes" svg={DEFAULT_SVG.eyes} />);
-    }
+      // always add eyes
+      children.push(
+        <SvgObject
+          key="eyes"
+          svg={
+            equipped.naked?.tierId === 1
+              ? DEFAULT_SVG.eyesAlien
+              : DEFAULT_SVG.eyes
+          }
+        />
+      );
 
-    if (!equipped.necklace) {
-      children.push(<SvgObject key="necklace" svg={DEFAULT_SVG.necklace} />);
-    }
+      if (!equipped.necklace) {
+        children.push(<SvgObject key="necklace" svg={DEFAULT_SVG.necklace} />);
+      }
 
-    if (!equipped.mouth) {
-      children.push(<SvgObject key="mouth" svg={DEFAULT_SVG.mouth} />);
+      if (!equipped.mouth) {
+        children.push(<SvgObject key="mouth" svg={DEFAULT_SVG.mouth} />);
+      }
     }
 
     return children;
@@ -113,14 +123,15 @@ export function TierPreview({
 
   const svg = useMemo(() => equipped[category]?.svg, [equipped, category]);
 
-  if (!svg) return null;
-
   return (
     <>
-      <SvgObject
-        style={{ ...fuzzMask(equipFuzz), ...fuzzMask(unequipFuzz) }}
-        svg={svg}
-      />
+      {svg && (
+        <SvgObject
+          style={{ ...fuzzMask(equipFuzz), ...fuzzMask(unequipFuzz) }}
+          svg={svg}
+        />
+      )}
+
       <NakedDefaultSvgs />
     </>
   );

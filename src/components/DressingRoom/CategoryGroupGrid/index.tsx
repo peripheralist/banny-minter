@@ -34,9 +34,12 @@ export default function CategoryGroupGrid({
   imageSize: number;
   style?: CSSProperties;
 }) {
-  const { tiers } = useCategorizedTiers();
-
-  const { selectedGroup, equipped, equip } = useContext(EquipmentContext);
+  const {
+    selectedGroup,
+    equipped,
+    equip,
+    availableTiers: tiers,
+  } = useContext(EquipmentContext);
 
   const pageSize = useMemo(() => gridRows * gridCols, [gridRows, gridCols]);
 

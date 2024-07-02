@@ -44,7 +44,9 @@ export default function BannyButtons({
             key={t.tierId}
             style={buttonStyle}
             fillFg={color}
-            onClick={() => equip?.naked?.(t.tierId)}
+            onClick={() =>
+              equip?.naked?.(t.tierId === naked?.tierId ? undefined : t.tierId)
+            }
             pressed={active}
             active={active}
           />

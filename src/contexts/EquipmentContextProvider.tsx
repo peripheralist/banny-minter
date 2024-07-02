@@ -138,6 +138,7 @@ export default function EquipmentContextProvider({
         setSelectedGroup,
         equippingCategory,
         unequippingCategory,
+        availableTiers
       }}
     >
       {children}
