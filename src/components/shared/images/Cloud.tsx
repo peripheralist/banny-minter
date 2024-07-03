@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+const AVAILABLE_CLOUD_COUNT = 4;
+
 export default function RandCloud({
   y,
   initialX,
@@ -11,7 +13,10 @@ export default function RandCloud({
   const [parentHeight, setParentHeight] = useState<number>(initialX);
   const [x, setX] = useState<number>(initialX);
 
-  const cloudId = useMemo(() => Math.floor(Math.random() * 8), []);
+  const cloudId = useMemo(
+    () => Math.floor(Math.random() * AVAILABLE_CLOUD_COUNT),
+    []
+  );
 
   const ref = useCallback((node: HTMLImageElement | null) => {
     if (!node) return;
@@ -42,19 +47,13 @@ export default function RandCloud({
   const { width, height } = useMemo(() => {
     switch (cloudId) {
       case 0:
-        return { width: 48, height: 16 };
+        return { width: 128 / 2, height: 44 / 2 };
       case 1:
-      case 3:
-        return { width: 48, height: 24 };
+        return { width: 186 / 2, height: 78 / 2 };
       case 2:
-        return { width: 64, height: 24 };
-      case 4:
-        return { width: 32, height: 16 };
-      case 5:
-        return { width: 48, height: 8 };
-      case 6:
-      case 7:
-        return { width: 64, height: 16 };
+        return { width: 77 / 2, height: 43 / 2 };
+      case 3:
+        return { width: 52 / 2, height: 20 / 2 };
     }
 
     return { width: 0, height: 0 };
