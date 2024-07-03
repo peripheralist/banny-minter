@@ -20,7 +20,7 @@ export default function TierImage({
           <object
             style={{
               position: "absolute",
-              top: "-16%",
+              top: "-18%",
               left: "-35%",
             }}
             width={size * 2}
@@ -35,41 +35,27 @@ export default function TierImage({
           <object
             style={{
               position: "absolute",
-              top: "-110%",
-              left: "-60%",
+              top: "-132%",
+              left: "-69%",
               bottom: 0,
             }}
-            width={size * 2.25}
-            height={size * 2.25}
+            width={size * 2.5}
+            height={size * 2.5}
             data={tier.image}
             type="image/svg+xml"
           />
         );
       case "suitTop":
-        return (
-          <object
-            style={{
-              position: "absolute",
-              top: "-64%",
-              left: "-30%",
-              bottom: 0,
-            }}
-            width={size * 1.8}
-            height={size * 1.8}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
       case "necklace":
         return (
           <object
             style={{
               position: "absolute",
-              top: "-70%",
-              left: "-45%",
+              top: "-77%",
+              left: "-49%",
               bottom: 0,
             }}
-            width={size * 2.4}
+            width={size * 2.25}
             height={size * 2.25}
             data={tier.image}
             type="image/svg+xml"
