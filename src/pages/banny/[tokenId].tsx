@@ -1,5 +1,4 @@
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
-import { useApolloClient } from "@/constants/apollo";
 import { useNfTsQuery } from "@/generated/graphql";
 import DressOwnedBanny from "@/pages/banny/DressOwnedBanny";
 import { useRouter } from "next/router";
@@ -16,10 +15,7 @@ export default function Index() {
 
   const _tokenId = !tokenId || isNaN(parseInt(tokenId)) ? 0 : parseInt(tokenId);
 
-  const client = useApolloClient();
-
   const { data: nft, loading: nftsLoading } = useNfTsQuery({
-    client,
     variables: {
       where: { tokenId: _tokenId as unknown as bigint },
     },

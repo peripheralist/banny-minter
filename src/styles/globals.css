@@ -23,7 +23,7 @@
   src: url("/fonts/VT323-Regular.ttf");
 }
 
-* {
+*, a {
   font-family: "VT323", monospace;
   cursor: crosshair;
 }

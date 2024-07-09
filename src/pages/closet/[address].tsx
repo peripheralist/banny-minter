@@ -58,10 +58,6 @@ export default function Index() {
         }}
       >
         <style>{`body { background: ${COLORS.banana} }`}</style>
-        {/* <h1>
-          {ensName ?? address}
-          {"'"}s Closet
-        </h1> */}
 
         <div style={{ marginTop: 20 }}>
           <RoundedFrame

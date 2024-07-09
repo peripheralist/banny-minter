@@ -25,7 +25,7 @@ export function useBannyEquippedTiers(
       equipped[c] =
         c === "naked"
           ? tiers[c].find((t) => t.tierId === nft.tier.tierId)
-          : tiers[c].find((t) => t.tierId === decoded[`${c}Upc`]);
+          : tiers[c].find((t) => t.tierId.toString() === decoded[`${c}Upc`]);
     }
 
     return equipped as EquippedTiers;

@@ -20,8 +20,10 @@ export default function DressOwnedBanny({
 }) {
   const { address } = useAccount();
 
-  const { tiers: ownedTiers, loading: tiersLoading } =
-    useOwnedCategorizedTiers(address);
+  const { tiers: ownedTiers, loading: tiersLoading } = useOwnedCategorizedTiers(
+    address,
+    true
+  );
 
   const equippedTiers = useBannyEquippedTiers(bannyNft);
 
@@ -46,7 +48,6 @@ export default function DressOwnedBanny({
           availableTiers={ownedTiers}
           defaultEquippedTierIds={equippedTierIds}
         >
-          <style>{`body { background: ${COLORS.banana} }`}</style>
           <DressingRoom button={<DecorateButton />} />
         </EquipmentContextProvider>
       ) : (

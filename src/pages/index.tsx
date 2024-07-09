@@ -168,7 +168,7 @@ export default function Home() {
             </ButtonPad>
           </Link>
 
-          {address ? (
+          {address ? ( // TODO fix bug, ssr does not match UI
             <Link href={`/closet/${address}`}>
               <ButtonPad
                 fillFg={COLORS.pink}

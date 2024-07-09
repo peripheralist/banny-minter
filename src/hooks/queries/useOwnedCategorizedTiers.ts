@@ -1,15 +1,15 @@
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { Tiers } from "@/model/tier";
+import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { useMemo } from "react";
 import { useCategorizedTiers } from "./useCategorizedTiers";
-import { useApolloClient } from "@/constants/apollo";
 
-export function useOwnedCategorizedTiers(wallet: string | undefined) {
-  const apolloClient = useApolloClient();
-
+export function useOwnedCategorizedTiers(
+  wallet: string | undefined,
+  onlyUnworn?: boolean
+) {
   const { data: nfts, loading: nftsLoading } = useNfTsQuery({
-    client: apolloClient,
     variables: {
       where: {
         collection: BANNYVERSE_COLLECTION_ID,
@@ -20,26 +20,31 @@ export function useOwnedCategorizedTiers(wallet: string | undefined) {
     },
   });
 
-  const ownedTierIds = useMemo(
-    () => nfts?.nfts.map((nft) => nft.tier.tierId),
-    [nfts]
-  );
-
   const { tiers, loading: tiersLoading } = useCategorizedTiers();
 
   const ownedTiers = useMemo(() => {
-    if (!tiers || !ownedTierIds?.length) return null;
+    if (!tiers || !nfts?.nfts.length) return null;
 
     return Object.entries(tiers).reduce(
       (acc, [category, tiersOfCategory]) => ({
         ...acc,
-        [category]: tiersOfCategory.filter((t) =>
-          ownedTierIds?.includes(t.tierId)
-        ),
+        [category]: tiersOfCategory.filter((t) => {
+          const nft = nfts?.nfts.find((nft) => nft.tier.tierId === t.tierId);
+
+          // TODO can maybe remove onlyUnworn logic?
+          if (onlyUnworn) {
+            // return true if NFT of tier is owned, and is currently not equipped to a banny
+            const info = decodeNFTInfo(nft?.tokenUri);
+            return nft && info?.wornByNakedBannyId === "0";
+          }
+
+          // return true if NFT of tier is owned
+          return !!nft;
+        }),
       }),
       {} as Tiers
     );
-  }, [tiers, ownedTierIds]);
+  }, [tiers, nfts, onlyUnworn]);
 
   return {
     tiers: ownedTiers,
