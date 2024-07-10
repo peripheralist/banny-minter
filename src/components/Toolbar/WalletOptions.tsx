@@ -23,9 +23,7 @@ export function WalletOptions() {
         <FuzzMoment
           height={16}
           width={68}
-          fill="black"
           onFinished={<span>{connector.name}</span>}
-          pixelSize={4}
         />
       </div>
     </ButtonPad>

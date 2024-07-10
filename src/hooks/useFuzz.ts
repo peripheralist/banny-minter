@@ -25,7 +25,7 @@ export function useFuzz({
   const { data: variations } = useQuery({
     queryKey: ["fuzz", width, height, fill, pixelSize, steps],
     queryFn: () => {
-      const p = pixelSize ?? 2;
+      const p = pixelSize ?? 4;
 
       let _variations: string[] = [];
 

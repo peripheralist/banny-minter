@@ -1,7 +1,7 @@
 import { CATEGORY_GROUP_NAMES } from "@/constants/nfts";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
-import { useWindowWidth } from "@/hooks/useWindowWidth";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { useContext, useMemo } from "react";
 import EquippedTiersPreview from "../EquippedTiersPreview";
 import { TOOLBAR_HEIGHT } from "../Toolbar";
@@ -28,19 +28,20 @@ export default function LargeView({
     setSelectedGroup,
   } = useContext(EquipmentContext);
 
-  const { measuredRef, height: containerHeight } = useMeasuredRef();
   const {
     measuredRef: previewRef,
     height: previewHeight,
     width: previewWidth,
   } = useMeasuredRef();
 
+  const { width: windowWidth, height: windowHeight } = useWindowSize();
+
   const gridRows = useMemo(
-    () => Math.max(Math.floor((containerHeight - 120) / 150), 0),
-    [containerHeight]
+    () =>
+      windowHeight ? Math.max(Math.floor((windowHeight - 120) / 150), 0) : 1,
+    [windowHeight]
   );
 
-  const windowWidth = useWindowWidth();
   const gridCols = useMemo(
     () => (windowWidth && windowWidth < 1200 ? 2 : 3),
     [windowWidth]
@@ -48,7 +49,6 @@ export default function LargeView({
 
   return (
     <div
-      ref={measuredRef}
       style={{
         width: "100vw",
         height: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
@@ -159,7 +159,6 @@ export default function LargeView({
           >
             <EquippedTiersPreview
               size={Math.min(previewHeight, previewWidth) * 0.92}
-              pixelSize={4}
               equipped={equipped}
               equippingCategory={equippingCategory}
               unequippingCategory={unequippingCategory}

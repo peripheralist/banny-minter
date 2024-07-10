@@ -2,19 +2,19 @@ import { CSSProperties, useEffect, useState } from "react";
 import Fuzz from "./Fuzz";
 
 export default function FuzzMoment({
-  fill,
   width,
   height,
   duration,
   pixelSize,
+  fill,
   style,
   onFinished,
 }: {
-  fill: CSSProperties["fill"];
   width: number;
   height: number;
   duration?: number;
   pixelSize?: number;
+  fill?: CSSProperties["fill"];
   style?: CSSProperties;
   onFinished?: JSX.Element;
 }) {

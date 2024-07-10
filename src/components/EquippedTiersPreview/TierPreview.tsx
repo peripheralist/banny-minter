@@ -35,7 +35,6 @@ export function TierPreview({
   const fuzzConfig = {
     width: size,
     height: size,
-    pixelSize: 4,
     fill: "white",
   };
 
@@ -93,6 +92,8 @@ export function TierPreview({
     if (category !== "naked") return null;
 
     let children: JSX.Element[] = [];
+
+    // console.log("asdf tierpreview", { equipped });
 
     if (!equipped.naked) {
       children.push(<SvgObject key="mannequin" svg={mannequinSvg} />);

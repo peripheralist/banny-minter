@@ -14,7 +14,7 @@ export default function Fuzz({
   getSvg?: (svg: string) => void;
   width: number;
   height: number;
-  fill: CSSProperties["fill"];
+  fill?: CSSProperties["fill"];
   style?: CSSProperties;
 }) {
   const steps = useMemo(() => {
@@ -30,6 +30,7 @@ export default function Fuzz({
 
   const fuzz = useFuzz({
     ...props,
+    fill: "black",
     steps,
     loop: true,
     enabled: true,

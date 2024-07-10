@@ -16,7 +16,7 @@ export default function DressedBannyNftImage({
   const equippedTiers = useBannyEquippedTiers(nft);
 
   if (!equippedTiers || allTiers.loading) {
-    return <Fuzz fill="#ccc" width={size} height={size} pixelSize={4} />;
+    return <Fuzz fill="#ccc" width={size} height={size} />;
   }
 
   return <EquippedTiersPreview equipped={equippedTiers} size={size} />;

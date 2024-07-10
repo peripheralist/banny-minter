@@ -1,6 +1,6 @@
 import { CATEGORY_GROUP_NAMES } from "@/constants/nfts";
 import { EquipmentContext } from "@/contexts/equipmentContext";
-import { useWindowWidth } from "@/hooks/useWindowWidth";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { useContext, useMemo } from "react";
 import EquippedTiersPreview from "../EquippedTiersPreview";
 import RoundedFrame from "../shared/RoundedFrame";
@@ -24,7 +24,7 @@ export default function SmallView({
     setSelectedGroup,
   } = useContext(EquipmentContext);
 
-  const windowWidth = useWindowWidth();
+  const windowWidth = useWindowSize();
   const gridImageSize = useMemo(
     () => (windowWidth && windowWidth > 600 ? 120 : 80),
     [windowWidth]
@@ -65,7 +65,6 @@ export default function SmallView({
         >
           <EquippedTiersPreview
             size={280}
-            pixelSize={4}
             equipped={equipped}
             equippingCategory={equippingCategory}
             unequippingCategory={unequippingCategory}

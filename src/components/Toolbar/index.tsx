@@ -13,6 +13,7 @@ export default function Index() {
   const router = useRouter();
 
   const address = router.query["address"] as `0x${string}`;
+  const tokenId = router.query["tokenId"] as string;
 
   const { data: ensName } = useEnsName({ address });
 
@@ -26,11 +27,14 @@ export default function Index() {
     if (router.pathname.includes("mint")) {
       return "SHOP";
     }
+    if (router.pathname.includes("banny")) {
+      return `DRESSING ROOM: BANNY #${tokenId}`;
+    }
     if (router.pathname.includes("closet")) {
       return `${formattedAddress}'s closet`;
     }
     return null;
-  }, [router.pathname, formattedAddress]);
+  }, [router.pathname, formattedAddress, tokenId]);
 
   const isSmallScreen = useIsSmallScreen();
 

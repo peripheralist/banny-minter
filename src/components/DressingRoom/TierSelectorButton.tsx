@@ -91,7 +91,6 @@ export default function TierSelectorButton({
           <FuzzMoment
             width={buttonSize}
             height={buttonSize}
-            pixelSize={4}
             fill="white"
             style={{ zIndex: 2, position: "absolute" }}
           />

@@ -1,6 +1,6 @@
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import { useNfTsQuery } from "@/generated/graphql";
-import DressOwnedBanny from "@/pages/banny/DressOwnedBanny";
+import DressOwnedBanny from "@/pages/dress/DressOwnedBanny";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
@@ -15,20 +15,22 @@ export default function Index() {
 
   const _tokenId = !tokenId || isNaN(parseInt(tokenId)) ? 0 : parseInt(tokenId);
 
-  const { data: nft, loading: nftsLoading } = useNfTsQuery({
+  const { data: nfts, loading: nftsLoading } = useNfTsQuery({
     variables: {
       where: { tokenId: _tokenId as unknown as bigint },
     },
   });
 
+  const nft = useMemo(() => nfts?.nfts[0], [nfts?.nfts]);
+
   const isOwner = useMemo(
-    () => address?.toLowerCase() === nft?.nfts[0].owner.address.toLowerCase(),
+    () => address?.toLowerCase() === nft?.owner.address.toLowerCase(),
     [address, nft]
   );
 
   if (nftsLoading) return <FullscreenLoading />;
 
-  if (isOwner) return <DressOwnedBanny bannyNft={nft?.nfts[0]} />;
+  if (isOwner) return <DressOwnedBanny bannyNft={nft} />;
 
-  return <PreviewUnownedBanny bannyNft={nft?.nfts[0]} size={400} />;
+  return <PreviewUnownedBanny bannyNft={nft} size={400} />;
 }

@@ -15,7 +15,7 @@ export default function FullscreenLoading() {
         gap: 20,
       }}
     >
-      <Fuzz width={200} height={200} fill="black" pixelSize={10} />
+      <Fuzz width={200} height={200} pixelSize={10} />
       <h1>Loading</h1>
     </div>
   );

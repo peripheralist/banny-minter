@@ -35,13 +35,7 @@ export default function MintButton() {
           }}
         >
           {mintTxPending ? (
-            <Fuzz
-              width={80}
-              height={32}
-              fill="white"
-              pixelSize={4}
-              interval={500}
-            />
+            <Fuzz width={80} height={32} fill="white" interval={500} />
           ) : (
             <div
               style={{
@@ -104,13 +98,7 @@ export default function MintButton() {
         }}
       >
         {mintTxPending ? (
-          <Fuzz
-            width={80}
-            height={32}
-            fill="white"
-            pixelSize={4}
-            interval={500}
-          />
+          <Fuzz width={80} height={32} fill="white" interval={500} />
         ) : (
           <div
             style={{

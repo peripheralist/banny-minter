@@ -91,13 +91,7 @@ export default function Button({
       <Arc deg={270} right="100%" top={0} />
       <Arc deg={270} right="100%" bottom={0} flipX />
       {loading && width ? (
-        <Fuzz
-          width={width}
-          height={height - 20}
-          fill="white"
-          pixelSize={4}
-          interval={250}
-        />
+        <Fuzz width={width} height={height - 20} fill="white" interval={250} />
       ) : (
         <div
           ref={contentRef}

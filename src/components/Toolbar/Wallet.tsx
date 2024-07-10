@@ -35,7 +35,6 @@ export default function Wallet() {
               fill="white"
               width={80}
               height={16}
-              pixelSize={4}
               onFinished={
                 <Link href={`/closet/${address}`} style={{ color: "white" }}>
                   {ensName ?? <span>0x...{address.substring(38)}</span>}

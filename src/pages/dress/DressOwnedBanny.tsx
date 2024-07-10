@@ -20,10 +20,8 @@ export default function DressOwnedBanny({
 }) {
   const { address } = useAccount();
 
-  const { tiers: ownedTiers, loading: tiersLoading } = useOwnedCategorizedTiers(
-    address,
-    true
-  );
+  const { tiers: ownedTiers, loading: tiersLoading } =
+    useOwnedCategorizedTiers(address);
 
   const equippedTiers = useBannyEquippedTiers(bannyNft);
 
