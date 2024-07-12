@@ -24,7 +24,7 @@ export default function SmallView({
     setSelectedGroup,
   } = useContext(EquipmentContext);
 
-  const windowWidth = useWindowSize();
+  const { width: windowWidth } = useWindowSize();
   const gridImageSize = useMemo(
     () => (windowWidth && windowWidth > 600 ? 120 : 80),
     [windowWidth]
