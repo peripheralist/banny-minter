@@ -29,11 +29,11 @@ export default function Fuzz({
   }, [density]);
 
   const fuzz = useFuzz({
-    ...props,
     fill: "black",
     steps,
     loop: true,
     enabled: true,
+    ...props,
   });
 
   if (!fuzz) return null;
