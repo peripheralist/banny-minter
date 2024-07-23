@@ -94,7 +94,7 @@ export default function Index() {
       <div style={{ paddingBottom: 40 }}>
         <h2 style={{ textAlign: "center" }}>{decoded?.name}</h2>
 
-        {isOwned && nft?.category === BigInt(0) && (
+        {isOwned && nft?.category === 0 && (
           <Link href={`/dress/${nft.tokenId.toString()}`}>
             <ButtonPad
               style={{
