@@ -52,7 +52,7 @@ export default function Index() {
       return <DressedBannyNftImage nft={nft} size={size} />;
     }
 
-    if (!nft?.tier) return <Fuzz width={size} height={size} />;
+    if (!nft?.tier) return <Fuzz width={size} height={size} pixelSize={8} fill="#808080" />;
 
     return <TierImage tier={parseTier(nft?.tier)} size={size} />;
   }, [nft, decoded, size]);

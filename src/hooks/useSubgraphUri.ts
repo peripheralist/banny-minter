@@ -8,7 +8,7 @@ export const useSubgraphUri = () => {
   const chain = useChain();
 
   if (isBrowser()) {
-    uri = `https://subgraph.satsuma-prod.com/${SUBGRAPH_KEY}/juicebox/nana-${chain}/api`;
+    uri = `https://subgraph.satsuma-prod.com/${SUBGRAPH_KEY}/juicebox/nana-${chain.name}/api`;
   } else {
     uri = process.env.SUBGRAPH_URL;
     if (!uri) {

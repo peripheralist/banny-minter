@@ -14,13 +14,13 @@ import { useAccount, useTransactionReceipt } from "wagmi";
 export function useMint() {
   const { address: connectedWalletAddress } = useAccount();
   const { contracts } = useJBContractContext();
+
   const jb721DataHookQuery = useFind721DataHook();
+  const jb721DataHookQueryAddress = jb721DataHookQuery.data as `0x${string}`;
 
   const { setAlert } = useContext(AlertContext);
 
   const { equipped, totalEquippedPrice } = useContext(EquipmentContext);
-
-  const jb721DataHookQueryAddress = jb721DataHookQuery.data as `0x${string}`;
 
   const tierIds = useMemo(
     () =>
@@ -92,10 +92,13 @@ export function useMint() {
         });
         break;
       case "error":
-        setAlert?.("Error minting");
+        if (tx.error.name !== "TransactionReceiptNotFoundError") {
+          // TODO seems unnecessary...
+          setAlert?.("Something may have went wrong...");
+        }
         break;
     }
-  }, [tx.status, setAlert, connectedWalletAddress]);
+  }, [tx.status, tx.error?.name, setAlert, connectedWalletAddress]);
 
   return { mint: pay, isLoading: isPending, tx };
 }

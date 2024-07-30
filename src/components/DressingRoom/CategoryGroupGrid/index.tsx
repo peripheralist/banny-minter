@@ -1,6 +1,5 @@
 import { Category, CATEGORY_GROUPS } from "@/constants/nfts";
 import { EquipmentContext } from "@/contexts/equipmentContext";
-import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { Tier } from "@/model/tier";
 import {
   CSSProperties,

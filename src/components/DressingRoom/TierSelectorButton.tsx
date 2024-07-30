@@ -26,38 +26,11 @@ export default function TierSelectorButton({
     return { active, onClick };
   }, [tier, equipped, equip]);
 
+  // Only use sold out treatment if tier is not a NFT
   const isSoldOut = useMemo(
-    () => tier.remainingSupply <= BigInt(0),
-    [tier.remainingSupply]
+    () => tier.remainingSupply <= BigInt(0) && !tier.tokenId,
+    [tier.remainingSupply, tier.tokenId]
   );
-
-  const RemainingSupply = useCallback(() => {
-    if (isSoldOut) {
-      return (
-        <div
-          style={{
-            fontSize: "0.875rem",
-            fontWeight: "bold",
-          }}
-        >
-          SOLD OUT
-        </div>
-      );
-    } else {
-      return (
-        <div
-          style={{
-            fontSize: "0.875rem",
-          }}
-        >
-          <span style={{ fontWeight: "bold" }}>
-            {tier.remainingSupply.toString()}
-          </span>
-          <span>/{tier.initialSupply.toString()} left</span>
-        </div>
-      );
-    }
-  }, [isSoldOut, tier.initialSupply, tier.remainingSupply]);
 
   return (
     <div style={{ position: "relative" }}>
@@ -97,17 +70,19 @@ export default function TierSelectorButton({
         </div>
       </ButtonPad>
 
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: buttonSize + 12,
-          textAlign: "center",
-        }}
-      >
-        <RemainingSupply />
-      </div>
+      {tier.label && (
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: buttonSize + 12,
+            textAlign: "center",
+          }}
+        >
+          {tier.label}
+        </div>
+      )}
     </div>
   );
 }

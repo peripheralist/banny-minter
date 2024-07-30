@@ -9,6 +9,11 @@ export type Tier = {
   price: bigint;
   initialSupply: bigint;
   remainingSupply: bigint;
+
+  label?: JSX.Element | string;
+  detail?: JSX.Element | string;
+
+  tokenId?: number; // Only if NFT
 };
 
 export type Tiers = Record<Category, Tier[]>;

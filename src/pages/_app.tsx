@@ -12,12 +12,17 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { FunctionsMap, withScalars } from "apollo-link-scalars";
 import { IntrospectionQuery, buildClientSchema } from "graphql";
-import { JBContractProvider, JBProjectProvider } from "juice-sdk-react";
+import {
+  JBChainId,
+  JBContractProvider,
+  JBProjectProvider,
+} from "juice-sdk-react";
 import type { AppProps } from "next/app";
 import { PropsWithChildren, useMemo } from "react";
 import { WagmiProvider } from "wagmi";
 import { config } from "../../config.wagmi";
 import introspectionResult from "../../graphql.schema.json";
+import { useChain } from "@/hooks/useChain";
 
 const queryClient = new QueryClient();
 
@@ -27,15 +32,30 @@ export default function App({ Component, pageProps }: AppProps) {
       <AlertContextProvider>
         <WagmiProvider config={config}>
           <_ApolloProvider>
-            <JBProjectProvider projectId={BigInt(BANNYVERSE_PROJECT_ID)}>
-              <JBContractProvider projectId={BigInt(BANNYVERSE_PROJECT_ID)}>
-                <Component {...pageProps} />
-              </JBContractProvider>
-            </JBProjectProvider>
+            <_JBProjectProvider>
+              <Component {...pageProps} />
+            </_JBProjectProvider>
           </_ApolloProvider>
         </WagmiProvider>
       </AlertContextProvider>
     </QueryClientProvider>
+  );
+}
+
+function _JBProjectProvider({ children }: PropsWithChildren) {
+  const chain = useChain();
+
+  if (!chain) return null;
+
+  return (
+    <JBProjectProvider
+      chainId={chain?.id as JBChainId}
+      projectId={BigInt(BANNYVERSE_PROJECT_ID)}
+    >
+      <JBContractProvider projectId={BigInt(BANNYVERSE_PROJECT_ID)}>
+        {children}
+      </JBContractProvider>
+    </JBProjectProvider>
   );
 }
 

@@ -1,7 +1,6 @@
 import { Tier } from "@/model/tier";
 import { CSSProperties } from "react";
 import TierSelectorButton from "../TierSelectorButton";
-import FuzzMoment from "@/components/pixelRenderers/FuzzMoment";
 
 /**
  * Renders a grid of tiers, with size multipliers for different categories.

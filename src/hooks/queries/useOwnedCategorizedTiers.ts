@@ -1,14 +1,10 @@
-import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
+import { BANNYVERSE_COLLECTION_ID, Category } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
-import { Tiers } from "@/model/tier";
-import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { useMemo } from "react";
 import { useCategorizedTiers } from "./useCategorizedTiers";
+import { Tier } from "@/model/tier";
 
-export function useOwnedCategorizedTiers(
-  wallet: string | undefined,
-  onlyUnworn?: boolean
-) {
+export function useOwnedCategorizedTiers(wallet: string | undefined) {
   const { data: nfts, loading: nftsLoading } = useNfTsQuery({
     variables: {
       where: {
@@ -28,23 +24,17 @@ export function useOwnedCategorizedTiers(
     return Object.entries(tiers).reduce(
       (acc, [category, tiersOfCategory]) => ({
         ...acc,
-        [category]: tiersOfCategory.filter((t) => {
-          const nft = nfts?.nfts.find((nft) => nft.tier.tierId === t.tierId);
-
-          // TODO can maybe remove onlyUnworn logic?
-          if (onlyUnworn) {
-            // return true if NFT of tier is owned, and is currently not equipped to a banny
-            const info = decodeNFTInfo(nft?.tokenUri);
-            return nft && info?.wornByNakedBannyId === "0";
-          }
-
-          // return true if NFT of tier is owned
-          return !!nft;
-        }),
+        [category]: tiersOfCategory
+          .map((t) => ({
+            tier: t,
+            quantity: nfts?.nfts.filter((nft) => nft.tier.tierId === t.tierId)
+              .length,
+          }))
+          .filter((t) => t.quantity),
       }),
-      {} as Tiers
+      {} as Record<Category, { tier: Tier; quantity: number }[]>
     );
-  }, [tiers, nfts, onlyUnworn]);
+  }, [tiers, nfts]);
 
   return {
     tiers: ownedTiers,
