@@ -11,6 +11,7 @@ export const parseTier = (
   return info
     ? {
         ...info,
+        tokenId: parseInt(info.tokenId),
         name: info.productName,
         category: categoryOfId[tier.category],
         tierId: tier.tierId,
