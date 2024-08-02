@@ -93,8 +93,6 @@ export function TierPreview({
 
     let children: JSX.Element[] = [];
 
-    // console.log("asdf tierpreview", { equipped });
-
     if (!equipped.naked) {
       children.push(<SvgObject key="mannequin" svg={mannequinSvg} />);
     } else {

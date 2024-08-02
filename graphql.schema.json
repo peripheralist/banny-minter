@@ -2086,6 +2086,29 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "Aggregation_interval",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "day",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hour",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "SCALAR",
         "name": "BigDecimal",
         "description": null,
@@ -96331,6 +96354,16 @@
         "possibleTypes": null
       },
       {
+        "kind": "SCALAR",
+        "name": "Timestamp",
+        "description": "A string representation of microseconds UNIX timestamp (16 digits)\n",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "UseAllowanceEvent",
         "description": null,
@@ -105310,6 +105343,18 @@
                 "name": "Int",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "parentHash",
+            "description": "The hash of the parent block",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Bytes",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

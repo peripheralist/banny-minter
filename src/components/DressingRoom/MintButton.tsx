@@ -14,11 +14,11 @@ export default function MintButton() {
 
   const { totalEquippedPrice } = useContext(EquipmentContext);
 
-  const { mint, isLoading, tx } = useMint();
+  const { mint, isPending } = useMint();
 
   const isSmallScreen = useIsSmallScreen();
 
-  const mintTxPending = isLoading || tx.isLoading;
+  const mintTxPending = isPending;
 
   if (isSmallScreen)
     return (

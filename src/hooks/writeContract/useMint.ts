@@ -14,6 +14,7 @@ import { useAccount, useTransactionReceipt } from "wagmi";
 export function useMint() {
   const { address: connectedWalletAddress } = useAccount();
   const { contracts } = useJBContractContext();
+  const terminalAddress = contracts.primaryNativeTerminal.data;
 
   const jb721DataHookQuery = useFind721DataHook();
   const jb721DataHookQueryAddress = jb721DataHookQuery.data as `0x${string}`;
@@ -39,44 +40,45 @@ export function useMint() {
 
   const memo = useMemo(() => `Minted tiers ${tierIds.join(", ")}`, [tierIds]);
 
-  const {
-    writeContract,
-    isPending,
-    data: hash, // I think?
-  } = useWriteJbMultiTerminalPay();
+  const { writeContract, isPending, data: hash } = useWriteJbMultiTerminalPay();
 
-  const pay = useCallback(() => {
-    const terminalAddress = contracts.primaryNativeTerminal.data;
-
+  const mint = useCallback(() => {
     if (!connectedWalletAddress || !terminalAddress || !totalEquippedPrice) {
       console.error("Missing something smh", {
         connectedWalletAddress,
         terminalAddress,
         totalEquippedPrice,
       });
+      setAlert?.("Something went wrong :(");
       return;
     }
 
-    writeContract({
-      address: terminalAddress,
-      args: [
-        BigInt(BANNYVERSE_PROJECT_ID),
-        NATIVE_TOKEN,
-        totalEquippedPrice,
-        connectedWalletAddress, // mint to connected wallet
-        BigInt(0),
-        memo,
-        metadata ?? DEFAULT_METADATA,
-      ],
-      value: totalEquippedPrice ?? undefined,
-    });
+    writeContract(
+      {
+        address: terminalAddress,
+        args: [
+          BigInt(BANNYVERSE_PROJECT_ID),
+          NATIVE_TOKEN,
+          totalEquippedPrice,
+          connectedWalletAddress, // mint to connected wallet
+          BigInt(0),
+          memo,
+          metadata ?? DEFAULT_METADATA,
+        ],
+        value: totalEquippedPrice ?? undefined,
+      },
+      {
+        onSuccess: () => console.log("hi"),
+      }
+    );
   }, [
     writeContract,
     totalEquippedPrice,
     connectedWalletAddress,
     memo,
     metadata,
-    contracts.primaryNativeTerminal.data,
+    terminalAddress,
+    setAlert,
   ]);
 
   const tx = useTransactionReceipt({
@@ -93,12 +95,12 @@ export function useMint() {
         break;
       case "error":
         if (tx.error.name !== "TransactionReceiptNotFoundError") {
-          // TODO seems unnecessary...
-          setAlert?.("Something may have went wrong...");
+          // TODO seems silly...
+          setAlert?.("Something may have gone wrong...");
         }
         break;
     }
   }, [tx.status, tx.error?.name, setAlert, connectedWalletAddress]);
 
-  return { mint: pay, isLoading: isPending, tx };
+  return { mint, isPending };
 }

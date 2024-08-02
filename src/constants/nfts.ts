@@ -1,5 +1,3 @@
-import { Tier } from "@/model/tier";
-
 export const BANNYVERSE_COLLECTION_ID = process.env
   .NEXT_PUBLIC_BANNYVERSE_COLLECTION_ID as `0x${string}`;
 

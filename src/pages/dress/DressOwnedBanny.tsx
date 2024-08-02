@@ -40,7 +40,15 @@ export default function DressOwnedBanny({
       );
     }
 
-    function detailForTier(tier: Tier) {
+    function detailForTier({
+      category,
+      name,
+      tokenId,
+    }: {
+      category: Category;
+      name: string | undefined;
+      tokenId: bigint;
+    }) {
       return (
         <div style={{ display: "flex" }}>
           <div
@@ -51,7 +59,7 @@ export default function DressOwnedBanny({
               color: COLORS.banana,
             }}
           >
-            {tier.category}:
+            {category}:
           </div>
           <div
             style={{
@@ -60,9 +68,9 @@ export default function DressOwnedBanny({
               justifyContent: "space-between",
             }}
           >
-            <span>{tier?.name ? tier.name : "--"}</span>
+            <span>{name ? name : "--"}</span>
             <span style={{ opacity: 0.5 }}>
-              {tier?.tokenId ? `ID: ${tier.tokenId}` : null}
+              {tokenId ? `ID: ${tokenId.toString()}` : null}
             </span>
           </div>
         </div>
@@ -70,16 +78,23 @@ export default function DressOwnedBanny({
     }
 
     return Object.entries(ownedTiers).reduce(
-      (acc, [category, tiersOfCategory]) => {
-        return {
-          ...acc,
-          [category]: tiersOfCategory.map((t) => ({
+      (acc, [category, tiersOfCategory]) => ({
+        ...acc,
+        [category]: tiersOfCategory.map((t) => {
+          const tokenId = t.nfts[0].tokenId; // override tier tokenId with tokenId of first NFT
+
+          return {
             ...t.tier,
-            label: labelForTier(t.quantity),
-            detail: detailForTier(t.tier),
-          })),
-        };
-      },
+            tokenId,
+            label: labelForTier(t.nfts.length),
+            detail: detailForTier({
+              category: t.tier.category,
+              name: t.tier.name,
+              tokenId,
+            }),
+          };
+        }),
+      }),
       {} as Tiers
     );
   }, [ownedTiers]);

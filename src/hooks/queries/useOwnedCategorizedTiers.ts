@@ -1,5 +1,5 @@
 import { BANNYVERSE_COLLECTION_ID, Category } from "@/constants/nfts";
-import { useNfTsQuery } from "@/generated/graphql";
+import { NfTsQuery, Nft, useNfTsQuery } from "@/generated/graphql";
 import { useMemo } from "react";
 import { useCategorizedTiers } from "./useCategorizedTiers";
 import { Tier } from "@/model/tier";
@@ -25,14 +25,22 @@ export function useOwnedCategorizedTiers(wallet: string | undefined) {
       (acc, [category, tiersOfCategory]) => ({
         ...acc,
         [category]: tiersOfCategory
-          .map((t) => ({
-            tier: t,
-            quantity: nfts?.nfts.filter((nft) => nft.tier.tierId === t.tierId)
-              .length,
-          }))
-          .filter((t) => t.quantity),
+          .map((tier) => {
+            const nftsOfTier = nfts?.nfts.filter(
+              (nft) => nft.tier.tierId === tier.tierId
+            );
+
+            return {
+              tier,
+              nfts: nftsOfTier,
+            };
+          })
+          .filter((t) => !!t.nfts.length),
       }),
-      {} as Record<Category, { tier: Tier; quantity: number }[]>
+      {} as Record<
+        Category,
+        { tier: Tier; nfts: NfTsQuery["nfts"][number][] }[]
+      >
     );
   }, [tiers, nfts]);
 

@@ -21,6 +21,7 @@ export type Scalars = {
   BigInt: { input: bigint; output: bigint; }
   Bytes: { input: any; output: any; }
   Int8: { input: any; output: any; }
+  Timestamp: { input: any; output: any; }
 };
 
 export type AddToBalanceEvent = {
@@ -200,6 +201,11 @@ export enum AddToBalanceEvent_OrderBy {
   terminal = 'terminal',
   timestamp = 'timestamp',
   txHash = 'txHash'
+}
+
+export enum Aggregation_Interval {
+  day = 'day',
+  hour = 'hour'
 }
 
 export type BlockChangedFilter = {
@@ -9621,6 +9627,8 @@ export type _Block_ = {
   hash: Maybe<Scalars['Bytes']['output']>;
   /** The block number */
   number: Scalars['Int']['output'];
+  /** The hash of the parent block */
+  parentHash: Maybe<Scalars['Bytes']['output']>;
   /** Integer representation of the timestamp stored in blocks for the chain */
   timestamp: Maybe<Scalars['Int']['output']>;
 };
@@ -9747,6 +9755,7 @@ export type ResolversTypes = {
   AddToBalanceEvent: ResolverTypeWrapper<AddToBalanceEvent>;
   AddToBalanceEvent_filter: AddToBalanceEvent_Filter;
   AddToBalanceEvent_orderBy: AddToBalanceEvent_OrderBy;
+  Aggregation_interval: Aggregation_Interval;
   BigDecimal: ResolverTypeWrapper<Scalars['BigDecimal']['output']>;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>;
   BlockChangedFilter: BlockChangedFilter;
@@ -9857,6 +9866,7 @@ export type ResolversTypes = {
   TapEvent: ResolverTypeWrapper<TapEvent>;
   TapEvent_filter: TapEvent_Filter;
   TapEvent_orderBy: TapEvent_OrderBy;
+  Timestamp: ResolverTypeWrapper<Scalars['Timestamp']['output']>;
   UseAllowanceEvent: ResolverTypeWrapper<UseAllowanceEvent>;
   UseAllowanceEvent_filter: UseAllowanceEvent_Filter;
   UseAllowanceEvent_orderBy: UseAllowanceEvent_OrderBy;
@@ -9955,6 +9965,7 @@ export type ResolversParentTypes = {
   Subscription: {};
   TapEvent: TapEvent;
   TapEvent_filter: TapEvent_Filter;
+  Timestamp: Scalars['Timestamp']['output'];
   UseAllowanceEvent: UseAllowanceEvent;
   UseAllowanceEvent_filter: UseAllowanceEvent_Filter;
   V1ConfigureEvent: V1ConfigureEvent;
@@ -10758,6 +10769,10 @@ export type TapEventResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface TimestampScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Timestamp'], any> {
+  name: 'Timestamp';
+}
+
 export type UseAllowanceEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['UseAllowanceEvent'] = ResolversParentTypes['UseAllowanceEvent']> = {
   amount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   amountUSD?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
@@ -10833,6 +10848,7 @@ export type WalletResolvers<ContextType = any, ParentType extends ResolversParen
 export type _Block_Resolvers<ContextType = any, ParentType extends ResolversParentTypes['_Block_'] = ResolversParentTypes['_Block_']> = {
   hash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
   number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  parentHash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
   timestamp?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -10884,6 +10900,7 @@ export type Resolvers<ContextType = any> = {
   SetFundAccessConstraintsEvent?: SetFundAccessConstraintsEventResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   TapEvent?: TapEventResolvers<ContextType>;
+  Timestamp?: GraphQLScalarType;
   UseAllowanceEvent?: UseAllowanceEventResolvers<ContextType>;
   V1ConfigureEvent?: V1ConfigureEventResolvers<ContextType>;
   V1InitEvent?: V1InitEventResolvers<ContextType>;

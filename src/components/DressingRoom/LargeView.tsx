@@ -171,7 +171,6 @@ export default function LargeView({
             display: "flex",
             alignItems: "stretch",
             gap: 10,
-            minHeight: '12vh',
           }}
         >
           <div style={{ flex: 1 }}>

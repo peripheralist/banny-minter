@@ -16,6 +16,7 @@ import {
   JBChainId,
   JBContractProvider,
   JBProjectProvider,
+  JBRulesetContext,
 } from "juice-sdk-react";
 import type { AppProps } from "next/app";
 import { PropsWithChildren, useMemo } from "react";
@@ -32,9 +33,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <AlertContextProvider>
         <WagmiProvider config={config}>
           <_ApolloProvider>
-            <_JBProjectProvider>
+            <JBProvider>
               <Component {...pageProps} />
-            </_JBProjectProvider>
+            </JBProvider>
           </_ApolloProvider>
         </WagmiProvider>
       </AlertContextProvider>
@@ -42,14 +43,14 @@ export default function App({ Component, pageProps }: AppProps) {
   );
 }
 
-function _JBProjectProvider({ children }: PropsWithChildren) {
+function JBProvider({ children }: PropsWithChildren) {
   const chain = useChain();
 
   if (!chain) return null;
 
   return (
     <JBProjectProvider
-      chainId={chain?.id as JBChainId}
+      chainId={chain.id as JBChainId}
       projectId={BigInt(BANNYVERSE_PROJECT_ID)}
     >
       <JBContractProvider projectId={BigInt(BANNYVERSE_PROJECT_ID)}>
