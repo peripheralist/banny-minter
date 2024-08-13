@@ -1,5 +1,6 @@
 import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
 import AlertContextProvider from "@/contexts/AlertContextProvider";
+import { useChain } from "@/hooks/useChain";
 import { useSubgraphUri } from "@/hooks/useSubgraphUri";
 import "@/styles/globals.css";
 import {
@@ -16,14 +17,12 @@ import {
   JBChainId,
   JBContractProvider,
   JBProjectProvider,
-  JBRulesetContext,
 } from "juice-sdk-react";
 import type { AppProps } from "next/app";
 import { PropsWithChildren, useMemo } from "react";
 import { WagmiProvider } from "wagmi";
 import { config } from "../../config.wagmi";
 import introspectionResult from "../../graphql.schema.json";
-import { useChain } from "@/hooks/useChain";
 
 const queryClient = new QueryClient();
 

@@ -4,7 +4,8 @@ import DressOwnedBanny from "@/pages/dress/DressOwnedBanny";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
-import PreviewUnownedBanny from "./PreviewUnownedBanny";
+import DressedBannyNftImage from "../closet/DressedBannyNftImage";
+import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 
 export default function Index() {
   const { address } = useAccount();
@@ -17,7 +18,10 @@ export default function Index() {
 
   const { data: nfts, loading: nftsLoading } = useNfTsQuery({
     variables: {
-      where: { tokenId: _tokenId as unknown as bigint },
+      where: {
+        tokenId: _tokenId as unknown as bigint,
+        collection: BANNYVERSE_COLLECTION_ID,
+      },
     },
   });
 
@@ -32,5 +36,5 @@ export default function Index() {
 
   if (isOwner) return <DressOwnedBanny bannyNft={nft} />;
 
-  return <PreviewUnownedBanny bannyNft={nft} size={400} />;
+  return <DressedBannyNftImage nft={nft} size={400} />;
 }

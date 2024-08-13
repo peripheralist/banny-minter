@@ -1,18 +1,16 @@
-import { CATEGORY_IDS, Category } from "@/constants/nfts";
+import { CATEGORY_IDS } from "@/constants/nfts";
 
 type NumString = `${number}`;
 
-type EquippedIds = Record<`${Exclude<Category, "naked">}Upc`, NumString>;
-
 type NakedInfo = {
-  category: "0";
+  category: 0;
   wornByNakedBannyId?: NumString;
-} & EquippedIds;
+};
 
 type AllOtherInfo = {
-  category: `"${Exclude<(typeof CATEGORY_IDS)[keyof typeof CATEGORY_IDS], 0>}"`;
+  category: Exclude<(typeof CATEGORY_IDS)[keyof typeof CATEGORY_IDS], 0>;
   wornByNakedBannyId: NumString;
-} & Partial<EquippedIds>;
+};
 
 export type NFTInfo = {
   name: string;
@@ -27,4 +25,5 @@ export type NFTInfo = {
   decimals: NumString;
   currency: NumString;
   description: string;
+  outfitIds?: bigint[];
 } & (NakedInfo | AllOtherInfo);

@@ -22,9 +22,14 @@
   font-family: "VT323";
   src: url("/fonts/VT323-Regular.ttf");
 }
+@font-face {
+  font-family: "Tronica Mono";
+  src: url("/fonts/Tronica Mono.woff");
+}
 
 *, a {
   font-family: "VT323", monospace;
+  /* font-family: "Tronica Mono", monospace; */
   cursor: crosshair;
 }
 

@@ -81,7 +81,12 @@ export function TierPreview({
     ({ svg, style }: { svg: string | undefined; style?: CSSProperties }) =>
       svg ? (
         <object
-          style={{ position: "absolute", ...style, width: size, height: size }}
+          style={{
+            position: "absolute",
+            ...style,
+            width: size,
+            height: size,
+          }}
           data={`data:image/svg+xml;base64,${btoa(svg)}`}
         />
       ) : null,

@@ -1,18 +1,20 @@
 import SingleFrameToolbarView from "@/components/SingleFrameToolbarView";
 import Fuzz from "@/components/pixelRenderers/Fuzz";
+import ButtonPad from "@/components/shared/ButtonPad";
 import TierImage from "@/components/shared/TierImage";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { parseTier } from "@/utils/parseTier";
 import { isArray } from "@apollo/client/utilities";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
-import DressedBannyNftImage from "../closet/DressedBannyNftImage";
-import { formatEther, isAddressEqual, parseEther } from "viem";
+import { formatEther, isAddressEqual } from "viem";
 import { useAccount } from "wagmi";
-import ButtonPad from "@/components/shared/ButtonPad";
-import Link from "next/link";
+import DressedBannyNftImage from "../closet/DressedBannyNftImage";
+import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
+import { useBannyEquippedTiers } from "@/hooks/useBannyEquippedTiers";
 
 export default function Index() {
   const { address } = useAccount();
@@ -28,7 +30,12 @@ export default function Index() {
   }, [router.query]);
 
   const { data } = useNfTsQuery({
-    variables: { where: { tokenId: tokenId as unknown as bigint } },
+    variables: {
+      where: {
+        tokenId: tokenId as unknown as bigint,
+        collection: BANNYVERSE_COLLECTION_ID,
+      },
+    },
   });
 
   const smallScreen = useIsSmallScreen();
@@ -45,14 +52,18 @@ export default function Index() {
     [nft?.owner.address, address]
   );
 
+  const { data: equippedTiers } = useBannyEquippedTiers(nft);
+
   const decoded = decodeNFTInfo(nft?.tokenUri);
 
   const NftImage = useCallback(() => {
-    if (decoded?.category === "0") {
+    if (decoded?.category === 0) {
       return <DressedBannyNftImage nft={nft} size={size} />;
     }
 
-    if (!nft?.tier) return <Fuzz width={size} height={size} pixelSize={8} fill="#808080" />;
+    if (!nft?.tier) {
+      return <Fuzz width={size} height={size} pixelSize={8} fill="#808080" />;
+    }
 
     return <TierImage tier={parseTier(nft?.tier)} size={size} />;
   }, [nft, decoded, size]);
@@ -118,28 +129,36 @@ export default function Index() {
             marginTop: 30,
           }}
         >
-          <NftInfoRow label="Owner" value={nft?.owner.address} />
-          <NftInfoRow
-            label="Purchase price"
-            value={
-              decoded?.price ? `${formatEther(BigInt(decoded.price))} ETH` : 0
-            }
-          />
-          <NftInfoRow label="Category" value={decoded?.categoryName} />
-          <NftInfoRow label="Total supply" value={decoded?.supply} />
-          <NftInfoRow label="Remaining" value={decoded?.remaining} />
-          <NftInfoRow label="UPC" value={decoded?.upc} />
           <NftInfoRow label="Token Id" value={decoded?.tokenId} />
+          <NftInfoRow label="Category" value={decoded?.categoryName} />
+          <NftInfoRow label="Owner" value={nft?.owner.address} />
           {decoded?.wornByNakedBannyId ? (
             <NftInfoRow
               label="Equipped"
               value={decoded.wornByNakedBannyId === "0" ? "NO" : "YES"}
             />
           ) : null}
+          {decoded?.outfitIds?.length && equippedTiers ? (
+            <NftInfoRow
+              label="Wearing"
+              value={Object.values(equippedTiers)
+                .filter((t) => t?.category !== "naked")
+                .map((t) => t?.name)
+                .join(", ")}
+            />
+          ) : null}
+          <NftInfoRow label="Total supply" value={decoded?.supply} />
+          <NftInfoRow label="UPC" value={decoded?.upc} />
+          <NftInfoRow
+            label="Purchase price"
+            value={
+              decoded?.price ? `${formatEther(BigInt(decoded.price))} ETH` : 0
+            }
+          />
         </div>
       </div>
     );
-  }, [decoded, NftInfoRow, isOwned, nft]);
+  }, [decoded, NftInfoRow, isOwned, nft, equippedTiers]);
 
   return (
     <SingleFrameToolbarView

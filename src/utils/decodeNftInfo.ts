@@ -10,7 +10,14 @@ export function decodeNFTInfo(
 
     const jsonStr = atob(base64);
 
-    return JSON.parse(jsonStr);
+    const json = JSON.parse(jsonStr.replaceAll(",]", "]"));
+
+    return {
+      ...json,
+      ...(json.outfitIds
+        ? { outfitIds: json.outfitIds.map((o: number) => BigInt(o)) } // convert outfitIds to BigInts
+        : {}),
+    };
   } catch (e) {
     console.error("Failed to decode nft info", { uri, error: e });
   }

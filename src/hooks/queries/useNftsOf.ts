@@ -1,7 +1,7 @@
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 
-export function useNftsOf(wallet: string | undefined) {
+export function useNftsOf(wallet: `0x${string}` | undefined) {
   return useNfTsQuery({
     variables: {
       where: {

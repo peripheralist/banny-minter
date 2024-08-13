@@ -7,7 +7,7 @@ import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { NfTsQuery } from "@/generated/graphql";
 import { useOwnedCategorizedTiers } from "@/hooks/queries/useOwnedCategorizedTiers";
 import { useBannyEquippedTiers } from "@/hooks/useBannyEquippedTiers";
-import { Tier, Tiers } from "@/model/tier";
+import { Tiers } from "@/model/tier";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
@@ -99,7 +99,7 @@ export default function DressOwnedBanny({
     );
   }, [ownedTiers]);
 
-  const equippedTiers = useBannyEquippedTiers(bannyNft);
+  const { data: equippedTiers } = useBannyEquippedTiers(bannyNft);
 
   const equippedTierIds = useMemo(() => {
     if (!equippedTiers) return {};

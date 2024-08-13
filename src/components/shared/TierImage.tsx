@@ -1,5 +1,6 @@
 import { Tier } from "@/model/tier";
 import React, { useCallback } from "react";
+import Fuzz from "../pixelRenderers/Fuzz";
 
 export default function TierImage({
   tier,
@@ -9,7 +10,7 @@ export default function TierImage({
   size: number;
 }) {
   const _Image = useCallback(() => {
-    if (!tier?.image) return null;
+    if (!tier?.image) return <Fuzz width={size} height={size} />;
 
     switch (tier.category) {
       case "glasses":

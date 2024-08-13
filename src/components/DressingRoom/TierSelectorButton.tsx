@@ -1,7 +1,8 @@
 import { COLORS } from "@/constants/colors";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { Tier } from "@/model/tier";
-import { useCallback, useContext, useMemo } from "react";
+import { useContext, useMemo } from "react";
+import Fuzz from "../pixelRenderers/Fuzz";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
 import TierImage from "../shared/TierImage";
@@ -49,7 +50,11 @@ export default function TierSelectorButton({
             overflow: "hidden",
           }}
         >
-          <TierImage tier={tier} size={buttonSize} />
+          {tier ? (
+            <TierImage tier={tier} size={buttonSize} />
+          ) : (
+            <Fuzz width={buttonSize} height={buttonSize} />
+          )}
 
           <div
             style={{
