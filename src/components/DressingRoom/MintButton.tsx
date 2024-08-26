@@ -8,6 +8,7 @@ import { useAccount } from "wagmi";
 import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
+import { FONT_SIZE } from "@/constants/fontSize";
 
 export default function MintButton() {
   const { address } = useAccount();
@@ -20,15 +21,14 @@ export default function MintButton() {
 
   const mintTxPending = isPending;
 
-  if (isSmallScreen)
+  if (isSmallScreen) {
     return (
       <RoundedFrame>
         <ButtonPad
-          disabled={mintTxPending || !address}
           style={{
-            height: 80,
-            padding: 1,
+            padding: 20,
           }}
+          disabled={mintTxPending || !address}
           fillFg={COLORS.pink}
           onClick={() => {
             mint();
@@ -40,7 +40,7 @@ export default function MintButton() {
             <div
               style={{
                 textAlign: "center",
-                fontSize: "3rem",
+                fontSize: FONT_SIZE["2xl"],
               }}
             >
               <div
@@ -55,9 +55,9 @@ export default function MintButton() {
               {!address && (
                 <div
                   style={{
-                    fontSize: "1.6rem",
                     textTransform: "uppercase",
                     color: "white",
+                    fontSize: FONT_SIZE.md,
                   }}
                 >
                   No wallet
@@ -70,7 +70,6 @@ export default function MintButton() {
         <div
           style={{
             padding: 8,
-            fontSize: "2rem",
             textAlign: "center",
             fontWeight: "bold",
             background: "#ffffff",
@@ -83,19 +82,28 @@ export default function MintButton() {
         </div>
       </RoundedFrame>
     );
+  }
 
   return (
-    <RoundedFrame style={{ width: "100%", minWidth: 150 }}>
+    <RoundedFrame
+      background="white"
+      style={{
+        padding: "0px 0px",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+      }}
+    >
       <ButtonPad
         disabled={mintTxPending || !address}
         style={{
-          height: 100,
-          padding: 1,
+          width: 180,
+          padding: 24,
+          height: "100%",
         }}
+        containerStyle={{ flex: 1 }}
         fillFg={COLORS.pink}
-        onClick={() => {
-          mint();
-        }}
+        onClick={mint}
       >
         {mintTxPending ? (
           <Fuzz width={80} height={32} fill="white" interval={500} />
@@ -103,7 +111,7 @@ export default function MintButton() {
           <div
             style={{
               textAlign: "center",
-              fontSize: "3rem",
+              fontSize: FONT_SIZE["2xl"],
             }}
           >
             <div
@@ -117,9 +125,9 @@ export default function MintButton() {
             {!address && (
               <div
                 style={{
-                  fontSize: "1.6rem",
                   textTransform: "uppercase",
                   color: "white",
+                  fontSize: FONT_SIZE.lg,
                 }}
               >
                 No wallet
@@ -131,11 +139,10 @@ export default function MintButton() {
 
       <div
         style={{
-          padding: 8,
-          fontSize: "2rem",
+          padding: 12,
+          paddingTop: 16,
           textAlign: "center",
           fontWeight: "bold",
-          background: "#ffffff",
         }}
       >
         {totalEquippedPrice ? formatEther(totalEquippedPrice) : "--"} ETH

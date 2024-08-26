@@ -1,6 +1,7 @@
 import { Tier } from "@/model/tier";
 import { CSSProperties } from "react";
 import TierSelectorButton from "../TierSelectorButton";
+import { FONT_SIZE } from "@/constants/fontSize";
 
 /**
  * Renders a grid of tiers, with size multipliers for different categories.
@@ -21,7 +22,7 @@ export default function TiersGrid({
 
   if (!tiers?.length)
     return (
-      <div style={{ fontSize: "1.875rem", whiteSpace: "pre" }}>
+      <div style={{ fontSize: FONT_SIZE.lg, whiteSpace: "pre" }}>
         No items available
       </div>
     );

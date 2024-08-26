@@ -1,7 +1,10 @@
 import { Tier } from "@/model/tier";
 import { useFind721DataHook } from "juice-sdk-react";
 import { useResolverAddress } from "../useResolverAddress";
-import { useWriteContractHandler } from "./useWriteContractHandler";
+import {
+  WriteContractHandlerOptions,
+  useWriteContractHandler,
+} from "./useWriteContractHandler";
 
 const decorateBannyWithAbi = [
   {
@@ -34,32 +37,44 @@ const decorateBannyWithAbi = [
   },
 ];
 
-export function useDecorateBanny() {
+export function useDecorateBanny(options?: WriteContractHandlerOptions) {
   const resolverAddress = useResolverAddress();
 
   const jb721DataHookQuery = useFind721DataHook();
   const jb721DataHookQueryAddress = jb721DataHookQuery.data as `0x${string}`;
 
-  const { write: decorateBanny, ...data } = useWriteContractHandler({
-    abi: decorateBannyWithAbi,
-    address: resolverAddress,
-    functionName: "decorateBannyWith",
-    args: ({
-      nakedBanny,
-      world,
-      outfits,
-    }: {
-      nakedBanny: Tier | undefined;
-      world: Tier | undefined;
-      outfits: Tier[];
-    }) => {
-      const nakedBannyId = BigInt(nakedBanny?.tokenId ?? 0);
-      const worldId = BigInt(world?.tokenId ?? 0);
-      const outfitIds = outfits.map((o) => BigInt(o.tokenId!));
+  const { write: decorateBanny, ...data } = useWriteContractHandler(
+    {
+      abi: decorateBannyWithAbi,
+      address: resolverAddress,
+      functionName: "decorateBannyWith",
+      args: ({
+        nakedBanny,
+        world,
+        outfits,
+      }: {
+        nakedBanny: Tier | undefined;
+        world: Tier | undefined;
+        outfits: Tier[];
+      }) => {
+        const nakedBannyId = BigInt(nakedBanny?.tokenId ?? 0);
+        const worldId = BigInt(world?.tokenId ?? 0);
+        const outfitIds = outfits.map((o) => BigInt(o.tokenId!));
 
-      return [jb721DataHookQueryAddress, nakedBannyId, worldId, outfitIds];
+        const args = [
+          jb721DataHookQueryAddress,
+          nakedBannyId,
+          worldId,
+          outfitIds,
+        ];
+
+        console.info("Creating transaction with args:", args);
+
+        return args;
+      },
     },
-  });
+    options
+  );
 
   return { decorateBanny, ...data };
 }

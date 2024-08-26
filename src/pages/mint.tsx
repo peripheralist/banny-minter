@@ -2,7 +2,6 @@ import DressingRoom from "@/components/DressingRoom";
 import MintButton from "@/components/DressingRoom/MintButton";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import { COLORS } from "@/constants/colors";
-import { Category } from "@/constants/nfts";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { Tier, Tiers } from "@/model/tier";
@@ -21,27 +20,14 @@ export default function Mint() {
 
     function labelForTier(tier: Tier) {
       if (tier.remainingSupply <= BigInt(0)) {
-        return (
-          <div
-            style={{
-              fontSize: "0.875rem",
-              fontWeight: "bold",
-            }}
-          >
-            SOLD OUT
-          </div>
-        );
+        return <div>SOLD OUT</div>;
       } else {
         return (
-          <div
-            style={{
-              fontSize: "0.875rem",
-            }}
-          >
-            <span style={{ fontWeight: "bold" }}>
-              {tier.remainingSupply.toString()}
+          <div>
+            <span>{tier.remainingSupply.toString()}</span>
+            <span style={{ opacity: 0.6 }}>
+              /{tier.initialSupply.toString()}
             </span>
-            <span>/{tier.initialSupply.toString()} left</span>
           </div>
         );
       }
@@ -49,27 +35,15 @@ export default function Mint() {
 
     function detailForTier(tier: Tier) {
       return (
-        <div style={{ display: "flex" }}>
-          <div
-            style={{
-              fontWeight: "bold",
-              width: "10%",
-              minWidth: 100,
-              color: COLORS.banana,
-            }}
-          >
-            {tier.category}:
-          </div>
-          <div
-            style={{
-              width: "100%",
-              display: "inline-flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <span>{tier?.name ? tier.name : "--"}</span>
-            <span>{tier?.price ? formatEther(tier.price) : "--"} ETH </span>
-          </div>
+        <div
+          style={{
+            width: "100%",
+            display: "inline-flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <span>{tier?.name ? tier.name : "--"}</span>
+          <span>{tier?.price ? formatEther(tier.price) : "--"} ETH </span>
         </div>
       );
     }
@@ -104,7 +78,11 @@ export default function Mint() {
             availableTiers={formattedTiers}
             defaultEquippedTierIds={{ naked: formattedTiers.naked[0].tierId }}
           >
-            <DressingRoom button={<MintButton />} includeBannyButtons />
+            <DressingRoom
+              button={<MintButton />}
+              includeBannyButtons
+              includeShuffle
+            />
           </EquipmentContextProvider>
         ) : (
           <FullscreenLoading />

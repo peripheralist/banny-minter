@@ -1,20 +1,12 @@
-import { BANNYVERSE_COLLECTION_ID, Category } from "@/constants/nfts";
-import { NfTsQuery, Nft, useNfTsQuery } from "@/generated/graphql";
+import { Category } from "@/constants/nfts";
+import { NfTsQuery } from "@/generated/graphql";
+import { Tier } from "@/model/tier";
 import { useMemo } from "react";
 import { useCategorizedTiers } from "./useCategorizedTiers";
-import { Tier } from "@/model/tier";
+import { useNftsOf } from "./useNftsOf";
 
-export function useOwnedCategorizedTiers(wallet: string | undefined) {
-  const { data: nfts, loading: nftsLoading } = useNfTsQuery({
-    variables: {
-      where: {
-        collection: BANNYVERSE_COLLECTION_ID,
-        owner_: {
-          wallet: wallet?.toLowerCase() ?? null,
-        },
-      },
-    },
-  });
+export function useOwnedCategorizedTiers(wallet: `0x${string}` | undefined) {
+  const { data: nfts, loading: nftsLoading } = useNftsOf(wallet);
 
   const { tiers, loading: tiersLoading } = useCategorizedTiers();
 

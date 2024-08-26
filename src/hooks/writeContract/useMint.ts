@@ -40,16 +40,23 @@ export function useMint() {
 
   const memo = useMemo(() => `Minted tiers ${tierIds.join(", ")}`, [tierIds]);
 
-  const { writeContract, isPending, data: hash } = useWriteJbMultiTerminalPay();
+  const {
+    writeContract,
+    isPending,
+    data: hash,
+    error,
+  } = useWriteJbMultiTerminalPay();
 
   const mint = useCallback(() => {
+    if (!tierIds.length) return;
+
     if (!connectedWalletAddress || !terminalAddress || !totalEquippedPrice) {
       console.error("Missing something smh", {
         connectedWalletAddress,
         terminalAddress,
         totalEquippedPrice,
       });
-      setAlert?.("Something went wrong :(");
+      setAlert?.({ body: "Something went wrong :(" });
       return;
     }
 
@@ -79,6 +86,7 @@ export function useMint() {
     metadata,
     terminalAddress,
     setAlert,
+    tierIds,
   ]);
 
   const tx = useTransactionReceipt({
@@ -86,21 +94,34 @@ export function useMint() {
   });
 
   useEffect(() => {
+    if (error) {
+      if (error.message.includes("User rejected the request")) {
+        setAlert?.({ title: "Transaction rejected" });
+      } else {
+        setAlert?.({ title: "Error", body: error.message });
+      }
+
+      return;
+    }
+
     switch (tx.status) {
       case "success":
-        setAlert?.("Minted!", {
-          label: "Go to closet",
-          href: `/closet/${connectedWalletAddress}`,
+        setAlert?.({
+          title: "Minted!",
+          action: {
+            label: "View in your closet",
+            href: `/closet/${connectedWalletAddress}`,
+          },
         });
         break;
       case "error":
         if (tx.error.name !== "TransactionReceiptNotFoundError") {
           // TODO seems silly...
-          setAlert?.("Something may have gone wrong...");
+          setAlert?.({ body: "Something may have gone wrong..." });
         }
         break;
     }
-  }, [tx.status, tx.error?.name, setAlert, connectedWalletAddress]);
+  }, [tx.status, tx.error?.name, setAlert, connectedWalletAddress, error]);
 
-  return { mint, isPending };
+  return { mint, isPending: isPending || tx.isLoading };
 }

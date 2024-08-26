@@ -6,6 +6,7 @@ import Fuzz from "../pixelRenderers/Fuzz";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
 import TierImage from "../shared/TierImage";
+import { FONT_SIZE } from "@/constants/fontSize";
 
 export default function TierSelectorButton({
   tier,
@@ -36,10 +37,12 @@ export default function TierSelectorButton({
   return (
     <div style={{ position: "relative" }}>
       <ButtonPad
-        style={{ marginBottom: 20 }}
-        fillFg="white"
+        fillFg={active ? COLORS.pinkLite : "white"}
+        fillBorder={active ? COLORS.pink : "black"}
         onClick={onClick}
         pressed={active}
+        style={{ opacity: isSoldOut ? 0.7 : 1 }}
+        shadow="sm"
       >
         <div
           style={{
@@ -48,10 +51,12 @@ export default function TierSelectorButton({
             height: buttonSize,
             borderRadius: 2,
             overflow: "hidden",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
           {tier ? (
-            <TierImage tier={tier} size={buttonSize} />
+            <TierImage tier={tier} size={buttonSize - 16} />
           ) : (
             <Fuzz width={buttonSize} height={buttonSize} />
           )}
@@ -60,34 +65,33 @@ export default function TierSelectorButton({
             style={{
               position: "absolute",
               inset: 0,
-              border: "4px solid",
-              borderColor: active ? COLORS.pink : "white",
-              background: isSoldOut ? "#ffffff88" : "transparent",
             }}
           />
 
+          {tier.label && (
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                textAlign: "center",
+                fontSize: FONT_SIZE.xs,
+                zIndex: 1,
+              }}
+            >
+              {tier.label}
+            </div>
+          )}
+
           <FuzzMoment
-            width={buttonSize}
-            height={buttonSize}
-            fill="white"
+            width={buttonSize - 8}
+            height={buttonSize - 8}
+            fill={"white"}
             style={{ zIndex: 2, position: "absolute" }}
           />
         </div>
       </ButtonPad>
-
-      {tier.label && (
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            top: buttonSize + 12,
-            textAlign: "center",
-          }}
-        >
-          {tier.label}
-        </div>
-      )}
     </div>
   );
 }

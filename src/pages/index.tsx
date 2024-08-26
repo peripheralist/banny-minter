@@ -2,7 +2,9 @@ import TiersDemo from "@/components/TiersDemo";
 import ButtonPad from "@/components/shared/ButtonPad";
 import CloudSky from "@/components/shared/CloudSky";
 import LoadingBanny from "@/components/shared/LoadingBanny";
+import { isBrowser } from "@/constants/browser";
 import { COLORS } from "@/constants/colors";
+import { FONT_SIZE } from "@/constants/fontSize";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import Head from "next/head";
@@ -19,7 +21,6 @@ import { useAccount } from "wagmi";
 
 export default function Home() {
   const [heroScroll, setHeroScroll] = useState<number>(0);
-  const { address } = useAccount();
 
   const { loading } = useCategorizedTiers();
 
@@ -41,8 +42,10 @@ export default function Home() {
   const NumberedText = useCallback(
     ({ n, children }: PropsWithChildren<{ n: number }>) => (
       <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
-        <h4 style={{ fontSize: "3.2rem", lineHeight: 1, margin: 0 }}>{n}</h4>
-        <p style={{ fontSize: "2.4rem", margin: 0 }}>{children}</p>
+        <h4 style={{ fontSize: FONT_SIZE["3xl"], lineHeight: 1, margin: 0 }}>
+          {n}
+        </h4>
+        <p style={{ fontSize: FONT_SIZE["2xl"], margin: 0 }}>{children}</p>
       </div>
     ),
     []
@@ -56,11 +59,27 @@ export default function Home() {
             position: "fixed",
             inset: 0,
             bottom: "70%",
-            top: "10%",
+            top: "6%",
             zIndex: -2,
             opacity: 0.85,
           }}
         >
+          <h1
+            style={{
+              position: "fixed",
+              left: 0,
+              right: 0,
+              top: 0,
+              textAlign: "center",
+              color: "black",
+              fontSize: "6.4rem",
+              letterSpacing: 24,
+              lineHeight: 0,
+            }}
+          >
+            Bannyverse
+          </h1>
+
           <CloudSky />
         </div>
 
@@ -90,12 +109,14 @@ export default function Home() {
             alt="Musa 1"
             height={screenHeight}
             width={screenHeight / 2}
+            priority
           />
           <Image
             src="/assets/musa_2.svg"
             alt="Musa 2"
             height={screenHeight}
             width={screenHeight / 2}
+            priority
           />
         </div>
       </>
@@ -109,18 +130,17 @@ export default function Home() {
         <title>Banny Factory</title>
         <meta name="description" content="Banny factory" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style>{`#sky { background-image: linear-gradient(#00A6FF,#b3e4ff); }`}</style>
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
 
       <main>
         <div
-          id="sky"
           style={{
             position: "fixed",
             width: "100vw",
             height: "100vh",
             zIndex: -2,
+            background: `linear-gradient(#00A6FF,#b3e4ff)`,
           }}
         />
 
@@ -156,10 +176,11 @@ export default function Home() {
         >
           <Link href={"/mint"}>
             <ButtonPad
+              fillBorder="white"
               style={{
                 width: 180,
                 height: 48,
-                fontSize: "2rem",
+                fontSize: FONT_SIZE.lg,
                 margin: "0 auto",
                 fontWeight: "bold",
               }}
@@ -168,23 +189,7 @@ export default function Home() {
             </ButtonPad>
           </Link>
 
-          {address ? ( // TODO fix bug, ssr does not match UI
-            <Link href={`/closet/${address}`}>
-              <ButtonPad
-                fillFg={COLORS.pink}
-                style={{
-                  width: 180,
-                  height: 48,
-                  fontSize: "2rem",
-                  margin: "0 auto",
-                  fontWeight: "bold",
-                  color: "white",
-                }}
-              >
-                Closet
-              </ButtonPad>
-            </Link>
-          ) : null}
+          <ClosetButton />
         </div>
 
         <div
@@ -211,22 +216,6 @@ export default function Home() {
             overflow: "scroll",
           }}
         >
-          <h1
-            style={{
-              position: "fixed",
-              left: 0,
-              right: 0,
-              top: 0,
-              textAlign: "center",
-              color: "black",
-              fontSize: "6rem",
-              letterSpacing: 24,
-              lineHeight: 0,
-            }}
-          >
-            BANNYVERSE
-          </h1>
-
           <div style={{ opacity: 1 - heroScroll * 3 }}>
             {loading ? (
               <div
@@ -279,5 +268,34 @@ export default function Home() {
         </div>
       </main>
     </>
+  );
+}
+
+function ClosetButton() {
+  const { address } = useAccount();
+
+  // state value suppresses hydration warning. idk man
+  const [_address, setAddress] = useState<`0x${string}`>();
+  useEffect(() => setAddress(address), [address]);
+
+  if (!_address) return null;
+
+  return (
+    <Link href={`/closet/${_address}`}>
+      <ButtonPad
+        fillFg={COLORS.pink}
+        fillBorder={COLORS.pink}
+        style={{
+          width: 180,
+          height: 48,
+          fontSize: FONT_SIZE.lg,
+          margin: "0 auto",
+          fontWeight: "bold",
+          color: "white",
+        }}
+      >
+        Closet
+      </ButtonPad>
+    </Link>
   );
 }

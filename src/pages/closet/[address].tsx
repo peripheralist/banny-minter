@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { isAddress } from "viem";
 import DressedBannyNftImage from "./DressedBannyNftImage";
+import { FONT_SIZE } from "@/constants/fontSize";
 
 const itemSize = 200;
 
@@ -29,6 +30,7 @@ export default function Index() {
           right: 10,
           color: "#00000088",
           textAlign: "center",
+          fontSize: FONT_SIZE.sm,
         }}
       >
         #{tokenId.toString()}

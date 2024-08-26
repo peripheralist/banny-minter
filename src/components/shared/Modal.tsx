@@ -1,36 +1,33 @@
-import { useMeasuredRef } from "@/hooks/useMeasuredRef";
+import { COLORS } from "@/constants/colors";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { PropsWithChildren, useEffect, useState } from "react";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
-import { COLORS } from "@/constants/colors";
-
-const bg = "#000000";
+import RoundedFrame from "./RoundedFrame";
+import { FONT_SIZE } from "@/constants/fontSize";
+import ButtonPad from "./ButtonPad";
 
 const pixelSize = 8;
 
 export default function Modal({
   open,
   onClose,
-  height,
   children,
 }: PropsWithChildren<{
   open?: boolean;
-  height?: number;
   onClose?: VoidFunction;
 }>) {
   const [isOpen, setIsOpen] = useState<boolean>();
 
   useEffect(() => setIsOpen(open), [open]);
 
-  const { measuredRef, width } = useMeasuredRef();
+  const { width, height } = useWindowSize();
 
   if (!isOpen) return null;
 
-  const _width = Math.min(width * 0.9, pixelSize * 60);
-  const _height = height ?? pixelSize * 24;
+  const shadowColor = `${COLORS.pink}88`;
 
   return (
     <div // backdrop
-      ref={measuredRef}
       style={{
         position: "fixed",
         inset: 0,
@@ -48,25 +45,63 @@ export default function Modal({
       }}
     >
       <FuzzMoment
-        fill={bg}
-        width={_width}
-        height={_height}
+        fill={COLORS.pink}
+        width={pixelSize * 20}
+        height={pixelSize * 20}
         pixelSize={pixelSize}
         duration={800}
         onFinished={
           <div
+            style={{
+              position: "relative",
+              maxWidth: Math.min(640, (width ?? 0) * 0.9),
+              maxHeight: (height ?? 0) * 0.8,
+            }}
             onClick={(e) => {
               e.stopPropagation();
             }}
-            style={{
-              width: _width,
-              height: _height,
-              background: bg,
-              padding: 10,
-              border: `10px solid ${COLORS.pink}`,
-            }}
           >
-            {children}
+            <RoundedFrame
+              background={COLORS.bananaHint}
+              containerStyle={{ zIndex: 10 }}
+              style={{
+                padding: 32,
+                width: "100%",
+                height: "100%",
+                overflow: "auto",
+              }}
+            >
+              {children}
+            </RoundedFrame>
+
+            {onClose && (
+              <ButtonPad
+                onClick={onClose}
+                fillFg={"white"}
+                shadow="sm"
+                containerStyle={{
+                  height: 40,
+                  marginTop: 16,
+                  textAlign: "center",
+                  zIndex: 10,
+                }}
+              >
+                Done
+              </ButtonPad>
+            )}
+
+            <RoundedFrame
+              background={shadowColor}
+              borderColor={shadowColor}
+              containerStyle={{
+                position: "absolute",
+                height: "calc(100% + 132px)",
+                top: -44,
+                left: -44,
+                right: -44,
+                bottom: -44,
+              }}
+            />
           </div>
         }
       />

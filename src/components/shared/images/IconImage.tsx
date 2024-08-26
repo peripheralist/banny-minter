@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { CSSProperties } from "react";
 
 /**
@@ -16,12 +15,14 @@ export default function IconImage({
   const _size = size ?? 40;
 
   return (
-    <Image
-      style={style}
-      width={_size}
-      height={_size}
-      src={`/assets/${name}.svg`}
-      alt={name}
+    <div
+      style={{
+        ...style,
+        width: _size,
+        height: _size,
+        maskImage: `url(/assets/${name}.svg)`,
+        maskSize: "100%",
+      }}
     />
   );
 }

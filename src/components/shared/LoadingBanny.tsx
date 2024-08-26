@@ -24,6 +24,7 @@ export default function LoadingBanny({
 
   return (
     <Image
+      priority
       src="/assets/banny_silhouette.svg"
       width={size}
       height={size}

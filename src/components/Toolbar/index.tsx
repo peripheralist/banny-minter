@@ -1,11 +1,13 @@
+import { FONT_SIZE } from "@/constants/fontSize";
 import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
+import { useEnsName } from "wagmi";
 import Blinker from "../shared/Blinker";
 import CurrentChain from "./CurrentChain";
 import Wallet from "./Wallet";
-import { useEnsName } from "wagmi";
+import { COLORS } from "@/constants/colors";
 
 export const TOOLBAR_HEIGHT = 50;
 
@@ -27,10 +29,10 @@ export default function Index() {
     if (router.pathname.includes("mint")) {
       return "SHOP";
     }
-    if (router.pathname.includes("banny")) {
+    if (router.pathname.includes("dress/")) {
       return `DRESSING ROOM: BANNY #${tokenId}`;
     }
-    if (router.pathname.includes("closet")) {
+    if (router.pathname.includes("closet/")) {
       return `${formattedAddress}'s closet`;
     }
     return null;
@@ -44,8 +46,8 @@ export default function Index() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: 10,
-        gap: 20,
+        padding: 12,
+        gap: 24,
         height: TOOLBAR_HEIGHT,
         ...(isSmallScreen
           ? { fontSize: "0.8rem" }
@@ -56,7 +58,7 @@ export default function Index() {
         style={{
           display: "flex",
           alignItems: "baseline",
-          gap: 20,
+          gap: 24,
           flex: 1,
         }}
       >
@@ -67,12 +69,12 @@ export default function Index() {
               display: "block",
               appearance: "none",
               color: "black",
-              fontSize: "3.6rem",
+              fontSize: FONT_SIZE["2xl"],
               lineHeight: 0,
-              letterSpacing: 4,
+              letterSpacing: 2,
             }}
           >
-            BANNYVERSE
+            Bannyverse
           </h1>
         </Link>
 
@@ -80,8 +82,8 @@ export default function Index() {
           <span
             style={{
               textTransform: "uppercase",
-              letterSpacing: 3,
-              fontSize: "1.5rem",
+              fontSize: FONT_SIZE.xl,
+              color: "black",
             }}
           >
             {pathText}
@@ -90,7 +92,14 @@ export default function Index() {
       </div>
 
       {isSmallScreen ? null : (
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            alignItems: "center",
+            fontSize: FONT_SIZE.sm,
+          }}
+        >
           <Blinker />
           Work in progress
         </div>

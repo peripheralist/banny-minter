@@ -1,5 +1,7 @@
+import { COLORS } from "@/constants/colors";
 import { Category, CATEGORY_GROUPS } from "@/constants/nfts";
 import { EquipmentContext } from "@/contexts/equipmentContext";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { Tier } from "@/model/tier";
 import {
   CSSProperties,
@@ -26,37 +28,23 @@ export default function CategoryGroupGrid({
   gridCols,
   gridRows,
   imageSize,
+  containerStyle,
   style,
 }: {
   gridCols: number;
-  gridRows: number;
+  gridRows?: number;
   imageSize: number;
+  containerStyle?: CSSProperties;
   style?: CSSProperties;
 }) {
+  const { measuredRef, height: containerHeight } = useMeasuredRef();
+
   const {
     selectedGroup,
     equipped,
     equip,
     availableTiers: tiers,
   } = useContext(EquipmentContext);
-
-  const pageSize = useMemo(() => gridRows * gridCols, [gridRows, gridCols]);
-
-  const gap = 6;
-
-  // +/-12 accounts for button pad internal margin. idk man. shit's not perferct
-  const gridWidth = useMemo(() => {
-    return (imageSize + 12) * gridCols + (gridCols + 1) * gap - 12;
-  }, [gridCols, imageSize]);
-  const gridHeight = useMemo(() => {
-    return (imageSize + 12) * gridRows + (gridRows + 1) * gap;
-  }, [gridRows, imageSize]);
-
-  const [pageIdx, setPageIdx] = useState<number>(0);
-
-  useEffect(() => {
-    setPageIdx(0);
-  }, [selectedGroup]);
 
   // Categories of selected group
   const categories = useMemo(
@@ -72,6 +60,23 @@ export default function CategoryGroupGrid({
       .filter(([category]) => categories.includes(category as Category))
       .reduce((acc, [_, _tiers]) => [...acc, ..._tiers], [] as Tier[]);
   }, [tiers, categories]);
+
+  const _gridRows = useMemo(
+    () =>
+      gridRows ??
+      Math.max(Math.floor((containerHeight - 80) / (imageSize + 20)), 0),
+    [containerHeight, gridRows]
+  );
+
+  const pageSize = useMemo(() => _gridRows * gridCols, [_gridRows, gridCols]);
+
+  const gap = 8;
+
+  const [pageIdx, setPageIdx] = useState<number>(0);
+
+  useEffect(() => {
+    setPageIdx(0);
+  }, [selectedGroup]);
 
   const pagesCount = useMemo(() => {
     const count = allTiers?.length;
@@ -89,7 +94,7 @@ export default function CategoryGroupGrid({
 
     categories.forEach((c) => {
       const idx = allTiers?.findIndex((t) => t.tierId === equipped[c]?.tierId);
-      if (idx && idx > -1) idxs.push(Math.floor(idx / pageSize));
+      if (idx !== undefined && idx > -1) idxs.push(Math.floor(idx / pageSize));
     });
 
     return idxs;
@@ -109,43 +114,40 @@ export default function CategoryGroupGrid({
   );
 
   return (
-    <RoundedFrame
-      containerStyle={{ height: "100%", boxSizing: "border-box" }}
-      shadow
-    >
-      <div
+    <div style={{ height: "100%" }} ref={measuredRef}>
+      <RoundedFrame
+        containerStyle={{
+          height: "100%",
+          boxSizing: "border-box",
+          ...containerStyle,
+        }}
         style={{
+          height: "100%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           position: "relative",
-          background: "#00000044",
-          height: "100%",
           boxSizing: "border-box",
+          minWidth: gridCols * imageSize + (gridCols - 1) * 30 + 32, // 30 and 32 have no explanation. goal is to keep object same width when grid is empty
           ...style,
         }}
+        // shadow
+        background={COLORS.bananaHint}
       >
-        <div
+        <TiersGrid
           style={{
-            width: gridWidth,
-            height: gridHeight,
+            gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
+            gap,
           }}
-        >
-          <TiersGrid
-            style={{
-              gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-              gap,
-            }}
-            tiers={tiersForPage}
-            imageSize={imageSize}
-          />
-        </div>
+          tiers={tiersForPage}
+          imageSize={imageSize}
+        />
 
         <div
           style={{
             display: "flex",
             alignItems: "flex-end",
-            gap: 10,
+            gap,
           }}
         >
           {pagesCount > 1 && (
@@ -169,16 +171,20 @@ export default function CategoryGroupGrid({
             </>
           )}
 
+          <div style={{ flex: 1 }} />
+
           {hasSelectedTiers && (
             <ButtonPad
-              style={{ width: 24, height: 24, zIndex: 1 }}
+              style={{ width: 80, height: 40 }}
               onClick={unequipAllTiersForGroup}
+              shadow="sm"
+              fillFg={"white"}
             >
-              ✖️
+              CLEAR
             </ButtonPad>
           )}
         </div>
-      </div>
-    </RoundedFrame>
+      </RoundedFrame>
+    </div>
   );
 }

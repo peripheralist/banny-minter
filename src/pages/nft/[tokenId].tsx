@@ -15,6 +15,13 @@ import { useAccount } from "wagmi";
 import DressedBannyNftImage from "../closet/DressedBannyNftImage";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { useBannyEquippedTiers } from "@/hooks/useBannyEquippedTiers";
+import { FONT_SIZE } from "@/constants/fontSize";
+import RoundedFrame from "@/components/shared/RoundedFrame";
+import { TOOLBAR_HEIGHT } from "@/components/Toolbar";
+import { COLORS } from "@/constants/colors";
+import dynamic from "next/dynamic";
+
+const Toolbar = dynamic(() => import("@/components/Toolbar"), { ssr: false });
 
 export default function Index() {
   const { address } = useAccount();
@@ -87,7 +94,7 @@ export default function Index() {
         <div
           style={{
             fontWeight: "bolder",
-            minWidth: 100,
+            minWidth: 180,
             textTransform: "uppercase",
             opacity: 0.5,
           }}
@@ -102,31 +109,15 @@ export default function Index() {
 
   const NftInfo = useCallback(() => {
     return (
-      <div style={{ paddingBottom: 40 }}>
-        <h2 style={{ textAlign: "center" }}>{decoded?.name}</h2>
-
-        {isOwned && nft?.category === 0 && (
-          <Link href={`/dress/${nft.tokenId.toString()}`}>
-            <ButtonPad
-              style={{
-                height: 40,
-                fontSize: "1.5rem",
-                width: "40%",
-                minWidth: 100,
-                margin: "0 auto",
-              }}
-            >
-              Dressing room
-            </ButtonPad>
-          </Link>
-        )}
+      <div>
+        <h2>{decoded?.name}</h2>
 
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 4,
-            marginTop: 30,
+            gap: 8,
+            marginTop: 32,
           }}
         >
           <NftInfoRow label="Token Id" value={decoded?.tokenId} />
@@ -156,16 +147,54 @@ export default function Index() {
             }
           />
         </div>
+
+        {isOwned && nft?.category === 0 && (
+          <Link href={`/dress/${nft.tokenId.toString()}`}>
+            <ButtonPad
+              containerStyle={{
+                height: 48,
+                fontSize: FONT_SIZE.lg,
+                width: "40%",
+                minWidth: 100,
+                marginTop: 32,
+              }}
+            >
+              Dressing room
+            </ButtonPad>
+          </Link>
+        )}
       </div>
     );
   }, [decoded, NftInfoRow, isOwned, nft, equippedTiers]);
 
   return (
-    <SingleFrameToolbarView
-      footer={<NftInfo />}
-      frameStyle={{ height: size, width: size, padding: 0 }}
+    <div
+      style={{
+        height: "100vh",
+      }}
     >
-      <NftImage />
-    </SingleFrameToolbarView>
+      <Toolbar />
+
+      <style>{`body { background: ${COLORS.banana} }`}</style>
+
+      <div
+        style={{
+          display: "flex",
+          gap: 32,
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <RoundedFrame
+          background={"white"}
+          containerStyle={{ height: size, width: size }}
+        >
+          <NftImage />
+        </RoundedFrame>
+
+        <NftInfo />
+      </div>
+    </div>
   );
 }

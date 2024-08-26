@@ -2,6 +2,9 @@ import { Tier } from "@/model/tier";
 import React, { useCallback } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 
+/**
+ * Renders tier image with custom position within frame.
+ */
 export default function TierImage({
   tier,
   size,

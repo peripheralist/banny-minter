@@ -112,7 +112,6 @@ export default function SmallView({
           <RoundedFrame containerStyle={{ flex: 1, height: "100%" }}>
             <div
               style={{
-                background: "black",
                 padding: 20,
                 boxSizing: "border-box",
               }}

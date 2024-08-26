@@ -2,11 +2,10 @@ import { COLORS } from "@/constants/colors";
 import Link from "next/link";
 import { useState } from "react";
 import { useAccount, useDisconnect, useEnsName } from "wagmi";
+import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
 import { WalletOptions } from "./WalletOptions";
-import FuzzMoment from "../pixelRenderers/FuzzMoment";
-import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 
 export default function Wallet() {
   const [showWalletOptions, setShowWalletOptions] = useState<boolean>();
@@ -14,21 +13,16 @@ export default function Wallet() {
   const { disconnect } = useDisconnect();
   const { data: ensName } = useEnsName({ address });
 
-  const isSmallScreen = useIsSmallScreen();
-
   return (
     <div>
       {address ? (
-        <RoundedFrame>
+        <RoundedFrame background={COLORS.pink}>
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: 16,
-              fontSize: isSmallScreen ? "1rem" : "1.4rem",
               paddingLeft: 16,
-              paddingRight: 0,
-              background: COLORS.pink,
             }}
           >
             <FuzzMoment
@@ -42,7 +36,9 @@ export default function Wallet() {
               }
             />
             <ButtonPad
-              style={{ width: 24, height: 24, zIndex: 1 }}
+              shadow="none"
+              containerStyle={{ margin: -4 }}
+              style={{ width: 32, height: 32 }}
               onClick={() => disconnect()}
             >
               ✖️
@@ -53,7 +49,8 @@ export default function Wallet() {
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <WalletOptions />
           <ButtonPad
-            style={{ width: 24, height: 24, marginBottom: 10 }}
+            shadow="sm"
+            style={{ width: 32, height: 32 }}
             onClick={() => setShowWalletOptions(false)}
           >
             ✖️
@@ -62,13 +59,12 @@ export default function Wallet() {
       ) : (
         <ButtonPad
           style={{
-            height: 32,
-            width: 88,
             color: "white",
-            fontSize: "1.4rem",
             textTransform: "uppercase",
-            marginBottom: 10,
+            height: 32,
+            padding: "0px 8px",
           }}
+          shadow="sm"
           fillFg={COLORS.pink}
           onClick={() => setShowWalletOptions(true)}
         >

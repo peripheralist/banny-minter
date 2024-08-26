@@ -1,4 +1,4 @@
-import Beacon from "@/components/shared/Beacon";
+import Light from "@/components/shared/Light";
 import { COLORS } from "@/constants/colors";
 import { useMemo } from "react";
 
@@ -31,7 +31,7 @@ export default function PageIndicator({
       const hasSelectedTier = pageIdxsOfSelected.includes(i);
 
       _children.push(
-        <Beacon
+        <Light
           key={i}
           onClick={() => setPageIdx(i)}
           on={active || hasSelectedTier}

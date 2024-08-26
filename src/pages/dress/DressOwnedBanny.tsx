@@ -24,71 +24,50 @@ export default function DressOwnedBanny({
   const { tiers: ownedTiers, loading: tiersLoading } =
     useOwnedCategorizedTiers(address);
 
-  const formattedOwnedTiers = useMemo(() => {
-    if (!ownedTiers) return;
+  const { data: equippedTiers } = useBannyEquippedTiers(bannyNft);
 
-    function labelForTier(quantity: number) {
+  const formattedAvailableTiers = useMemo(() => {
+    if (!ownedTiers || !equippedTiers) return;
+
+    function labelForTier(quantity?: number) {
       return (
-        <div
-          style={{
-            fontSize: "0.875rem",
-            fontWeight: "bold",
-          }}
-        >
-          {quantity} owned
-        </div>
+        <div>{quantity === undefined ? "Equipped" : `${quantity} owned`}</div>
       );
     }
 
     function detailForTier({
-      category,
       name,
       tokenId,
     }: {
-      category: Category;
       name: string | undefined;
       tokenId: bigint;
     }) {
       return (
-        <div style={{ display: "flex" }}>
-          <div
-            style={{
-              fontWeight: "bold",
-              width: "10%",
-              minWidth: 100,
-              color: COLORS.banana,
-            }}
-          >
-            {category}:
-          </div>
-          <div
-            style={{
-              width: "100%",
-              display: "inline-flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <span>{name ? name : "--"}</span>
-            <span style={{ opacity: 0.5 }}>
-              {tokenId ? `ID: ${tokenId.toString()}` : null}
-            </span>
-          </div>
+        <div style={{ display: "flex", width: "100%" }}>
+          <div style={{ flex: 1 }}>{name ? name : "--"}</div>
+
+          <span style={{ opacity: 0.5 }}>
+            {tokenId ? `ID: ${tokenId.toString()}` : null}
+          </span>
         </div>
       );
     }
 
-    return Object.entries(ownedTiers).reduce(
+    // Format and add owned nft tiers (equipped items are unowned)
+    const formattedOwnedTiers = Object.entries(ownedTiers).reduce(
       (acc, [category, tiersOfCategory]) => ({
         ...acc,
         [category]: tiersOfCategory.map((t) => {
-          const tokenId = t.nfts[0].tokenId; // override tier tokenId with tokenId of first NFT
+          const tokenId =
+            category === "naked" && bannyNft
+              ? bannyNft.tokenId
+              : t.nfts[0].tokenId; // override tier tokenId with tokenId of first NFT, or bannyNft
 
           return {
             ...t.tier,
             tokenId,
             label: labelForTier(t.nfts.length),
             detail: detailForTier({
-              category: t.tier.category,
               name: t.tier.name,
               tokenId,
             }),
@@ -97,9 +76,29 @@ export default function DressOwnedBanny({
       }),
       {} as Tiers
     );
-  }, [ownedTiers]);
 
-  const { data: equippedTiers } = useBannyEquippedTiers(bannyNft);
+    // Format and add equipped nft tiers
+    const formattedEquippedTiers = Object.entries(equippedTiers).reduce(
+      (acc, [category, tier]) => ({
+        ...acc,
+        [category]: [
+          ...acc[category as Category],
+          {
+            ...tier,
+            label: labelForTier(),
+            detail: detailForTier({
+              name: tier.name,
+              tokenId: BigInt(tier.tokenId ?? 0),
+            }),
+            equipped: true,
+          },
+        ],
+      }),
+      formattedOwnedTiers
+    );
+
+    return { ...formattedOwnedTiers, ...formattedEquippedTiers };
+  }, [ownedTiers, bannyNft, equippedTiers]);
 
   const equippedTierIds = useMemo(() => {
     if (!equippedTiers) return {};
@@ -115,11 +114,12 @@ export default function DressOwnedBanny({
   return (
     <div>
       <Toolbar />
+
       <style>{`body { background: ${COLORS.banana} }`}</style>
 
-      {formattedOwnedTiers ? (
+      {formattedAvailableTiers ? (
         <EquipmentContextProvider
-          availableTiers={formattedOwnedTiers}
+          availableTiers={formattedAvailableTiers}
           defaultEquippedTierIds={equippedTierIds}
         >
           <DressingRoom button={<DecorateButton />} />

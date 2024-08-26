@@ -1,69 +1,63 @@
 import Modal from "@/components/shared/Modal";
 import Link from "next/link";
 import { PropsWithChildren, useCallback, useMemo, useState } from "react";
-import { AlertContext, Href } from "./alertContext";
+import { Alert, AlertContext, Href } from "./alertContext";
+import { FONT_SIZE } from "@/constants/fontSize";
 
 export default function AlertContextProvider({ children }: PropsWithChildren) {
-  const [_alert, _setAlert] = useState<string>();
-  const [_href, _setHref] = useState<Href>();
+  const [_alert, _setAlert] = useState<Alert>();
 
-  const setAlert = useCallback((alert: string, href?: Href) => {
+  const setAlert = useCallback((alert: Alert) => {
     _setAlert(alert);
-    _setHref(href);
   }, []);
 
   const reset = useCallback(() => {
     _setAlert(undefined);
-    _setHref(undefined);
   }, []);
 
   const content = useMemo(() => {
     if (!_alert) return null;
 
+    const { title, body, action } = _alert;
+
     return (
       <div
         style={{
-          width: "100%",
+          minWidth: 240,
           height: "100%",
           position: "relative",
-          color: "white",
+          color: "black",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: 10,
+          whiteSpace: "break-spaces",
+          gap: 16,
         }}
       >
-        <div style={{ fontSize: "2rem", textAlign: "center" }}>{_alert}</div>
-
-        {_href && (
-          <div style={{ fontSize: "1.65rem" }} onClick={reset}>
-            <Link href={_href.href}>
-              {">"} {_href.label}
-            </Link>
+        {title && (
+          <div style={{ fontSize: FONT_SIZE.xl, textAlign: "center" }}>
+            {title}
           </div>
         )}
 
-        <div
-          onClick={reset}
-          style={{
-            position: "absolute",
-            left: 5,
-            top: 0,
-            fontSize: "2rem",
-          }}
-        >
-          ⨯
-        </div>
+        {body && <div style={{ fontSize: FONT_SIZE.sm }}>{body}</div>}
+
+        {action && (
+          <div style={{ fontSize: FONT_SIZE.lg }} onClick={reset}>
+            <Link href={action.href}>
+              {">"} {action.label}
+            </Link>
+          </div>
+        )}
       </div>
     );
-  }, [_alert, _href, reset]);
+  }, [_alert, reset]);
 
   return (
     <AlertContext.Provider
       value={{
         alert: _alert,
-        href: _href,
         setAlert,
       }}
     >

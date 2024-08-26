@@ -7,19 +7,12 @@ export function WalletOptions() {
 
   return connectors.map((connector) => (
     <ButtonPad
-      style={{ height: 32, marginBottom: 10 }}
       key={connector.id}
+      style={{ height: 32, padding: "0px 8px" }}
+      shadow="sm"
       onClick={() => connect({ connector })}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          padding: 8,
-          fontSize: "1.3rem",
-        }}
-      >
+      <div style={{}}>
         <FuzzMoment
           height={16}
           width={68}

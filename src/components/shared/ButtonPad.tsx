@@ -1,127 +1,158 @@
-import { CSSProperties, PropsWithChildren, useCallback, useState } from "react";
-import PixelArc from "../pixelRenderers/PixelArc";
-import RoundedRect from "./RoundedRect";
+import {
+  CSSProperties,
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
+import PixelCorner from "../pixelRenderers/PixelCorner";
+import RoundedFrame from "./RoundedFrame";
+
+const TRANSITION_TIME_MILLIS = 60;
 
 export default function ButtonPad({
   children,
-  radius,
   fillBg,
   fillFg,
+  fillBorder,
+  shadow,
   onClick,
   pressed,
+  containerStyle,
   style,
   disabled,
 }: PropsWithChildren<{
-  fillBg?: CSSProperties["fill"];
-  fillFg?: CSSProperties["fill"];
-  radius?: number;
+  fillBg?: CSSProperties["background"];
+  fillFg?: CSSProperties["background"];
+  fillBorder?: CSSProperties["borderColor"];
+  shadow?: "sm" | "md" | "none";
   onClick?: VoidFunction;
   pressed?: boolean;
+  containerStyle?: CSSProperties;
   style?: CSSProperties;
   disabled?: boolean;
 }>) {
   const [clicked, setClicked] = useState<boolean>();
+
+  const shadowDepth = useMemo(() => {
+    switch (shadow) {
+      case undefined:
+      case "md":
+        return 8;
+      case "sm":
+        return 4;
+    }
+
+    return 0;
+  }, [shadow]);
 
   const _onClick = useCallback(() => {
     if (disabled) return;
 
     setClicked(true);
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setClicked(false);
       onClick?.();
-    }, 100);
+    }, TRANSITION_TIME_MILLIS);
+
+    return () => clearTimeout(timeout);
   }, [onClick, disabled]);
-
-  const depth = 6;
-  const edge = 6;
-  const r = radius ?? 4;
-
-  const highlightColor = pressed || clicked ? "#00000044" : "#ffffff88";
 
   return (
     <div
       style={{
         position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         userSelect: "none",
-        margin: edge,
-        ...style,
+        boxSizing: "border-box",
+        ...containerStyle,
       }}
       role="button"
       onClick={_onClick}
     >
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          transform:
-            pressed || clicked || disabled
-              ? "translate(0px, 0px)"
-              : `translate(-${depth / 2}px, -${depth / 2}px)`,
-          transition: "transform 40ms",
-        }}
-      >
-        <RoundedRect
-          style={{ position: "absolute", inset: 0, zIndex: -1 }}
-          fill={fillFg ?? "white"}
-          radius={r / 2}
-        />
-        <PixelArc
+      {shadowDepth > 0 && (
+        <LayerBg
+          fill={fillBg ?? (clicked || pressed ? "#000000aa" : "#00000064")}
           style={{
             position: "absolute",
             left: 0,
-            top: 0,
-            transform: `scale(-1,1)`,
-          }}
-          width={5}
-          height={5}
-          pixelSize={1}
-          fill={highlightColor}
-          radius={3}
-          thickness={3}
-        />
-        <div
-          style={{
-            position: "absolute",
-            height: "calc(100% - 7px)",
-            top: 5,
-            width: 2,
-            background: highlightColor,
+            right: 0,
+            bottom: -shadowDepth,
           }}
         />
-        <div
-          style={{
-            position: "absolute",
-            width: "calc(100% - 7px)",
-            height: 2,
-            left: 5,
-            background: highlightColor,
-          }}
-        />
+      )}
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          {children}
-        </div>
-      </div>
+      <RoundedFrame
+        background={fillFg ?? "white"}
+        borderColor={fillBorder ?? "black"}
+        containerStyle={{
+          transform: clicked || pressed ? `translate(0px, 4px)` : undefined,
+          transition: `transform ${TRANSITION_TIME_MILLIS}ms`,
+          transitionTimingFunction: "ease-out",
+          minWidth: "100%",
+          boxSizing: "border-box",
+        }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          ...style,
+        }}
+      >
+        {children}
+      </RoundedFrame>
+    </div>
+  );
+}
 
-      <RoundedRect
-        fill={fillBg ?? "black"}
-        radius={r}
+function LayerBg({
+  fill,
+  style,
+}: {
+  fill: CSSProperties["background"];
+  style?: CSSProperties;
+}) {
+  const Corner = useCallback(
+    ({ _style }: { _style?: CSSProperties }) => (
+      <PixelCorner
+        size={12}
+        fillInner={fill}
+        fillBorder={fill}
+        style={_style}
+      />
+    ),
+    [fill]
+  );
+
+  return (
+    <div style={{ position: "relative", ...style }}>
+      <div
         style={{
           position: "absolute",
-          zIndex: -1,
-          left: -edge,
-          right: -edge,
-          top: -edge,
-          bottom: -edge,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: "flex",
+        }}
+      >
+        <Corner _style={{ transform: "scale(1, -1)" }} />
+
+        <div style={{ flex: 1, background: fill, height: 12 }} />
+
+        <Corner _style={{ transform: "scale(-1, -1)" }} />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 12,
+          left: 0,
+          right: 0,
+          height: 4,
+          background: fill,
         }}
       />
     </div>

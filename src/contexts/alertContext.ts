@@ -2,10 +2,15 @@ import { createContext } from "react";
 
 export type Href = { label: string; href: string };
 
+export type Alert = {
+  title?: string;
+  body?: string;
+  action?: Href;
+};
+
 type Context = {
-  alert: string | undefined;
-  href?: Href;
-  setAlert?: (alert: string, href?: Href) => void;
+  alert: Alert | undefined;
+  setAlert?: (alert: Alert) => void;
 };
 
 export const AlertContext = createContext<Context>({

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Beacon from "./Beacon";
+import Light from "./Light";
 
 export default function Blinker() {
   const [on, setOn] = useState<boolean>();
@@ -10,5 +10,5 @@ export default function Blinker() {
     return () => clearInterval(id);
   }, []);
 
-  return <Beacon on={on} />;
+  return <Light on={on} />;
 }

@@ -1,3 +1,4 @@
+import { FONT_SIZE } from "@/constants/fontSize";
 import { useChain } from "@/hooks/useChain";
 import React, { useMemo } from "react";
 import { useAccount } from "wagmi";
@@ -13,5 +14,9 @@ export default function CurrentChain() {
     return null;
   }, [address, chain]);
 
-  return <div style={{ textTransform: "uppercase" }}>{text}</div>;
+  return (
+    <div style={{ textTransform: "uppercase", fontSize: FONT_SIZE.sm }}>
+      {text}
+    </div>
+  );
 }

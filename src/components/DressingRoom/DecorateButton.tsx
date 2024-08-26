@@ -8,25 +8,41 @@ import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
 import { useNFTApprovals } from "@/hooks/useNFTApprovals";
 import ApproveNFTsModal from "../modals/ApproveNFTsModal";
+import { FONT_SIZE } from "@/constants/fontSize";
+import { AlertContext } from "@/contexts/alertContext";
 
 export default function DecorateButton() {
   const [approveModalOpen, setApproveModalOpen] = useState(false);
+
+  const { setAlert } = useContext(AlertContext);
 
   const { address } = useAccount();
 
   const { equipped } = useContext(EquipmentContext);
 
-  const { decorateBanny, isPending } = useDecorateBanny();
+  const onSuccess = useCallback(() => {
+    setAlert?.({
+      title: "Success!",
+      action: {
+        label: "View Banny",
+        href: `/nft/${equipped["naked"]?.tokenId}`,
+      },
+    });
+  }, [equipped["naked"]?.tokenId, setAlert]);
 
-  const wearableTokenIds = useMemo(
+  const { decorateBanny, isPending } = useDecorateBanny({
+    onSuccess,
+  });
+
+  const maybeUnapprovedTokenIds = useMemo(
     () =>
-      CATEGORIES.filter((c) => c !== "naked" && !!equipped[c]?.tokenId).map(
-        (c) => BigInt(equipped[c]!.tokenId!)
-      ),
+      CATEGORIES.filter(
+        (c) => c !== "naked" && !!equipped[c]?.tokenId && !equipped[c]?.equipped
+      ).map((c) => BigInt(equipped[c]!.tokenId!)),
     [equipped]
   );
 
-  const { approvals } = useNFTApprovals(wearableTokenIds);
+  const { approvals } = useNFTApprovals(maybeUnapprovedTokenIds);
 
   const tokenIdsNeedApproval = useMemo(
     () =>
@@ -56,29 +72,24 @@ export default function DecorateButton() {
   return (
     <>
       <ButtonPad
-        style={{
-          padding: 1,
-        }}
         fillFg={COLORS.pink}
         onClick={decorate}
+        shadow="sm"
+        style={{ minWidth: 180, padding: 24 }}
       >
         {isPending ? (
-          <div style={{ padding: 10 }}>
-            <Fuzz width={80} height={32} fill="white" interval={500} />
-          </div>
+          <Fuzz width={120} height={40} fill="white" interval={500} />
         ) : (
           <div
             style={{
               textAlign: "center",
-              fontSize: "2.4rem",
             }}
           >
             <div
               style={{
                 opacity: address ? 1 : 0.25,
-                padding: 10,
-                minWidth: 120,
                 color: address ? "white" : "black",
+                fontSize: FONT_SIZE["2xl"],
               }}
             >
               Dress
@@ -87,7 +98,7 @@ export default function DecorateButton() {
             {!address && (
               <div
                 style={{
-                  fontSize: "1.25rem",
+                  fontSize: FONT_SIZE.lg,
                   textTransform: "uppercase",
                   color: "white",
                 }}

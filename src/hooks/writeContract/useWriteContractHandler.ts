@@ -1,11 +1,20 @@
-import { MutateOptions } from "@tanstack/react-query";
-import { WriteContractErrorType } from "@wagmi/core";
+import { AlertContext } from "@/contexts/alertContext";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Abi, ContractFunctionArgs, ContractFunctionName } from "viem";
 import { useTransactionReceipt, useWriteContract } from "wagmi";
-import { WriteContractData, WriteContractVariables } from "wagmi/query";
+import { WriteContractVariables } from "wagmi/query";
 import { config } from "../../../config.wagmi";
-import { AlertContext } from "@/contexts/alertContext";
+
+export type WriteContractHandlerOptions<args = unknown> = {
+  onSuccess?: (v: args) => void;
+  onError?: (v: args) => void;
+};
+
+// export type WriteContractHandlerOptions<variables = unknown> = MutateOptions<
+//   WriteContractData,
+//   WriteContractErrorType,
+//   variables
+// >;
 
 type _Config = typeof config;
 
@@ -33,9 +42,9 @@ export function useWriteContractHandler<
   meta extends unknown
 >(
   variables: Omit<variables, "args"> & { args: args | ((x: meta) => args) },
-  options?: MutateOptions<WriteContractData, WriteContractErrorType, variables>
+  options?: WriteContractHandlerOptions<args>
 ) {
-  const [usedVariables, setUsedVariables] = useState<variables>();
+  const [usedArgs, setUsedArgs] = useState<args>();
 
   const {
     writeContract,
@@ -50,17 +59,16 @@ export function useWriteContractHandler<
     (a: meta) => {
       const { args } = variables;
 
+      const _args = Array.isArray(args) ? args : (args as (x: meta) => args)(a);
+
       const v = {
         ...variables,
-        args: Array.isArray(args) ? args : (args as (x: meta) => args)(a),
+        args: _args,
       } as variables;
 
-      setUsedVariables(v);
+      setUsedArgs(_args);
 
-      writeContract<abi, functionName, args, chainId>(
-        v,
-        options as any // TODO will fix im sorry
-      );
+      writeContract<abi, functionName, args, chainId>(v, undefined);
     },
     [variables, options, writeContract]
   );
@@ -72,20 +80,26 @@ export function useWriteContractHandler<
   useEffect(() => {
     if (data.error) {
       console.warn("Transaction error:", data.error);
-      setAlert?.(data.error.message);
+
+      if (usedArgs && options?.onError) {
+        options.onError(usedArgs);
+      } else {
+        setAlert?.({ title: "Error :(", body: data.error.message });
+      }
       return;
     }
 
     switch (tx.status) {
       case "success":
-        if (hash && usedVariables) {
-          options?.onSuccess?.(hash, usedVariables, undefined);
-        }
+        if (usedArgs) options?.onSuccess?.(usedArgs);
+
         break;
       case "error":
-        if (tx.error.name !== "TransactionReceiptNotFoundError") {
+        if (
           // TODO seems silly...
-          setAlert?.("Something may have gone wrong...");
+          tx.error.name !== "TransactionReceiptNotFoundError"
+        ) {
+          setAlert?.({ body: "Something may have gone wrong..." });
         }
         break;
     }
@@ -93,10 +107,11 @@ export function useWriteContractHandler<
     tx.status,
     tx.error?.name,
     setAlert,
-    options,
-    usedVariables,
+    options?.onSuccess,
+    options?.onError,
+    usedArgs,
     hash,
-    data.error,
+    data.error?.message,
   ]);
 
   return { write, isPending: isPending || tx.isLoading, data };

@@ -1,173 +1,188 @@
-import { CSSProperties, PropsWithChildren } from "react";
-import PixelArc from "../pixelRenderers/PixelArc";
+import {
+  CSSProperties,
+  MouseEventHandler,
+  PropsWithChildren,
+  useCallback,
+} from "react";
+import PixelCorner from "../pixelRenderers/PixelCorner";
 
 export default function RoundedFrame({
   children,
   shadow,
+  background,
+  borderColor,
   containerStyle,
   style,
+  onClick,
 }: PropsWithChildren<{
   shadow?: boolean;
+  background?: CSSProperties["background"];
+  borderColor?: CSSProperties["borderColor"];
   containerStyle?: CSSProperties;
   style?: CSSProperties;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }>) {
-  const r = 8;
+  const _borderColor = borderColor ?? "black";
+  const shadowColor = "#00000044";
+  const cornerSize = 12;
+  const borderSize = 4;
+
+  const Corner = useCallback(
+    ({ _style }: { _style?: CSSProperties }) => (
+      <PixelCorner
+        size={12}
+        fillInner={background}
+        fillBorder={_borderColor}
+        style={_style}
+      />
+    ),
+    [background, _borderColor]
+  );
 
   return (
     <div
-      style={{ position: "relative", overflow: "hidden", ...containerStyle }}
+      style={{ position: "relative", height: "100%", ...containerStyle }}
+      onClick={(e) => onClick?.(e)}
     >
       <div
         style={{
-          borderRadius: 15,
-          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           height: "100%",
-          boxSizing: "border-box",
-          ...style,
         }}
       >
-        {children}
+        <div
+          style={{
+            width: "calc(100% - 24px)",
+            position: "absolute",
+            margin: "0 auto",
+            background,
+            bottom: 12,
+            top: borderSize,
+          }}
+        />
+
+        <div
+          style={{
+            zIndex: 1,
+            padding: 4,
+            boxSizing: "border-box",
+            ...style,
+          }}
+        >
+          {children}
+        </div>
       </div>
 
-      <PixelArc
+      <div
         style={{
           position: "absolute",
+          top: 0,
           left: 0,
-          top: -1,
-          transform: `scale(-1,1)`,
+          right: 0,
+          display: "flex",
         }}
-        width={10}
-        height={10}
-        pixelSize={1}
-        fill={"black"}
-        radius={6}
-        thickness={4}
-      />
-      {shadow && (
-        <PixelArc
-          style={{
-            position: "absolute",
-            left: 4,
-            top: 4,
-            transform: `scale(-1,1)`,
-          }}
-          width={8}
-          height={8}
-          pixelSize={2}
-          fill={"#00000064"}
-          radius={4}
-          thickness={6}
-        />
-      )}
+      >
+        <Corner />
 
-      <PixelArc
+        <div style={{ flex: 1, background: _borderColor, height: 4 }} />
+
+        <Corner _style={{ transform: "scale(-1, 1)" }} />
+      </div>
+
+      <div
         style={{
           position: "absolute",
+          bottom: 0,
+          left: 0,
           right: 0,
-          top: -1,
-          transform: `scale(1,1)`,
+          display: "flex",
         }}
-        width={10}
-        height={10}
-        pixelSize={1}
-        fill={"black"}
-        radius={6}
-        thickness={4}
-      />
-      <PixelArc
-        style={{
-          position: "absolute",
-          right: 0,
-          bottom: -1,
-          transform: `scale(1,-1)`,
-        }}
-        width={10}
-        height={10}
-        pixelSize={1}
-        fill={"black"}
-        radius={6}
-        thickness={4}
-      />
-      <PixelArc
+      >
+        <Corner _style={{ transform: "scale(1, -1)" }} />
+
+        <div style={{ flex: 1 }}>
+          <div style={{ width: "100%", background, height: 8 }} />
+          <div style={{ width: "100%", background: _borderColor, height: 4 }} />
+        </div>
+
+        <Corner _style={{ transform: "scale(-1, -1)" }} />
+      </div>
+
+      <div
         style={{
           position: "absolute",
           left: 0,
-          bottom: -1,
-          transform: `scale(-1,-1)`,
+          top: 12,
+          bottom: 12,
+          display: "flex",
         }}
-        width={10}
-        height={10}
-        pixelSize={1}
-        fill={"black"}
-        radius={6}
-        thickness={4}
-      />
+      >
+        <div style={{ height: "100%", background: _borderColor, width: 4 }} />
+        <div
+          style={{
+            height: "100%",
+            background,
+            width: 8,
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          right: 0,
+          top: 12,
+          bottom: 12,
+          display: "flex",
+        }}
+      >
+        <div
+          style={{
+            height: "100%",
+            background,
+            width: 8,
+          }}
+        />
+        <div style={{ height: "100%", background: _borderColor, width: 4 }} />
+      </div>
 
       {shadow && (
         <>
-          <div
+          <PixelCorner
+            size={borderSize * 2}
+            fillBorder={shadowColor}
+            pixelSize={borderSize}
             style={{
               position: "absolute",
-              background: "#00000064",
-              top: r + 4,
-              bottom: 2,
-              left: 4,
-              width: 4,
+              top: borderSize,
+              left: borderSize,
+              transform: "scale(-1,-1)",
             }}
           />
           <div
             style={{
               position: "absolute",
-              background: "#00000064",
-              top: 4,
-              left: r + 4,
-              right: 2,
-              height: 4,
+              background: shadowColor,
+              top: cornerSize,
+              bottom: borderSize * 2,
+              left: borderSize,
+              width: borderSize,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              background: shadowColor,
+              top: borderSize,
+              left: cornerSize,
+              right: borderSize * 2,
+              height: borderSize,
             }}
           />
         </>
       )}
-
-      <div
-        style={{
-          position: "absolute",
-          background: "black",
-          top: r,
-          bottom: r,
-          left: 0,
-          width: 4,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          background: "black",
-          top: r,
-          bottom: r,
-          right: 0,
-          width: 4,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          background: "black",
-          top: 0,
-          left: r,
-          right: r,
-          height: 4,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          background: "black",
-          bottom: 0,
-          left: r,
-          right: r,
-          height: 4,
-        }}
-      />
     </div>
   );
 }

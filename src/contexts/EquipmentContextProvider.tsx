@@ -10,7 +10,7 @@ import {
 } from "react";
 import { EquipmentContext } from "./equipmentContext";
 
-export const EQUIP_DURATION_MILLIS = 320;
+export const EQUIP_DURATION_MILLIS = 400;
 
 export default function EquipmentContextProvider({
   children,
@@ -107,7 +107,10 @@ export default function EquipmentContextProvider({
     CATEGORIES.forEach((c) => {
       if (!availableTiers[c].length) return;
 
-      equip[c](Math.floor(Math.random() * availableTiers[c].length) + 1);
+      equip[c](
+        availableTiers[c][Math.floor(Math.random() * availableTiers[c].length)]
+          .tierId
+      );
     });
   }, [equip, availableTiers]);
 

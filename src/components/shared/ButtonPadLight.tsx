@@ -1,5 +1,5 @@
 import { CSSProperties, PropsWithChildren } from "react";
-import Beacon from "./Beacon";
+import Light from "./Light";
 import ButtonPad from "./ButtonPad";
 
 export default function ButtonPadLight({
@@ -7,11 +7,13 @@ export default function ButtonPadLight({
   active,
   ...props
 }: PropsWithChildren<{
-  fillBg?: CSSProperties["fill"];
-  fillFg?: CSSProperties["fill"];
+  fillBg?: CSSProperties["background"];
+  fillFg?: CSSProperties["background"];
+  fillBorder?: CSSProperties["borderColor"];
   radius?: number;
   onClick?: VoidFunction;
   style?: CSSProperties;
+  containerStyle?: CSSProperties;
   active?: boolean;
   pressed?: boolean;
 }>) {
@@ -22,11 +24,11 @@ export default function ButtonPadLight({
       <div
         style={{
           position: "absolute",
-          right: 4,
-          bottom: 4,
+          right: 8,
+          bottom: 8,
         }}
       >
-        <Beacon on={active} />
+        <Light offColor={props.fillFg} on={active} />
       </div>
     </ButtonPad>
   );

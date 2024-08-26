@@ -31,13 +31,14 @@ export default function SingleFrameToolbarView({
         <div style={{ marginTop: 20 }}>
           <RoundedFrame
             shadow
-            style={{
-              height: `calc(100vh - ${TOOLBAR_HEIGHT + 40}px)`,
+            background={"white"}
+            containerStyle={{
+              height: `calc(100vh - ${TOOLBAR_HEIGHT + 80}px)`,
               overflow: "scroll",
-              background: "white",
               padding: 10,
               ...frameStyle,
             }}
+            style={{ height: "100%" }}
           >
             {children}
           </RoundedFrame>

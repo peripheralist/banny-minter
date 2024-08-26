@@ -3,7 +3,7 @@ import { ChainId, useChain } from "./useChain";
 
 const addresses: Record<ChainId, `0x${string}`> = {
   [mainnet.id]: "0xasdf", // TODO
-  [sepolia.id]: "0xd9485D5A6D5ff42b821B59173b749B0A5186e3eD",
+  [sepolia.id]: "0x564B851da553e37C4d519894E0B286c896c3F18a",
 };
 
 export function useResolverAddress() {
