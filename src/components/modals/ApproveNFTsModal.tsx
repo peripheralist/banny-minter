@@ -1,6 +1,5 @@
 import { FONT_SIZE } from "@/constants/fontSize";
 import { AlertContext } from "@/contexts/alertContext";
-import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useApprove } from "@/hooks/writeContract/useApprove";
 import { useSetApprovalForAll } from "@/hooks/writeContract/useSetApprovalForAll";
 import { useCallback, useContext } from "react";
@@ -25,15 +24,17 @@ export default function ApproveNFTsModal({
     useSetApprovalForAll({ onSuccess });
   const { approve, isPending, usedArgs } = useApprove({ onSuccess });
 
-  const { measuredRef, width } = useMeasuredRef();
-
   if (!tokenIds) return null;
 
   return (
     <Modal open onClose={onClose}>
       <div
-        ref={measuredRef}
-        style={{ display: "flex", flexDirection: "column", color: "black" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          color: "black",
+          gap: 8,
+        }}
       >
         <h1>Some tokens need to be approved</h1>
         <p>
@@ -58,7 +59,7 @@ export default function ApproveNFTsModal({
               onClick={() => approve({ tokenId: t })}
               shadow="none"
               loading={
-                usedArgs?.includes(t)
+                isPending && usedArgs?.includes(t)
                   ? { fill: "black", width: 100, height: 24 }
                   : undefined
               }
@@ -67,23 +68,23 @@ export default function ApproveNFTsModal({
             </ButtonPad>
           </div>
         ))}
-      </div>
 
-      {tokenIds.length > 1 && (
-        <ButtonPad
-          containerStyle={{ width: 120 }}
-          style={{ width: 120, height: 32 }}
-          onClick={() => setApprovalForAll(undefined)}
-          shadow="none"
-          loading={
-            approveAllPending
-              ? { fill: "black", width: 100, height: 24 }
-              : undefined
-          }
-        >
-          Approve all
-        </ButtonPad>
-      )}
+        {tokenIds.length > 1 && (
+          <ButtonPad
+            containerStyle={{ width: 180, marginTop: 24 }}
+            style={{ width: 180, height: 32 }}
+            onClick={() => setApprovalForAll(undefined)}
+            shadow="none"
+            loading={
+              approveAllPending
+                ? { fill: "black", width: 160, height: 24 }
+                : undefined
+            }
+          >
+            Approve all
+          </ButtonPad>
+        )}
+      </div>
     </Modal>
   );
 }

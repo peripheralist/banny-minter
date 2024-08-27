@@ -3,13 +3,14 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { CATEGORIES } from "@/constants/nfts";
 import { AlertContext } from "@/contexts/alertContext";
 import { EquipmentContext } from "@/contexts/equipmentContext";
+import { useIsApprovedForAll } from "@/hooks/useIsApprovedForAll";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useNFTApprovals } from "@/hooks/useNFTApprovals";
 import { useDecorateBanny } from "@/hooks/writeContract/useDecorateBanny";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 import ApproveNFTsModal from "../modals/ApproveNFTsModal";
 import ButtonPad from "../shared/ButtonPad";
-import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 
 export default function DecorateButton() {
   // TODO need to disable button until unworn outfits are equipped
@@ -53,8 +54,10 @@ export default function DecorateButton() {
     [approvals]
   );
 
+  const { isApprovedForAll } = useIsApprovedForAll(address);
+
   const decorate = useCallback(() => {
-    if (tokenIdsNeedApproval?.length) {
+    if (tokenIdsNeedApproval?.length && !isApprovedForAll) {
       setApproveModalOpen(true);
       return;
     }
@@ -68,7 +71,7 @@ export default function DecorateButton() {
       world: equipped.world,
       outfits,
     });
-  }, [equipped, decorateBanny, tokenIdsNeedApproval]);
+  }, [equipped, decorateBanny, tokenIdsNeedApproval, isApprovedForAll]);
 
   const { measuredRef, width, height } = useMeasuredRef();
 
