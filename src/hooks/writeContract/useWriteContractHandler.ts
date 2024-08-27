@@ -114,5 +114,5 @@ export function useWriteContractHandler<
     data.error?.message,
   ]);
 
-  return { write, isPending: isPending || tx.isLoading, data };
+  return { write, isPending: isPending || tx.isLoading, data, usedArgs };
 }

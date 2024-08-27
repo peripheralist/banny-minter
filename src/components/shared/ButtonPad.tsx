@@ -5,6 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import Fuzz from "../pixelRenderers/Fuzz";
 import PixelCorner from "../pixelRenderers/PixelCorner";
 import RoundedFrame from "./RoundedFrame";
 
@@ -21,6 +22,7 @@ export default function ButtonPad({
   containerStyle,
   style,
   disabled,
+  loading,
 }: PropsWithChildren<{
   fillBg?: CSSProperties["background"];
   fillFg?: CSSProperties["background"];
@@ -31,6 +33,7 @@ export default function ButtonPad({
   containerStyle?: CSSProperties;
   style?: CSSProperties;
   disabled?: boolean;
+  loading?: { fill: CSSProperties["fill"]; width: number; height: number };
 }>) {
   const [clicked, setClicked] = useState<boolean>();
 
@@ -47,7 +50,7 @@ export default function ButtonPad({
   }, [shadow]);
 
   const _onClick = useCallback(() => {
-    if (disabled) return;
+    if (disabled || loading) return;
 
     setClicked(true);
 
@@ -57,7 +60,7 @@ export default function ButtonPad({
     }, TRANSITION_TIME_MILLIS);
 
     return () => clearTimeout(timeout);
-  }, [onClick, disabled]);
+  }, [onClick, disabled, loading]);
 
   return (
     <div
@@ -102,7 +105,7 @@ export default function ButtonPad({
           ...style,
         }}
       >
-        {children}
+        {loading ? <Fuzz {...loading} interval={500} /> : children}
       </RoundedFrame>
     </div>
   );

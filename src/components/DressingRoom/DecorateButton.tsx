@@ -1,17 +1,18 @@
 import { COLORS } from "@/constants/colors";
+import { FONT_SIZE } from "@/constants/fontSize";
 import { CATEGORIES } from "@/constants/nfts";
+import { AlertContext } from "@/contexts/alertContext";
 import { EquipmentContext } from "@/contexts/equipmentContext";
+import { useNFTApprovals } from "@/hooks/useNFTApprovals";
 import { useDecorateBanny } from "@/hooks/writeContract/useDecorateBanny";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
-import Fuzz from "../pixelRenderers/Fuzz";
-import ButtonPad from "../shared/ButtonPad";
-import { useNFTApprovals } from "@/hooks/useNFTApprovals";
 import ApproveNFTsModal from "../modals/ApproveNFTsModal";
-import { FONT_SIZE } from "@/constants/fontSize";
-import { AlertContext } from "@/contexts/alertContext";
+import ButtonPad from "../shared/ButtonPad";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 
 export default function DecorateButton() {
+  // TODO need to disable button until unworn outfits are equipped
   const [approveModalOpen, setApproveModalOpen] = useState(false);
 
   const { setAlert } = useContext(AlertContext);
@@ -69,45 +70,48 @@ export default function DecorateButton() {
     });
   }, [equipped, decorateBanny, tokenIdsNeedApproval]);
 
+  const { measuredRef, width, height } = useMeasuredRef();
+
+  const loading = isPending ? { fill: "white", width, height } : undefined;
+
   return (
     <>
       <ButtonPad
         fillFg={COLORS.pink}
         onClick={decorate}
         shadow="sm"
-        style={{ minWidth: 180, padding: 24 }}
+        disabled={!address}
+        style={{ padding: 24 }}
+        loading={loading}
       >
-        {isPending ? (
-          <Fuzz width={120} height={40} fill="white" interval={500} />
-        ) : (
+        <div
+          style={{
+            textAlign: "center",
+          }}
+        >
           <div
+            ref={measuredRef}
             style={{
-              textAlign: "center",
+              opacity: address ? 1 : 0.25,
+              color: address ? "white" : "black",
+              fontSize: FONT_SIZE["2xl"],
             }}
           >
+            Dress
+          </div>
+
+          {!address && (
             <div
               style={{
-                opacity: address ? 1 : 0.25,
-                color: address ? "white" : "black",
-                fontSize: FONT_SIZE["2xl"],
+                fontSize: FONT_SIZE.lg,
+                textTransform: "uppercase",
+                color: "white",
               }}
             >
-              Dress
+              No wallet
             </div>
-
-            {!address && (
-              <div
-                style={{
-                  fontSize: FONT_SIZE.lg,
-                  textTransform: "uppercase",
-                  color: "white",
-                }}
-              >
-                No wallet
-              </div>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </ButtonPad>
 
       {approveModalOpen && (

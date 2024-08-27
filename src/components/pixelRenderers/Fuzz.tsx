@@ -11,7 +11,6 @@ export default function Fuzz({
   interval?: number;
   pixelSize?: number;
   density?: number;
-  getSvg?: (svg: string) => void;
   width: number;
   height: number;
   fill?: CSSProperties["fill"];

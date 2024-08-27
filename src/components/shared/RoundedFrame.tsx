@@ -2,6 +2,7 @@ import {
   CSSProperties,
   MouseEventHandler,
   PropsWithChildren,
+  Ref,
   useCallback,
 } from "react";
 import PixelCorner from "../pixelRenderers/PixelCorner";
@@ -14,6 +15,7 @@ export default function RoundedFrame({
   containerStyle,
   style,
   onClick,
+  contentRef,
 }: PropsWithChildren<{
   shadow?: boolean;
   background?: CSSProperties["background"];
@@ -21,6 +23,7 @@ export default function RoundedFrame({
   containerStyle?: CSSProperties;
   style?: CSSProperties;
   onClick?: MouseEventHandler<HTMLDivElement>;
+  contentRef?: Ref<HTMLDivElement>;
 }>) {
   const _borderColor = borderColor ?? "black";
   const shadowColor = "#00000044";
@@ -70,6 +73,7 @@ export default function RoundedFrame({
             boxSizing: "border-box",
             ...style,
           }}
+          ref={contentRef}
         >
           {children}
         </div>

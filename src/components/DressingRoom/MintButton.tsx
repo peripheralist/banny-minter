@@ -1,16 +1,17 @@
 import { COLORS } from "@/constants/colors";
+import { FONT_SIZE } from "@/constants/fontSize";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useMint } from "@/hooks/writeContract/useMint";
 import { formatEther } from "juice-sdk-core";
 import { useContext } from "react";
 import { useAccount } from "wagmi";
-import Fuzz from "../pixelRenderers/Fuzz";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
-import { FONT_SIZE } from "@/constants/fontSize";
 
 export default function MintButton() {
+  // TODO need to disable button until mintable outfits are equipped
   const { address } = useAccount();
 
   const { totalEquippedPrice } = useContext(EquipmentContext);
@@ -19,52 +20,50 @@ export default function MintButton() {
 
   const isSmallScreen = useIsSmallScreen();
 
-  const mintTxPending = isPending;
+  const { measuredRef, width, height } = useMeasuredRef();
+
+  const loading = isPending ? { fill: "white", width, height } : undefined;
 
   if (isSmallScreen) {
     return (
       <RoundedFrame>
         <ButtonPad
-          style={{
-            padding: 20,
-          }}
-          disabled={mintTxPending || !address}
+          style={{ padding: 24 }}
+          disabled={!address}
+          loading={loading}
           fillFg={COLORS.pink}
           onClick={() => {
             mint();
           }}
         >
-          {mintTxPending ? (
-            <Fuzz width={80} height={32} fill="white" interval={500} />
-          ) : (
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: FONT_SIZE["2xl"],
+            }}
+          >
             <div
+              ref={measuredRef}
               style={{
-                textAlign: "center",
-                fontSize: FONT_SIZE["2xl"],
+                opacity: address ? 1 : 0.25,
+                color: address ? "white" : "black",
               }}
             >
+              Mint
+            </div>
+
+            {!address && (
               <div
                 style={{
-                  opacity: address ? 1 : 0.25,
-                  color: address ? "white" : "black",
+                  textTransform: "uppercase",
+                  color: "white",
+                  fontSize: FONT_SIZE.md,
                 }}
               >
-                Mint
+                No wallet
               </div>
-
-              {!address && (
-                <div
-                  style={{
-                    textTransform: "uppercase",
-                    color: "white",
-                    fontSize: FONT_SIZE.md,
-                  }}
-                >
-                  No wallet
-                </div>
-              )}
-            </div>
-          )}
+            )}
+          </div>
         </ButtonPad>
 
         <div
@@ -95,9 +94,10 @@ export default function MintButton() {
       }}
     >
       <ButtonPad
-        disabled={mintTxPending || !address}
+        disabled={!address}
+        loading={loading}
         style={{
-          width: 180,
+          minWidth: 180,
           padding: 24,
           height: "100%",
         }}
@@ -105,36 +105,34 @@ export default function MintButton() {
         fillFg={COLORS.pink}
         onClick={mint}
       >
-        {mintTxPending ? (
-          <Fuzz width={80} height={32} fill="white" interval={500} />
-        ) : (
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: FONT_SIZE["2xl"],
+          }}
+        >
           <div
+            ref={measuredRef}
             style={{
-              textAlign: "center",
-              fontSize: FONT_SIZE["2xl"],
+              opacity: address ? 1 : 0.25,
+              color: address ? "white" : "black",
             }}
           >
+            Mint
+          </div>
+
+          {!address && (
             <div
               style={{
-                opacity: address ? 1 : 0.25,
-                color: address ? "white" : "black",
+                textTransform: "uppercase",
+                color: "white",
+                fontSize: FONT_SIZE.lg,
               }}
             >
-              Mint
+              No wallet
             </div>
-            {!address && (
-              <div
-                style={{
-                  textTransform: "uppercase",
-                  color: "white",
-                  fontSize: FONT_SIZE.lg,
-                }}
-              >
-                No wallet
-              </div>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </ButtonPad>
 
       <div

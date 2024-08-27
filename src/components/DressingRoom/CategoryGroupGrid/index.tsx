@@ -131,7 +131,7 @@ export default function CategoryGroupGrid({
           minWidth: gridCols * imageSize + (gridCols - 1) * 30 + 32, // 30 and 32 have no explanation. goal is to keep object same width when grid is empty
           ...style,
         }}
-        // shadow
+        shadow
         background={COLORS.bananaHint}
       >
         <TiersGrid

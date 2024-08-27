@@ -142,11 +142,11 @@ export default function LargeView({
 
         <div
           style={{
-            height: "calc(100% - 8px)",
+            height: "calc(100% - 12px)",
             width: 8,
             background: "#00000044",
             margin: -4,
-            marginTop: 4,
+            marginTop: 8,
             zIndex: 1,
           }}
         />

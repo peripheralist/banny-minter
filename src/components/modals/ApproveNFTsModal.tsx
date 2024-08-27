@@ -1,10 +1,11 @@
+import { FONT_SIZE } from "@/constants/fontSize";
+import { AlertContext } from "@/contexts/alertContext";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useApprove } from "@/hooks/writeContract/useApprove";
 import { useSetApprovalForAll } from "@/hooks/writeContract/useSetApprovalForAll";
-import Modal from "../shared/Modal";
+import { useCallback, useContext } from "react";
 import ButtonPad from "../shared/ButtonPad";
-import { FONT_SIZE } from "@/constants/fontSize";
-import { useCallback, useContext, useMemo } from "react";
-import { AlertContext } from "@/contexts/alertContext";
+import Modal from "../shared/Modal";
 
 export default function ApproveNFTsModal({
   tokenIds,
@@ -20,14 +21,20 @@ export default function ApproveNFTsModal({
     setAlert?.({ title: "Success!" });
   }, [setAlert, onClose]);
 
-  const { setApprovalForAll } = useSetApprovalForAll({ onSuccess });
-  const { approve } = useApprove({ onSuccess });
+  const { setApprovalForAll, isPending: approveAllPending } =
+    useSetApprovalForAll({ onSuccess });
+  const { approve, isPending, usedArgs } = useApprove({ onSuccess });
+
+  const { measuredRef, width } = useMeasuredRef();
 
   if (!tokenIds) return null;
 
   return (
     <Modal open onClose={onClose}>
-      <div style={{ display: "flex", flexDirection: "column", color: "black" }}>
+      <div
+        ref={measuredRef}
+        style={{ display: "flex", flexDirection: "column", color: "black" }}
+      >
         <h1>Some tokens need to be approved</h1>
         <p>
           When dressing a Banny, wearable NFTs are transferred to the Resolver
@@ -50,6 +57,11 @@ export default function ApproveNFTsModal({
               style={{ width: 120, height: 32 }}
               onClick={() => approve({ tokenId: t })}
               shadow="none"
+              loading={
+                usedArgs?.includes(t)
+                  ? { fill: "black", width: 100, height: 24 }
+                  : undefined
+              }
             >
               Approve
             </ButtonPad>
@@ -63,6 +75,11 @@ export default function ApproveNFTsModal({
           style={{ width: 120, height: 32 }}
           onClick={() => setApprovalForAll(undefined)}
           shadow="none"
+          loading={
+            approveAllPending
+              ? { fill: "black", width: 100, height: 24 }
+              : undefined
+          }
         >
           Approve all
         </ButtonPad>
