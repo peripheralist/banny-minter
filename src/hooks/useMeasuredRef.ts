@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 
 export function useMeasuredRef() {
+  const [node, setNode] = useState<HTMLDivElement>();
   const [width, setWidth] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
 
@@ -14,11 +15,15 @@ export function useMeasuredRef() {
     };
 
     if (node) {
+      setNode(node);
+
       fn();
 
       document.addEventListener("resize", fn);
       window.addEventListener("resize", fn);
     } else {
+      setNode(undefined);
+
       setWidth(0);
       setHeight(0);
 
@@ -27,5 +32,5 @@ export function useMeasuredRef() {
     }
   }, []);
 
-  return { measuredRef, width, height };
+  return { measuredRef, node, width, height };
 }

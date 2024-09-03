@@ -121,6 +121,7 @@ export default function DressOwnedBanny({
         <EquipmentContextProvider
           availableTiers={formattedAvailableTiers}
           defaultEquippedTierIds={equippedTierIds}
+          defaultGroup="head"
         >
           <DressingRoom button={<DecorateButton />} />
         </EquipmentContextProvider>

@@ -22,15 +22,17 @@ export default function DecorateButton() {
 
   const { equipped } = useContext(EquipmentContext);
 
+  const nakedTokenId = equipped["naked"]?.tokenId;
+
   const onSuccess = useCallback(() => {
     setAlert?.({
       title: "Success!",
       action: {
         label: "View Banny",
-        href: `/nft/${equipped["naked"]?.tokenId}`,
+        href: `/nft/${nakedTokenId}`,
       },
     });
-  }, [equipped["naked"]?.tokenId, setAlert]);
+  }, [nakedTokenId, setAlert, equipped]);
 
   const { decorateBanny, isPending } = useDecorateBanny({
     onSuccess,

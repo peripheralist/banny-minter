@@ -78,11 +78,7 @@ export default function Mint() {
             availableTiers={formattedTiers}
             defaultEquippedTierIds={{ naked: formattedTiers.naked[0].tierId }}
           >
-            <DressingRoom
-              button={<MintButton />}
-              includeBannyButtons
-              includeShuffle
-            />
+            <DressingRoom button={<MintButton />} includeBody />
           </EquipmentContextProvider>
         ) : (
           <FullscreenLoading />

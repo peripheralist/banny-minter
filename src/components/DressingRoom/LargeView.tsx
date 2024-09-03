@@ -1,4 +1,3 @@
-import { FONT_SIZE } from "@/constants/fontSize";
 import { CATEGORY_GROUP_NAMES } from "@/constants/nfts";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
@@ -6,28 +5,22 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import { useContext, useMemo } from "react";
 import EquippedTiersPreview from "../EquippedTiersPreview";
 import { TOOLBAR_HEIGHT } from "../Toolbar";
-import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
-import BannyButtons from "./BannyButtons";
 import CategoryGroupButton from "./CategoryGroupButton";
-import CategoryGroupGrid from "./CategoryGroupGrid";
 import Summary from "./Summary";
-import { COLORS } from "@/constants/colors";
+import TiersScrollGrid from "./TiersScrollGrid";
 
 export default function LargeView({
   button,
-  includeBannyButtons,
-  includeShuffle,
+  includeBody,
 }: {
   button: JSX.Element;
-  includeBannyButtons?: boolean;
-  includeShuffle?: boolean;
+  includeBody?: boolean;
 }) {
   const {
     equipped,
     equippingCategory,
     unequippingCategory,
-    equipRandom,
     selectedGroup,
     setSelectedGroup,
   } = useContext(EquipmentContext);
@@ -41,7 +34,12 @@ export default function LargeView({
   const { width: windowWidth } = useWindowSize();
 
   const gridCols = useMemo(
-    () => (windowWidth && windowWidth < 1200 ? 2 : 3),
+    () =>
+      windowWidth && windowWidth < 1200
+        ? 2
+        : windowWidth && windowWidth < 1320
+        ? 3
+        : 4,
     [windowWidth]
   );
 
@@ -67,10 +65,10 @@ export default function LargeView({
         style={{
           display: "flex",
           height: "100%",
+          gap: layoutSpacing,
         }}
       >
-        <RoundedFrame
-          background={COLORS.bananaLite}
+        <div
           style={{
             display: "flex",
             flexDirection: "column",
@@ -80,39 +78,8 @@ export default function LargeView({
             boxSizing: "border-box",
             overflow: "auto",
             gap: 16,
-            padding: contentSpacing,
           }}
-          containerStyle={{ zIndex: 1 }}
         >
-          {includeBannyButtons && (
-            <RoundedFrame
-              background={"white"}
-              containerStyle={{
-                padding: contentSpacing,
-                margin: -contentSpacing,
-                height: 140,
-                boxSizing: "border-box",
-                marginBottom: 0,
-              }}
-              style={{
-                width: "100%",
-                padding: 0,
-                boxSizing: "border-box",
-                marginTop: 8,
-              }}
-            >
-              <BannyButtons
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 12,
-                  marginBottom: contentSpacing,
-                }}
-                buttonStyle={{ height: 44, width: 44 }}
-              />
-            </RoundedFrame>
-          )}
-
           {setSelectedGroup
             ? CATEGORY_GROUP_NAMES.map((g) => (
                 <CategoryGroupButton
@@ -125,37 +92,15 @@ export default function LargeView({
                 />
               ))
             : null}
+        </div>
 
-          <div style={{ flex: 1 }}></div>
-
-          {includeShuffle && (
-            <ButtonPad
-              style={{ height: 40, fontSize: FONT_SIZE.md }}
-              onClick={equipRandom}
-              fillFg={COLORS.bananaHint}
-              shadow="sm"
-            >
-              SHUFFLE
-            </ButtonPad>
+        <TiersScrollGrid
+          categories={CATEGORY_GROUP_NAMES.filter((n) =>
+            includeBody ? true : n !== "body"
           )}
-        </RoundedFrame>
-
-        <div
-          style={{
-            height: "calc(100% - 12px)",
-            width: 8,
-            background: "#00000044",
-            margin: -4,
-            marginTop: 8,
-            zIndex: 1,
-          }}
-        />
-
-        <CategoryGroupGrid
-          containerStyle={{ marginLeft: -16 }}
           style={{
             padding: contentSpacing,
-            paddingLeft: contentSpacing + 12,
+            paddingTop: 0,
           }}
           gridCols={gridCols}
           imageSize={132}

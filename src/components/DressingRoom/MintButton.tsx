@@ -71,7 +71,7 @@ export default function MintButton() {
             padding: 8,
             textAlign: "center",
             fontWeight: "bold",
-            background: "#ffffff",
+            background: COLORS.bananaHint,
           }}
         >
           {totalEquippedPrice
@@ -85,7 +85,7 @@ export default function MintButton() {
 
   return (
     <RoundedFrame
-      background="white"
+      background={COLORS.bananaHint}
       style={{
         padding: "0px 0px",
         display: "flex",
@@ -101,7 +101,7 @@ export default function MintButton() {
           padding: 24,
           height: "100%",
         }}
-        containerStyle={{ flex: 1 }}
+        containerStyle={{ flex: 1, marginTop: -4 }}
         fillFg={COLORS.pink}
         onClick={mint}
       >

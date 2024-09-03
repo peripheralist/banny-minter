@@ -70,7 +70,7 @@ export function useWriteContractHandler<
 
       writeContract<abi, functionName, args, chainId>(v, undefined);
     },
-    [variables, options, writeContract]
+    [variables, writeContract]
   );
 
   const tx = useTransactionReceipt({
@@ -106,12 +106,11 @@ export function useWriteContractHandler<
   }, [
     tx.status,
     tx.error?.name,
+    data.error,
     setAlert,
-    options?.onSuccess,
-    options?.onError,
+    options,
     usedArgs,
     hash,
-    data.error?.message,
   ]);
 
   return { write, isPending: isPending || tx.isLoading, data, usedArgs };

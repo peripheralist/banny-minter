@@ -4,22 +4,16 @@ import SmallView from "./SmallView";
 
 export default function Index({
   button,
-  includeBannyButtons,
-  includeShuffle,
+  includeBody,
 }: {
   button: JSX.Element;
-  includeBannyButtons?: boolean;
-  includeShuffle?: boolean;
+  includeBody?: boolean;
 }) {
   const isSmallScreen = useIsSmallScreen();
 
   return isSmallScreen ? (
-    <SmallView button={button} includeBannyButtons={includeBannyButtons} />
+    <SmallView button={button} includeBody={includeBody} />
   ) : (
-    <LargeView
-      button={button}
-      includeBannyButtons={includeBannyButtons}
-      includeShuffle={includeShuffle}
-    />
+    <LargeView button={button} includeBody={includeBody} />
   );
 }

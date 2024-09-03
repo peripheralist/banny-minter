@@ -65,7 +65,7 @@ export default function CategoryGroupGrid({
     () =>
       gridRows ??
       Math.max(Math.floor((containerHeight - 80) / (imageSize + 20)), 0),
-    [containerHeight, gridRows]
+    [containerHeight, gridRows, imageSize]
   );
 
   const pageSize = useMemo(() => _gridRows * gridCols, [_gridRows, gridCols]);

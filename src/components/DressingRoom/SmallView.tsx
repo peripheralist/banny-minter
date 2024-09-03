@@ -11,10 +11,10 @@ import Summary from "./Summary";
 
 export default function SmallView({
   button,
-  includeBannyButtons,
+  includeBody,
 }: {
   button: JSX.Element;
-  includeBannyButtons?: boolean;
+  includeBody?: boolean;
 }) {
   const {
     equipped,
@@ -49,7 +49,7 @@ export default function SmallView({
         gap,
       }}
     >
-      {includeBannyButtons && (
+      {includeBody && (
         <BannyButtons
           style={{ display: "flex", gap }}
           buttonStyle={{ height: 40, flex: 1 }}

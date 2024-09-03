@@ -14,16 +14,20 @@ export const EQUIP_DURATION_MILLIS = 400;
 
 export default function EquipmentContextProvider({
   children,
+  defaultGroup,
   availableTiers,
   defaultEquippedTierIds,
 }: PropsWithChildren<{
+  defaultGroup?: CategoryGroup;
   availableTiers: Tiers;
   defaultEquippedTierIds?: Partial<Record<Category, number>>;
 }>) {
   const [equippedTierId, setEquippedTierId] = useState<
     Partial<Record<Category, number>>
   >({});
-  const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("head");
+  const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>(
+    defaultGroup ?? "body"
+  );
   const [equippingCategory, setEquippingCategory] = useState<Category>();
   const [unequippingCategory, setUnequippingCategory] = useState<Category>();
 

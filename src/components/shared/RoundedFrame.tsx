@@ -67,10 +67,12 @@ export default function RoundedFrame({
         />
 
         <div
+          className="sup"
           style={{
             zIndex: 1,
             padding: 4,
             boxSizing: "border-box",
+            maxHeight: "calc(100% - 8px)",
             ...style,
           }}
           ref={contentRef}
