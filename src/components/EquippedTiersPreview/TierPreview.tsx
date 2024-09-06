@@ -1,5 +1,5 @@
 import { mannequinSvg } from "@/constants/mannequinSvg";
-import { Category } from "@/constants/nfts";
+import { Category } from "@/constants/category";
 import { DEFAULT_SVG } from "@/constants/svgDefaults";
 import { EQUIP_DURATION_MILLIS } from "@/contexts/EquipmentContextProvider";
 import { useFuzz } from "@/hooks/useFuzz";

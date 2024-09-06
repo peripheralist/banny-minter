@@ -1,4 +1,4 @@
-import { Category } from "@/constants/nfts";
+import { Category } from "@/constants/category";
 
 export type Tier = {
   category: Category;

@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { CATEGORIES } from "@/constants/nfts";
+import { CATEGORIES } from "@/constants/category";
 import { AlertContext } from "@/contexts/alertContext";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useIsApprovedForAll } from "@/hooks/useIsApprovedForAll";
@@ -32,7 +32,7 @@ export default function DecorateButton() {
         href: `/nft/${nakedTokenId}`,
       },
     });
-  }, [nakedTokenId, setAlert, equipped]);
+  }, [nakedTokenId, setAlert]);
 
   const { decorateBanny, isPending } = useDecorateBanny({
     onSuccess,

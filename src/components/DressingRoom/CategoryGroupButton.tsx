@@ -1,5 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { CATEGORY_GROUPS, CategoryGroup } from "@/constants/nfts";
+import { CATEGORY_GROUPS, CategoryGroup } from "@/constants/category";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useCallback, useContext, useMemo } from "react";
 import ButtonPad from "../shared/ButtonPad";

@@ -2,7 +2,7 @@ import DressingRoom from "@/components/DressingRoom";
 import DecorateButton from "@/components/DressingRoom/DecorateButton";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import { COLORS } from "@/constants/colors";
-import { Category } from "@/constants/nfts";
+import { Category } from "@/constants/category";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { NfTsQuery } from "@/generated/graphql";
 import { useOwnedCategorizedTiers } from "@/hooks/queries/useOwnedCategorizedTiers";

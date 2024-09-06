@@ -1,5 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { CATEGORY_GROUP_NAMES, CategoryGroup } from "@/constants/nfts";
+import { CategoryGroup } from "@/constants/category";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import {

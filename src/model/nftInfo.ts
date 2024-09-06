@@ -1,4 +1,4 @@
-import { CATEGORY_IDS } from "@/constants/nfts";
+import { CATEGORY_IDS } from "@/constants/category";
 
 type NumString = `${number}`;
 

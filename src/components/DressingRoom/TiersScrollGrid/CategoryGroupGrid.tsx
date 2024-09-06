@@ -1,7 +1,7 @@
 import ButtonPad from "@/components/shared/ButtonPad";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { CATEGORY_GROUPS, CategoryGroup } from "@/constants/nfts";
+import { CATEGORY_GROUPS, CategoryGroup } from "@/constants/category";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { Tier } from "@/model/tier";
 import { useCallback, useContext, useMemo } from "react";

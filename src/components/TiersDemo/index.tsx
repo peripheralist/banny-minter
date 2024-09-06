@@ -1,5 +1,5 @@
 import { categoryIncompatibles } from "@/constants/incompatibles";
-import { CATEGORIES, Category } from "@/constants/nfts";
+import { CATEGORIES, Category } from "@/constants/category";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { EquippedTiers } from "@/model/tier";
 import { useEffect, useMemo, useState } from "react";

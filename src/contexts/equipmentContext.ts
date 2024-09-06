@@ -1,4 +1,4 @@
-import { CATEGORIES, Category, CategoryGroup } from "@/constants/nfts";
+import { CATEGORIES, Category, CategoryGroup } from "@/constants/category";
 import { EquipTierFns, EquippedTiers, Tiers } from "@/model/tier";
 import { createContext } from "react";
 

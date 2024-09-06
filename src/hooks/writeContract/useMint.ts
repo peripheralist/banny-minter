@@ -1,4 +1,5 @@
-import { BANNYVERSE_PROJECT_ID, CATEGORIES } from "@/constants/nfts";
+import { CATEGORIES } from "@/constants/category";
+import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
 import { AlertContext } from "@/contexts/alertContext";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";

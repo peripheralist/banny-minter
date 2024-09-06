@@ -1,4 +1,5 @@
-import { BANNYVERSE_COLLECTION_ID, Category } from "@/constants/nfts";
+import { Category } from "@/constants/category";
+import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { NftTier_OrderBy, useAllNftTiersQuery } from "@/generated/graphql";
 import { Tier, Tiers } from "@/model/tier";
 import { parseTier } from "@/utils/parseTier";

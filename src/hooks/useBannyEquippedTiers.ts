@@ -1,4 +1,4 @@
-import { categoryOfId } from "@/constants/nfts";
+import { categoryOfId } from "@/constants/category";
 import { NfTsQuery } from "@/generated/graphql";
 import { EquippedTiers, Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";

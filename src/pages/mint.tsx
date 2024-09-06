@@ -19,18 +19,18 @@ export default function Mint() {
     if (!tiers) return;
 
     function labelForTier(tier: Tier) {
+      if (tier.initialSupply === BigInt(999999999)) {
+        return <div>Unlimited</div>;
+      }
       if (tier.remainingSupply <= BigInt(0)) {
         return <div>SOLD OUT</div>;
-      } else {
-        return (
-          <div>
-            <span>{tier.remainingSupply.toString()}</span>
-            <span style={{ opacity: 0.6 }}>
-              /{tier.initialSupply.toString()}
-            </span>
-          </div>
-        );
       }
+      return (
+        <div>
+          <span>{tier.remainingSupply.toString()}</span>
+          <span style={{ opacity: 0.6 }}>/{tier.initialSupply.toString()}</span>
+        </div>
+      );
     }
 
     function detailForTier(tier: Tier) {

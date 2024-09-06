@@ -1,4 +1,4 @@
-import { Category } from "@/constants/nfts";
+import { Category } from "@/constants/category";
 import { NfTsQuery } from "@/generated/graphql";
 import { Tier } from "@/model/tier";
 import { useMemo } from "react";

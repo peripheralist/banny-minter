@@ -1,4 +1,4 @@
-import { Category } from "./nfts";
+import { Category } from "./category";
 
 type CategoryIncompatibles = Partial<Record<Category, Category[]>>;
 

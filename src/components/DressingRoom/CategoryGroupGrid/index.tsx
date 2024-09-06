@@ -1,5 +1,5 @@
+import { CATEGORY_GROUPS, Category } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
-import { Category, CATEGORY_GROUPS } from "@/constants/nfts";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { Tier } from "@/model/tier";

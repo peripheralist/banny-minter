@@ -1,7 +1,7 @@
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { CATEGORIES, Category } from "@/constants/nfts";
+import { CATEGORIES, Category } from "@/constants/category";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useContext, useMemo } from "react";

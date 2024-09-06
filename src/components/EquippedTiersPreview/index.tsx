@@ -1,4 +1,4 @@
-import { CATEGORIES, Category } from "@/constants/nfts";
+import { CATEGORIES, Category } from "@/constants/category";
 import { EquippedTiers } from "@/model/tier";
 import { TierPreview } from "./TierPreview";
 

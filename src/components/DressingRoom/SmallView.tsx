@@ -1,4 +1,4 @@
-import { CATEGORY_GROUP_NAMES } from "@/constants/nfts";
+import { CATEGORY_GROUP_NAMES } from "@/constants/category";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useContext, useMemo } from "react";
