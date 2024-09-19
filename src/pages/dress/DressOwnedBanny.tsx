@@ -1,8 +1,8 @@
 import DressingRoom from "@/components/DressingRoom";
 import DecorateButton from "@/components/DressingRoom/DecorateButton";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
-import { COLORS } from "@/constants/colors";
 import { Category } from "@/constants/category";
+import { COLORS } from "@/constants/colors";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { NfTsQuery } from "@/generated/graphql";
 import { useOwnedCategorizedTiers } from "@/hooks/queries/useOwnedCategorizedTiers";
@@ -29,30 +29,6 @@ export default function DressOwnedBanny({
   const formattedAvailableTiers = useMemo(() => {
     if (!ownedTiers || !equippedTiers) return;
 
-    function labelForTier(quantity?: number) {
-      return (
-        <div>{quantity === undefined ? "Equipped" : `${quantity} owned`}</div>
-      );
-    }
-
-    function detailForTier({
-      name,
-      tokenId,
-    }: {
-      name: string | undefined;
-      tokenId: bigint;
-    }) {
-      return (
-        <div style={{ display: "flex", width: "100%" }}>
-          <div style={{ flex: 1 }}>{name ? name : "--"}</div>
-
-          <span style={{ opacity: 0.5 }}>
-            {tokenId ? `ID: ${tokenId.toString()}` : null}
-          </span>
-        </div>
-      );
-    }
-
     // Format and add owned nft tiers (equipped items are unowned)
     const formattedOwnedTiers = Object.entries(ownedTiers).reduce(
       (acc, [category, tiersOfCategory]) => ({
@@ -66,11 +42,7 @@ export default function DressOwnedBanny({
           return {
             ...t.tier,
             tokenId,
-            label: labelForTier(t.nfts.length),
-            detail: detailForTier({
-              name: t.tier.name,
-              tokenId,
-            }),
+            ownedSupply: t.nfts.length,
           };
         }),
       }),
@@ -85,11 +57,6 @@ export default function DressOwnedBanny({
           ...acc[category as Category],
           {
             ...tier,
-            label: labelForTier(),
-            detail: detailForTier({
-              name: tier.name,
-              tokenId: BigInt(tier.tokenId ?? 0),
-            }),
             equipped: true,
           },
         ],
@@ -122,6 +89,7 @@ export default function DressOwnedBanny({
           availableTiers={formattedAvailableTiers}
           defaultEquippedTierIds={equippedTierIds}
           defaultGroup="head"
+          displayStrategy="dress"
         >
           <DressingRoom button={<DecorateButton />} />
         </EquipmentContextProvider>

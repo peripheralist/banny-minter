@@ -7,7 +7,6 @@ import { useEnsName } from "wagmi";
 import Blinker from "../shared/Blinker";
 import CurrentChain from "./CurrentChain";
 import Wallet from "./Wallet";
-import { COLORS } from "@/constants/colors";
 
 export const TOOLBAR_HEIGHT = 50;
 
@@ -25,18 +24,25 @@ export default function Index() {
     ? `${address.substring(0, 6)}...${address.slice(38)}`
     : undefined;
 
+  const currentPath = useMemo(() => {
+    const { pathname } = router;
+
+    if (pathname.includes("mint")) return "store";
+    if (pathname.includes("dress/")) return "dress";
+    if (pathname.includes("closet/")) return "closet";
+  }, [router.pathname]);
+
   const pathText = useMemo(() => {
-    if (router.pathname.includes("mint")) {
-      return "SHOP";
-    }
-    if (router.pathname.includes("dress/")) {
-      return `DRESSING ROOM: BANNY #${tokenId}`;
-    }
-    if (router.pathname.includes("closet/")) {
-      return `${formattedAddress}'s closet`;
+    switch (currentPath) {
+      case "store":
+        return "STORE";
+      case "dress":
+        return `DRESSING ROOM: BANNY #${tokenId}`;
+      case "closet":
+        return `${formattedAddress}'s closet`;
     }
     return null;
-  }, [router.pathname, formattedAddress, tokenId]);
+  }, [currentPath, formattedAddress, tokenId]);
 
   const isSmallScreen = useIsSmallScreen();
 
@@ -66,7 +72,6 @@ export default function Index() {
           <h1
             style={{
               margin: 0,
-              display: "block",
               appearance: "none",
               color: "black",
               fontSize: FONT_SIZE["2xl"],
@@ -74,7 +79,7 @@ export default function Index() {
               letterSpacing: 2,
             }}
           >
-            Bannyverse
+            B
           </h1>
         </Link>
 
@@ -82,13 +87,26 @@ export default function Index() {
           <span
             style={{
               textTransform: "uppercase",
-              fontSize: FONT_SIZE.xl,
+              fontSize: FONT_SIZE["2xl"],
               color: "black",
             }}
           >
             {pathText}
           </span>
         )}
+
+        <Link
+          href={"/mint"}
+          hidden={currentPath === "store"}
+          style={{
+            textTransform: "uppercase",
+            fontSize: FONT_SIZE.xl,
+            color: "black",
+            opacity: 0.7,
+          }}
+        >
+          Store
+        </Link>
       </div>
 
       {isSmallScreen ? null : (

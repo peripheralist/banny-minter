@@ -10,10 +10,9 @@ export type Tier = {
   initialSupply: bigint;
   remainingSupply: bigint;
 
-  label?: JSX.Element | string;
-  detail?: JSX.Element | string;
-
-  tokenId?: number; // Only if NFT
+  // Below only if NFT
+  ownedSupply?: number;
+  tokenId?: number;
   equipped?: boolean; // Only if NFT is equipped + owned by resolver contract
 };
 

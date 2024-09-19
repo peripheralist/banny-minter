@@ -1,5 +1,6 @@
-import { categoryIncompatibles } from "@/constants/incompatibles";
 import { CATEGORIES, Category, CategoryGroup } from "@/constants/category";
+import { categoryIncompatibles } from "@/constants/incompatibles";
+import { DisplayStrategy } from "@/model/displayStrategy";
 import { EquipTierFns, EquippedTiers, Tiers } from "@/model/tier";
 import {
   PropsWithChildren,
@@ -17,10 +18,12 @@ export default function EquipmentContextProvider({
   defaultGroup,
   availableTiers,
   defaultEquippedTierIds,
+  displayStrategy,
 }: PropsWithChildren<{
   defaultGroup?: CategoryGroup;
   availableTiers: Tiers;
   defaultEquippedTierIds?: Partial<Record<Category, number>>;
+  displayStrategy?: DisplayStrategy;
 }>) {
   const [equippedTierId, setEquippedTierId] = useState<
     Partial<Record<Category, number>>
@@ -134,6 +137,12 @@ export default function EquipmentContextProvider({
     );
   }, [availableTiers, equipped]);
 
+  const _displayStrategy = useMemo(() => {
+    if (!displayStrategy) throw new Error("displayStrategy is undefined");
+
+    return displayStrategy;
+  }, []);
+
   return (
     <EquipmentContext.Provider
       value={{
@@ -146,6 +155,7 @@ export default function EquipmentContextProvider({
         equippingCategory,
         unequippingCategory,
         availableTiers,
+        displayStrategy: _displayStrategy,
       }}
     >
       {children}

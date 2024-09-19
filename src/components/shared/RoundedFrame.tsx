@@ -67,7 +67,6 @@ export default function RoundedFrame({
         />
 
         <div
-          className="sup"
           style={{
             zIndex: 1,
             padding: 4,

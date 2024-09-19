@@ -1,4 +1,5 @@
 import { CATEGORIES, Category, CategoryGroup } from "@/constants/category";
+import { DisplayStrategy } from "@/model/displayStrategy";
 import { EquipTierFns, EquippedTiers, Tiers } from "@/model/tier";
 import { createContext } from "react";
 
@@ -12,6 +13,7 @@ type Context = {
   equippingCategory?: Category;
   unequippingCategory?: Category;
   availableTiers?: Tiers;
+  displayStrategy?: DisplayStrategy;
 };
 
 export const EquipmentContext = createContext<Context>({

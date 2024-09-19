@@ -64,7 +64,7 @@ export default function Home() {
             opacity: 0.85,
           }}
         >
-          <h1
+          {/* <h1
             style={{
               position: "fixed",
               left: 0,
@@ -78,7 +78,7 @@ export default function Home() {
             }}
           >
             Bannyverse
-          </h1>
+          </h1> */}
 
           <CloudSky />
         </div>

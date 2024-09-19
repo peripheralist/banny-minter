@@ -4,6 +4,9 @@ import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useCallback, useContext, useMemo } from "react";
 import ButtonPad from "../shared/ButtonPad";
 import IconImage from "../shared/images/IconImage";
+import { FONT_SIZE } from "@/constants/fontSize";
+import Light from "../shared/Light";
+import RoundedFrame from "../shared/RoundedFrame";
 
 /**
  * Button for selecting
@@ -51,6 +54,28 @@ export default function CategoryGroupButton({
       <IconImage style={{ background: "black" }} name={name} size={size} />
     );
   }, [group, size]);
+
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        height: 40,
+        fontSize: FONT_SIZE.md,
+        textTransform: "uppercase",
+        opacity: active ? 1 : 0.4,
+        gap: 4,
+      }}
+    >
+      {group}
+
+      <div style={{ color: COLORS.pink, minWidth: 20 }}>
+        {equippedCount > 0 ? equippedCount : ""}
+      </div>
+    </div>
+  );
 
   return (
     <ButtonPad

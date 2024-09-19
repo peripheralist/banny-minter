@@ -63,13 +63,13 @@ export default function CategoryGroupGrid({
       >
         <h4
           style={{
-            textTransform: "uppercase",
             margin: 0,
             paddingTop: 8,
             fontSize: FONT_SIZE.xl,
           }}
         >
-          {group}
+          {group[0].toUpperCase()}
+          {group.substring(1)}
         </h4>
 
         {selectedTiersCount > 0 && (

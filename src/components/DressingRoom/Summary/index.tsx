@@ -1,10 +1,11 @@
 import RoundedFrame from "@/components/shared/RoundedFrame";
+import { CATEGORIES, Category } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { CATEGORIES, Category } from "@/constants/category";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
-import { useContext, useMemo } from "react";
+import { formatEther } from "juice-sdk-core";
+import { useCallback, useContext, useMemo } from "react";
 import Fuzz from "../../pixelRenderers/Fuzz";
 
 export default function Index() {
@@ -34,7 +35,8 @@ export default function Index() {
 }
 
 function SelectedTierDetail({ category }: { category: Category }) {
-  const { equipped, equippingCategory } = useContext(EquipmentContext);
+  const { equipped, equippingCategory, displayStrategy } =
+    useContext(EquipmentContext);
 
   const { measuredRef, width } = useMeasuredRef();
 
@@ -44,6 +46,38 @@ function SelectedTierDetail({ category }: { category: Category }) {
     () => equippingCategory === category && width,
     [category, equippingCategory, width]
   );
+
+  const Content = useCallback(() => {
+    if (!tier) return null;
+
+    const { name, price, tokenId } = tier;
+
+    switch (displayStrategy) {
+      case "mint":
+        return (
+          <div
+            style={{
+              width: "100%",
+              display: "inline-flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <span>{name ? name : "--"}</span>
+            <span>{price ? formatEther(price) : "--"} ETH </span>
+          </div>
+        );
+      case "dress":
+        return (
+          <div style={{ display: "flex", width: "100%" }}>
+            <div style={{ flex: 1 }}>{name ? name : "--"}</div>
+
+            <span style={{ opacity: 0.5 }}>
+              {tokenId ? `ID: ${tokenId.toString()}` : null}
+            </span>
+          </div>
+        );
+    }
+  }, [tier]);
 
   return (
     <span
@@ -64,7 +98,8 @@ function SelectedTierDetail({ category }: { category: Category }) {
           >
             {formatCategoryName(category)}:
           </div>
-          {tier?.detail}
+
+          <Content />
         </div>
       )}
     </span>

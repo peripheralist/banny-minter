@@ -9,6 +9,7 @@ import RoundedFrame from "../shared/RoundedFrame";
 import CategoryGroupButton from "./CategoryGroupButton";
 import Summary from "./Summary";
 import TiersScrollGrid from "./TiersScrollGrid";
+import { COLORS } from "@/constants/colors";
 
 export default function LargeView({
   button,
@@ -34,17 +35,20 @@ export default function LargeView({
   const { width: windowWidth } = useWindowSize();
 
   const gridCols = useMemo(
-    () =>
-      windowWidth && windowWidth < 1200
-        ? 2
-        : windowWidth && windowWidth < 1320
-        ? 3
-        : 4,
+    () => (windowWidth && windowWidth < 800 ? 1 : 2),
+    [windowWidth]
+  );
+
+  const imageSize = useMemo(
+    () => (windowWidth && windowWidth < 1600 ? 240 : 240),
     [windowWidth]
   );
 
   const layoutSpacing = 12;
   const contentSpacing = 20;
+
+  const { measuredRef: groupButtonsRef, height: groupButtonsHeight } =
+    useMeasuredRef();
 
   return (
     <div
@@ -64,47 +68,65 @@ export default function LargeView({
       <div
         style={{
           display: "flex",
+          flexDirection: "column",
           height: "100%",
-          gap: layoutSpacing,
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyItems: "flex-start",
-            position: "relative",
-            height: "100%",
-            boxSizing: "border-box",
-            overflow: "auto",
-            gap: 16,
-          }}
-        >
-          {setSelectedGroup
-            ? CATEGORY_GROUP_NAMES.map((g) => (
-                <CategoryGroupButton
-                  key={g}
-                  group={g}
-                  active={selectedGroup === g}
-                  onClick={
-                    selectedGroup === g ? undefined : () => setSelectedGroup(g)
-                  }
-                />
-              ))
-            : null}
+        <div ref={groupButtonsRef}>
+          <RoundedFrame
+            containerStyle={{
+              height: "auto",
+              marginBottom: -layoutSpacing - 4,
+              zIndex: 10,
+            }}
+            background={"white"}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              gap: 8,
+              paddingLeft: 24,
+              paddingRight: 24,
+              boxSizing: "border-box",
+            }}
+          >
+            {setSelectedGroup
+              ? CATEGORY_GROUP_NAMES.map((g) => (
+                  <CategoryGroupButton
+                    key={g}
+                    group={g}
+                    active={selectedGroup === g}
+                    onClick={
+                      selectedGroup === g
+                        ? undefined
+                        : () => setSelectedGroup(g)
+                    }
+                  />
+                ))
+              : null}
+          </RoundedFrame>
         </div>
 
-        <TiersScrollGrid
-          categories={CATEGORY_GROUP_NAMES.filter((n) =>
-            includeBody ? true : n !== "body"
-          )}
+        <div
           style={{
-            padding: contentSpacing,
-            paddingTop: 0,
+            flex: 1,
+            maxHeight: `calc(100% - ${
+              groupButtonsHeight - layoutSpacing + 8
+            }px)`,
           }}
-          gridCols={gridCols}
-          imageSize={132}
-        />
+        >
+          <TiersScrollGrid
+            categories={CATEGORY_GROUP_NAMES.filter((n) =>
+              includeBody ? true : n !== "body"
+            )}
+            style={{
+              padding: contentSpacing,
+              paddingTop: 0,
+            }}
+            gridCols={gridCols}
+            imageSize={imageSize}
+          />
+        </div>
       </div>
 
       <div
@@ -134,7 +156,7 @@ export default function LargeView({
             }}
           >
             <EquippedTiersPreview
-              size={Math.min(previewHeight, previewWidth) * 0.9}
+              size={Math.min(previewHeight, previewWidth) * 0.96}
               equipped={equipped}
               equippingCategory={equippingCategory}
               unequippingCategory={unequippingCategory}

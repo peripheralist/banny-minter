@@ -1,5 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { CategoryGroup } from "@/constants/category";
+import { CATEGORY_GROUP_NAMES, CategoryGroup } from "@/constants/category";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import {
@@ -7,10 +7,14 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import RoundedFrame from "../../shared/RoundedFrame";
 import CategoryGroupGrid from "./CategoryGroupGrid";
+import CategoryGroupButton from "../CategoryGroupButton";
+
+const BUTTONS_HEIGHT = 40;
 
 /**
  * Renders a paged grid of all tiers within a category group, that can be equipped or unequipped by clicking..
@@ -65,8 +69,10 @@ export default function TiersScrollGrid({
     setSelectedGroup(nearest[0]);
   }, [categories, scrollListenerActive, setSelectedGroup, node]);
 
+  const maxContentHeight = useMemo(() => height - 12, [height]);
+
   return (
-    <div ref={measuredRef} style={{ height: "100%" }}>
+    <div ref={measuredRef} style={{ maxHeight: "100%" }}>
       <RoundedFrame
         containerStyle={{
           height: "100%",
@@ -75,9 +81,9 @@ export default function TiersScrollGrid({
         }}
         style={{
           overflow: "hidden",
-          marginTop: 4,
+          marginTop: 12,
           paddingTop: 0,
-          maxHeight: height - 12,
+          maxHeight: maxContentHeight,
         }}
         shadow
         background={COLORS.bananaHint}
@@ -92,8 +98,8 @@ export default function TiersScrollGrid({
             position: "relative",
             boxSizing: "border-box",
             overflow: "auto",
-            maxHeight: height - 12,
-            paddingBottom: height - 240,
+            maxHeight: maxContentHeight - BUTTONS_HEIGHT,
+            paddingBottom: `calc(100% - 40px)`,
             ...style,
           }}
         >
