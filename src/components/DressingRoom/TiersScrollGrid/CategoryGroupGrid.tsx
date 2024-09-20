@@ -49,14 +49,14 @@ export default function CategoryGroupGrid({
   return (
     <div id={group} style={{ marginBottom: 24 }}>
       <div
+        id={`h-${group}`}
         style={{
           position: "sticky",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "baseline",
           top: 0,
-          padding: "8px 0",
-          height: 40,
+          padding: "4px 0 12px",
           background: COLORS.bananaHint,
           zIndex: 10,
         }}

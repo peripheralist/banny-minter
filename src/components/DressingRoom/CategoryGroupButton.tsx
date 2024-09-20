@@ -35,7 +35,8 @@ export default function CategoryGroupButton({
     let name = "";
     switch (group) {
       case "body":
-        return <div style={{ textAlign: "center" }}>naked icon?</div>;
+        name = "naked";
+        break;
       case "world":
         name = "background";
         break;
@@ -51,37 +52,20 @@ export default function CategoryGroupButton({
     }
 
     return (
-      <IconImage style={{ background: "black" }} name={name} size={size} />
+      <IconImage
+        style={{ background: active ? COLORS.pink : "black" }}
+        name={name}
+        size={size}
+      />
     );
-  }, [group, size]);
-
-  return (
-    <div
-      onClick={onClick}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        height: 40,
-        fontSize: FONT_SIZE.md,
-        textTransform: "uppercase",
-        opacity: active ? 1 : 0.4,
-        gap: 4,
-      }}
-    >
-      {group}
-
-      <div style={{ color: COLORS.pink, minWidth: 20 }}>
-        {equippedCount > 0 ? equippedCount : ""}
-      </div>
-    </div>
-  );
+  }, [group, size, active]);
 
   return (
     <ButtonPad
-      fillFg={active ? "white" : COLORS.bananaLite}
+      fillFg={active ? COLORS.pinkLite : "white"}
       onClick={onClick}
-      style={{ width: 100, height: 100, opacity: active ? 1 : 1 }}
+      style={{ height: 60, opacity: active ? 1 : 1 }}
+      containerStyle={{ width: "100%" }}
       pressed={active}
     >
       <Icon />

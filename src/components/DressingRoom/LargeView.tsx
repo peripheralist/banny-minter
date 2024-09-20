@@ -35,12 +35,12 @@ export default function LargeView({
   const { width: windowWidth } = useWindowSize();
 
   const gridCols = useMemo(
-    () => (windowWidth && windowWidth < 800 ? 1 : 2),
+    () => (windowWidth && windowWidth < 800 ? 1 : 3),
     [windowWidth]
   );
 
   const imageSize = useMemo(
-    () => (windowWidth && windowWidth < 1600 ? 240 : 240),
+    () => (windowWidth && windowWidth < 800 ? 240 : 200),
     [windowWidth]
   );
 
@@ -48,6 +48,8 @@ export default function LargeView({
   const contentSpacing = 20;
 
   const { measuredRef: groupButtonsRef, height: groupButtonsHeight } =
+    useMeasuredRef();
+  const { measuredRef: gridColumnRef, height: gridColumnHeight } =
     useMeasuredRef();
 
   return (
@@ -66,60 +68,56 @@ export default function LargeView({
       }}
     >
       <div
+        ref={gridColumnRef}
         style={{
           display: "flex",
           flexDirection: "column",
           height: "100%",
         }}
       >
-        <div ref={groupButtonsRef}>
-          <RoundedFrame
-            containerStyle={{
-              height: "auto",
-              marginBottom: -layoutSpacing - 4,
-              zIndex: 10,
-            }}
-            background={"white"}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              width: "100%",
-              gap: 8,
-              paddingLeft: 24,
-              paddingRight: 24,
-              boxSizing: "border-box",
-            }}
-          >
-            {setSelectedGroup
-              ? CATEGORY_GROUP_NAMES.map((g) => (
-                  <CategoryGroupButton
-                    key={g}
-                    group={g}
-                    active={selectedGroup === g}
-                    onClick={
-                      selectedGroup === g
-                        ? undefined
-                        : () => setSelectedGroup(g)
-                    }
-                  />
-                ))
-              : null}
-          </RoundedFrame>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            gap: layoutSpacing,
+            marginBottom: layoutSpacing,
+            boxSizing: "border-box",
+          }}
+          ref={groupButtonsRef}
+        >
+          {setSelectedGroup
+            ? CATEGORY_GROUP_NAMES.map((g) => (
+                <CategoryGroupButton
+                  key={g}
+                  group={g}
+                  active={selectedGroup === g}
+                  onClick={
+                    selectedGroup === g ? undefined : () => setSelectedGroup(g)
+                  }
+                />
+              ))
+            : null}
         </div>
 
         <div
           style={{
             flex: 1,
-            maxHeight: `calc(100% - ${
-              groupButtonsHeight - layoutSpacing + 8
-            }px)`,
+            flexShrink: 1,
+            boxSizing: "border-box",
+            minHeight: 0,
           }}
         >
           <TiersScrollGrid
             categories={CATEGORY_GROUP_NAMES.filter((n) =>
               includeBody ? true : n !== "body"
             )}
+            containerStyle={{
+              maxHeight: gridColumnHeight - groupButtonsHeight - layoutSpacing,
+            }}
             style={{
+              maxHeight:
+                gridColumnHeight - groupButtonsHeight - layoutSpacing - 36,
               padding: contentSpacing,
               paddingTop: 0,
             }}
