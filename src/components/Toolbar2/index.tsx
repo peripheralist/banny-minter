@@ -1,19 +1,20 @@
+import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
-import { useEnsName } from "wagmi";
-import Blinker from "../shared/Blinker";
+import { useAccount, useEnsName } from "wagmi";
 import CurrentChain from "./CurrentChain";
 import Wallet from "./Wallet";
-import { COLORS } from "@/constants/colors";
 
-export const TOOLBAR_HEIGHT = 60;
+export const TOOLBAR_WIDTH = 120;
 
 export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
   const { itemsQuantity } = useContext(ShopContext);
+
+  const { address: connectedAddress } = useAccount();
 
   const router = useRouter();
 
@@ -54,13 +55,14 @@ export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
     <div
       style={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "space-between",
-        alignItems: "center",
-        padding: 10,
+        padding: 16,
         boxSizing: "border-box",
-        gap: 20,
-        height: TOOLBAR_HEIGHT,
-        background: COLORS.bananaLite,
+        gap: 24,
+        height: "100vh",
+        width: TOOLBAR_WIDTH,
+        background: COLORS.banana,
         ...(isSmallScreen
           ? { fontSize: "0.8rem" }
           : { position: "fixed", top: 0, left: 0, right: 0 }),
@@ -70,7 +72,7 @@ export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
       <div
         style={{
           display: "flex",
-          alignItems: "baseline",
+          flexDirection: "column",
           gap: 20,
           flex: 1,
         }}
@@ -78,12 +80,11 @@ export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
         <Link href={"/"}>
           <h1
             style={{
-              margin: 0,
               appearance: "none",
               color: "black",
               fontSize: FONT_SIZE["2xl"],
-              lineHeight: 0,
-              letterSpacing: 2,
+              margin: 0,
+              marginBottom: 16,
             }}
           >
             0_0
@@ -103,33 +104,29 @@ export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
         )}
 
         <Link
-          href={"/mint"}
-          hidden={currentPath === "store"}
+          href={"/drops"}
+          // hidden={currentPath === "store"}
           style={{
-            textTransform: "uppercase",
-            fontSize: FONT_SIZE.xl,
+            fontSize: FONT_SIZE.lg,
             color: "black",
-            opacity: 0.7,
           }}
         >
-          Store
+          Drops
         </Link>
       </div>
 
-      {isSmallScreen ? null : (
-        <div
+      {connectedAddress && (
+        <Link
+          href={"/closet/" + connectedAddress}
+          // hidden={currentPath === "store"}
           style={{
-            display: "flex",
-            gap: 10,
-            alignItems: "center",
-            fontSize: FONT_SIZE.sm,
+            fontSize: FONT_SIZE.lg,
+            color: "black",
           }}
         >
-          <Blinker />
-          Work in progress
-        </div>
+          Closet
+        </Link>
       )}
-
       {/* <MusicPlayer /> */}
       <CurrentChain />
       <div onClick={onBagClick}>{`Bag (${itemsQuantity})`}</div>

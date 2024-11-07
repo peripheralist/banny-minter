@@ -26,10 +26,15 @@
   font-family: "Tronica Mono";
   src: url("/fonts/Tronica Mono.woff");
 }
+@font-face {
+  font-family: "Departure Mono";
+  src: url("/fonts/Departure Mono.woff");
+}
 
 *, a {
   font-family: "VT323", monospace;
   font-family: "Tronica Mono", monospace;
+  /* font-family: "Departure Mono", monospace; */
   cursor: crosshair;
   /* perspective: 1px; */
 }
@@ -59,6 +64,10 @@ button {
   cursor: crosshair;
   letter-spacing: 2px;
   white-space: nowrap;
+}
+
+p {
+  line-height: 1.6;
 }
 
 @keyframes slide-in-left {

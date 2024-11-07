@@ -1,5 +1,6 @@
 import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
 import AlertContextProvider from "@/contexts/AlertContextProvider";
+import ShopContextProvider from "@/contexts/ShopContextProvider";
 import { useChain } from "@/hooks/useChain";
 import { useSubgraphUri } from "@/hooks/useSubgraphUri";
 import "@/styles/globals.css";
@@ -33,7 +34,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <WagmiProvider config={config}>
           <_ApolloProvider>
             <JBProvider>
-              <Component {...pageProps} />
+              <ShopContextProvider>
+                <Component {...pageProps} />
+              </ShopContextProvider>
             </JBProvider>
           </_ApolloProvider>
         </WagmiProvider>
