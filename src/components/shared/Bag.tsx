@@ -15,7 +15,7 @@ export default function Bag({
   open?: boolean;
   onClose?: VoidFunction;
 }) {
-  const { bag, removeItem } = useContext(ShopContext);
+  const { bag, removeItem, itemsQuantity } = useContext(ShopContext);
 
   const { equipped, equip } = useContext(EquipmentContext);
 
@@ -31,18 +31,34 @@ export default function Bag({
         overflow: "hidden",
       }}
     >
-      <h1 style={{ margin: 0, padding: 12, paddingBottom: 0, paddingTop: 8 }}>
-        <span
-          style={{
-            marginBottom: 6,
-            display: "inline-block",
-            verticalAlign: "middle",
-          }}
-          onClick={onClose}
-        >
-          {">"}
-        </span>{" "}
-        Bag
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          margin: 0,
+          padding: 12,
+          paddingBottom: 0,
+          paddingTop: 8,
+        }}
+      >
+        <span>
+          <span
+            style={{
+              marginBottom: 6,
+              display: "inline-block",
+              verticalAlign: "middle",
+            }}
+            onClick={onClose}
+          >
+            {">"}
+          </span>{" "}
+          Bag
+        </span>
+
+        <span style={{ fontSize: FONT_SIZE.sm, textTransform: "uppercase" }}>
+          {itemsQuantity} item{itemsQuantity && itemsQuantity > 1 ? "s" : ""}
+        </span>
       </h1>
 
       <div
@@ -93,13 +109,18 @@ export default function Bag({
                     </RoundedFrame>
                   </div>
 
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: FONT_SIZE.md }}>
-                      {name} {quantity > 1 ? `(x${quantity})` : ""}
+                  <div style={{ flex: 1, fontSize: FONT_SIZE.sm }}>
+                    <div>
+                      {quantity > 1 ? (
+                        <span style={{ fontWeight: "bold" }}>
+                          (x{quantity}){" "}
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                      {name}
                     </div>
-                    <div style={{ fontSize: FONT_SIZE.md }}>
-                      Ξ{formatEther(price)}
-                    </div>
+                    <div>Ξ{formatEther(price * BigInt(quantity))}</div>
                   </div>
 
                   <div
@@ -139,6 +160,8 @@ export default function Bag({
     >
       <h1
         style={{
+          display: "flex",
+          justifyContent: "space-between",
           margin: 0,
           padding: 48,
           transform: `rotate(90deg)`,

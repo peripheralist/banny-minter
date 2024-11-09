@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Light from "./Light";
 
-export default function Blinker() {
+export default function Blinker(props?: Partial<Parameters<typeof Light>>[0]) {
   const [on, setOn] = useState<boolean>();
 
   useEffect(() => {
@@ -10,5 +10,5 @@ export default function Blinker() {
     return () => clearInterval(id);
   }, []);
 
-  return <Light on={on} />;
+  return <Light on={on} {...props} />;
 }

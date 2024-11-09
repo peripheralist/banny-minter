@@ -1,29 +1,43 @@
 import { CategoryGroup } from "@/constants/category";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { Tier } from "@/model/tier";
-import { PropsWithChildren, useCallback, useMemo, useState } from "react";
+import {
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { ShopContext, ShoppingBag } from "./shopContext";
+import { EquipmentContext } from "./equipmentContext";
 
 export const EQUIP_DURATION_MILLIS = 400;
 
 export default function ShopContextProvider({ children }: PropsWithChildren) {
+  const { equip } = useContext(EquipmentContext);
+
   const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("body");
 
   const { tiers } = useCategorizedTiers();
 
   const [bag, setBag] = useState<ShoppingBag>([]);
 
-  const addItem = useCallback((tier: Tier) => {
-    setBag((b) =>
-      b.some((_b) => _b.tier.tierId === tier.tierId)
-        ? b.map((_b) =>
-            _b.tier.tierId === tier.tierId
-              ? { tier: _b.tier, quantity: _b.quantity + 1 }
-              : _b
-          )
-        : [...b, { tier, quantity: 1 }]
-    );
-  }, []);
+  const addItem = useCallback(
+    (tier: Tier) => {
+      equip?.[tier.category](tier.tierId);
+
+      setBag((b) =>
+        b.some((_b) => _b.tier.tierId === tier.tierId)
+          ? b.map((_b) =>
+              _b.tier.tierId === tier.tierId
+                ? { tier: _b.tier, quantity: _b.quantity + 1 }
+                : _b
+            )
+          : [...b, { tier, quantity: 1 }]
+      );
+    },
+    [equip]
+  );
 
   const removeItem = useCallback((tierId: Tier["tierId"]) => {
     setBag((b) => {
@@ -50,13 +64,12 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
     () =>
       // Sum price of all selected assets
       bag.reduce(
-        (acc, { tier }) => (tier?.price ? acc + tier.price : acc),
+        (acc, { tier, quantity }) =>
+          tier?.price ? acc + tier.price * BigInt(quantity) : acc,
         BigInt(0)
       ),
     [bag]
   );
-
-  console.log("asdf", { bag });
 
   return (
     <ShopContext.Provider

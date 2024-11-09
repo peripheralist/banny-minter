@@ -1,13 +1,27 @@
 import { FONT_SIZE } from "@/constants/fontSize";
-import { useChain } from "@/hooks/useChain";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useAccount } from "wagmi";
+import Blinker from "../shared/Blinker";
+import { COLORS } from "@/constants/colors";
 
 export default function CurrentChain() {
   const { address, chain } = useAccount();
 
   const text = useMemo(() => {
-    if (address && !chain) return "Unsupported chain";
+    if (address && !chain)
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            color: "#f42",
+            fontWeight: "bold",
+          }}
+        >
+          <Blinker offColor={"#f42"} /> Unsupported chain
+        </div>
+      );
 
     if (chain) return chain.name;
 
@@ -15,7 +29,12 @@ export default function CurrentChain() {
   }, [address, chain]);
 
   return (
-    <div style={{ textTransform: "uppercase", fontSize: FONT_SIZE.sm }}>
+    <div
+      style={{
+        textTransform: "uppercase",
+        fontSize: FONT_SIZE.xs,
+      }}
+    >
       {text}
     </div>
   );

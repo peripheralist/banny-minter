@@ -1,8 +1,8 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { EquipmentContext } from "@/contexts/equipmentContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { Tier } from "@/model/tier";
+import Link from "next/link";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { formatEther } from "viem";
 import Fuzz from "../pixelRenderers/Fuzz";
@@ -19,10 +19,8 @@ export default function TierShopButton({
 }) {
   const [added, setAdded] = useState(false);
   const { addItem } = useContext(ShopContext);
-  const { equip } = useContext(EquipmentContext);
 
-  const onClick = useCallback(() => {
-    equip?.[tier.category](tier.tierId);
+  const onClickAdd = useCallback(() => {
     addItem?.(tier);
 
     setAdded(true);
@@ -30,7 +28,7 @@ export default function TierShopButton({
     setTimeout(() => {
       setAdded(false);
     }, 1000);
-  }, [tier, addItem, equip]);
+  }, [tier, addItem]);
 
   // Only use sold out treatment if tier is not a NFT
   const isSoldOut = useMemo(
@@ -97,45 +95,45 @@ export default function TierShopButton({
           justifyContent: "space-between",
         }}
       >
-        {tier ? (
-          <div style={{ marginTop: 12 }}>
-            <FuzzMoment
-              width={buttonSize - 16}
-              height={buttonSize - 16}
-              fill={"white"}
-              style={{ zIndex: 2, position: "absolute" }}
+        <Link href={`/item/${tier.tierId}`} style={{ color: "black" }}>
+          {tier ? (
+            <div style={{ marginTop: 12, pointerEvents: "none" }}>
+              <FuzzMoment
+                width={buttonSize - 16}
+                height={buttonSize - 16}
+                fill={"white"}
+                style={{ zIndex: 2, position: "absolute" }}
+                pixelSize={8}
+              />
+              <TierImage tier={tier} size={buttonSize - 36} />
+            </div>
+          ) : (
+            <Fuzz
+              width={buttonSize}
+              height={buttonSize}
               pixelSize={8}
+              fill="black"
             />
-            <TierImage tier={tier} size={buttonSize - 36} />
-          </div>
-        ) : (
-          <Fuzz
-            width={buttonSize}
-            height={buttonSize}
-            pixelSize={8}
-            fill="black"
-          />
-        )}
+          )}
 
-        <div
-          style={{
-            position: "absolute",
-            bottom: 52,
-            right: 12,
-            left: 12,
-          }}
-        >
-          <Label />
-        </div>
+          <div
+            style={{
+              position: "absolute",
+              bottom: 52,
+              right: 12,
+              left: 12,
+            }}
+          >
+            <Label />
+          </div>
+        </Link>
 
         <ButtonPad
           style={{ display: "flex", padding: 10, color: COLORS.pink }}
+          fillFg={added ? COLORS.pinkLite : "white"}
+          fillBorder={added ? COLORS.pink : "black"}
           containerStyle={{ marginBottom: 4, width: "100%" }}
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onClick?.();
-          }}
+          onClick={onClickAdd}
           shadow="sm"
         >
           {added ? "Added" : `Add Ξ${formatEther(tier.price)}`}

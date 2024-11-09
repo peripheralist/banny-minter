@@ -2,7 +2,6 @@ import TiersDemo from "@/components/TiersDemo";
 import ButtonPad from "@/components/shared/ButtonPad";
 import CloudSky from "@/components/shared/CloudSky";
 import LoadingBanny from "@/components/shared/LoadingBanny";
-import { isBrowser } from "@/constants/browser";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
@@ -27,7 +26,7 @@ export default function Home() {
   const { measuredRef, height: screenHeight } = useMeasuredRef();
 
   const demoSize = useMemo(
-    () => Math.round(screenHeight * 0.85),
+    () => Math.round(screenHeight * 0.75),
     [screenHeight]
   );
 
@@ -57,29 +56,31 @@ export default function Home() {
         <div
           style={{
             position: "fixed",
+            top: "4%",
+            left: 0,
+            right: 0,
+            bottom: "76%",
+            zIndex: -2,
+          }}
+        >
+          <Image
+            src={"/assets/looks_logo.svg"}
+            fill
+            alt="looks logo"
+            style={{ opacity: 0.8 }}
+          />
+        </div>
+
+        <div
+          style={{
+            position: "fixed",
             inset: 0,
-            bottom: "70%",
-            top: "6%",
+            bottom: "64%",
+            top: "20%",
             zIndex: -2,
             opacity: 0.85,
           }}
         >
-          {/* <h1
-            style={{
-              position: "fixed",
-              left: 0,
-              right: 0,
-              top: 0,
-              textAlign: "center",
-              color: "black",
-              fontSize: "6.4rem",
-              letterSpacing: 24,
-              lineHeight: 0,
-            }}
-          >
-            Bannyverse
-          </h1> */}
-
           <CloudSky />
         </div>
 
@@ -130,7 +131,7 @@ export default function Home() {
         <title>Banny Factory</title>
         <meta name="description" content="Banny factory" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* <link rel="icon" href="/favicon.ico" /> */}
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
@@ -149,7 +150,7 @@ export default function Home() {
         <Image
           style={{
             position: "fixed",
-            bottom: "10.5%",
+            bottom: "13.7%",
             left: 0,
             right: 0,
             margin: "0 auto",

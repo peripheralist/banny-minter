@@ -1,53 +1,15 @@
-import { COLORS } from "@/constants/colors";
-import { FONT_SIZE } from "@/constants/fontSize";
-import { ShopContext } from "@/contexts/shopContext";
 import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
+import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useContext, useMemo } from "react";
-import { useAccount, useEnsName } from "wagmi";
-import CurrentChain from "./CurrentChain";
+import { PropsWithChildren, useState } from "react";
+import { useAccount } from "wagmi";
+import RoundedFrame from "../shared/RoundedFrame";
 import Wallet from "./Wallet";
 
-export const TOOLBAR_WIDTH = 120;
+export const TOOLBAR_WIDTH = 140;
 
-export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
-  const { itemsQuantity } = useContext(ShopContext);
-
+export default function Index() {
   const { address: connectedAddress } = useAccount();
-
-  const router = useRouter();
-
-  const address = router.query["address"] as `0x${string}`;
-  const tokenId = router.query["tokenId"] as string;
-
-  const { data: ensName } = useEnsName({ address });
-
-  const formattedAddress = ensName
-    ? ensName
-    : address
-    ? `${address.substring(0, 6)}...${address.slice(38)}`
-    : undefined;
-
-  const currentPath = useMemo(() => {
-    const pathname = router.pathname;
-
-    if (pathname.includes("mint")) return "store";
-    if (pathname.includes("dress/")) return "dress";
-    if (pathname.includes("closet/")) return "closet";
-  }, [router.pathname]);
-
-  const pathText = useMemo(() => {
-    switch (currentPath) {
-      case "store":
-        return "STORE";
-      case "dress":
-        return `DRESSING ROOM: BANNY #${tokenId}`;
-      case "closet":
-        return `${formattedAddress}'s closet`;
-    }
-    return null;
-  }, [currentPath, formattedAddress, tokenId]);
 
   const isSmallScreen = useIsSmallScreen();
 
@@ -57,80 +19,91 @@ export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: 16,
         boxSizing: "border-box",
+        padding: 12,
+        paddingRight: 0,
         gap: 24,
         height: "100vh",
         width: TOOLBAR_WIDTH,
-        background: COLORS.banana,
         ...(isSmallScreen
           ? { fontSize: "0.8rem" }
           : { position: "fixed", top: 0, left: 0, right: 0 }),
         zIndex: 10,
       }}
     >
+      <_Link href={"/"}>
+        <Image
+          src={"/assets/banny_eyes.svg"}
+          width={TOOLBAR_WIDTH - 12}
+          height={((TOOLBAR_WIDTH - 12) * 8) / 14}
+          alt="banny eyes"
+        />
+      </_Link>
+
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 20,
           flex: 1,
+          gap: 8,
         }}
       >
-        <Link href={"/"}>
-          <h1
-            style={{
-              appearance: "none",
-              color: "black",
-              fontSize: FONT_SIZE["2xl"],
-              margin: 0,
-              marginBottom: 16,
-            }}
-          >
-            0_0
-          </h1>
-        </Link>
-
-        {pathText && (
-          <span
-            style={{
-              textTransform: "uppercase",
-              fontSize: FONT_SIZE["2xl"],
-              color: "black",
-            }}
-          >
-            {pathText}
-          </span>
-        )}
-
-        <Link
-          href={"/drops"}
-          // hidden={currentPath === "store"}
-          style={{
-            fontSize: FONT_SIZE.lg,
-            color: "black",
-          }}
-        >
+        <_Link frame href={"/drops"}>
           Drops
-        </Link>
+        </_Link>
+
+        <_Link frame href={"/runway"}>
+          Runway
+        </_Link>
+
+        {connectedAddress && (
+          <_Link frame href={"/closet/" + connectedAddress}>
+            Closet
+          </_Link>
+        )}
       </div>
 
-      {connectedAddress && (
-        <Link
-          href={"/closet/" + connectedAddress}
-          // hidden={currentPath === "store"}
-          style={{
-            fontSize: FONT_SIZE.lg,
-            color: "black",
-          }}
-        >
-          Closet
-        </Link>
-      )}
       {/* <MusicPlayer /> */}
-      <CurrentChain />
-      <div onClick={onBagClick}>{`Bag (${itemsQuantity})`}</div>
+      {/* <div onClick={onBagClick}>{`Bag (${itemsQuantity})`}</div> */}
+
       <Wallet />
     </div>
+  );
+}
+
+function _Link({
+  children,
+  frame,
+  ...props
+}: PropsWithChildren<{ href: string; frame?: boolean }>) {
+  const [isHover, setIsHover] = useState(false);
+
+  return (
+    <Link
+      {...props}
+      style={{
+        position: "relative",
+        padding: 0,
+      }}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
+    >
+      {frame ? (
+        <RoundedFrame
+          background={isHover ? "white" : undefined}
+          style={{
+            color: "black",
+            fontWeight: "bold",
+            padding: "8px 16px",
+            height: 40,
+            textTransform: "uppercase",
+          }}
+        >
+          {children}
+        </RoundedFrame>
+      ) : (
+        children
+      )}
+    </Link>
   );
 }

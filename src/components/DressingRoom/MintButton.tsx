@@ -1,6 +1,7 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
+import { WalletContext } from "@/contexts/walletContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useMint } from "@/hooks/writeContract/useMint";
 import { formatEther } from "juice-sdk-core";
@@ -12,24 +13,27 @@ export default function MintButton() {
   // TODO need to disable button until mintable outfits are equipped
   const { address } = useAccount();
 
+  const { connect } = useContext(WalletContext);
   const { totalEquippedPrice } = useContext(ShopContext);
 
   const { mint, isPending } = useMint();
 
   const { measuredRef, width, height } = useMeasuredRef();
 
-  const loading = isPending ? { fill: "white", width, height } : undefined;
+  const loading = isPending
+    ? { fill: "white", width, height: height - 4 }
+    : undefined;
 
   const noMintableItems =
     !totalEquippedPrice || totalEquippedPrice == BigInt(0);
 
   return (
     <ButtonPad
-      disabled={!address || noMintableItems}
+      disabled={noMintableItems}
       loading={loading}
       style={{ padding: 12 }}
       fillFg={COLORS.pink}
-      onClick={mint}
+      onClick={address ? mint : connect}
     >
       <div style={{ width: "100%" }} ref={measuredRef}>
         <div

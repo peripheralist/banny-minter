@@ -1,76 +1,68 @@
 import { COLORS } from "@/constants/colors";
-import Link from "next/link";
-import { useState } from "react";
+import { FONT_SIZE } from "@/constants/fontSize";
+import { WalletContext } from "@/contexts/walletContext";
+import { useContext } from "react";
 import { useAccount, useDisconnect, useEnsName } from "wagmi";
-import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
 import RoundedFrame from "../shared/RoundedFrame";
-import { WalletOptions } from "./WalletOptions";
+import CurrentChain from "./CurrentChain";
+import FuzzMoment from "../pixelRenderers/FuzzMoment";
 
 export default function Wallet() {
-  const [showWalletOptions, setShowWalletOptions] = useState<boolean>();
+  const { connect } = useContext(WalletContext);
+
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const { data: ensName } = useEnsName({ address });
 
-  return (
-    <div>
-      {address ? (
-        <RoundedFrame background={COLORS.pink}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 16,
-              paddingLeft: 16,
-            }}
-          >
-            <FuzzMoment
-              fill="white"
-              width={80}
-              height={16}
-              onFinished={
-                <Link href={`/closet/${address}`} style={{ color: "white" }}>
-                  {ensName ?? <span>0x...{address.substring(38)}</span>}
-                </Link>
-              }
-            />
-            <ButtonPad
-              shadow="none"
-              containerStyle={{ margin: -4 }}
-              style={{ width: 32, height: 32 }}
-              onClick={() => disconnect()}
-            >
-              ✖️
-            </ButtonPad>
-          </div>
-        </RoundedFrame>
-      ) : showWalletOptions ? (
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <WalletOptions />
-          <ButtonPad
-            shadow="sm"
-            style={{ width: 32, height: 32 }}
-            onClick={() => setShowWalletOptions(false)}
-          >
-            ✖️
-          </ButtonPad>
-        </div>
-      ) : (
-        <ButtonPad
+  return address ? (
+    <div style={{}}>
+      <div>
+        <h4 style={{ margin: 0, textAlign: "center" }}>Wallet</h4>
+
+        <RoundedFrame
+          background={COLORS.bananaLite}
           style={{
-            color: "white",
-            textTransform: "uppercase",
-            height: 32,
-            padding: "0px 16px",
+            padding: 12,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            gap: 8,
+            width: "100%",
+            fontSize: FONT_SIZE.sm,
           }}
-          shadow="sm"
-          fillFg={COLORS.pink}
-          onClick={() => setShowWalletOptions(true)}
         >
-          Connect
-        </ButtonPad>
-      )}
+          <CurrentChain />
+
+          <div style={{ fontWeight: "bold" }}>
+            {ensName ?? `${address.substring(0, 6)}…${address.substring(38)}`}
+          </div>
+
+          <ButtonPad
+            onClick={() => disconnect()}
+            style={{
+              padding: 10,
+              color: "black",
+            }}
+            shadow="sm"
+          >
+            Disconnect
+          </ButtonPad>
+        </RoundedFrame>
+      </div>
     </div>
+  ) : (
+    <ButtonPad
+      style={{
+        color: "white",
+        textTransform: "uppercase",
+        padding: 12,
+      }}
+      shadow="sm"
+      fillFg={COLORS.pink}
+      onClick={connect}
+    >
+      Connect
+    </ButtonPad>
   );
 }
