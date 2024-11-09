@@ -1,11 +1,10 @@
 import ToolbarBagView from "@/components/ToolbarBagView";
+import RoundedFrame from "@/components/shared/RoundedFrame";
 import { CATEGORY_IDS } from "@/constants/category";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
-import React from "react";
-import DressedBannyNftImage from "../closet/DressedBannyNftImage";
-import RoundedFrame from "@/components/shared/RoundedFrame";
 import Link from "next/link";
+import DressedBannyNftImage from "../closet/DressedBannyNftImage";
 
 const IMG_SIZE = 320;
 
@@ -36,9 +35,13 @@ export default function Runway() {
         {bannys?.nfts.map((nft) => (
           <Link
             key={nft.tokenId.toString()}
+            style={{ display: "block" }}
             href={`/nft/${nft.tokenId.toString()}`}
           >
-            <RoundedFrame background={"white"}>
+            <RoundedFrame
+              background={"white"}
+              style={{ pointerEvents: "none" }}
+            >
               <DressedBannyNftImage nft={nft} size={IMG_SIZE} />
             </RoundedFrame>
           </Link>

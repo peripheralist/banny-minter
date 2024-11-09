@@ -19,7 +19,7 @@ export default function ToolbarBagView({
   children,
   header,
   frame,
-}: PropsWithChildren<{ header: string; frame?: boolean }>) {
+}: PropsWithChildren<{ header: string | JSX.Element; frame?: boolean }>) {
   const [bagIsOpen, setBagIsOpen] = useState(false);
 
   const { measuredRef: headerRef, height: headerHeight } = useMeasuredRef();
@@ -55,13 +55,10 @@ export default function ToolbarBagView({
           <RoundedFrame background={"black"}>
             <h4
               style={{
-                position: "sticky",
-                top: -4,
                 textTransform: "uppercase",
                 padding: "4px 8px",
                 margin: 0,
                 color: COLORS.banana,
-                zIndex: 11,
               }}
             >
               {header}
