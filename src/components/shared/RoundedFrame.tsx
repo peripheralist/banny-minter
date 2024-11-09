@@ -44,7 +44,12 @@ export default function RoundedFrame({
 
   return (
     <div
-      style={{ position: "relative", height: "100%", ...containerStyle }}
+      style={{
+        position: "relative",
+        height: "100%",
+        width: "100%",
+        ...containerStyle,
+      }}
       onClick={(e) => onClick?.(e)}
     >
       <div
@@ -72,6 +77,9 @@ export default function RoundedFrame({
             padding: 4,
             boxSizing: "border-box",
             maxHeight: "calc(100% - 8px)",
+            maxWidth: "100%",
+            width: "100%",
+            height: "100%",
             ...style,
           }}
           ref={contentRef}

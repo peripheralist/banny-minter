@@ -20,10 +20,10 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@apollo/client@^3.9.6":
-  version "3.9.6"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.9.6.tgz#4292448d9b0a48244a60307b74d2fea7e83dfe70"
-  integrity sha512-+zpddcnZ4G2VZ0xIEnvIHFsLqeopNOnWuE2ZVbRuetLLpj/biLPNN719B/iofdd1/iHRclKfv0XaAmX6PBhYKA==
+"@apollo/client@^3.11.9":
+  version "3.11.9"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.11.9.tgz#d7f998a6e8496667f157823d50a746c4e5a20b46"
+  integrity sha512-aQ6VL+CPO1G4DLS/3FelfA+nl+ZQCP5qeN1NS6J8xh9wumUM/2W1ccneqCYmbTMDtoSunxE1BV2W6u0FF4axwQ==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     "@wry/caches" "^1.0.0"
@@ -33,7 +33,7 @@
     hoist-non-react-statics "^3.3.2"
     optimism "^0.18.0"
     prop-types "^15.7.2"
-    rehackt "0.0.6"
+    rehackt "^0.1.0"
     response-iterator "^0.2.6"
     symbol-observable "^4.0.0"
     ts-invariant "^0.10.3"
@@ -5243,18 +5243,18 @@ jsonify@^0.0.1:
     object.assign "^4.1.4"
     object.values "^1.1.6"
 
-juice-sdk-core@^10.0.3-alpha:
-  version "10.0.3-alpha"
-  resolved "https://registry.yarnpkg.com/juice-sdk-core/-/juice-sdk-core-10.0.3-alpha.tgz#dcd1afa2faa13f42559ced3b308e5e886892c7bd"
-  integrity sha512-E+Wx7zv/PCOWrY9Co62ilyHa/6ge44xltTsNeaF96a3d3jWhWlkLlrDBrHDnT48VvClw0LbnRWOFvaB662OyFg==
+juice-sdk-core@^11.0.0-alpha:
+  version "11.0.0-alpha"
+  resolved "https://registry.yarnpkg.com/juice-sdk-core/-/juice-sdk-core-11.0.0-alpha.tgz#dd0228158de3c3a2799ea6ba3b1f22c8c0635d60"
+  integrity sha512-wqKAb9f88579CiTZP6MNb08TOStQ4OqgLQYh7cwmONcpon09+A9tyHPCxhgKjGHGevzF80Wv2Z0dPjgujMRI2Q==
   dependencies:
     bs58 "^5.0.0"
     fpnum "^1.0.0"
 
-juice-sdk-react@^10.0.1-alpha:
-  version "10.0.1-alpha"
-  resolved "https://registry.yarnpkg.com/juice-sdk-react/-/juice-sdk-react-10.0.1-alpha.tgz#a1a9273292ed7b6f2f97e87e60c131b8cd53ee03"
-  integrity sha512-Lpdymh4bt2YBba2htXn/RB+Kohs1iMhu2mqzadwAtrYpsFz+dKkL5GFA1YLLSC96d31KSVJX/bArX46Uc5hnoA==
+juice-sdk-react@^11.0.0-alpha:
+  version "11.0.0-alpha"
+  resolved "https://registry.yarnpkg.com/juice-sdk-react/-/juice-sdk-react-11.0.0-alpha.tgz#15b93be75d80e9e83a0f45b4cc8c81d3f1828e49"
+  integrity sha512-G0zCPMCozfAK0Y9mxGMtMOYW8Bm3ml5bEEr/pKFbrrxIs+sEUnK4f5CZWiaA6fZlN8QnUbXbIRteFjv+RB2Yzg==
 
 keccak@^3.0.3:
   version "3.0.4"
@@ -6369,10 +6369,10 @@ regexp.prototype.flags@^1.5.0, regexp.prototype.flags@^1.5.1:
     define-properties "^1.2.0"
     set-function-name "^2.0.0"
 
-rehackt@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/rehackt/-/rehackt-0.0.6.tgz#7a0a2247f2295e7548915417e44fbbf03bf004f4"
-  integrity sha512-l3WEzkt4ntlEc/IB3/mF6SRgNHA6zfQR7BlGOgBTOmx7IJJXojDASav+NsgXHFjHn+6RmwqsGPFgZpabWpeOdw==
+rehackt@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/rehackt/-/rehackt-0.1.0.tgz#a7c5e289c87345f70da8728a7eb878e5d03c696b"
+  integrity sha512-7kRDOuLHB87D/JESKxQoRwv4DzbIdwkAGQ7p6QKGdVlY1IZheUnVhlk/4UZlNUVxdAXpyxikE3URsG067ybVzw==
 
 relay-runtime@12.0.0:
   version "12.0.0"

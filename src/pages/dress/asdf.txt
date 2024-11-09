@@ -1,0 +1,39 @@
+Toolbar
+  - Links
+    - Home
+    - Drops
+    - Closet
+  - Wallet
+  - Bag
+
+Bag
+  - Display bag tiers (read from ShopContext.bag)
+  - >remove tier from bag
+  - <BannyContextProvider/>
+    - <BagPreview/>
+      - Choose which items from Bag to preview. equip()/unequip() via BannyContext
+
+TiersGrid
+  - Read tiers from ShopContext, filter by drop id
+
+Index
+  <ShopContext/> (top level to preserve bag state while navigating)
+    /[dropId]
+      - <Toolbar/>
+        - <Bag/>
+      - <Drop details/>
+      - <TiersGrid/>
+    / (landing page)
+      - <BannyContextProvider/>
+        - Banny with changing wearables
+    /DressingRoom/[tokenId]
+      - >Read worn NFTs from tokenId
+      - >Read owned NFTs from ownedNftsQuery() (one of each item)
+      - <BannyContextProvider/> (default equipped worn NFTs)
+        - Owned Nfts grid (equip()/unequip() via BannyContext)
+        - Banny Preview
+    /runway
+      - Display owned banny NFTs from any wallet
+    /closet
+      - Display owned NFTs from connected wallet
+      - Filter by category group

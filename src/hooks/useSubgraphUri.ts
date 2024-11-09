@@ -1,24 +1,33 @@
 import { SUBGRAPH_KEY } from "@/constants/subgraph";
 import { useChain } from "./useChain";
 import { isBrowser } from "@/constants/browser";
+import { useMemo } from "react";
 
 export const useSubgraphUri = () => {
-  let uri: string | undefined;
-
   const chain = useChain();
 
-  if (isBrowser()) {
-    uri = `https://subgraph.satsuma-prod.com/${SUBGRAPH_KEY}/juicebox/nana-${chain.name.toLowerCase()}/api`;
-  } else {
-    uri = process.env.SUBGRAPH_URL;
-    if (!uri) {
-      throw new Error("SUBGRAPH_URL environment variable not defined");
-    }
-  }
+  const chainName = useMemo(() => chain.name, [chain.name]);
 
-  const url = new URL(uri);
-  if (url.pathname.match(/graphql$/g)) {
-    return url.href.slice(0, url.href.lastIndexOf("/"));
-  }
-  return url.href;
+  const uri = useMemo(() => {
+    if (isBrowser()) {
+      return `https://subgraph.satsuma-prod.com/${SUBGRAPH_KEY}/juicebox/nana-${chainName.toLowerCase()}/api`;
+    } else {
+      if (!process.env.SUBGRAPH_URL) {
+        throw new Error("SUBGRAPH_URL environment variable not defined");
+      }
+
+      return process.env.SUBGRAPH_URL;
+    }
+  }, [chainName]);
+
+  const url = useMemo(() => {
+    let _url = new URL(uri);
+
+    if (_url.pathname.match(/graphql$/g)) {
+      return _url.href.slice(0, _url.href.lastIndexOf("/"));
+    }
+    return _url.href;
+  }, [uri]);
+
+  return url;
 };

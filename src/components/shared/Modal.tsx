@@ -1,10 +1,8 @@
 import { COLORS } from "@/constants/colors";
-import { useWindowSize } from "@/hooks/useWindowSize";
 import { PropsWithChildren, useEffect, useState } from "react";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
-import RoundedFrame from "./RoundedFrame";
-import { FONT_SIZE } from "@/constants/fontSize";
 import ButtonPad from "./ButtonPad";
+import RoundedFrame from "./RoundedFrame";
 
 const pixelSize = 8;
 
@@ -20,11 +18,9 @@ export default function Modal({
 
   useEffect(() => setIsOpen(open), [open]);
 
-  const { width, height } = useWindowSize();
-
   if (!isOpen) return null;
 
-  const shadowColor = `${COLORS.pink}88`;
+  const shadowColor = `#00000088`;
 
   return (
     <div // backdrop
@@ -38,6 +34,7 @@ export default function Modal({
         width: "100vw",
         height: "100vh",
         zIndex: 100,
+        background: shadowColor,
       }}
       onClick={() => {
         setIsOpen(false);
@@ -45,18 +42,13 @@ export default function Modal({
       }}
     >
       <FuzzMoment
-        fill={COLORS.pink}
+        fill={"white"}
         width={pixelSize * 20}
         height={pixelSize * 20}
         pixelSize={pixelSize}
-        duration={800}
+        duration={400}
         onFinished={
           <div
-            style={{
-              position: "relative",
-              maxWidth: Math.min(640, (width ?? 0) * 0.9),
-              maxHeight: (height ?? 0) * 0.8,
-            }}
             onClick={(e) => {
               e.stopPropagation();
             }}
@@ -65,9 +57,10 @@ export default function Modal({
               background={COLORS.bananaHint}
               containerStyle={{ zIndex: 10 }}
               style={{
-                padding: 32,
-                width: "100%",
-                height: "100%",
+                minWidth: "40vw",
+                width: "90vw",
+                maxWidth: 600,
+                padding: 24,
                 overflow: "auto",
               }}
             >
@@ -80,28 +73,15 @@ export default function Modal({
                 fillFg={"white"}
                 shadow="sm"
                 containerStyle={{
-                  height: 40,
-                  marginTop: 16,
+                  marginTop: 12,
                   textAlign: "center",
                   zIndex: 10,
                 }}
+                style={{ padding: 12 }}
               >
-                Done
+                Close
               </ButtonPad>
             )}
-
-            <RoundedFrame
-              background={shadowColor}
-              borderColor={shadowColor}
-              containerStyle={{
-                position: "absolute",
-                height: "calc(100% + 132px)",
-                top: -44,
-                left: -44,
-                right: -44,
-                bottom: -44,
-              }}
-            />
           </div>
         }
       />

@@ -1,6 +1,6 @@
 import { Category } from "@/constants/category";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
-import { NftTier_OrderBy, useAllNftTiersQuery } from "@/generated/graphql";
+import { useAllNftTiersQuery } from "@/generated/graphql";
 import { Tier, Tiers } from "@/model/tier";
 import { parseTier } from "@/utils/parseTier";
 import { useMemo } from "react";
@@ -12,11 +12,21 @@ export function useCategorizedTiers() {
   const { data: tiers, ...props } = useAllNftTiersQuery({
     variables: {
       collection: BANNYVERSE_COLLECTION_ID,
-      orderBy: NftTier_OrderBy.price,
     },
+    fetchPolicy: "cache-first",
   });
 
-  const _tiers: Tiers | undefined = useMemo(
+  // console.log(
+  //   "asdf tiers",
+  //   CATEGORIES.reduce(
+  //     (acc, c) => [...acc, ...(tiers?.[c] ?? [])],
+  //     [] as AllNftTiersQuery[Category]
+  //   )
+  //     .sort((a, b) => (a.tierId < b.tierId ? -1 : 1))
+  //     .map((t) => `${parseTier(t)?.name} ${t.tierId}`)
+  // );
+
+  const formattedTiers: Tiers | undefined = useMemo(
     () =>
       tiers
         ? Object.entries(tiers).reduce((acc, [k, tiers]) => {
@@ -43,10 +53,8 @@ export function useCategorizedTiers() {
     [tiers]
   );
 
-  // return useQuery({queryKey: 'categorized-tiers', queryFn})
-
   return {
     ...props,
-    tiers: _tiers,
+    tiers: formattedTiers,
   };
 }

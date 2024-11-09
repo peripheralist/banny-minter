@@ -1,5 +1,6 @@
 import {
   CSSProperties,
+  MouseEventHandler,
   PropsWithChildren,
   useCallback,
   useMemo,
@@ -28,7 +29,7 @@ export default function ButtonPad({
   fillFg?: CSSProperties["background"];
   fillBorder?: CSSProperties["borderColor"];
   shadow?: "sm" | "md" | "none";
-  onClick?: VoidFunction;
+  onClick?: MouseEventHandler<HTMLDivElement>;
   pressed?: boolean;
   containerStyle?: CSSProperties;
   style?: CSSProperties;
@@ -49,18 +50,21 @@ export default function ButtonPad({
     return 0;
   }, [shadow]);
 
-  const _onClick = useCallback(() => {
-    if (disabled || loading) return;
+  const _onClick: MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (disabled || loading) return;
 
-    setClicked(true);
+      setClicked(true);
 
-    const timeout = setTimeout(() => {
-      setClicked(false);
-      onClick?.();
-    }, TRANSITION_TIME_MILLIS);
+      const timeout = setTimeout(() => {
+        setClicked(false);
+        onClick?.(e);
+      }, TRANSITION_TIME_MILLIS);
 
-    return () => clearTimeout(timeout);
-  }, [onClick, disabled, loading]);
+      return () => clearTimeout(timeout);
+    },
+    [onClick, disabled, loading]
+  );
 
   return (
     <div
@@ -92,7 +96,10 @@ export default function ButtonPad({
         background={fillFg ?? "white"}
         borderColor={fillBorder ?? "black"}
         containerStyle={{
-          transform: clicked || pressed ? `translate(0px, 4px)` : undefined,
+          transform:
+            (clicked || pressed) && shadowDepth
+              ? `translate(0px, ${shadowDepth}px)`
+              : undefined,
           transition: `transform ${TRANSITION_TIME_MILLIS}ms`,
           transitionTimingFunction: "ease-out",
           minWidth: "100%",

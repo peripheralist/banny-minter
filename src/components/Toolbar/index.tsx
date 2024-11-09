@@ -1,16 +1,20 @@
 import { FONT_SIZE } from "@/constants/fontSize";
+import { ShopContext } from "@/contexts/shopContext";
 import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { useEnsName } from "wagmi";
 import Blinker from "../shared/Blinker";
 import CurrentChain from "./CurrentChain";
 import Wallet from "./Wallet";
+import { COLORS } from "@/constants/colors";
 
-export const TOOLBAR_HEIGHT = 50;
+export const TOOLBAR_HEIGHT = 60;
 
-export default function Index() {
+export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
+  const { itemsQuantity } = useContext(ShopContext);
+
   const router = useRouter();
 
   const address = router.query["address"] as `0x${string}`;
@@ -25,7 +29,7 @@ export default function Index() {
     : undefined;
 
   const currentPath = useMemo(() => {
-    const { pathname } = router;
+    const pathname = router.pathname;
 
     if (pathname.includes("mint")) return "store";
     if (pathname.includes("dress/")) return "dress";
@@ -52,19 +56,22 @@ export default function Index() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: 12,
-        gap: 24,
+        padding: 10,
+        boxSizing: "border-box",
+        gap: 20,
         height: TOOLBAR_HEIGHT,
+        background: COLORS.bananaLite,
         ...(isSmallScreen
           ? { fontSize: "0.8rem" }
           : { position: "fixed", top: 0, left: 0, right: 0 }),
+        zIndex: 10,
       }}
     >
       <div
         style={{
           display: "flex",
           alignItems: "baseline",
-          gap: 24,
+          gap: 20,
           flex: 1,
         }}
       >
@@ -79,7 +86,7 @@ export default function Index() {
               letterSpacing: 2,
             }}
           >
-            B
+            0_0
           </h1>
         </Link>
 
@@ -113,7 +120,7 @@ export default function Index() {
         <div
           style={{
             display: "flex",
-            gap: 8,
+            gap: 10,
             alignItems: "center",
             fontSize: FONT_SIZE.sm,
           }}
@@ -125,6 +132,7 @@ export default function Index() {
 
       {/* <MusicPlayer /> */}
       <CurrentChain />
+      <div onClick={onBagClick}>{`Bag (${itemsQuantity})`}</div>
       <Wallet />
     </div>
   );

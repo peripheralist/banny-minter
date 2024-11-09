@@ -26,10 +26,15 @@
   font-family: "Tronica Mono";
   src: url("/fonts/Tronica Mono.woff");
 }
+@font-face {
+  font-family: "Departure Mono";
+  src: url("/fonts/Departure Mono.woff");
+}
 
 *, a {
   font-family: "VT323", monospace;
   font-family: "Tronica Mono", monospace;
+  /* font-family: "Departure Mono", monospace; */
   cursor: crosshair;
   /* perspective: 1px; */
 }
@@ -38,7 +43,7 @@ body {
   margin: 0;
   /* background: skyblue; */
   /* background: #cde; */
-  /* background: #f8b431; banny yellow */
+  background: #f8b431; /* banny yellow */
   /* background: #D98F02; */
 }
 
@@ -59,6 +64,10 @@ button {
   cursor: crosshair;
   letter-spacing: 2px;
   white-space: nowrap;
+}
+
+p {
+  line-height: 1.6;
 }
 
 @keyframes slide-in-left {

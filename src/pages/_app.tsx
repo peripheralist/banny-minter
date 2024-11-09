@@ -1,5 +1,9 @@
 import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
 import AlertContextProvider from "@/contexts/AlertContextProvider";
+import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
+import ShopContextProvider from "@/contexts/ShopContextProvider";
+import WalletContextProvider from "@/contexts/WalletContextProvider";
+import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useChain } from "@/hooks/useChain";
 import { useSubgraphUri } from "@/hooks/useSubgraphUri";
 import "@/styles/globals.css";
@@ -19,6 +23,7 @@ import {
   JBProjectProvider,
 } from "juice-sdk-react";
 import type { AppProps } from "next/app";
+import Image from "next/image";
 import { PropsWithChildren, useMemo } from "react";
 import { WagmiProvider } from "wagmi";
 import { config } from "../../config.wagmi";
@@ -29,16 +34,52 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <AlertContextProvider>
-        <WagmiProvider config={config}>
-          <_ApolloProvider>
+      <WagmiProvider config={config}>
+        <_ApolloProvider>
+          <AlertContextProvider>
             <JBProvider>
-              <Component {...pageProps} />
+              <WalletContextProvider>
+                <_EquipmentContextProvider>
+                  <ShopContextProvider>
+                    <Component {...pageProps} />
+                  </ShopContextProvider>
+                </_EquipmentContextProvider>
+              </WalletContextProvider>
             </JBProvider>
-          </_ApolloProvider>
-        </WagmiProvider>
-      </AlertContextProvider>
+          </AlertContextProvider>
+        </_ApolloProvider>
+      </WagmiProvider>
     </QueryClientProvider>
+  );
+}
+
+function _EquipmentContextProvider({ children }: PropsWithChildren) {
+  const { tiers } = useCategorizedTiers();
+
+  if (!tiers)
+    return (
+      <div
+        style={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Image
+          src={"/assets/banny_eyes.svg"}
+          width={240}
+          height={(240 * 8) / 14}
+          alt="banny eyes"
+        />
+      </div>
+    );
+
+  return (
+    <EquipmentContextProvider availableTiers={tiers} displayStrategy="mint">
+      {children}
+    </EquipmentContextProvider>
   );
 }
 
@@ -59,6 +100,9 @@ function JBProvider({ children }: PropsWithChildren) {
   );
 }
 
+// for some reason multiple apollo instances are being created (maybe just a dev thing?). this ensures the cache is created only once.
+const cache = new InMemoryCache();
+
 function _ApolloProvider({ children }: PropsWithChildren) {
   const subgraphUri = useSubgraphUri();
 
@@ -72,7 +116,7 @@ function _ApolloProvider({ children }: PropsWithChildren) {
         // convert bigint-typed strings to bigints
         if (raw === undefined || raw === null) return null;
 
-        return BigInt(raw as string);
+        return BigInt(raw as string | number);
       },
     },
   };
@@ -85,8 +129,17 @@ function _ApolloProvider({ children }: PropsWithChildren) {
 
   const client = useMemo(() => {
     const httpLink = new HttpLink({ uri: subgraphUri });
+
+    // https://github.com/reduxjs/redux-devtools/issues/1541#issuecomment-1834205251
+    (BigInt.prototype as unknown as { toJSON: unknown }).toJSON = function () {
+      return this.toString();
+    };
+
     return new ApolloClient({
-      cache: new InMemoryCache(),
+      devtools: {
+        enabled: true,
+      },
+      cache,
       link: ApolloLink.from([scalarsLink, httpLink]),
     });
   }, [subgraphUri, scalarsLink]);

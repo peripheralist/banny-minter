@@ -102,7 +102,7 @@ export default function TierSelectorButton({
           </div>
         );
     }
-  }, [tier]);
+  }, [tier, displayStrategy]);
 
   return (
     <ButtonPad
@@ -111,6 +111,7 @@ export default function TierSelectorButton({
       onClick={onClick}
       pressed={active}
       style={{ opacity: isSoldOut ? 0.7 : 1 }}
+      containerStyle={{ maxWidth: buttonSize + 8 }}
       shadow="sm"
     >
       <div

@@ -1,43 +1,49 @@
-import { CATEGORIES } from "@/constants/category";
 import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
 import { AlertContext } from "@/contexts/alertContext";
-import { EquipmentContext } from "@/contexts/equipmentContext";
+import { ShopContext } from "@/contexts/shopContext";
 import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
 import {
-  useFind721DataHook,
   useJBContractContext,
   usePreparePayMetadata,
   useWriteJbMultiTerminalPay,
 } from "juice-sdk-react";
 import { useCallback, useContext, useEffect, useMemo } from "react";
 import { useAccount, useTransactionReceipt } from "wagmi";
+import { useTiered721HookOf } from "../readContract/useTiered721HookOf";
 
 export function useMint() {
   const { address: connectedWalletAddress } = useAccount();
   const { contracts } = useJBContractContext();
-  const terminalAddress = contracts.primaryNativeTerminal.data;
-
-  const jb721DataHookQuery = useFind721DataHook();
-  const jb721DataHookQueryAddress = jb721DataHookQuery.data as `0x${string}`;
-
   const { setAlert } = useContext(AlertContext);
+  const { bag, totalEquippedPrice } = useContext(ShopContext);
 
-  const { equipped, totalEquippedPrice } = useContext(EquipmentContext);
+  const { data: jb721DataHookQueryAddress } = useTiered721HookOf(
+    parseInt(BANNYVERSE_PROJECT_ID)
+  );
+  const terminalAddress = contracts.primaryNativeTerminal.data;
 
   const tierIds = useMemo(
     () =>
-      CATEGORIES.filter((c) => !!equipped[c]).map((c) =>
-        BigInt(equipped[c]!.tierId)
-      ),
-    [equipped]
+      bag.flatMap(({ tier, quantity }) => {
+        let _tierIds = [];
+        for (let i = 0; i < quantity; i++) {
+          _tierIds.push(BigInt(tier.tierId));
+        }
+        return _tierIds;
+      }),
+    [bag]
   );
 
-  const metadata = usePreparePayMetadata({
-    jb721Hook: {
-      dataHookAddress: jb721DataHookQueryAddress,
-      tierIdsToMint: tierIds,
-    },
-  });
+  const metadata = usePreparePayMetadata(
+    jb721DataHookQueryAddress
+      ? {
+          jb721Hook: {
+            dataHookAddress: jb721DataHookQueryAddress,
+            tierIdsToMint: tierIds,
+          },
+        }
+      : undefined
+  );
 
   const memo = useMemo(() => `Minted tiers ${tierIds.join(", ")}`, [tierIds]);
 

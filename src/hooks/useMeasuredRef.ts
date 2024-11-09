@@ -19,6 +19,7 @@ export function useMeasuredRef() {
 
       fn();
 
+      node.addEventListener("resize", fn);
       document.addEventListener("resize", fn);
       window.addEventListener("resize", fn);
     } else {

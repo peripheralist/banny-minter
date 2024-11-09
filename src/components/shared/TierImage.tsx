@@ -59,8 +59,21 @@ export default function TierImage({
               left: "-49%",
               bottom: 0,
             }}
-            width={size * 2.25}
-            height={size * 2.25}
+            width={size * 2}
+            height={size * 2}
+            data={tier.image}
+            type="image/svg+xml"
+          />
+        );
+      case "naked":
+      case "topping":
+      case "backside":
+      case "fist":
+        return (
+          <object
+            style={{ position: "absolute", top: "-15%", left: "-10%" }}
+            width={size * 1.3}
+            height={size * 1.3}
             data={tier.image}
             type="image/svg+xml"
           />
@@ -68,9 +81,9 @@ export default function TierImage({
       default:
         return (
           <object
-            style={{ position: "absolute", top: "-10%", left: "-4%" }}
-            width={size * 1.2}
-            height={size * 1.2}
+            style={{ position: "absolute", top: 0, left: 0 }}
+            width={size * 1}
+            height={size * 1}
             data={tier.image}
             type="image/svg+xml"
           />
