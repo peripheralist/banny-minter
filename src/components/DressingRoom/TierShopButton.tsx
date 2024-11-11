@@ -102,8 +102,7 @@ export default function TierShopButton({
                 width={buttonSize - 16}
                 height={buttonSize - 16}
                 fill={"white"}
-                style={{ zIndex: 2, position: "absolute" }}
-                pixelSize={8}
+                style={{ zIndex: 2, position: "absolute", margin: 8 }}
               />
               <TierImage tier={tier} size={buttonSize - 36} />
             </div>

@@ -62,7 +62,7 @@ export default function Index() {
           padding: 24,
           paddingTop: 20,
           gap: 24,
-          paddingBottom: 64,
+          paddingBottom: 80,
         }}
       >
         <div>
@@ -71,11 +71,7 @@ export default function Index() {
           </RoundedFrame>
         </div>
 
-        {tier && (
-          <div style={{ maxWidth: 480, overflow: "hidden" }}>
-            <NftTierInfo nft={nft} tier={tier} />
-          </div>
-        )}
+        {tier && <NftTierInfo nft={nft} tier={tier} />}
       </div>
     </ToolbarBagView>
   );

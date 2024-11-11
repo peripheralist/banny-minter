@@ -10,6 +10,7 @@ import { isAddressEqual } from "viem";
 import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
 import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
+import { DROPS } from "@/constants/drops";
 
 export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
   const { address } = useAccount();
@@ -25,6 +26,10 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
         : false,
     [nft?.owner.address, address]
   );
+
+  const drop = useMemo(() => {
+    return DROPS.find((d) => d.tierIds.includes(tier.tierId));
+  }, [tier]);
 
   const NftInfoRow = useCallback(
     ({
@@ -73,14 +78,20 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
         }}
       >
         {nft && <NftInfoRow label="Token Id" value={nft.tokenId.toString()} />}
+        {drop && <NftInfoRow label="Drop" value={`#${drop.id} ${drop.name}`} />}
         <NftInfoRow
-          label="Group"
+          label="Type"
           value={CATEGORY_GROUP_NAMES.find((n) =>
             CATEGORY_GROUPS[n].includes(tier.category)
           )}
         />
         <NftInfoRow label="Token category" value={tier.category} />
-        {nft && <NftInfoRow label="Owner" value={nft.owner.address} />}
+        {nft && (
+          <NftInfoRow
+            label="Owner"
+            value={(isOwned ? "(You) " : "") + nft.owner.address}
+          />
+        )}
         {decoded?.wornByNakedBannyId ? (
           <NftInfoRow
             label="Equipped"
@@ -113,10 +124,15 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
 
       {nft && isOwned && nft?.category === 0 && (
         <Link
-          style={{ display: "block", paddingBottom: 24, marginTop: 24 }}
+          style={{
+            display: "block",
+            position: "absolute",
+            bottom: 24,
+            left: 24,
+          }}
           href={`/dress/${nft.tokenId.toString()}`}
         >
-          <ButtonPad style={{ padding: "8px 12px" }}>Dressing room</ButtonPad>
+          <ButtonPad style={{ padding: 16 }}>Dressing room</ButtonPad>
         </Link>
       )}
     </div>

@@ -3,6 +3,7 @@ import ButtonPad from "@/components/shared/ButtonPad";
 import CloudSky from "@/components/shared/CloudSky";
 import LoadingBanny from "@/components/shared/LoadingBanny";
 import { COLORS } from "@/constants/colors";
+import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
@@ -175,18 +176,37 @@ export default function Home() {
             zIndex: 10,
           }}
         >
-          <Link href={"/mint"}>
+          <Link href={`/drop/${DROPS[0].id}`}>
             <ButtonPad
-              fillBorder="white"
+              fillFg={COLORS.pink}
               style={{
-                width: 180,
-                height: 48,
-                fontSize: FONT_SIZE.lg,
-                margin: "0 auto",
-                fontWeight: "bold",
+                padding: "12px 16px",
+                height: 56,
+                color: "white",
+                display: "block",
+                textAlign: "center",
               }}
             >
-              Shop
+              <div style={{ fontSize: FONT_SIZE.lg, fontWeight: "bold" }}>
+                Drop {DROPS[0].id}: {DROPS[0].name}
+              </div>
+              <div
+                style={{ fontSize: FONT_SIZE.xs, textTransform: "uppercase" }}
+              >
+                Available now
+              </div>
+            </ButtonPad>
+          </Link>
+
+          <Link href={`/drops`}>
+            <ButtonPad
+              style={{
+                padding: "12px 16px",
+                height: 56,
+                fontSize: FONT_SIZE.lg,
+              }}
+            >
+              All drops
             </ButtonPad>
           </Link>
 
@@ -284,15 +304,12 @@ function ClosetButton() {
   return (
     <Link href={`/closet/${_address}`}>
       <ButtonPad
-        fillFg={COLORS.pink}
-        fillBorder={COLORS.pink}
         style={{
-          width: 180,
-          height: 48,
+          padding: "12px 16px",
+          height: 56,
           fontSize: FONT_SIZE.lg,
           margin: "0 auto",
           fontWeight: "bold",
-          color: "white",
         }}
       >
         Closet

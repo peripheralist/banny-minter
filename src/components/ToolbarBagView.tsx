@@ -3,12 +3,14 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import dynamic from "next/dynamic";
-import { PropsWithChildren, useContext, useState } from "react";
+import { PropsWithChildren, useContext, useEffect, useState } from "react";
 import EquippedTiersPreview from "./EquippedTiersPreview";
 import { TOOLBAR_WIDTH } from "./Toolbar2";
 import Bag from "./shared/Bag";
 import RoundedFrame from "./shared/RoundedFrame";
+import Link from "next/link";
 
 const Toolbar = dynamic(() => import("@/components/Toolbar2"), { ssr: false });
 
@@ -18,13 +20,29 @@ const BAG_CLOSED_WIDTH = 80;
 export default function ToolbarBagView({
   children,
   header,
+  backButton,
   frame,
-}: PropsWithChildren<{ header: string | JSX.Element; frame?: boolean }>) {
-  const [bagIsOpen, setBagIsOpen] = useState(false);
+}: PropsWithChildren<{
+  header: string | JSX.Element;
+  frame?: boolean;
+  backButton?: {
+    href: string;
+    label?: string | JSX.Element;
+  };
+}>) {
+  const [bagIsOpen, setBagIsOpen] = useState<boolean>();
 
   const { measuredRef: headerRef, height: headerHeight } = useMeasuredRef();
 
+  const { width } = useWindowSize();
+
   const { bag } = useContext(ShopContext);
+
+  useEffect(() => {
+    if (width && width > 1500 && bagIsOpen === undefined) {
+      setBagIsOpen(true);
+    }
+  }, [width, bagIsOpen]);
 
   return (
     <div
@@ -51,8 +69,32 @@ export default function ToolbarBagView({
           overflow: "hidden",
         }}
       >
-        <div ref={headerRef} style={{ paddingBottom: 12 }}>
-          <RoundedFrame background={"black"}>
+        <div
+          ref={headerRef}
+          style={{ display: "flex", gap: 12, paddingBottom: 12 }}
+        >
+          {backButton && (
+            <RoundedFrame
+              background={"black"}
+              containerStyle={{ width: "auto" }}
+            >
+              <Link
+                href={backButton.href}
+                style={{
+                  display: "flex",
+                  padding: "4px 8px",
+                  gap: 8,
+                  alignItems: "baseline",
+                  color: COLORS.banana,
+                  textTransform: "uppercase",
+                }}
+              >
+                <span>{"<"}</span>
+                {backButton.label || null}
+              </Link>
+            </RoundedFrame>
+          )}
+          <RoundedFrame background={"black"} containerStyle={{ flex: 1 }}>
             <h4
               style={{
                 textTransform: "uppercase",

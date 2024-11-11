@@ -4,6 +4,7 @@ import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
+import { DROPS } from "@/constants/drops";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { ShopContext } from "@/contexts/shopContext";
 import { useNftTiersQuery } from "@/generated/graphql";
@@ -37,8 +38,16 @@ export default function Index() {
 
   const size = useSingleImageSize();
 
+  const drop = useMemo(() => {
+    return DROPS.find((d) => d.tierIds.includes(_tierId));
+  }, [_tierId]);
+
   return (
-    <ToolbarBagView frame header={`ITEM: ${tier?.name}`}>
+    <ToolbarBagView
+      frame
+      header={`ITEM: ${tier?.name}`}
+      backButton={drop ? { href: `/drop/${drop.id}` } : undefined}
+    >
       <div
         style={{
           display: "flex",
@@ -47,7 +56,7 @@ export default function Index() {
           padding: 24,
           paddingTop: 20,
           gap: 24,
-          paddingBottom: 64,
+          paddingBottom: 80,
         }}
       >
         <div>
@@ -57,12 +66,12 @@ export default function Index() {
         </div>
 
         {tier && (
-          <div style={{ maxWidth: 480, overflow: "hidden", paddingBottom: 12 }}>
+          <div style={{ overflow: "hidden", paddingBottom: 12 }}>
             <NftTierInfo tier={tier} />
 
             <ButtonPad
-              containerStyle={{ marginTop: 24 }}
-              style={{ padding: "8px 12px", color: COLORS.pink }}
+              containerStyle={{ position: "absolute", bottom: 24, left: 24 }}
+              style={{ padding: 16, color: COLORS.pink }}
               onClick={() => addItem?.(tier)}
             >
               Add to bag Ξ{formatEther(tier.price)}

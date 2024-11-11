@@ -7,13 +7,12 @@ import {
   CategoryGroup,
 } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
+import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { Tier } from "@/model/tier";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
-import { DROPS } from "../drops";
 
 const IMG_SIZE = 240;
 
@@ -63,8 +62,9 @@ export default function Drop() {
 
   return (
     <ToolbarBagView
-      header={`Drop #${drop?.id.toString().padStart(3, "0")} | ${drop?.name}`}
       frame
+      header={`Drop #${drop?.id.toString().padStart(3, "0")} | ${drop?.name}`}
+      backButton={{ href: "/drops" }}
     >
       <div
         style={{
