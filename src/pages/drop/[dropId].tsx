@@ -10,13 +10,19 @@ import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
+import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { Tier } from "@/model/tier";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
 
-const IMG_SIZE = 240;
-
-function CategoryGroupGrid({ group }: { group: CategoryGroup }) {
+function CategoryGroupGrid({
+  group,
+  imgSize,
+}: {
+  group: CategoryGroup;
+  imgSize: number;
+}) {
   const { availableTiers: tiers } = useContext(ShopContext);
 
   const groupCategories = useMemo(() => CATEGORY_GROUPS[group], [group]);
@@ -34,12 +40,12 @@ function CategoryGroupGrid({ group }: { group: CategoryGroup }) {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: `repeat(auto-fit, ${IMG_SIZE}px)`,
+        gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
         gap: 16,
       }}
     >
       {tiersOfGroup.map((t) => (
-        <TierShopButton key={t.tierId} tier={t} buttonSize={IMG_SIZE} />
+        <TierShopButton key={t.tierId} tier={t} buttonSize={imgSize} />
       ))}
     </div>
   ) : (
@@ -60,6 +66,15 @@ export default function Drop() {
 
   const drop = useMemo(() => DROPS.find((d) => d.id === dropId), [dropId]);
 
+  const isSmallScreen = useIsSmallScreen();
+
+  const { width } = useWindowSize();
+
+  const imgSize = useMemo(
+    () => (isSmallScreen ? (width ? width - 24 : 320) : 240),
+    [isSmallScreen, width]
+  );
+
   return (
     <ToolbarBagView
       frame
@@ -69,14 +84,26 @@ export default function Drop() {
       <div
         style={{
           position: "relative",
-          maxWidth: IMG_SIZE * 4 + 16 * 3, // fit 4 columns with gap
-          padding: 48,
-          paddingLeft: 120,
-          paddingTop: 16,
+          ...(isSmallScreen
+            ? {
+                paddingTop: 16,
+              }
+            : {
+                maxWidth: imgSize * 4 + 16 * 3, // fit 4 columns with gap
+                padding: 48,
+                paddingLeft: 120,
+                paddingTop: 16,
+              }),
         }}
       >
         <div style={{ marginBottom: 80 }}>
-          <h1 style={{ fontSize: FONT_SIZE["4xl"] }}>{drop?.name}</h1>
+          <h1
+            style={{
+              fontSize: isSmallScreen ? FONT_SIZE["3xl"] : FONT_SIZE["4xl"],
+            }}
+          >
+            {drop?.name}
+          </h1>
 
           <div style={{ fontWeight: "bold" }}>
             {drop?.dateCreated} | {drop?.itemCount} items
@@ -98,15 +125,24 @@ export default function Drop() {
               <div
                 style={{
                   position: "sticky",
-                  top: 12,
+                  top: isSmallScreen ? 0 : 12,
                   textTransform: "uppercase",
                   margin: 0,
+                  zIndex: 2,
                 }}
               >
                 <div
                   style={{
                     position: "absolute",
-                    left: -128,
+                    ...(isSmallScreen
+                      ? {
+                          left: -20,
+                          // right: -12,
+                          top: 0,
+                        }
+                      : {
+                          left: -128,
+                        }),
                   }}
                 >
                   <RoundedFrame
@@ -121,7 +157,8 @@ export default function Drop() {
                   </RoundedFrame>
                 </div>
               </div>
-              <CategoryGroupGrid group={g} />
+
+              <CategoryGroupGrid group={g} imgSize={imgSize} />
             </div>
           ))}
         </div>

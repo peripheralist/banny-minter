@@ -11,6 +11,7 @@ import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
 import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
 import { DROPS } from "@/constants/drops";
+import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 
 export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
   const { address } = useAccount();
@@ -26,6 +27,8 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
         : false,
     [nft?.owner.address, address]
   );
+
+  const isSmallScreen = useIsSmallScreen();
 
   const drop = useMemo(() => {
     return DROPS.find((d) => d.tierIds.includes(tier.tierId));
@@ -126,7 +129,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
         <Link
           style={{
             display: "block",
-            position: "absolute",
+            position: isSmallScreen ? "fixed" : "absolute",
             bottom: 24,
             left: 24,
           }}

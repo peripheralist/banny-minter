@@ -109,6 +109,7 @@ export default function ButtonPad({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          opacity: disabled ? 0.6 : 1,
           ...style,
         }}
       >

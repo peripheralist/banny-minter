@@ -5,7 +5,7 @@ export function useIsSmallScreen() {
   const { width: windowWidth } = useWindowSize();
 
   return useMemo(
-    () => (windowWidth ? windowWidth < 1000 : undefined),
+    () => (windowWidth ? windowWidth < 800 : undefined),
     [windowWidth]
   );
 }

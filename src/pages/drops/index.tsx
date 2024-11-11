@@ -4,6 +4,7 @@ import RoundedFrame from "@/components/shared/RoundedFrame";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
+import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 import { Drop } from "@/model/drop";
 import Link from "next/link";
 import { useState } from "react";
@@ -91,13 +92,15 @@ function DropLink({ drop }: { drop: Drop }) {
 }
 
 export default function Drops() {
+  const isSmallScreen = useIsSmallScreen();
+
   return (
     <ToolbarBagView header="DROPS">
       <div style={{ position: "relative" }}>
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(2, 1fr)`,
+            gridTemplateColumns: `repeat(${isSmallScreen ? 1 : 2}, 1fr)`,
             gap: 16,
             paddingBottom: 80,
           }}

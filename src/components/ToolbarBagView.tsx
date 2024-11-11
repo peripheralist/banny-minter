@@ -5,12 +5,20 @@ import { ShopContext } from "@/contexts/shopContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import dynamic from "next/dynamic";
-import { PropsWithChildren, useContext, useEffect, useState } from "react";
+import {
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import EquippedTiersPreview from "./EquippedTiersPreview";
 import { TOOLBAR_WIDTH } from "./Toolbar2";
 import Bag from "./shared/Bag";
 import RoundedFrame from "./shared/RoundedFrame";
 import Link from "next/link";
+import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
+import ToolbarIcon, { TOOLBAR_ICON_SIZE } from "./ToolbarIcon";
 
 const Toolbar = dynamic(() => import("@/components/Toolbar2"), { ssr: false });
 
@@ -38,11 +46,121 @@ export default function ToolbarBagView({
 
   const { bag } = useContext(ShopContext);
 
+  const isSmallScreen = useIsSmallScreen();
+
+  const Header = useCallback(
+    () => (
+      <div
+        ref={headerRef}
+        style={{ display: "flex", gap: 12, paddingBottom: 12 }}
+      >
+        {backButton && (
+          <RoundedFrame background={"black"} containerStyle={{ width: "auto" }}>
+            <Link
+              href={backButton.href}
+              style={{
+                display: "flex",
+                padding: "4px 8px",
+                gap: 8,
+                alignItems: "baseline",
+                color: COLORS.banana,
+                textTransform: "uppercase",
+              }}
+            >
+              <span>{"<"}</span>
+              {backButton.label || null}
+            </Link>
+          </RoundedFrame>
+        )}
+        <RoundedFrame background={"black"} containerStyle={{ flex: 1 }}>
+          <h4
+            style={{
+              textTransform: "uppercase",
+              padding: "4px 8px",
+              margin: 0,
+              color: COLORS.banana,
+            }}
+          >
+            {header}
+          </h4>
+        </RoundedFrame>
+      </div>
+    ),
+    [header, backButton, headerRef]
+  );
+
   useEffect(() => {
     if (width && width > 1500 && bagIsOpen === undefined) {
       setBagIsOpen(true);
     }
   }, [width, bagIsOpen]);
+
+  if (isSmallScreen)
+    return (
+      <div style={{ height: "100vh", width: "100vw", overflow: "hidden" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: 12,
+            boxSizing: "border-box",
+          }}
+        >
+          <ToolbarIcon />
+
+          <div onClick={() => setBagIsOpen(true)}>BAG ({bag.length || 0})</div>
+        </div>
+
+        <div style={{ paddingLeft: 12, paddingRight: 12 }}>
+          <Header />
+        </div>
+
+        <div
+          style={{
+            position: "fixed",
+            top: TOOLBAR_ICON_SIZE + 12 * 2 + headerHeight,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            paddingLeft: 12,
+            paddingRight: 12,
+            paddingBottom: 80,
+            overflow: "auto",
+          }}
+        >
+          {children}
+        </div>
+
+        <div
+          id="bagcontainer"
+          style={{
+            position: "fixed",
+            inset: 0,
+            opacity: bagIsOpen ? 1 : 0,
+            pointerEvents: bagIsOpen ? "all" : "none",
+            transition: "opacity 0.1s ease-in, transform 0.1s ease-in",
+            background: "#00000088",
+          }}
+          onClick={() => setBagIsOpen(false)}
+        >
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              bottom: 0,
+              left: bagIsOpen ? 80 : "100%",
+              right: 0,
+              transition: "left 0.1s ease-in, transform 0.1s ease-in",
+              background: COLORS.bananaLite,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Bag open />
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <div
