@@ -33,7 +33,7 @@ export default function EquipmentContextProvider({
       serialize: (v) => JSON.stringify(v),
     });
   const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>(
-    defaultGroup ?? "body"
+    defaultGroup ?? "banny"
   );
   const [equippingCategory, setEquippingCategory] = useState<Category>();
   const [unequippingCategory, setUnequippingCategory] = useState<Category>();
@@ -111,7 +111,7 @@ export default function EquipmentContextProvider({
     }
   }, [defaultEquippedTierIds, setEquippedTierId]);
 
-  const equipNone = useCallback(() => {
+  const unequipAll = useCallback(() => {
     setEquippedTierId({});
   }, [setEquippedTierId]);
 
@@ -142,7 +142,7 @@ export default function EquipmentContextProvider({
       value={{
         equipped,
         equip,
-        equipNone,
+        unequipAll,
         totalEquippedPrice,
         selectedGroup,
         setSelectedGroup,

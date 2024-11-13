@@ -58,7 +58,7 @@ export default function BagItems() {
                   </RoundedFrame>
                 </div>
 
-                <div style={{ flex: 1, fontSize: FONT_SIZE.sm }}>
+                <div style={{ flex: 1 }}>
                   <div>
                     {quantity > 1 ? (
                       <span style={{ fontWeight: "bold" }}>(x{quantity}) </span>
@@ -67,7 +67,9 @@ export default function BagItems() {
                     )}
                     {name}
                   </div>
-                  <div>Ξ{formatEther(price * BigInt(quantity))}</div>
+                  <div style={{ fontSize: FONT_SIZE.sm }}>
+                    Ξ{formatEther(price * BigInt(quantity))}
+                  </div>
                 </div>
 
                 <div

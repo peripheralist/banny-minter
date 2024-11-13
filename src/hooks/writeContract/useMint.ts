@@ -67,24 +67,19 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
       return;
     }
 
-    writeContract(
-      {
-        address: terminalAddress,
-        args: [
-          BigInt(BANNYVERSE_PROJECT_ID),
-          NATIVE_TOKEN,
-          totalEquippedPrice,
-          connectedWalletAddress, // mint to connected wallet
-          BigInt(0),
-          memo,
-          metadata ?? DEFAULT_METADATA,
-        ],
-        value: totalEquippedPrice ?? undefined,
-      },
-      {
-        onSuccess: props?.onSuccess,
-      }
-    );
+    writeContract({
+      address: terminalAddress,
+      args: [
+        BigInt(BANNYVERSE_PROJECT_ID),
+        NATIVE_TOKEN,
+        totalEquippedPrice,
+        connectedWalletAddress, // mint to connected wallet
+        BigInt(0),
+        memo,
+        metadata ?? DEFAULT_METADATA,
+      ],
+      value: totalEquippedPrice ?? undefined,
+    });
   }, [
     writeContract,
     totalEquippedPrice,
@@ -94,7 +89,6 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     terminalAddress,
     setAlert,
     tierIds,
-    props,
   ]);
 
   const tx = useTransactionReceipt({
@@ -114,13 +108,14 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
 
     switch (tx.status) {
       case "success":
-        setAlert?.({
-          title: "Minted!",
-          action: {
-            label: "View in your closet",
-            href: `/closet/${connectedWalletAddress}`,
-          },
-        });
+        // setAlert?.({
+        //   title: "Minted!",
+        //   action: {
+        //     label: "View in your closet",
+        //     href: `/closet/${connectedWalletAddress}`,
+        //   },
+        // });
+        props?.onSuccess?.();
         break;
       case "error":
         if (tx.error.name !== "TransactionReceiptNotFoundError") {
@@ -129,7 +124,14 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
         }
         break;
     }
-  }, [tx.status, tx.error?.name, setAlert, connectedWalletAddress, error]);
+  }, [
+    tx.status,
+    tx.error?.name,
+    setAlert,
+    connectedWalletAddress,
+    error,
+    props,
+  ]);
 
   return { mint, isPending: isPending || tx.isLoading };
 }

@@ -292,7 +292,7 @@ function Drawer({
       <RoundedFrame
         background={"white"}
         containerStyle={{
-          height: open ? BAG_WIDTH + 12 : BAG_CLOSED_WIDTH,
+          height: open ? BAG_WIDTH + 12 : BAG_CLOSED_WIDTH + 4,
           transition: "height 0.1s ease-in, transform 0.1s ease-in",
           flexShrink: 0,
           marginBottom: -32,

@@ -17,7 +17,7 @@ export const EQUIP_DURATION_MILLIS = 400;
 export default function ShopContextProvider({ children }: PropsWithChildren) {
   const { equip } = useContext(EquipmentContext);
 
-  const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("body");
+  const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("banny");
 
   const { tiers } = useCategorizedTiers();
 

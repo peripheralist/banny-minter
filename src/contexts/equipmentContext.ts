@@ -6,7 +6,7 @@ import { createContext } from "react";
 type Context = {
   equipped: EquippedTiers;
   equip?: EquipTierFns;
-  equipNone?: VoidFunction;
+  unequipAll?: VoidFunction;
   totalEquippedPrice?: bigint | null;
   selectedGroup: CategoryGroup;
   setSelectedGroup?: (g: CategoryGroup) => void;
@@ -17,7 +17,7 @@ type Context = {
 };
 
 export const EquipmentContext = createContext<Context>({
-  selectedGroup: "body",
+  selectedGroup: "banny",
   equipped: CATEGORIES.reduce(
     (acc, category) => ({
       ...acc,

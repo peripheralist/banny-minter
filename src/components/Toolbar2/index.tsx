@@ -1,11 +1,11 @@
+import { useIsHover } from "@/hooks/useIsHover";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import Image from "next/image";
 import Link from "next/link";
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren } from "react";
 import { useAccount } from "wagmi";
 import RoundedFrame from "../shared/RoundedFrame";
 import Wallet from "./Wallet";
-import { useIsHover } from "@/hooks/useIsHover";
 
 export const TOOLBAR_WIDTH = 140;
 
@@ -29,7 +29,6 @@ export default function Index() {
         ...(isSmallScreen
           ? { fontSize: "0.8rem" }
           : { position: "fixed", top: 0, left: 0, right: 0 }),
-        zIndex: 10,
       }}
     >
       <_Link href={"/"}>

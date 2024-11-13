@@ -1,8 +1,18 @@
 import { TOOLBAR_HEIGHT } from "@/components/Toolbar";
 import ToolbarBagView from "@/components/ToolbarBagView";
 import Fuzz from "@/components/pixelRenderers/Fuzz";
+import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
+import {
+  CATEGORY_GROUPS,
+  CATEGORY_GROUP_NAMES,
+  CATEGORY_IDS,
+  CategoryGroup,
+  categoryOfId,
+} from "@/constants/category";
+import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
+import { NfTsQuery } from "@/generated/graphql";
 import { useNftsOf } from "@/hooks/queries/useNftsOf";
 import { parseTier } from "@/utils/parseTier";
 import Link from "next/link";
@@ -11,17 +21,6 @@ import { useCallback, useMemo } from "react";
 import { isAddress } from "viem";
 import { useEnsName } from "wagmi";
 import DressedBannyNftImage from "./DressedBannyNftImage";
-import {
-  CATEGORIES,
-  CATEGORY_GROUPS,
-  CATEGORY_GROUP_NAMES,
-  CATEGORY_IDS,
-  CategoryGroup,
-  categoryOfId,
-} from "@/constants/category";
-import { NfTsQuery } from "@/generated/graphql";
-import RoundedFrame from "@/components/shared/RoundedFrame";
-import { COLORS } from "@/constants/colors";
 
 const IMG_SIZE = 200;
 
@@ -55,12 +54,12 @@ export default function Index() {
       <div
         style={{
           position: "absolute",
-          bottom: -16,
+          bottom: -12,
           left: 0,
           right: 0,
-          color: "#00000088",
           textAlign: "center",
-          fontSize: FONT_SIZE.sm,
+          color: "black",
+          fontSize: FONT_SIZE.xs,
         }}
       >
         #{tokenId.toString()}
@@ -72,37 +71,36 @@ export default function Index() {
   const CategoryGrids = useCallback(() => {
     return CATEGORY_GROUP_NAMES.map((g) => {
       const contents = nftsByCategoryGroup[g].map((nft) => {
-        const item =
+        const content =
           nft.category === CATEGORY_IDS["naked"] ? (
-            <Link href={`/nft/${nft.tokenId}`}>
-              <div style={{ pointerEvents: "none", position: "relative" }}>
-                <DressedBannyNftImage size={IMG_SIZE} nft={nft} />
-                <TokenId tokenId={nft.tokenId} />
-              </div>
-            </Link>
+            <>
+              <DressedBannyNftImage size={IMG_SIZE - 16} nft={nft} />
+              <TokenId tokenId={nft.tokenId} />
+            </>
           ) : (
-            <Link href={`/nft/${nft.tokenId}`}>
-              <div
-                style={{
-                  width: IMG_SIZE,
-                  height: IMG_SIZE,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  pointerEvents: "none",
-                  position: "relative",
-                }}
-              >
-                <TierImage tier={parseTier(nft.tier)} size={160} />
-                <TokenId tokenId={nft.tokenId} />
-              </div>
-            </Link>
+            <>
+              <TierImage tier={parseTier(nft.tier)} size={IMG_SIZE - 16} />
+              <TokenId tokenId={nft.tokenId} />
+            </>
           );
 
         return (
-          <RoundedFrame key={nft.tokenId} background={"white"}>
-            {item}
-          </RoundedFrame>
+          <Link key={nft.tokenId} href={`/nft/${nft.tokenId}`}>
+            <RoundedFrame
+              style={{ width: IMG_SIZE, height: IMG_SIZE }}
+              background={"white"}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  pointerEvents: "none",
+                }}
+              >
+                {content}
+              </div>
+            </RoundedFrame>
+          </Link>
         );
       });
 

@@ -9,18 +9,22 @@ import { useAccount } from "wagmi";
 import BagItems from "../shared/BagItems";
 import ButtonPad from "../shared/ButtonPad";
 import Modal from "../shared/Modal";
+import Link from "next/link";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 
 export default function MintButton() {
   const [isConfirming, setIsConfirming] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const { address } = useAccount();
   const { connect } = useContext(WalletContext);
   const { totalEquippedPrice, emptyBag } = useContext(ShopContext);
+  const { unequipAll } = useContext(EquipmentContext);
 
   const { mint, isPending } = useMint({
     onSuccess: () => {
       setIsConfirming(false);
-      emptyBag?.();
+      setIsSuccess(true);
     },
   });
 
@@ -31,19 +35,62 @@ export default function MintButton() {
     if (!totalEquippedPrice) return null;
 
     return (
-      <Modal open={isConfirming}>
-        <h1>Mint items for {formatEther(totalEquippedPrice)}?</h1>
+      <Modal open={isConfirming} onClose={() => setIsConfirming(false)}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          <h1 style={{ margin: 0 }}>Mint NFTs</h1>
 
-        <BagItems />
+          <BagItems />
 
-        {isPending ? (
-          <ButtonPad onClick={mint}>Mint</ButtonPad>
-        ) : (
-          "Transaction pending"
-        )}
+          <p>
+            By minting Looks NFTs, you{"'"}re paying the on-chain{" "}
+            <Link href={"https://revnet.eth.sucks/memo/"}>Looks Revnet</Link>{" "}
+            treasury and earning $BAN in return.
+          </p>
+
+          <div>$BAN earned by this payment: 69420</div>
+
+          {isPending ? (
+            "Transaction pending..."
+          ) : (
+            <ButtonPad
+              onClick={mint}
+              fillFg={COLORS.pink}
+              style={{
+                padding: "12px 16px",
+                color: "white",
+                fontSize: FONT_SIZE.lg,
+              }}
+            >
+              Mint ({formatEther(totalEquippedPrice)} ETH)
+            </ButtonPad>
+          )}
+        </div>
       </Modal>
     );
   }, [isPending, isConfirming, totalEquippedPrice, mint]);
+
+  const SucccessModal = useCallback(() => {
+    return (
+      <Modal
+        open={isSuccess}
+        onClose={() => {
+          emptyBag?.();
+          unequipAll?.();
+          setIsSuccess(false);
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          <h1 style={{ margin: 0 }}>Minted!</h1>
+
+          <BagItems />
+
+          <div>
+            View items in your <Link href={`/closet/${address}`}>closet</Link>.
+          </div>
+        </div>
+      </Modal>
+    );
+  }, [emptyBag, unequipAll, isSuccess, address]);
 
   return (
     <>
@@ -87,6 +134,7 @@ export default function MintButton() {
       </ButtonPad>
 
       <ConfirmCheckoutModal />
+      <SucccessModal />
     </>
   );
 }

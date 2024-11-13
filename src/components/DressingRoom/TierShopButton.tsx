@@ -95,7 +95,9 @@ export default function TierShopButton({
         }}
       >
         <Link href={`/item/${tier.tierId}`} style={{ color: "black" }}>
-          <div style={{ marginTop: 12, pointerEvents: "none" }}>
+          <div
+            style={{ marginTop: 12, marginBottom: 12, pointerEvents: "none" }}
+          >
             <FuzzMoment
               width={buttonSize - 16}
               height={buttonSize - 16}
@@ -104,10 +106,12 @@ export default function TierShopButton({
             />
             <TierImage tier={tier} size={buttonSize - 36} />
           </div>
+
+          <Label />
         </Link>
 
         <ButtonPad
-          style={{ display: "flex", padding: 10, color: COLORS.pink }}
+          style={{ padding: 8, color: COLORS.pink }}
           fillFg={added ? COLORS.pinkLite : "white"}
           fillBorder={added ? COLORS.pink : "black"}
           containerStyle={{ marginBottom: 4, width: "100%" }}

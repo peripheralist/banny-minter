@@ -34,7 +34,7 @@ export default function CategoryGroupButton({
   const Icon = useCallback(() => {
     let name = "";
     switch (group) {
-      case "body":
+      case "banny":
         name = "naked";
         break;
       case "world":

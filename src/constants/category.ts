@@ -44,7 +44,7 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const CATEGORY_GROUP_NAMES = [
-  "body",
+  "banny",
   "head",
   "outfit",
   "special",
@@ -55,7 +55,7 @@ export type CategoryGroup = (typeof CATEGORY_GROUP_NAMES)[number];
 
 // Groups of similar asset categories, not including body
 export const CATEGORY_GROUPS: Record<CategoryGroup, Category[]> = {
-  body: ["naked"],
+  banny: ["naked"],
   head: ["glasses", "head", "headTop", "mouth"],
   outfit: ["necklace", "legs", "suit", "suitBottom", "suitTop"],
   special: ["fist", "topping", "backside"],

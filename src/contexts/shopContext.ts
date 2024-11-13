@@ -17,6 +17,6 @@ type Context = {
 };
 
 export const ShopContext = createContext<Context>({
-  selectedGroup: "body",
+  selectedGroup: "banny",
   bag: [],
 });

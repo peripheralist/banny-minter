@@ -1,5 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "./ButtonPad";
 import RoundedFrame from "./RoundedFrame";
@@ -18,6 +18,11 @@ export default function Modal({
 
   useEffect(() => setIsOpen(open), [open]);
 
+  const _onClose = useCallback(() => {
+    setIsOpen(false);
+    onClose?.();
+  }, [onClose]);
+
   if (!isOpen) return null;
 
   const shadowColor = `#00000088`;
@@ -35,56 +40,44 @@ export default function Modal({
         height: "100vh",
         zIndex: 100,
         background: shadowColor,
+        overflow: "auto",
       }}
-      onClick={() => {
-        setIsOpen(false);
-        onClose?.();
-      }}
+      onClick={_onClose}
     >
-      <FuzzMoment
-        fill={"white"}
-        width={pixelSize * 20}
-        height={pixelSize * 20}
-        pixelSize={pixelSize}
-        duration={400}
-        onFinished={
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <RoundedFrame
-              background={COLORS.bananaHint}
-              containerStyle={{ zIndex: 10 }}
-              style={{
-                minWidth: "40vw",
-                width: "90vw",
-                maxWidth: 600,
-                padding: 24,
-                overflow: "auto",
-              }}
-            >
-              {children}
-            </RoundedFrame>
+      <div
+        style={{ margin: 80 }}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <RoundedFrame
+          background={COLORS.bananaHint}
+          containerStyle={{ height: "auto" }}
+          style={{
+            minWidth: "40vw",
+            width: "90vw",
+            maxWidth: 600,
+            padding: 24,
+            overflow: "auto",
+          }}
+        >
+          {children}
+        </RoundedFrame>
 
-            {onClose && (
-              <ButtonPad
-                onClick={onClose}
-                fillFg={"white"}
-                shadow="sm"
-                containerStyle={{
-                  marginTop: 12,
-                  textAlign: "center",
-                  zIndex: 10,
-                }}
-                style={{ padding: 12 }}
-              >
-                Close
-              </ButtonPad>
-            )}
-          </div>
-        }
-      />
+        <ButtonPad
+          onClick={_onClose}
+          fillFg={"white"}
+          shadow="sm"
+          containerStyle={{
+            marginTop: 12,
+            textAlign: "center",
+            zIndex: 10,
+          }}
+          style={{ padding: 12 }}
+        >
+          Close
+        </ButtonPad>
+      </div>
     </div>
   );
 }
