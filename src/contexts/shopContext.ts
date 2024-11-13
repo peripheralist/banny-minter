@@ -9,6 +9,7 @@ type Context = {
   bag: ShoppingBag;
   addItem?: (t: Tier) => void;
   removeItem?: (t: Tier["tierId"]) => void;
+  emptyBag?: VoidFunction;
   itemsQuantity?: number;
   totalEquippedPrice?: bigint | null;
   selectedGroup: CategoryGroup;

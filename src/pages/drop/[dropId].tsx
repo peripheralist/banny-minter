@@ -10,7 +10,6 @@ import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
-import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Tier } from "@/model/tier";
 import { useRouter } from "next/router";
@@ -66,9 +65,7 @@ export default function Drop() {
 
   const drop = useMemo(() => DROPS.find((d) => d.id === dropId), [dropId]);
 
-  const isSmallScreen = useIsSmallScreen();
-
-  const { width } = useWindowSize();
+  const { width, isSmallScreen } = useWindowSize();
 
   const imgSize = useMemo(
     () => (isSmallScreen ? (width ? width - 24 : 320) : 240),

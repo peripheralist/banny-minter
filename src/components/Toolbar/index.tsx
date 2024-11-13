@@ -1,6 +1,7 @@
+import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
-import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
@@ -8,7 +9,6 @@ import { useEnsName } from "wagmi";
 import Blinker from "../shared/Blinker";
 import CurrentChain from "./CurrentChain";
 import Wallet from "./Wallet";
-import { COLORS } from "@/constants/colors";
 
 export const TOOLBAR_HEIGHT = 60;
 
@@ -48,7 +48,7 @@ export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
     return null;
   }, [currentPath, formattedAddress, tokenId]);
 
-  const isSmallScreen = useIsSmallScreen();
+  const { isSmallScreen } = useWindowSize();
 
   return (
     <div

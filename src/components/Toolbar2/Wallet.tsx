@@ -4,9 +4,9 @@ import { WalletContext } from "@/contexts/walletContext";
 import { useContext } from "react";
 import { useAccount, useDisconnect, useEnsName } from "wagmi";
 import ButtonPad from "../shared/ButtonPad";
+import FormattedAddress from "../shared/FormattedAddress";
 import RoundedFrame from "../shared/RoundedFrame";
 import CurrentChain from "./CurrentChain";
-import FuzzMoment from "../pixelRenderers/FuzzMoment";
 
 export default function Wallet() {
   const { connect } = useContext(WalletContext);
@@ -35,7 +35,7 @@ export default function Wallet() {
           <CurrentChain />
 
           <div style={{ fontWeight: "bold" }}>
-            {ensName ?? `${address.substring(0, 6)}…${address.substring(38)}`}
+            {ensName ?? <FormattedAddress address={address} />}
           </div>
 
           <ButtonPad

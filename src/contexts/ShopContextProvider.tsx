@@ -1,5 +1,6 @@
-import { CategoryGroup } from "@/constants/category";
+import { Category, CategoryGroup } from "@/constants/category";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
+import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { Tier } from "@/model/tier";
 import {
   PropsWithChildren,
@@ -8,8 +9,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { ShopContext, ShoppingBag } from "./shopContext";
 import { EquipmentContext } from "./equipmentContext";
+import { ShopContext, ShoppingBag } from "./shopContext";
 
 export const EQUIP_DURATION_MILLIS = 400;
 
@@ -20,7 +21,37 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
 
   const { tiers } = useCategorizedTiers();
 
-  const [bag, setBag] = useState<ShoppingBag>([]);
+  const { value: bag, setValue: setBag } = useLocalStorageState<ShoppingBag>(
+    "looks_bag",
+    {
+      initialValue: [],
+      parse: (str) =>
+        str
+          ? JSON.parse(str).map(
+              ({
+                tierId,
+                category,
+                quantity,
+              }: {
+                tierId: number;
+                category: Category;
+                quantity: number;
+              }) => ({
+                quantity,
+                tier: tiers?.[category].find((t) => t.tierId === tierId),
+              })
+            )
+          : [],
+      serialize: (b) =>
+        JSON.stringify(
+          b.map(({ tier, quantity }) => ({
+            tierId: tier.tierId,
+            category: tier.category,
+            quantity,
+          }))
+        ),
+    }
+  );
 
   const addItem = useCallback(
     (tier: Tier) => {
@@ -36,24 +67,29 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
           : [...b, { tier, quantity: 1 }]
       );
     },
-    [equip]
+    [equip, setBag]
   );
 
-  const removeItem = useCallback((tierId: Tier["tierId"]) => {
-    setBag((b) => {
-      const tier = b.find(({ tier }) => tier.tierId === tierId);
+  const removeItem = useCallback(
+    (tierId: Tier["tierId"]) => {
+      setBag((b) => {
+        const tier = b.find(({ tier }) => tier.tierId === tierId);
 
-      if (tier && tier.quantity > 1) {
-        return b.map(({ tier, quantity }) =>
-          tier.tierId === tierId
-            ? { tier, quantity: quantity - 1 }
-            : { tier, quantity }
-        );
-      }
+        if (tier && tier.quantity > 1) {
+          return b.map(({ tier, quantity }) =>
+            tier.tierId === tierId
+              ? { tier, quantity: quantity - 1 }
+              : { tier, quantity }
+          );
+        }
 
-      return b.filter(({ tier }) => tier.tierId !== tierId);
-    });
-  }, []);
+        return b.filter(({ tier }) => tier.tierId !== tierId);
+      });
+    },
+    [setBag]
+  );
+
+  const emptyBag = useCallback(() => setBag([]), [setBag]);
 
   const itemsQuantity = useMemo(
     () => bag.reduce((acc, { quantity }) => acc + quantity, 0),
@@ -77,6 +113,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
         bag,
         addItem,
         removeItem,
+        emptyBag,
         itemsQuantity,
         totalEquippedPrice,
         selectedGroup,

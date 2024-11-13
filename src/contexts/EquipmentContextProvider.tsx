@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import { EquipmentContext } from "./equipmentContext";
+import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 
 export const EQUIP_DURATION_MILLIS = 400;
 
@@ -25,9 +26,12 @@ export default function EquipmentContextProvider({
   defaultEquippedTierIds?: Partial<Record<Category, number>>;
   displayStrategy?: DisplayStrategy;
 }>) {
-  const [equippedTierId, setEquippedTierId] = useState<
-    Partial<Record<Category, number>>
-  >({});
+  const { value: equippedTierId, setValue: setEquippedTierId } =
+    useLocalStorageState<Partial<Record<Category, number>>>("looks_equipped", {
+      initialValue: {},
+      parse: (str) => (str ? JSON.parse(str) : {}),
+      serialize: (v) => JSON.stringify(v),
+    });
   const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>(
     defaultGroup ?? "body"
   );
@@ -99,27 +103,17 @@ export default function EquipmentContextProvider({
       }),
       {} as EquipTierFns
     );
-  }, []);
+  }, [setEquippedTierId]);
 
   useEffect(() => {
     if (defaultEquippedTierIds) {
       setEquippedTierId(defaultEquippedTierIds);
     }
-  }, [defaultEquippedTierIds]);
+  }, [defaultEquippedTierIds, setEquippedTierId]);
 
-  const equipRandom = useCallback(() => {
-    if (!availableTiers) return;
-
-    // randomize all category tier ids
-    CATEGORIES.forEach((c) => {
-      if (!availableTiers[c].length) return;
-
-      equip[c](
-        availableTiers[c][Math.floor(Math.random() * availableTiers[c].length)]
-          .tierId
-      );
-    });
-  }, [equip, availableTiers]);
+  const equipNone = useCallback(() => {
+    setEquippedTierId({});
+  }, [setEquippedTierId]);
 
   const totalEquippedPrice = useMemo(() => {
     if (!availableTiers) return null;
@@ -141,14 +135,14 @@ export default function EquipmentContextProvider({
     if (!displayStrategy) throw new Error("displayStrategy is undefined");
 
     return displayStrategy;
-  }, []);
+  }, [displayStrategy]);
 
   return (
     <EquipmentContext.Provider
       value={{
         equipped,
         equip,
-        equipRandom,
+        equipNone,
         totalEquippedPrice,
         selectedGroup,
         setSelectedGroup,

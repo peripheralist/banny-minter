@@ -128,12 +128,7 @@ function LayerBg({
 }) {
   const Corner = useCallback(
     ({ _style }: { _style?: CSSProperties }) => (
-      <PixelCorner
-        size={12}
-        fillInner={fill}
-        fillBorder={fill}
-        style={_style}
-      />
+      <PixelCorner fillInner={fill} fillBorder={fill} style={_style} />
     ),
     [fill]
   );

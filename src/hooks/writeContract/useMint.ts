@@ -11,7 +11,7 @@ import { useCallback, useContext, useEffect, useMemo } from "react";
 import { useAccount, useTransactionReceipt } from "wagmi";
 import { useTiered721HookOf } from "../readContract/useTiered721HookOf";
 
-export function useMint() {
+export function useMint(props?: { onSuccess?: VoidFunction }) {
   const { address: connectedWalletAddress } = useAccount();
   const { contracts } = useJBContractContext();
   const { setAlert } = useContext(AlertContext);
@@ -82,7 +82,7 @@ export function useMint() {
         value: totalEquippedPrice ?? undefined,
       },
       {
-        onSuccess: () => console.log("hi"),
+        onSuccess: props?.onSuccess,
       }
     );
   }, [
@@ -94,6 +94,7 @@ export function useMint() {
     terminalAddress,
     setAlert,
     tierIds,
+    props,
   ]);
 
   const tx = useTransactionReceipt({

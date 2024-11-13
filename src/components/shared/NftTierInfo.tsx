@@ -1,19 +1,29 @@
+import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
+import { DROPS } from "@/constants/drops";
+import { FONT_SIZE } from "@/constants/fontSize";
 import { ITEM_DESCRIPTIONS } from "@/constants/itemDescriptions";
 import { useBannyEquippedTiers } from "@/hooks/useBannyEquippedTiers";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
 import { Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { formatEther } from "juice-sdk-core";
 import Link from "next/link";
-import { useCallback, useMemo } from "react";
+import { CSSProperties, useCallback, useMemo } from "react";
 import { isAddressEqual } from "viem";
 import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
-import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
-import { DROPS } from "@/constants/drops";
-import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
+import FormattedAddress from "./FormattedAddress";
 
-export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
+export default function NftTierInfo({
+  tier,
+  nft,
+  style,
+}: {
+  tier: Tier;
+  nft?: NFT;
+  style?: CSSProperties;
+}) {
   const { address } = useAccount();
 
   const { data: equippedTiers } = useBannyEquippedTiers(nft);
@@ -28,7 +38,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
     [nft?.owner.address, address]
   );
 
-  const isSmallScreen = useIsSmallScreen();
+  const { isSmallScreen } = useWindowSize();
 
   const drop = useMemo(() => {
     return DROPS.find((d) => d.tierIds.includes(tier.tierId));
@@ -40,7 +50,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
       value,
     }: {
       label: string;
-      value: string | number | undefined;
+      value: JSX.Element | string | number | undefined;
     }) => (
       <div
         style={{
@@ -67,20 +77,47 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
   );
 
   return (
-    <div>
-      <h2>{tier.name}</h2>
+    <div style={style}>
+      <h1>{tier.name}</h1>
 
-      <p style={{ margin: 0 }}>{ITEM_DESCRIPTIONS[tier.tierId]}</p>
+      <div style={{ marginTop: 24, fontSize: FONT_SIZE.lg }}>
+        {formatEther(BigInt(tier.price))} ETH
+      </div>
+
+      <p style={{ margin: 0, marginTop: 12, maxWidth: 400 }}>
+        {ITEM_DESCRIPTIONS[tier.tierId]}
+      </p>
 
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 12,
+          gap: 8,
           marginTop: 24,
+          fontSize: FONT_SIZE.sm,
         }}
       >
-        {nft && <NftInfoRow label="Token Id" value={nft.tokenId.toString()} />}
+        {nft && (
+          <NftInfoRow
+            label="Owner"
+            value={
+              <div style={{ display: "flex", gap: 8, alignItems: "baseline" }}>
+                <FormattedAddress address={nft?.owner.address} />{" "}
+                {isOwned ? "(You) " : ""}
+              </div>
+            }
+          />
+        )}
+        {nft && (
+          <NftInfoRow
+            label="Minted"
+            value={`${(
+              tier.initialSupply - tier.remainingSupply
+            ).toString()}/${tier.initialSupply.toString()} ${
+              tier.remainingSupply === BigInt(0) ? "(Sold out)" : ""
+            }`}
+          />
+        )}
         {drop && <NftInfoRow label="Drop" value={`#${drop.id} ${drop.name}`} />}
         <NftInfoRow
           label="Type"
@@ -89,12 +126,6 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
           )}
         />
         <NftInfoRow label="Token category" value={tier.category} />
-        {nft && (
-          <NftInfoRow
-            label="Owner"
-            value={(isOwned ? "(You) " : "") + nft.owner.address}
-          />
-        )}
         {decoded?.wornByNakedBannyId ? (
           <NftInfoRow
             label="Equipped"
@@ -110,19 +141,8 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
               .join(", ")}
           />
         ) : null}
-        <NftInfoRow
-          label="Total supply"
-          value={tier.initialSupply.toString()}
-        />
-        <NftInfoRow
-          label="Mints"
-          value={(tier.initialSupply - tier.remainingSupply).toString()}
-        />
-        <NftInfoRow label="UPC" value={tier.tierId} />
-        <NftInfoRow
-          label="Purchase price"
-          value={`${formatEther(BigInt(tier.price))} ETH`}
-        />
+        {nft && <NftInfoRow label="Token Id" value={nft.tokenId.toString()} />}
+        {/* <NftInfoRow label="UPC" value={tier.tierId} /> */}
       </div>
 
       {nft && isOwned && nft?.category === 0 && (

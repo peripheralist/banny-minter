@@ -1,74 +1,45 @@
-import { useQuery } from "@tanstack/react-query";
-import { CSSProperties } from "react";
+import { CSSProperties, useMemo } from "react";
 
 export default function PixelCorner({
-  size,
   style,
-  pixelSize,
   fillOuter,
   fillInner,
   fillBorder,
 }: {
-  size: number;
   style?: CSSProperties;
-  pixelSize?: number;
   fillOuter?: CSSProperties["background"];
   fillInner?: CSSProperties["background"];
   fillBorder?: CSSProperties["background"];
 }) {
-  const { data: elem } = useQuery({
-    queryKey: [
-      "pixel-corner",
-      size,
-      pixelSize,
-      fillOuter,
-      fillInner,
-      fillBorder,
-      style,
-    ],
-    queryFn: () => {
-      const pixels = [];
+  const html = useMemo(() => {
+    const outer = fillOuter
+      ? `<path d="M0 8H4V4H8V0H0V8Z" fill="${fillOuter}"/>`
+      : "";
 
-      const p = pixelSize ?? 4;
-      const b = fillBorder ?? "black";
+    const border = fillBorder
+      ? `<path d="M12 0H8V4H4V8H0V12H4V8H8V4H12V0Z" fill="${fillBorder}" />`
+      : "";
 
-      for (let x = 0; x < size; x += p) {
-        for (let y = 0; y < size; y += p) {
-          const _style: CSSProperties = {
-            position: "absolute",
-            width: p,
-            height: p,
-            left: x,
-            top: y,
-          };
+    const inner = fillInner
+      ? `<path d="M12 4H8V8H4V12H12V4Z" fill="${fillInner}" />`
+      : "";
 
-          const key = `${x}-${y}`;
+    return `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">${outer}${border}${inner}</svg>`;
+  }, [fillOuter, fillBorder, fillInner]);
 
-          if (x + y < size - p && fillOuter) {
-            pixels.push(
-              <div key={key} style={{ ..._style, background: fillOuter }} />
-            );
-          }
-          if (x + y > size - p && fillInner) {
-            pixels.push(
-              <div key={key} style={{ ..._style, background: fillInner }} />
-            );
-          }
-          if (x + y === size - p) {
-            pixels.push(<div key={key} style={{ ..._style, background: b }} />);
-          }
-        }
-      }
-
-      return (
-        <div
-          style={{ position: "relative", width: size, height: size, ...style }}
-        >
-          {pixels}
-        </div>
-      );
-    },
-  });
-
-  return elem ?? null;
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 12,
+        height: 12,
+        ...style,
+      }}
+      dangerouslySetInnerHTML={{
+        __html: html,
+      }}
+    />
+  );
 }

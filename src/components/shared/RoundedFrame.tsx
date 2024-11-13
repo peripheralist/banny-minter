@@ -33,7 +33,6 @@ export default function RoundedFrame({
   const Corner = useCallback(
     ({ _style }: { _style?: CSSProperties }) => (
       <PixelCorner
-        size={12}
         fillInner={background}
         fillBorder={_borderColor}
         style={_style}
@@ -164,9 +163,7 @@ export default function RoundedFrame({
       {shadow && (
         <>
           <PixelCorner
-            size={borderSize * 2}
             fillBorder={shadowColor}
-            pixelSize={borderSize}
             style={{
               position: "absolute",
               top: borderSize,

@@ -2,23 +2,17 @@ import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { ShopContext } from "@/contexts/shopContext";
+import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import dynamic from "next/dynamic";
-import {
-  PropsWithChildren,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import Link from "next/link";
+import { PropsWithChildren, useCallback, useContext, useEffect } from "react";
 import EquippedTiersPreview from "./EquippedTiersPreview";
 import { TOOLBAR_WIDTH } from "./Toolbar2";
+import ToolbarIcon, { TOOLBAR_ICON_SIZE } from "./ToolbarIcon";
 import Bag from "./shared/Bag";
 import RoundedFrame from "./shared/RoundedFrame";
-import Link from "next/link";
-import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
-import ToolbarIcon, { TOOLBAR_ICON_SIZE } from "./ToolbarIcon";
 
 const Toolbar = dynamic(() => import("@/components/Toolbar2"), { ssr: false });
 
@@ -38,7 +32,14 @@ export default function ToolbarBagView({
     label?: string | JSX.Element;
   };
 }>) {
-  const [bagIsOpen, setBagIsOpen] = useState<boolean>();
+  const { value: bagIsOpen, setValue: setBagIsOpen } = useLocalStorageState(
+    "looks_bag_open",
+    {
+      initialValue: undefined,
+      parse: (v) => (v === "true" ? true : false),
+      serialize: (v) => (v ? "true" : "false"),
+    }
+  );
 
   const { measuredRef: headerRef, height: headerHeight } = useMeasuredRef();
 
@@ -46,7 +47,7 @@ export default function ToolbarBagView({
 
   const { bag } = useContext(ShopContext);
 
-  const isSmallScreen = useIsSmallScreen();
+  const { isSmallScreen } = useWindowSize();
 
   const Header = useCallback(
     () => (
@@ -94,6 +95,8 @@ export default function ToolbarBagView({
       setBagIsOpen(true);
     }
   }, [width, bagIsOpen]);
+
+  if (bagIsOpen === undefined) return null;
 
   if (isSmallScreen)
     return (

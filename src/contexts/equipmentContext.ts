@@ -6,7 +6,7 @@ import { createContext } from "react";
 type Context = {
   equipped: EquippedTiers;
   equip?: EquipTierFns;
-  equipRandom?: VoidFunction;
+  equipNone?: VoidFunction;
   totalEquippedPrice?: bigint | null;
   selectedGroup: CategoryGroup;
   setSelectedGroup?: (g: CategoryGroup) => void;

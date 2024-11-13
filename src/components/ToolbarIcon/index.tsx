@@ -5,6 +5,7 @@ import Wallet from "../Toolbar2/Wallet";
 import RoundedFrame from "../shared/RoundedFrame";
 import { useAccount } from "wagmi";
 import { COLORS } from "@/constants/colors";
+import { useIsHover } from "@/hooks/useIsHover";
 
 export const TOOLBAR_ICON_SIZE = 40;
 
@@ -84,17 +85,16 @@ export default function ToolbarIcon() {
 }
 
 function _Link({ children, ...props }: PropsWithChildren<{ href: string }>) {
-  const [isHover, setIsHover] = useState(false);
+  const { isHover, ...hoverProps } = useIsHover();
 
   return (
     <Link
       {...props}
+      {...hoverProps}
       style={{
         position: "relative",
         padding: 0,
       }}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
     >
       <RoundedFrame
         background={isHover ? "white" : undefined}

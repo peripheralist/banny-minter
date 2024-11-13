@@ -1,17 +1,18 @@
-import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import Image from "next/image";
 import Link from "next/link";
 import { PropsWithChildren, useState } from "react";
 import { useAccount } from "wagmi";
 import RoundedFrame from "../shared/RoundedFrame";
 import Wallet from "./Wallet";
+import { useIsHover } from "@/hooks/useIsHover";
 
 export const TOOLBAR_WIDTH = 140;
 
 export default function Index() {
   const { address: connectedAddress } = useAccount();
 
-  const isSmallScreen = useIsSmallScreen();
+  const { isSmallScreen } = useWindowSize();
 
   return (
     <div
@@ -76,17 +77,16 @@ function _Link({
   frame,
   ...props
 }: PropsWithChildren<{ href: string; frame?: boolean }>) {
-  const [isHover, setIsHover] = useState(false);
+  const { isHover, ...hoverProps } = useIsHover();
 
   return (
     <Link
       {...props}
+      {...hoverProps}
       style={{
         position: "relative",
         padding: 0,
       }}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
     >
       {frame ? (
         <RoundedFrame

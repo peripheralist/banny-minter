@@ -4,7 +4,7 @@ import RoundedFrame from "@/components/shared/RoundedFrame";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { useIsSmallScreen } from "@/hooks/useIsSmallScreen";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { Drop } from "@/model/drop";
 import Link from "next/link";
 import { useState } from "react";
@@ -92,7 +92,7 @@ function DropLink({ drop }: { drop: Drop }) {
 }
 
 export default function Drops() {
-  const isSmallScreen = useIsSmallScreen();
+  const { isSmallScreen } = useWindowSize();
 
   return (
     <ToolbarBagView header="DROPS">

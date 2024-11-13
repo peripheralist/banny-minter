@@ -5,7 +5,6 @@ import { Tier } from "@/model/tier";
 import Link from "next/link";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { formatEther } from "viem";
-import Fuzz from "../pixelRenderers/Fuzz";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
 import TierImage from "../shared/TierImage";
@@ -96,34 +95,14 @@ export default function TierShopButton({
         }}
       >
         <Link href={`/item/${tier.tierId}`} style={{ color: "black" }}>
-          {tier ? (
-            <div style={{ marginTop: 12, pointerEvents: "none" }}>
-              <FuzzMoment
-                width={buttonSize - 16}
-                height={buttonSize - 16}
-                fill={"white"}
-                style={{ zIndex: 2, position: "absolute", margin: 8 }}
-              />
-              <TierImage tier={tier} size={buttonSize - 36} />
-            </div>
-          ) : (
-            <Fuzz
-              width={buttonSize}
-              height={buttonSize}
-              pixelSize={8}
-              fill="black"
+          <div style={{ marginTop: 12, pointerEvents: "none" }}>
+            <FuzzMoment
+              width={buttonSize - 16}
+              height={buttonSize - 16}
+              fill={"white"}
+              style={{ zIndex: 2, position: "absolute", margin: 8 }}
             />
-          )}
-
-          <div
-            style={{
-              position: "absolute",
-              bottom: 52,
-              right: 12,
-              left: 12,
-            }}
-          >
-            <Label />
+            <TierImage tier={tier} size={buttonSize - 36} />
           </div>
         </Link>
 
