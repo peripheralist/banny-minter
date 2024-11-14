@@ -2,17 +2,13 @@ import DressingRoom from "@/components/DressingRoom";
 import DecorateButton from "@/components/DressingRoom/DecorateButton";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import { Category } from "@/constants/category";
-import { COLORS } from "@/constants/colors";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { NfTsQuery } from "@/generated/graphql";
 import { useOwnedCategorizedTiers } from "@/hooks/queries/useOwnedCategorizedTiers";
 import { useBannyEquippedTiers } from "@/hooks/useBannyEquippedTiers";
 import { Tiers } from "@/model/tier";
-import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
-
-const Toolbar = dynamic(() => import("@/components/Toolbar"), { ssr: false });
 
 export default function DressOwnedBanny({
   bannyNft,
@@ -78,24 +74,16 @@ export default function DressOwnedBanny({
 
   if (tiersLoading) return <FullscreenLoading />;
 
-  return (
-    <div>
-      <Toolbar />
-
-      <style>{`body { background: ${COLORS.banana} }`}</style>
-
-      {formattedAvailableTiers ? (
-        <EquipmentContextProvider
-          availableTiers={formattedAvailableTiers}
-          defaultEquippedTierIds={equippedTierIds}
-          defaultGroup="head"
-          displayStrategy="dress"
-        >
-          <DressingRoom button={<DecorateButton />} />
-        </EquipmentContextProvider>
-      ) : (
-        <FullscreenLoading />
-      )}
-    </div>
+  return formattedAvailableTiers ? (
+    <EquipmentContextProvider
+      availableTiers={formattedAvailableTiers}
+      defaultEquippedTierIds={equippedTierIds}
+      defaultGroup="head"
+      displayStrategy="dress"
+    >
+      <DressingRoom button={<DecorateButton />} />
+    </EquipmentContextProvider>
+  ) : (
+    <FullscreenLoading />
   );
 }

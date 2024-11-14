@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import { useResolverAddress } from "./useResolverAddress";
 import { isAddressEqual } from "viem";
 
+/**
+ * Check which tokenIds are approved for transfer to resolver contract
+ */
 export function useNFTApprovals(tokenIds: bigint[]) {
   const [loading, setLoading] = useState(false);
 
@@ -63,6 +66,13 @@ export function useNFTApprovals(tokenIds: bigint[]) {
     }
 
     getApprovals();
+
+    // // poll for approvals
+    // const interval = setInterval(() => {
+    //   getApprovals();
+    // }, 10 * 1000);
+
+    // return () => clearInterval(interval);
   }, [tokenIds, resolverAddress]);
 
   return { approvals, loading };

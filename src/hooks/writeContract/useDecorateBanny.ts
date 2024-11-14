@@ -1,5 +1,5 @@
 import { Tier } from "@/model/tier";
-import { useFind721DataHook } from "juice-sdk-react";
+import { useTiered721Hook } from "../readContract/useTiered721HookOf";
 import { useResolverAddress } from "../useResolverAddress";
 import {
   WriteContractHandlerOptions,
@@ -40,8 +40,7 @@ const decorateBannyWithAbi = [
 export function useDecorateBanny(options?: WriteContractHandlerOptions) {
   const resolverAddress = useResolverAddress();
 
-  const jb721DataHookQuery = useFind721DataHook();
-  const jb721DataHookQueryAddress = jb721DataHookQuery.data as `0x${string}`;
+  const { data: jb721DataHookQueryAddress } = useTiered721Hook();
 
   const { write: decorateBanny, ...data } = useWriteContractHandler(
     {

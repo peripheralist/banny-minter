@@ -25,5 +25,6 @@ export type NFTInfo = {
   decimals: NumString;
   currency: NumString;
   description: string;
-  outfitIds?: bigint[];
+  outfitIds?: number[];
+  worldId?: number;
 } & (NakedInfo | AllOtherInfo);

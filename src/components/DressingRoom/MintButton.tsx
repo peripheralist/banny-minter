@@ -23,6 +23,7 @@ export default function MintButton() {
 
   const { mint, isPending } = useMint({
     onSuccess: () => {
+      console.log("asdf mint onsuccess");
       setIsConfirming(false);
       setIsSuccess(true);
     },
@@ -70,22 +71,25 @@ export default function MintButton() {
   }, [isPending, isConfirming, totalEquippedPrice, mint]);
 
   const SucccessModal = useCallback(() => {
+    const onClose = () => {
+      emptyBag?.();
+      unequipAll?.();
+      setIsSuccess(false);
+    };
+
     return (
-      <Modal
-        open={isSuccess}
-        onClose={() => {
-          emptyBag?.();
-          unequipAll?.();
-          setIsSuccess(false);
-        }}
-      >
+      <Modal open={isSuccess} onClose={onClose}>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <h1 style={{ margin: 0 }}>Minted!</h1>
 
           <BagItems />
 
           <div>
-            View items in your <Link href={`/closet/${address}`}>closet</Link>.
+            View items in your{" "}
+            <Link onClick={onClose} href={`/closet/${address}`}>
+              closet
+            </Link>
+            .
           </div>
         </div>
       </Modal>

@@ -40,9 +40,14 @@ export default function Runway() {
           >
             <RoundedFrame
               background={"white"}
-              style={{ pointerEvents: "none" }}
+              style={{
+                pointerEvents: "none",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              <DressedBannyNftImage nft={nft} size={IMG_SIZE} />
+              <DressedBannyNftImage nft={nft} size={IMG_SIZE - 8} />
             </RoundedFrame>
           </Link>
         ))}

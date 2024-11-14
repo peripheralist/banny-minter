@@ -12,6 +12,8 @@ export default function DressedBannyNftImage({
 }) {
   const { data: equippedTiers, loading } = useBannyEquippedTiers(nft);
 
+  console.log("asdf dressedbanny", { equippedTiers });
+
   if (!equippedTiers || loading) {
     return <Fuzz fill="#ccc" width={size} height={size} />;
   }

@@ -74,12 +74,12 @@ export default function Index() {
         const content =
           nft.category === CATEGORY_IDS["naked"] ? (
             <>
-              <DressedBannyNftImage size={IMG_SIZE - 16} nft={nft} />
+              <DressedBannyNftImage size={IMG_SIZE - 8} nft={nft} />
               <TokenId tokenId={nft.tokenId} />
             </>
           ) : (
             <>
-              <TierImage tier={parseTier(nft.tier)} size={IMG_SIZE - 16} />
+              <TierImage tier={parseTier(nft.tier)} size={IMG_SIZE - 8} />
               <TokenId tokenId={nft.tokenId} />
             </>
           );
@@ -87,18 +87,15 @@ export default function Index() {
         return (
           <Link key={nft.tokenId} href={`/nft/${nft.tokenId}`}>
             <RoundedFrame
-              style={{ width: IMG_SIZE, height: IMG_SIZE }}
               background={"white"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                pointerEvents: "none",
+              }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  pointerEvents: "none",
-                }}
-              >
-                {content}
-              </div>
+              {content}
             </RoundedFrame>
           </Link>
         );

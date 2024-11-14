@@ -12,12 +12,9 @@ export function decodeNFTInfo(
 
     const json = JSON.parse(jsonStr.replaceAll(",]", "]"));
 
-    return {
-      ...json,
-      ...(json.outfitIds
-        ? { outfitIds: json.outfitIds.map((o: number) => BigInt(o)) } // convert outfitIds to BigInts
-        : {}),
-    };
+    console.log("asdf json", json);
+
+    return json;
   } catch (e) {
     console.error("Failed to decode nft info", { uri, error: e });
   }

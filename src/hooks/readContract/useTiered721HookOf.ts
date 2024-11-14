@@ -2,8 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { readContract } from "@wagmi/core";
 import { config } from "../../../config.wagmi";
 import { ChainId, useChain } from "../useChain";
+import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
 
-export function useTiered721HookOf(projectId: number) {
+export function useTiered721Hook() {
   const chain = useChain();
 
   const revDeployerAddress: Record<ChainId, `0x${string}`> = {
@@ -12,12 +13,12 @@ export function useTiered721HookOf(projectId: number) {
   };
 
   return useQuery({
-    queryKey: [revDeployerAddress, projectId],
+    queryKey: ["looks-hook", revDeployerAddress],
     queryFn: () =>
       readContract(config, {
         address: revDeployerAddress[chain.id],
         functionName: "tiered721HookOf",
-        args: [BigInt(projectId)],
+        args: [BigInt(BANNYVERSE_PROJECT_ID)],
         abi: [
           {
             type: "function",

@@ -27,7 +27,7 @@ export default function RoundedFrame({
 }>) {
   const _borderColor = borderColor ?? "black";
   const shadowColor = "#00000044";
-  const cornerSize = 12;
+  const cornerSize = 8;
   const borderSize = 4;
 
   const Corner = useCallback(
@@ -57,6 +57,7 @@ export default function RoundedFrame({
           alignItems: "center",
           justifyContent: "center",
           height: "100%",
+          // width: "100%",
         }}
       >
         <div
@@ -162,15 +163,6 @@ export default function RoundedFrame({
 
       {shadow && (
         <>
-          <PixelCorner
-            fillBorder={shadowColor}
-            style={{
-              position: "absolute",
-              top: borderSize,
-              left: borderSize,
-              transform: "scale(-1,-1)",
-            }}
-          />
           <div
             style={{
               position: "absolute",

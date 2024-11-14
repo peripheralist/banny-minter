@@ -7,19 +7,18 @@ import {
   usePreparePayMetadata,
   useWriteJbMultiTerminalPay,
 } from "juice-sdk-react";
-import { useCallback, useContext, useEffect, useMemo } from "react";
-import { useAccount, useTransactionReceipt } from "wagmi";
-import { useTiered721HookOf } from "../readContract/useTiered721HookOf";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
+import { useTiered721Hook } from "../readContract/useTiered721HookOf";
 
 export function useMint(props?: { onSuccess?: VoidFunction }) {
+  const [isComplete, setIsComplete] = useState(false);
   const { address: connectedWalletAddress } = useAccount();
   const { contracts } = useJBContractContext();
   const { setAlert } = useContext(AlertContext);
   const { bag, totalEquippedPrice } = useContext(ShopContext);
 
-  const { data: jb721DataHookQueryAddress } = useTiered721HookOf(
-    parseInt(BANNYVERSE_PROJECT_ID)
-  );
+  const { data: jb721DataHookQueryAddress } = useTiered721Hook();
   const terminalAddress = contracts.primaryNativeTerminal.data;
 
   const tierIds = useMemo(
@@ -67,6 +66,8 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
       return;
     }
 
+    setIsComplete(false);
+
     writeContract({
       address: terminalAddress,
       args: [
@@ -91,17 +92,24 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     tierIds,
   ]);
 
-  const tx = useTransactionReceipt({
+  const tx = useWaitForTransactionReceipt({
     hash,
+    pollingInterval: 1000,
+    retryCount: 3,
+    retryDelay: 5000,
   });
 
   useEffect(() => {
+    if (isComplete) return;
+
     if (error) {
       if (error.message.includes("User rejected the request")) {
         setAlert?.({ title: "Transaction rejected" });
       } else {
         setAlert?.({ title: "Error", body: error.message });
       }
+
+      setIsComplete(true);
 
       return;
     }
@@ -116,11 +124,13 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
         //   },
         // });
         props?.onSuccess?.();
+        setIsComplete(true);
         break;
       case "error":
         if (tx.error.name !== "TransactionReceiptNotFoundError") {
           // TODO seems silly...
           setAlert?.({ body: "Something may have gone wrong..." });
+          setIsComplete(true);
         }
         break;
     }
@@ -131,7 +141,10 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     connectedWalletAddress,
     error,
     props,
+    isComplete,
   ]);
+
+  console.log("asdf mint tx", hash, isPending, tx.status, tx.error, tx);
 
   return { mint, isPending: isPending || tx.isLoading };
 }

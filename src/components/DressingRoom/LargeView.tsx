@@ -1,15 +1,15 @@
 import { CATEGORY_GROUP_NAMES } from "@/constants/category";
+import { COLORS } from "@/constants/colors";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import EquippedTiersPreview from "../EquippedTiersPreview";
-import { TOOLBAR_HEIGHT } from "../Toolbar";
+import { CategoryGroupGrid2 } from "../shared/CategoryGroupGrid2";
+import FullscreenLoading from "../shared/FullscreenLoading";
 import RoundedFrame from "../shared/RoundedFrame";
-import CategoryGroupButton from "./CategoryGroupButton";
-import Summary from "./Summary";
-import TiersScrollGrid from "./TiersScrollGrid";
-import { COLORS } from "@/constants/colors";
+import DecorateButton from "./DecorateButton";
+import OwnedTierButton from "./OwnedTierButton";
 
 export default function LargeView({
   button,
@@ -18,143 +18,70 @@ export default function LargeView({
   button: JSX.Element;
   includeBody?: boolean;
 }) {
-  const {
-    equipped,
-    equippingCategory,
-    unequippingCategory,
-    selectedGroup,
-    setSelectedGroup,
-  } = useContext(EquipmentContext);
+  const { availableTiers, equipped, equippingCategory, unequippingCategory } =
+    useContext(EquipmentContext);
 
-  const {
-    measuredRef: previewRef,
-    height: previewHeight,
-    width: previewWidth,
-  } = useMeasuredRef();
+  const { measuredRef: previewRef, width: previewWidth } = useMeasuredRef();
 
-  const { width: windowWidth } = useWindowSize();
+  const { isSmallScreen } = useWindowSize();
 
-  const gridCols = useMemo(
-    () => (windowWidth && windowWidth < 800 ? 1 : 3),
-    [windowWidth]
-  );
-
-  const imageSize = useMemo(
-    () => (windowWidth && windowWidth < 800 ? 240 : 200),
-    [windowWidth]
-  );
-
-  const layoutSpacing = 12;
-  const contentSpacing = 20;
-
-  const { measuredRef: groupButtonsRef, height: groupButtonsHeight } =
-    useMeasuredRef();
-  const { measuredRef: gridColumnRef, height: gridColumnHeight } =
-    useMeasuredRef();
+  if (!availableTiers) return <FullscreenLoading />;
 
   return (
     <div
       style={{
-        width: "100vw",
-        height: `calc(100vh - ${TOOLBAR_HEIGHT}px)`,
-        marginTop: TOOLBAR_HEIGHT,
-        overflow: "hidden",
-        minHeight: 600,
-        boxSizing: "border-box",
+        maxHeight: "calc(100% - 12px)",
         display: "flex",
-        justifyContent: "space-between",
-        alignItems: "flex-end",
-        padding: layoutSpacing,
+        alignItems: "stretch",
+        gap: 12,
       }}
     >
-      <div
-        ref={gridColumnRef}
+      <RoundedFrame
+        containerStyle={{ height: "auto" }}
+        background={COLORS.bananaLite}
         style={{
           display: "flex",
           flexDirection: "column",
-          height: "100%",
+          overflow: "auto",
+          padding: 24,
+          paddingLeft: isSmallScreen ? 24 : 120,
+          gap: 48,
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            gap: layoutSpacing,
-            marginBottom: layoutSpacing,
-            boxSizing: "border-box",
-          }}
-          ref={groupButtonsRef}
-        >
-          {setSelectedGroup
-            ? CATEGORY_GROUP_NAMES.map((g) => (
-                <CategoryGroupButton
-                  key={g}
-                  group={g}
-                  active={selectedGroup === g}
-                  onClick={
-                    selectedGroup === g ? undefined : () => setSelectedGroup(g)
-                  }
-                />
-              ))
-            : null}
-        </div>
-
-        <div
-          style={{
-            flex: 1,
-            flexShrink: 1,
-            boxSizing: "border-box",
-            minHeight: 0,
-          }}
-        >
-          <TiersScrollGrid
-            categories={CATEGORY_GROUP_NAMES.filter((n) =>
-              includeBody ? true : n !== "body"
-            )}
-            containerStyle={{
-              maxHeight: gridColumnHeight - groupButtonsHeight - layoutSpacing,
-            }}
-            style={{
-              maxHeight:
-                gridColumnHeight - groupButtonsHeight - layoutSpacing - 36,
-              padding: contentSpacing,
-              paddingTop: 0,
-            }}
-            gridCols={gridCols}
-            imageSize={imageSize}
+        {CATEGORY_GROUP_NAMES.filter((g) => g !== "banny").map((g) => (
+          <CategoryGroupGrid2
+            label
+            tiers={availableTiers}
+            group={g}
+            key={g}
+            button={(t) => <OwnedTierButton tier={t} size={200} />}
+            imgSize={200}
           />
-        </div>
-      </div>
+        ))}
+      </RoundedFrame>
 
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "flex-end",
-          flex: 1,
-          height: "100%",
-          marginLeft: layoutSpacing,
-          gap: layoutSpacing,
+          justifyContent: "space-between",
+          gap: 12,
+          maxWidth: 480,
+          width: "50vw",
         }}
       >
-        <div
-          ref={previewRef}
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-        >
+        <div style={{ display: "flex", flex: 1 }} ref={previewRef}>
           <RoundedFrame
             shadow
             background={"white"}
-            containerStyle={{
-              width: "100%",
-              height: "100%",
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <EquippedTiersPreview
-              size={Math.min(previewHeight, previewWidth) * 0.96}
+              size={previewWidth - 24}
               equipped={equipped}
               equippingCategory={equippingCategory}
               unequippingCategory={unequippingCategory}
@@ -162,19 +89,7 @@ export default function LargeView({
           </RoundedFrame>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "end",
-            gap: layoutSpacing,
-          }}
-        >
-          <div style={{ flex: 1, height: "100%" }}>
-            <Summary />
-          </div>
-
-          {button}
-        </div>
+        <DecorateButton />
       </div>
     </div>
   );

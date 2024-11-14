@@ -1,12 +1,12 @@
+import { CATEGORIES } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { CATEGORIES } from "@/constants/category";
 import { AlertContext } from "@/contexts/alertContext";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useIsApprovedForAll } from "@/hooks/useIsApprovedForAll";
-import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useNFTApprovals } from "@/hooks/useNFTApprovals";
 import { useDecorateBanny } from "@/hooks/writeContract/useDecorateBanny";
+import { Tier } from "@/model/tier";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 import ApproveNFTsModal from "../modals/ApproveNFTsModal";
@@ -14,17 +14,19 @@ import ButtonPad from "../shared/ButtonPad";
 
 export default function DecorateButton() {
   // TODO need to disable button until unworn outfits are equipped
+  const [approvedIds, setApprovedIds] = useState<BigInt[]>([]);
   const [approveModalOpen, setApproveModalOpen] = useState(false);
 
   const { setAlert } = useContext(AlertContext);
 
   const { address } = useAccount();
 
-  const { equipped } = useContext(EquipmentContext);
+  const { equipped, availableTiers } = useContext(EquipmentContext);
 
   const nakedTokenId = equipped["naked"]?.tokenId;
 
-  const onSuccess = useCallback(() => {
+  const onDressSuccess = useCallback(() => {
+    setApprovedIds([]);
     setAlert?.({
       title: "Success!",
       action: {
@@ -35,31 +37,41 @@ export default function DecorateButton() {
   }, [nakedTokenId, setAlert]);
 
   const { decorateBanny, isPending } = useDecorateBanny({
-    onSuccess,
+    onSuccess: onDressSuccess,
   });
 
   const maybeUnapprovedTokenIds = useMemo(
     () =>
       CATEGORIES.filter(
         (c) => c !== "naked" && !!equipped[c]?.tokenId && !equipped[c]?.equipped
-      ).map((c) => BigInt(equipped[c]!.tokenId!)),
-    [equipped]
+      )
+        .map((c) => BigInt(equipped[c]!.tokenId!))
+        .filter((tokenId) => !approvedIds.includes(tokenId)), // exclude any tokens that have been approved since last state update
+    [equipped, approvedIds]
   );
 
   const { approvals } = useNFTApprovals(maybeUnapprovedTokenIds);
 
-  const tokenIdsNeedApproval = useMemo(
+  const nftsNeedApproval = useMemo(
     () =>
       approvals
         ?.filter(({ approved }) => !approved)
-        .map(({ tokenId }) => tokenId),
-    [approvals]
+        .map(({ tokenId }) => tokenId)
+        .flatMap((tokenId) =>
+          CATEGORIES.map((c) =>
+            availableTiers?.[c].find(
+              (_t) => BigInt(_t.tokenId || 0) === tokenId
+            )
+          )
+        )
+        .filter((t) => !!t) as Tier[],
+    [approvals, availableTiers]
   );
 
   const { isApprovedForAll } = useIsApprovedForAll(address);
 
   const decorate = useCallback(() => {
-    if (tokenIdsNeedApproval?.length && !isApprovedForAll) {
+    if (nftsNeedApproval?.length && !isApprovedForAll) {
       setApproveModalOpen(true);
       return;
     }
@@ -73,11 +85,7 @@ export default function DecorateButton() {
       world: equipped.world,
       outfits,
     });
-  }, [equipped, decorateBanny, tokenIdsNeedApproval, isApprovedForAll]);
-
-  const { measuredRef, width, height } = useMeasuredRef();
-
-  const loading = isPending ? { fill: "white", width, height } : undefined;
+  }, [equipped, decorateBanny, nftsNeedApproval, isApprovedForAll]);
 
   return (
     <>
@@ -86,43 +94,16 @@ export default function DecorateButton() {
         onClick={decorate}
         shadow="sm"
         disabled={!address}
-        style={{ padding: 24 }}
-        loading={loading}
+        style={{ padding: 12, fontSize: FONT_SIZE.lg, color: "white" }}
       >
-        <div
-          style={{
-            textAlign: "center",
-          }}
-        >
-          <div
-            ref={measuredRef}
-            style={{
-              opacity: address ? 1 : 0.25,
-              color: address ? "white" : "black",
-              fontSize: FONT_SIZE["2xl"],
-            }}
-          >
-            Dress
-          </div>
-
-          {!address && (
-            <div
-              style={{
-                fontSize: FONT_SIZE.lg,
-                textTransform: "uppercase",
-                color: "white",
-              }}
-            >
-              No wallet
-            </div>
-          )}
-        </div>
+        Dress
       </ButtonPad>
 
-      {approveModalOpen && (
+      {approveModalOpen && nftsNeedApproval.length > 0 && (
         <ApproveNFTsModal
-          tokenIds={tokenIdsNeedApproval}
+          nftTiers={nftsNeedApproval}
           onClose={() => setApproveModalOpen(false)}
+          onApproved={(tokenId) => setApprovedIds((ids) => [...ids, tokenId])}
         />
       )}
     </>

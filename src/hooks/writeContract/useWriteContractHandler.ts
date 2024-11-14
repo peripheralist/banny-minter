@@ -1,7 +1,7 @@
 import { AlertContext } from "@/contexts/alertContext";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Abi, ContractFunctionArgs, ContractFunctionName } from "viem";
-import { useTransactionReceipt, useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { WriteContractVariables } from "wagmi/query";
 import { config } from "../../../config.wagmi";
 
@@ -44,6 +44,7 @@ export function useWriteContractHandler<
   variables: Omit<variables, "args"> & { args: args | ((x: meta) => args) },
   options?: WriteContractHandlerOptions<args>
 ) {
+  const [isComplete, setIsComplete] = useState(false);
   const [usedArgs, setUsedArgs] = useState<args>();
 
   const {
@@ -57,6 +58,8 @@ export function useWriteContractHandler<
 
   const write = useCallback(
     (a: meta) => {
+      setIsComplete(false);
+
       const { args } = variables;
 
       const _args = Array.isArray(args) ? args : (args as (x: meta) => args)(a);
@@ -73,11 +76,16 @@ export function useWriteContractHandler<
     [variables, writeContract]
   );
 
-  const tx = useTransactionReceipt({
+  const tx = useWaitForTransactionReceipt({
     hash,
+    pollingInterval: 1000,
+    retryCount: 3,
+    retryDelay: 5000,
   });
 
   useEffect(() => {
+    if (isComplete) return;
+
     if (data.error) {
       console.warn("Transaction error:", data.error);
 
@@ -86,12 +94,16 @@ export function useWriteContractHandler<
       } else {
         setAlert?.({ title: "Error :(", body: data.error.message });
       }
+
+      setIsComplete(true);
       return;
     }
 
     switch (tx.status) {
       case "success":
         if (usedArgs) options?.onSuccess?.(usedArgs);
+
+        setIsComplete(true);
 
         break;
       case "error":
@@ -100,7 +112,9 @@ export function useWriteContractHandler<
           tx.error.name !== "TransactionReceiptNotFoundError"
         ) {
           setAlert?.({ body: "Something may have gone wrong..." });
+          setIsComplete(true);
         }
+
         break;
     }
   }, [
@@ -111,7 +125,10 @@ export function useWriteContractHandler<
     options,
     usedArgs,
     hash,
+    isComplete,
   ]);
+
+  console.log("asdf tx", isPending, tx.status, tx.error);
 
   return { write, isPending: isPending || tx.isLoading, data, usedArgs };
 }

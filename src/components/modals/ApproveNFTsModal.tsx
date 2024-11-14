@@ -5,26 +5,37 @@ import { useSetApprovalForAll } from "@/hooks/writeContract/useSetApprovalForAll
 import { useCallback, useContext } from "react";
 import ButtonPad from "../shared/ButtonPad";
 import Modal from "../shared/Modal";
+import { Tier } from "@/model/tier";
+import TierImage from "../shared/TierImage";
+import RoundedFrame from "../shared/RoundedFrame";
 
 export default function ApproveNFTsModal({
-  tokenIds,
+  nftTiers,
   onClose,
+  onApproved,
 }: {
-  tokenIds: bigint[] | undefined;
+  nftTiers: Tier[] | undefined;
   onClose?: VoidFunction;
+  onApproved?: (tokenId: BigInt) => void;
 }) {
   const { setAlert } = useContext(AlertContext);
 
-  const onSuccess = useCallback(() => {
-    onClose?.();
-    setAlert?.({ title: "Success!" });
-  }, [setAlert, onClose]);
-
   const { setApprovalForAll, isPending: approveAllPending } =
-    useSetApprovalForAll({ onSuccess });
-  const { approve, isPending, usedArgs } = useApprove({ onSuccess });
+    useSetApprovalForAll({
+      onSuccess: () => {
+        onClose?.();
+        setAlert?.({ title: "Success!" });
+      },
+    });
 
-  if (!tokenIds) return null;
+  const { approve, isPending, usedArgs } = useApprove({
+    onSuccess: (args: unknown) => {
+      console.log("asdf onapproved", args);
+      onApproved?.((args as [`0x${string}`, BigInt])[1]);
+    },
+  });
+
+  if (!nftTiers) return null;
 
   return (
     <Modal open onClose={onClose}>
@@ -42,24 +53,36 @@ export default function ApproveNFTsModal({
           contract. Approve those NFTs for transfer below.
         </p>
 
-        {tokenIds.map((t) => (
+        {nftTiers.map((t) => (
           <div
-            key={t.toString()}
+            key={t.tokenId?.toString()}
             style={{
               display: "flex",
-              alignItems: "baseline",
-              gap: 32,
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 12,
             }}
           >
-            <div style={{ fontSize: FONT_SIZE.lg }}>{t.toString()}</div>
+            <div>
+              <RoundedFrame background={"white"}>
+                <TierImage tier={t} size={64} />
+              </RoundedFrame>
+            </div>
+
+            <div style={{ flex: 1 }}>
+              {t.name}{" "}
+              <span style={{ fontSize: FONT_SIZE.xs }}>
+                #{t.tokenId?.toString()}
+              </span>
+            </div>
 
             <ButtonPad
               containerStyle={{ width: 120 }}
-              style={{ width: 120, height: 32 }}
-              onClick={() => approve({ tokenId: t })}
+              style={{ padding: "8px 12px" }}
+              onClick={() => approve({ tokenId: BigInt(t.tokenId || 0) })}
               shadow="none"
               loading={
-                isPending && usedArgs?.includes(t)
+                isPending && usedArgs?.includes(BigInt(t.tokenId || 0))
                   ? { fill: "black", width: 100, height: 24 }
                   : undefined
               }
@@ -69,10 +92,10 @@ export default function ApproveNFTsModal({
           </div>
         ))}
 
-        {tokenIds.length > 1 && (
+        {nftTiers.length > 1 && (
           <ButtonPad
-            containerStyle={{ width: 180, marginTop: 24 }}
-            style={{ width: 180, height: 32 }}
+            containerStyle={{ marginTop: 24 }}
+            style={{ padding: "8px 12px" }}
             onClick={() => setApprovalForAll(undefined)}
             shadow="none"
             loading={

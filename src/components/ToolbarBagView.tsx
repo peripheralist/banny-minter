@@ -7,7 +7,13 @@ import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { PropsWithChildren, useCallback, useContext, useEffect } from "react";
+import {
+  CSSProperties,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+} from "react";
 import EquippedTiersPreview from "./EquippedTiersPreview";
 import { TOOLBAR_WIDTH } from "./Toolbar2";
 import ToolbarIcon, { TOOLBAR_ICON_SIZE } from "./ToolbarIcon";
@@ -24,9 +30,11 @@ export default function ToolbarBagView({
   header,
   backButton,
   frame,
+  frameStyle,
 }: PropsWithChildren<{
   header: string | JSX.Element;
   frame?: boolean;
+  frameStyle?: CSSProperties;
   backButton?: {
     href: string;
     label?: string | JSX.Element;
@@ -94,7 +102,7 @@ export default function ToolbarBagView({
     if (width && width > 1500 && bagIsOpen === undefined) {
       setBagIsOpen(true);
     }
-  }, [width, bagIsOpen]);
+  }, [width, bagIsOpen, setBagIsOpen]);
 
   if (bagIsOpen === undefined) return null;
 
@@ -232,14 +240,18 @@ export default function ToolbarBagView({
         {frame ? (
           <RoundedFrame
             background={COLORS.bananaLite}
-            style={{ overflow: "auto" }}
-            containerStyle={{ height: `calc(100% - ${headerHeight}px)` }}
+            style={{ overflow: "auto", ...frameStyle }}
+            containerStyle={{
+              width: "100%",
+              height: `calc(100% - ${headerHeight}px)`,
+            }}
           >
             {children}
           </RoundedFrame>
         ) : (
           <div
             style={{
+              position: "relative",
               overflow: "auto",
               height: `calc(100% - ${headerHeight}px)`,
             }}

@@ -13,6 +13,8 @@ export function useBannyEquippedTiers(
   const resolverAddress = useResolverAddress();
   const allWornNfts = useNftsOf(resolverAddress);
 
+  console.log("asdf", { allWornNfts });
+
   const data = useMemo(() => {
     if (!allWornNfts.data || !bannyNft) return;
 
@@ -29,27 +31,29 @@ export function useBannyEquippedTiers(
 
     const decoded = decodeNFTInfo(bannyNft.tokenUri);
 
-    decoded?.outfitIds?.forEach((tokenId) => {
-      const tier = nfts.find((nft) => nft.tokenId === tokenId)?.tier;
+    console.log("asdf", decoded);
 
-      if (tier) {
-        const nftsOfTier = allWornNfts.data?.nfts.filter(
-          (nft) => nft.tier.tierId === tier.tierId
-        );
+    const allAssetIds = [...(decoded?.outfitIds ?? [])];
+    if (decoded?.worldId) allAssetIds.push(decoded.worldId);
 
-        if (!nftsOfTier) {
-          console.error("Error getting equipped tiers from decoded outfitIds");
-          return;
-        }
+    allAssetIds.forEach((tokenId) => {
+      const assetTier = nfts.find(
+        (nft) => nft.tokenId === BigInt(tokenId)
+      )?.tier;
 
-        equipped[categoryOfId[tier.category]] = {
-          ...parseTier(tier),
-          tokenId: parseInt(nftsOfTier[0].tokenId.toString()),
+      console.log("asdf", tokenId, assetTier);
+
+      if (assetTier) {
+        equipped[categoryOfId[assetTier.category]] = {
+          ...parseTier(assetTier),
+          tokenId: parseInt(tokenId.toString()),
         } as Tier;
       } else {
         console.warn("Error finding tier for NFT with tokenId:", tokenId);
       }
     });
+
+    console.log("asdf", equipped);
 
     return equipped;
   }, [bannyNft, allWornNfts]);

@@ -1,11 +1,12 @@
+import ToolbarBagView from "@/components/ToolbarBagView";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
+import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import DressOwnedBanny from "@/pages/dress/DressOwnedBanny";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
 import DressedBannyNftImage from "../closet/DressedBannyNftImage";
-import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 
 export default function Index() {
   const { address } = useAccount();
@@ -32,9 +33,15 @@ export default function Index() {
     [address, nft]
   );
 
-  if (nftsLoading) return <FullscreenLoading />;
+  const content = useMemo(() => {
+    if (nftsLoading) return <FullscreenLoading />;
+    if (isOwner) return <DressOwnedBanny bannyNft={nft} />;
+    return <DressedBannyNftImage nft={nft} size={400} />;
+  }, [nftsLoading, isOwner, nft]);
 
-  if (isOwner) return <DressOwnedBanny bannyNft={nft} />;
-
-  return <DressedBannyNftImage nft={nft} size={400} />;
+  return (
+    <ToolbarBagView header={`Dressing room: Banny #${_tokenId}`}>
+      {content}
+    </ToolbarBagView>
+  );
 }
