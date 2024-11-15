@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 
 export function useWindowSize() {
-  const [width, setWidth] = useState<number>();
-  const [height, setHeight] = useState<number>();
+  const [width, setWidth] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
 
   useEffect(() => {
     if (typeof window === undefined) return;
@@ -19,10 +19,7 @@ export function useWindowSize() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const isSmallScreen = useMemo(
-    () => width !== undefined && width < 800,
-    [width]
-  );
+  const isSmallScreen = useMemo(() => width !== 0 && width < 800, [width]);
 
   return { width, height, isSmallScreen };
 }

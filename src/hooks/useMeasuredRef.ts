@@ -9,9 +9,11 @@ export function useMeasuredRef() {
     if (!node) return null;
 
     const fn = () => {
-      const rect = node.getBoundingClientRect();
-      setWidth(rect.width);
-      setHeight(rect.height);
+      setTimeout(() => {
+        const rect = node.getBoundingClientRect();
+        setWidth(rect.width);
+        setHeight(rect.height);
+      }, 0);
     };
 
     if (node) {
