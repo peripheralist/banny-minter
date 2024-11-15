@@ -1,6 +1,8 @@
 import { TOOLBAR_HEIGHT } from "@/components/Toolbar";
-import ToolbarBagView from "@/components/ToolbarBagView";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import Fuzz from "@/components/pixelRenderers/Fuzz";
+import ButtonPad from "@/components/shared/ButtonPad";
+import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import {
@@ -20,9 +22,8 @@ import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
 import { isAddress } from "viem";
 import { useEnsName } from "wagmi";
-import DressedBannyNftImage from "./DressedBannyNftImage";
 
-const IMG_SIZE = 200;
+const IMG_SIZE = 240;
 
 export default function Index() {
   const router = useRouter();
@@ -86,17 +87,30 @@ export default function Index() {
 
         return (
           <Link key={nft.tokenId} href={`/nft/${nft.tokenId}`}>
-            <RoundedFrame
-              background={"white"}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                pointerEvents: "none",
-              }}
-            >
-              {content}
-            </RoundedFrame>
+            <div>
+              <RoundedFrame
+                background={"white"}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  pointerEvents: "none",
+                }}
+              >
+                {content}
+              </RoundedFrame>
+            </div>
+
+            {nft.category === CATEGORY_IDS["naked"] && (
+              <Link href={`/dress/${nft.tokenId.toString()}`}>
+                <ButtonPad
+                  containerStyle={{ marginTop: 12 }}
+                  style={{ padding: 8 }}
+                >
+                  Dress
+                </ButtonPad>
+              </Link>
+            )}
           </Link>
         );
       });
@@ -154,7 +168,7 @@ export default function Index() {
   }
 
   return (
-    <ToolbarBagView frame header={`${ensName ?? address}'s closet`}>
+    <ToolbarBagView frame header={`${ensName ?? address}'s locker`}>
       <div>
         {loading ? (
           <div

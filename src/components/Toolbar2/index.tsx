@@ -52,13 +52,13 @@ export default function Index() {
           Drops
         </_Link>
 
-        <_Link frame href={"/runway"}>
-          Runway
+        <_Link frame href={"/catalog"}>
+          Catalog
         </_Link>
 
         {connectedAddress && (
-          <_Link frame href={"/closet/" + connectedAddress}>
-            Closet
+          <_Link frame href={"/locker/" + connectedAddress}>
+            Locker
           </_Link>
         )}
       </div>

@@ -173,9 +173,7 @@ export default function Home() {
             <NumberedText n={1}>
               Shop Drops for limited edition Bannys and outfits.
             </NumberedText>
-            <NumberedText n={2}>
-              Style Bannys in the dressing room.
-            </NumberedText>
+            <NumberedText n={2}>Style Bannys in your locker.</NumberedText>
             <NumberedText n={3}>$BAN everything.</NumberedText>
           </div>
         </div>
@@ -213,7 +211,7 @@ export default function Home() {
             </ButtonPad>
           </Link>
 
-          <Link href={`/drops`}>
+          <Link href={`/catalog`}>
             <ButtonPad
               style={{
                 padding: "12px 16px",
@@ -221,11 +219,11 @@ export default function Home() {
                 fontSize: FONT_SIZE.lg,
               }}
             >
-              All drops
+              Catalog
             </ButtonPad>
           </Link>
 
-          <ClosetButton />
+          <LockerButton />
         </div>
       </div>
     ),
@@ -271,7 +269,7 @@ export default function Home() {
   );
 }
 
-function ClosetButton() {
+function LockerButton() {
   const { address } = useAccount();
 
   // state value suppresses hydration warning. idk man
@@ -281,7 +279,7 @@ function ClosetButton() {
   if (!_address) return null;
 
   return (
-    <Link href={`/closet/${_address}`}>
+    <Link href={`/locker/${_address}`}>
       <ButtonPad
         style={{
           padding: "12px 16px",
@@ -291,7 +289,7 @@ function ClosetButton() {
           fontWeight: "bold",
         }}
       >
-        Closet
+        Locker
       </ButtonPad>
     </Link>
   );

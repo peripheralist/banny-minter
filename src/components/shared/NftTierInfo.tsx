@@ -2,7 +2,7 @@ import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ITEM_DESCRIPTIONS } from "@/constants/itemDescriptions";
-import { useBannyEquippedTiers } from "@/hooks/useBannyEquippedTiers";
+import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
 import { Tier } from "@/model/tier";

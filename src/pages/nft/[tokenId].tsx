@@ -1,5 +1,6 @@
-import ToolbarBagView from "@/components/ToolbarBagView";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import Fuzz from "@/components/pixelRenderers/Fuzz";
+import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
@@ -12,7 +13,6 @@ import { parseTier } from "@/utils/parseTier";
 import { isArray } from "@apollo/client/utilities";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
-import DressedBannyNftImage from "../closet/DressedBannyNftImage";
 
 export default function Index() {
   const router = useRouter();

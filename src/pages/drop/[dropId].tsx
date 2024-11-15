@@ -1,10 +1,8 @@
 import TierShopButton from "@/components/DressingRoom/TierShopButton";
-import ToolbarBagView from "@/components/ToolbarBagView";
 import { CategoryGroupGrid2 } from "@/components/shared/CategoryGroupGrid2";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
-import RoundedFrame from "@/components/shared/RoundedFrame";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_GROUP_NAMES } from "@/constants/category";
-import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";

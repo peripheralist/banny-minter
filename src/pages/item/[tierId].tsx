@@ -1,4 +1,4 @@
-import ToolbarBagView from "@/components/ToolbarBagView";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import ButtonPad from "@/components/shared/ButtonPad";
 import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";

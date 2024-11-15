@@ -1,3 +1,4 @@
+import { TOOLBAR_WIDTH } from "@/components/Toolbar2";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { EquipmentContext } from "@/contexts/equipmentContext";
@@ -14,11 +15,10 @@ import {
   useContext,
   useEffect,
 } from "react";
-import EquippedTiersPreview from "./EquippedTiersPreview";
-import { TOOLBAR_WIDTH } from "./Toolbar2";
-import ToolbarIcon, { TOOLBAR_ICON_SIZE } from "./ToolbarIcon";
-import Bag from "./shared/Bag";
-import RoundedFrame from "./shared/RoundedFrame";
+import EquippedTiersPreview from "../EquippedTiersPreview";
+import ToolbarIcon, { TOOLBAR_ICON_SIZE } from "../ToolbarIcon";
+import Bag from "./Bag";
+import RoundedFrame from "./RoundedFrame";
 
 const Toolbar = dynamic(() => import("@/components/Toolbar2"), { ssr: false });
 

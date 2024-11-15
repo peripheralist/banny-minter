@@ -1,7 +1,7 @@
 import EquippedTiersPreview from "@/components/EquippedTiersPreview";
 import Fuzz from "@/components/pixelRenderers/Fuzz";
 import { NfTsQuery } from "@/generated/graphql";
-import { useBannyEquippedTiers } from "@/hooks/useBannyEquippedTiers";
+import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 
 export default function DressedBannyNftImage({
   nft,

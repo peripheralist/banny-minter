@@ -1,12 +1,12 @@
-import ToolbarBagView from "@/components/ToolbarBagView";
+import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import DressOwnedBanny from "@/pages/dress/DressOwnedBanny";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
-import DressedBannyNftImage from "../closet/DressedBannyNftImage";
 
 export default function Index() {
   const { address } = useAccount();

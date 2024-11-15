@@ -1,14 +1,14 @@
-import ToolbarBagView from "@/components/ToolbarBagView";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
+import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import { CATEGORY_IDS } from "@/constants/category";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import Link from "next/link";
-import DressedBannyNftImage from "../closet/DressedBannyNftImage";
 
 const IMG_SIZE = 320;
 
-export default function Runway() {
+export default function Catalog() {
   const { data: bannys } = useNfTsQuery({
     variables: {
       where: {
@@ -20,13 +20,11 @@ export default function Runway() {
 
   return (
     <ToolbarBagView
-      frame
-      header={`RUNWAY | ${bannys?.nfts.length} minted bannys`}
+      header={`CATALOG | ${bannys?.nfts.length ?? "--"} minted bannys`}
     >
       <div
         style={{
           display: "grid",
-          padding: 24,
           paddingTop: 20,
           gridTemplateColumns: `repeat(auto-fit, ${IMG_SIZE}px)`,
           gap: 16,

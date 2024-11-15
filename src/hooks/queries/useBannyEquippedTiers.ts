@@ -4,8 +4,8 @@ import { EquippedTiers, Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { parseTier } from "@/utils/parseTier";
 import { useMemo } from "react";
-import { useNftsOf } from "./queries/useNftsOf";
-import { useResolverAddress } from "./useResolverAddress";
+import { useResolverAddress } from "../useResolverAddress";
+import { useNftsOf } from "./useNftsOf";
 
 export function useBannyEquippedTiers(
   bannyNft: NfTsQuery["nfts"][number] | undefined

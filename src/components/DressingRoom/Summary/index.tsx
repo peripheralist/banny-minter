@@ -77,7 +77,7 @@ function SelectedTierDetail({ category }: { category: Category }) {
           </div>
         );
     }
-  }, [tier]);
+  }, [tier, displayStrategy]);
 
   return (
     <span

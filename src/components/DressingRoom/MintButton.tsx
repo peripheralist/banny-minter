@@ -86,8 +86,8 @@ export default function MintButton() {
 
           <div>
             View items in your{" "}
-            <Link onClick={onClose} href={`/closet/${address}`}>
-              closet
+            <Link onClick={onClose} href={`/locker/${address}`}>
+              locker
             </Link>
             .
           </div>

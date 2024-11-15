@@ -67,10 +67,10 @@ export default function ToolbarIcon() {
 
           <_Link href="/">Home</_Link>
           <_Link href="/drops">Drops</_Link>
-          <_Link href={"/runway"}>Runway</_Link>
+          <_Link href={"/catalog"}>Catalog</_Link>
 
           {connectedAddress && (
-            <_Link href={"/closet/" + connectedAddress}>Closet</_Link>
+            <_Link href={"/locker/" + connectedAddress}>Locker</_Link>
           )}
 
           <div style={{ flex: 1 }}></div>
