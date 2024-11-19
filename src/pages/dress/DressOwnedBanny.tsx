@@ -81,6 +81,7 @@ export default function DressOwnedBanny({
 
   return formattedAvailableTiers ? (
     <EquipmentContextProvider
+      cacheKey="dress"
       availableTiers={formattedAvailableTiers}
       defaultEquippedTierIds={equippedTierIds}
       defaultGroup="head"

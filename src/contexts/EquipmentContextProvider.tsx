@@ -15,23 +15,28 @@ import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 export const EQUIP_DURATION_MILLIS = 400;
 
 export default function EquipmentContextProvider({
+  cacheKey,
   children,
   defaultGroup,
   availableTiers,
   defaultEquippedTierIds,
   displayStrategy,
 }: PropsWithChildren<{
+  cacheKey: string;
   defaultGroup?: CategoryGroup;
   availableTiers: Tiers;
   defaultEquippedTierIds?: Partial<Record<Category, number>>;
   displayStrategy?: DisplayStrategy;
 }>) {
   const { value: equippedTierId, setValue: setEquippedTierId } =
-    useLocalStorageState<Partial<Record<Category, number>>>("looks_equipped", {
-      initialValue: {},
-      parse: (str) => (str ? JSON.parse(str) : {}),
-      serialize: (v) => JSON.stringify(v),
-    });
+    useLocalStorageState<Partial<Record<Category, number>>>(
+      "looks_equipped_" + cacheKey,
+      {
+        initialValue: {},
+        parse: (str) => (str ? JSON.parse(str) : {}),
+        serialize: (v) => JSON.stringify(v),
+      }
+    );
   const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>(
     defaultGroup ?? "banny"
   );

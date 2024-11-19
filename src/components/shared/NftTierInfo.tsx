@@ -14,6 +14,7 @@ import { isAddressEqual } from "viem";
 import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
 import FormattedAddress from "./FormattedAddress";
+import RoundedFrame from "./RoundedFrame";
 
 export default function NftTierInfo({
   tier,
@@ -58,6 +59,7 @@ export default function NftTierInfo({
           margin: "0 auto",
           width: "100%",
           gap: 24,
+          minWidth: 400,
         }}
       >
         <div
@@ -70,7 +72,7 @@ export default function NftTierInfo({
         >
           {label}
         </div>
-        <div style={{ lineBreak: "anywhere", flex: 1 }}>{value}</div>
+        <div style={{ flex: 1 }}>{value}</div>
       </div>
     ),
     []
@@ -80,8 +82,14 @@ export default function NftTierInfo({
     <div style={style}>
       <h1>{tier.name}</h1>
 
-      <div style={{ marginTop: 24, fontSize: FONT_SIZE.lg }}>
-        {formatEther(BigInt(tier.price))} ETH
+      <div style={{ display: "flex" }}>
+        <RoundedFrame
+          background={"black"}
+          containerStyle={{ width: "auto" }}
+          style={{ padding: "8px 12px", color: "white" }}
+        >
+          {formatEther(BigInt(tier.price))} ETH
+        </RoundedFrame>
       </div>
 
       <p style={{ margin: 0, marginTop: 12, maxWidth: 400 }}>
@@ -108,16 +116,12 @@ export default function NftTierInfo({
             }
           />
         )}
-        {nft && (
-          <NftInfoRow
-            label="Minted"
-            value={`${(
-              tier.initialSupply - tier.remainingSupply
-            ).toString()}/${tier.initialSupply.toString()} ${
-              tier.remainingSupply === BigInt(0) ? "(Sold out)" : ""
-            }`}
-          />
-        )}
+        <NftInfoRow
+          label="Supply"
+          value={`${tier.remainingSupply.toString()}/${tier.initialSupply.toString()} available ${
+            tier.remainingSupply === BigInt(0) ? "(Sold out)" : ""
+          }`}
+        />
         {drop && <NftInfoRow label="Drop" value={`#${drop.id} ${drop.name}`} />}
         <NftInfoRow
           label="Type"

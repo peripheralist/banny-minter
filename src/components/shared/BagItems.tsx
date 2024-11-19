@@ -58,15 +58,13 @@ export default function BagItems({ canRemove }: { canRemove?: boolean }) {
                 </div>
 
                 <div style={{ flex: 1 }}>
-                  <div>
+                  <div>{name}</div>
+                  <div style={{ fontSize: FONT_SIZE.sm }}>
                     {quantity > 1 ? (
                       <span style={{ fontWeight: "bold" }}>(x{quantity}) </span>
                     ) : (
                       ""
                     )}
-                    {name}
-                  </div>
-                  <div style={{ fontSize: FONT_SIZE.sm }}>
                     Ξ{formatEther(price * BigInt(quantity))}
                   </div>
                 </div>

@@ -30,11 +30,13 @@ const BAG_CLOSED_WIDTH = 80;
 export default function ToolbarBagView({
   children,
   header,
+  subHeader,
   backButton,
   frame,
   frameStyle,
 }: PropsWithChildren<{
   header: string | JSX.Element;
+  subHeader?: string | JSX.Element;
   frame?: boolean;
   frameStyle?: CSSProperties;
   backButton?: {

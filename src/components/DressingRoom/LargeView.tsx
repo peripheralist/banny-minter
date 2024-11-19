@@ -73,7 +73,9 @@ export default function LargeView({
             label
             items={availableTiersByCategoryGroup}
             key={g}
-            render={(t) => <OwnedTierButton tier={t} size={200} />}
+            render={(t) => (
+              <OwnedTierButton key={t.tierId} tier={t} size={200} />
+            )}
             gridStyle={{
               gridTemplateColumns: `repeat(auto-fit, ${200}px)`,
               gap: 16,

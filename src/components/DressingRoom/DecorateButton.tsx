@@ -240,91 +240,97 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
     [isSuccess, onClose, router]
   );
 
-  const content = useMemo(() => {
+  const { content, footer } = useMemo(() => {
     if (isSuccess) {
-      return (
-        <>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <h1>Success!</h1>
+      return {
+        content: (
+          <>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <h1>Success!</h1>
 
-            <div>
-              <RoundedFrame background={"white"}>
-                <EquippedTiersPreview size={240} equipped={equipped} />
-              </RoundedFrame>
+              <div>
+                <RoundedFrame background={"white"}>
+                  <EquippedTiersPreview size={240} equipped={equipped} />
+                </RoundedFrame>
+              </div>
             </div>
-          </div>
-        </>
-      );
+          </>
+        ),
+      };
     }
 
     if (isPending) {
-      return <TransactionPending text="Dressing Banny..." hash={hash} />;
+      return {
+        content: <TransactionPending text="Dressing Banny..." hash={hash} />,
+      };
     }
 
-    return (
-      <>
-        <h1>New fit?</h1>
-
-        <p>
-          When dressing a Banny, outfits & backgrounds will be transferred to
-          the Resolver contract. When removed, they{"'"}ll be returned to
-          whichever wallet owns the Banny.
-        </p>
-
-        <div style={{ display: "flex", gap: 12 }}>
-          <div>
-            <RoundedFrame background={"white"}>
-              <EquippedTiersPreview size={240} equipped={equipped} />
-            </RoundedFrame>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {CATEGORIES.filter((c) => c !== "naked" && !!equipped[c]).map(
-              (c) => {
-                const tier = equipped[c];
-
-                return (
-                  <div
-                    key={c}
-                    style={{ display: "flex", gap: 12, alignItems: "center" }}
-                  >
-                    <div>
-                      <RoundedFrame
-                        background={"white"}
-                        style={{ pointerEvents: "none" }}
-                      >
-                        <TierImage size={56} tier={tier} />
-                      </RoundedFrame>
-                    </div>
-
-                    <div>{tier?.name}</div>
-                  </div>
-                );
-              }
-            )}
-          </div>
-        </div>
-
+    return {
+      footer: (
         <ButtonPad
           fillFg={COLORS.pink}
-          containerStyle={{ marginTop: 48 }}
           style={{ padding: 12, color: "white" }}
           onClick={decorate}
         >
           Dress
         </ButtonPad>
-      </>
-    );
+      ),
+      content: (
+        <>
+          <h1 style={{ margin: 0 }}>New fit?</h1>
+
+          <p>
+            When dressing a Banny, outfits & backgrounds will be transferred to
+            the Resolver contract. When removed, they{"'"}ll be returned to
+            whichever wallet owns the Banny.
+          </p>
+
+          <div style={{ display: "flex", gap: 12 }}>
+            <div>
+              <RoundedFrame background={"white"}>
+                <EquippedTiersPreview size={240} equipped={equipped} />
+              </RoundedFrame>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {CATEGORIES.filter((c) => c !== "naked" && !!equipped[c]).map(
+                (c) => {
+                  const tier = equipped[c];
+
+                  return (
+                    <div
+                      key={c}
+                      style={{ display: "flex", gap: 12, alignItems: "center" }}
+                    >
+                      <div>
+                        <RoundedFrame
+                          background={"white"}
+                          style={{ pointerEvents: "none" }}
+                        >
+                          <TierImage size={56} tier={tier} />
+                        </RoundedFrame>
+                      </div>
+
+                      <div>{tier?.name}</div>
+                    </div>
+                  );
+                }
+              )}
+            </div>
+          </div>
+        </>
+      ),
+    };
   }, [decorate, hash, isPending, isSuccess, equipped]);
 
   return (
-    <Modal open onClose={_onClose}>
+    <Modal open onClose={_onClose} footer={footer}>
       {content}
     </Modal>
   );

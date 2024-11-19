@@ -34,7 +34,23 @@ export default function MintButton() {
     if (!totalEquippedPrice) return null;
 
     return (
-      <Modal open={isConfirming} onClose={() => setIsConfirming(false)}>
+      <Modal
+        open={isConfirming}
+        onClose={() => setIsConfirming(false)}
+        footer={
+          <ButtonPad
+            onClick={mint}
+            fillFg={COLORS.pink}
+            style={{
+              padding: "12px 16px",
+              color: "white",
+              fontSize: FONT_SIZE.lg,
+            }}
+          >
+            Mint ({formatEther(totalEquippedPrice)} ETH)
+          </ButtonPad>
+        }
+      >
         {isPending ? (
           <TransactionPending hash={hash} text="Minting..." />
         ) : (
@@ -50,18 +66,6 @@ export default function MintButton() {
             </p>
 
             <div>$BAN earned by this payment: 69420</div>
-
-            <ButtonPad
-              onClick={mint}
-              fillFg={COLORS.pink}
-              style={{
-                padding: "12px 16px",
-                color: "white",
-                fontSize: FONT_SIZE.lg,
-              }}
-            >
-              Mint ({formatEther(totalEquippedPrice)} ETH)
-            </ButtonPad>
           </div>
         )}
       </Modal>

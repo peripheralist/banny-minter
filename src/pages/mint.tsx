@@ -27,6 +27,7 @@ export default function Mint() {
 
         {tiers ? (
           <EquipmentContextProvider
+            cacheKey="mint"
             availableTiers={tiers}
             defaultEquippedTierIds={{ naked: tiers.naked[0].tierId }}
             displayStrategy="mint"

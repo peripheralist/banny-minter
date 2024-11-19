@@ -1,16 +1,16 @@
 import { COLORS } from "@/constants/colors";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
-import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "./ButtonPad";
 import RoundedFrame from "./RoundedFrame";
-
-const pixelSize = 8;
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 
 export default function Modal({
   open,
+  footer,
   onClose,
   children,
 }: PropsWithChildren<{
+  footer?: JSX.Element;
   open?: boolean;
   onClose?: VoidFunction;
 }>) {
@@ -22,6 +22,8 @@ export default function Modal({
     setIsOpen(false);
     onClose?.();
   }, [onClose]);
+
+  const { measuredRef: footerRef, height: footerHeight } = useMeasuredRef();
 
   if (!isOpen) return null;
 
@@ -38,14 +40,13 @@ export default function Modal({
         justifyContent: "center",
         width: "100vw",
         height: "100vh",
-        zIndex: 100,
+        zIndex: 999,
         background: shadowColor,
         overflow: "auto",
       }}
       onClick={_onClose}
     >
       <div
-        style={{ margin: 80 }}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -54,29 +55,37 @@ export default function Modal({
           background={COLORS.bananaHint}
           containerStyle={{ height: "auto" }}
           style={{
-            minWidth: "40vw",
-            width: "90vw",
-            maxWidth: 600,
-            padding: 24,
+            minWidth: 320,
+            maxWidth: "calc(100vw - 144px)",
+            maxHeight: `calc(100vh - ${footerHeight + 80}px)`,
+            padding: 48,
             overflow: "auto",
           }}
         >
           {children}
         </RoundedFrame>
 
-        <ButtonPad
-          onClick={_onClose}
-          fillFg={"white"}
-          shadow="sm"
-          containerStyle={{
-            marginTop: 12,
-            textAlign: "center",
-            zIndex: 10,
+        <div
+          ref={footerRef}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            marginTop: 8,
+            zIndex: 999,
           }}
-          style={{ padding: 12 }}
         >
-          Close
-        </ButtonPad>
+          {footer}
+
+          <ButtonPad
+            onClick={_onClose}
+            fillFg={"white"}
+            shadow="sm"
+            style={{ padding: 12 }}
+          >
+            Close
+          </ButtonPad>
+        </div>
       </div>
     </div>
   );

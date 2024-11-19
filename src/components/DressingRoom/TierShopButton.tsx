@@ -2,7 +2,6 @@ import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { Tier } from "@/model/tier";
-import Link from "next/link";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { formatEther } from "viem";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
@@ -12,9 +11,11 @@ import TierImage from "../shared/TierImage";
 export default function TierShopButton({
   tier,
   buttonSize,
+  onClick,
 }: {
   tier: Tier;
   buttonSize: number;
+  onClick?: VoidFunction;
 }) {
   const [added, setAdded] = useState(false);
   const { addItem } = useContext(ShopContext);
@@ -94,7 +95,7 @@ export default function TierShopButton({
           justifyContent: "space-between",
         }}
       >
-        <Link href={`/item/${tier.tierId}`} style={{ color: "black" }}>
+        <div onClick={onClick}>
           <div
             style={{ marginTop: 12, marginBottom: 12, pointerEvents: "none" }}
           >
@@ -108,7 +109,7 @@ export default function TierShopButton({
           </div>
 
           <Label />
-        </Link>
+        </div>
 
         <ButtonPad
           style={{ padding: 8, color: COLORS.pink }}

@@ -43,7 +43,11 @@ function _EquipmentContextProvider({ children }: PropsWithChildren) {
   if (!tiers) return <FullscreenLoading />;
 
   return (
-    <EquipmentContextProvider availableTiers={tiers} displayStrategy="mint">
+    <EquipmentContextProvider
+      cacheKey="bag_preview"
+      availableTiers={tiers}
+      displayStrategy="mint"
+    >
       {children}
     </EquipmentContextProvider>
   );
