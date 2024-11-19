@@ -12,8 +12,6 @@ export function decodeNFTInfo(
 
     const json = JSON.parse(jsonStr.replaceAll(",]", "]"));
 
-    console.log("asdf json", json);
-
     return json;
   } catch (e) {
     console.error("Failed to decode nft info", { uri, error: e });

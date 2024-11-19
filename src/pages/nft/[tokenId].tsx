@@ -53,7 +53,7 @@ export default function Index() {
   }, [nft, size]);
 
   return (
-    <ToolbarBagView frame header={`Token: ${tier?.name} #${tokenId}`}>
+    <ToolbarBagView frame header={`Token: ${tier?.name ?? "--"} #${tokenId}`}>
       <div
         style={{
           display: "flex",

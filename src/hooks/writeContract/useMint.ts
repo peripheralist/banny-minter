@@ -144,7 +144,10 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     isComplete,
   ]);
 
-  console.log("asdf mint tx", hash, isPending, tx.status, tx.error, tx);
-
-  return { mint, isPending: isPending || tx.isLoading };
+  return {
+    mint,
+    isPending: isPending || tx.isLoading,
+    isSuccess: tx.isSuccess,
+    hash,
+  };
 }

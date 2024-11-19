@@ -25,8 +25,13 @@ export default function OwnedTierButton({
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <div style={{ fontSize: FONT_SIZE.md }}>{tier.name}</div>
-        <div style={{ fontSize: FONT_SIZE.xs }}>
-          {tier.ownedSupply ? `${tier.ownedSupply} owned` : "Wearing"}
+        <div
+          style={{
+            fontSize: FONT_SIZE.xs,
+            color: tier.equipped ? COLORS.pink : "black",
+          }}
+        >
+          {tier.equipped ? "DRESSED" : `${tier.ownedSupply} owned`}
         </div>
       </div>
     );

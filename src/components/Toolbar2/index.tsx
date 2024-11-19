@@ -2,8 +2,9 @@ import { useIsHover } from "@/hooks/useIsHover";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import Image from "next/image";
 import Link from "next/link";
-import { PropsWithChildren } from "react";
+import { CSSProperties, PropsWithChildren } from "react";
 import { useAccount } from "wagmi";
+import Loading from "../shared/Loading";
 import RoundedFrame from "../shared/RoundedFrame";
 import Wallet from "./Wallet";
 
@@ -31,14 +32,7 @@ export default function Index() {
           : { position: "fixed", top: 0, left: 0, right: 0 }),
       }}
     >
-      <_Link href={"/"}>
-        <Image
-          src={"/assets/banny_eyes.svg"}
-          width={TOOLBAR_WIDTH - 12}
-          height={((TOOLBAR_WIDTH - 12) * 8) / 14}
-          alt="banny eyes"
-        />
-      </_Link>
+      <HomeButton />
 
       <div
         style={{
@@ -75,16 +69,23 @@ function _Link({
   children,
   frame,
   ...props
-}: PropsWithChildren<{ href: string; frame?: boolean }>) {
+}: PropsWithChildren<{
+  href: string;
+  frame?: boolean;
+  onMouseEnter?: VoidFunction;
+  onMouseLeave?: VoidFunction;
+  style?: CSSProperties;
+}>) {
   const { isHover, ...hoverProps } = useIsHover();
 
   return (
     <Link
-      {...props}
       {...hoverProps}
+      {...props}
       style={{
         position: "relative",
         padding: 0,
+        ...props.style,
       }}
     >
       {frame ? (
@@ -104,5 +105,29 @@ function _Link({
         children
       )}
     </Link>
+  );
+}
+
+function HomeButton() {
+  const { isHover, ...hoverProps } = useIsHover();
+
+  const width = TOOLBAR_WIDTH - 12;
+  const height = ((TOOLBAR_WIDTH - 12) * 8) / 14;
+
+  return (
+    <_Link href={"/"} {...hoverProps} style={{ width, height }}>
+      {isHover ? (
+        <div style={{ width, height }}>
+          <Loading />
+        </div>
+      ) : (
+        <Image
+          src={"/assets/banny_eyes.svg"}
+          width={width}
+          height={height}
+          alt="banny eyes"
+        />
+      )}
+    </_Link>
   );
 }

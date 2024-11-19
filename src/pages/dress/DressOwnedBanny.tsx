@@ -4,8 +4,8 @@ import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import { Category } from "@/constants/category";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { NfTsQuery } from "@/generated/graphql";
-import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 import { useOwnedCategorizedTiers } from "@/hooks/queries/useOwnedCategorizedTiers";
+import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 import { Tiers } from "@/model/tier";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
@@ -29,18 +29,23 @@ export default function DressOwnedBanny({
     const formattedOwnedTiers = Object.entries(ownedTiers).reduce(
       (acc, [category, tiersOfCategory]) => ({
         ...acc,
-        [category]: tiersOfCategory.map((t) => {
-          const tokenId =
-            category === "naked" && bannyNft
-              ? bannyNft.tokenId
-              : t.nfts[0].tokenId; // override tier tokenId with tokenId of first NFT, or bannyNft
+        [category]: tiersOfCategory
+          .filter(
+            ({ tier }) =>
+              equippedTiers[category as Category]?.tierId !== tier.tierId // only add tier if not equipped
+          )
+          .map((t) => {
+            const tokenId =
+              category === "naked" && bannyNft
+                ? bannyNft.tokenId
+                : t.nfts[0].tokenId; // override tier tokenId with tokenId of first NFT, or bannyNft
 
-          return {
-            ...t.tier,
-            tokenId,
-            ownedSupply: t.nfts.length,
-          };
-        }),
+            return {
+              ...t.tier,
+              tokenId,
+              ownedSupply: t.nfts.length,
+            };
+          }),
       }),
       {} as Tiers
     );

@@ -1,31 +1,29 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { WalletContext } from "@/contexts/walletContext";
 import { useMint } from "@/hooks/writeContract/useMint";
 import { formatEther } from "juice-sdk-core";
+import Link from "next/link";
 import { useCallback, useContext, useState } from "react";
 import { useAccount } from "wagmi";
 import BagItems from "../shared/BagItems";
 import ButtonPad from "../shared/ButtonPad";
 import Modal from "../shared/Modal";
-import Link from "next/link";
-import { EquipmentContext } from "@/contexts/equipmentContext";
+import TransactionPending from "../shared/TransactionPending";
 
 export default function MintButton() {
   const [isConfirming, setIsConfirming] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
 
   const { address } = useAccount();
   const { connect } = useContext(WalletContext);
   const { totalEquippedPrice, emptyBag } = useContext(ShopContext);
   const { unequipAll } = useContext(EquipmentContext);
 
-  const { mint, isPending } = useMint({
+  const { mint, isPending, isSuccess, hash } = useMint({
     onSuccess: () => {
-      console.log("asdf mint onsuccess");
       setIsConfirming(false);
-      setIsSuccess(true);
     },
   });
 
@@ -37,22 +35,22 @@ export default function MintButton() {
 
     return (
       <Modal open={isConfirming} onClose={() => setIsConfirming(false)}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <h1 style={{ margin: 0 }}>Mint NFTs</h1>
+        {isPending ? (
+          <TransactionPending hash={hash} text="Minting..." />
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            <h1 style={{ margin: 0 }}>Mint NFTs</h1>
 
-          <BagItems />
+            <BagItems />
 
-          <p>
-            By minting Looks NFTs, you{"'"}re paying the on-chain{" "}
-            <Link href={"https://revnet.eth.sucks/memo/"}>Looks Revnet</Link>{" "}
-            treasury and earning $BAN in return.
-          </p>
+            <p>
+              By minting Looks NFTs, you{"'"}re paying the on-chain{" "}
+              <Link href={"https://revnet.eth.sucks/memo/"}>Looks Revnet</Link>{" "}
+              treasury and earning $BAN in return.
+            </p>
 
-          <div>$BAN earned by this payment: 69420</div>
+            <div>$BAN earned by this payment: 69420</div>
 
-          {isPending ? (
-            "Transaction pending..."
-          ) : (
             <ButtonPad
               onClick={mint}
               fillFg={COLORS.pink}
@@ -64,22 +62,28 @@ export default function MintButton() {
             >
               Mint ({formatEther(totalEquippedPrice)} ETH)
             </ButtonPad>
-          )}
-        </div>
+          </div>
+        )}
       </Modal>
     );
-  }, [isPending, isConfirming, totalEquippedPrice, mint]);
+  }, [isPending, isConfirming, totalEquippedPrice, mint, hash]);
 
   const SucccessModal = useCallback(() => {
     const onClose = () => {
       emptyBag?.();
       unequipAll?.();
-      setIsSuccess(false);
     };
 
     return (
       <Modal open={isSuccess} onClose={onClose}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 48,
+            alignItems: "center",
+          }}
+        >
           <h1 style={{ margin: 0 }}>Minted!</h1>
 
           <BagItems />

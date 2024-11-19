@@ -45,6 +45,7 @@ export default function LargeView({
           overflow: "auto",
           padding: 24,
           paddingLeft: isSmallScreen ? 24 : 120,
+          paddingBottom: 80,
           gap: 48,
         }}
       >

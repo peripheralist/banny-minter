@@ -19,7 +19,7 @@ export function useWindowSize() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const isSmallScreen = useMemo(() => width !== 0 && width < 800, [width]);
+  const isSmallScreen = useMemo(() => width !== 0 && width < 1000, [width]);
 
   return { width, height, isSmallScreen };
 }

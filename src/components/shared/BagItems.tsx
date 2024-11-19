@@ -7,7 +7,7 @@ import { useContext } from "react";
 import RoundedFrame from "./RoundedFrame";
 import TierImage from "./TierImage";
 
-export default function BagItems() {
+export default function BagItems({ canRemove }: { canRemove?: boolean }) {
   const { equipped, equip } = useContext(EquipmentContext);
   const { bag, removeItem } = useContext(ShopContext);
 
@@ -15,11 +15,10 @@ export default function BagItems() {
     <div
       style={{
         display: "flex",
+        alignItems: "flex-start",
         flexDirection: "column",
         gap: 8,
-        width: "100%",
         flex: 1,
-        padding: 12,
         boxSizing: "border-box",
         overflow: "auto",
       }}
@@ -47,7 +46,7 @@ export default function BagItems() {
                 >
                   <RoundedFrame
                     borderColor={
-                      equipped[category]?.tierId === tierId
+                      canRemove && equipped[category]?.tierId === tierId
                         ? COLORS.pink
                         : "black"
                     }
@@ -72,19 +71,21 @@ export default function BagItems() {
                   </div>
                 </div>
 
-                <div
-                  style={{ padding: 8 }}
-                  onClick={() => {
-                    if (equipped?.[category]?.tierId === tierId) {
-                      // unequip when removing
-                      equip?.[category](undefined);
-                    }
+                {canRemove && (
+                  <div
+                    style={{ padding: 8 }}
+                    onClick={() => {
+                      if (equipped?.[category]?.tierId === tierId) {
+                        // unequip when removing
+                        equip?.[category](undefined);
+                      }
 
-                    removeItem?.(tierId);
-                  }}
-                >
-                  x
-                </div>
+                      removeItem?.(tierId);
+                    }}
+                  >
+                    x
+                  </div>
+                )}
               </div>
             );
           })

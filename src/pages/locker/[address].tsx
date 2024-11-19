@@ -1,10 +1,9 @@
-import { TOOLBAR_HEIGHT } from "@/components/Toolbar";
-import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import Fuzz from "@/components/pixelRenderers/Fuzz";
 import ButtonPad from "@/components/shared/ButtonPad";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
+import Loading from "@/components/shared/Loading";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import {
   CATEGORY_GROUPS,
   CATEGORY_GROUP_NAMES,
@@ -169,32 +168,32 @@ export default function Index() {
 
   return (
     <ToolbarBagView frame header={`${ensName ?? address}'s locker`}>
-      <div>
-        {loading ? (
-          <div
-            style={{
-              height: `calc(84vh - ${TOOLBAR_HEIGHT}px)`,
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Fuzz height={120} width={120} />
+      {loading ? (
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div style={{ width: 200, height: 200 }}>
+            <Loading />
           </div>
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 64,
-              paddingBottom: 64,
-            }}
-          >
-            <CategoryGrids />
-          </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 64,
+            paddingBottom: 64,
+          }}
+        >
+          <CategoryGrids />
+        </div>
+      )}
     </ToolbarBagView>
   );
 }

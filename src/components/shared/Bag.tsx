@@ -57,7 +57,9 @@ export default function Bag({
         </span>
       </h1>
 
-      <BagItems />
+      <div style={{ padding: 12, flex: 1 }}>
+        <BagItems canRemove />
+      </div>
 
       <div style={{ padding: 12 }}>
         <MintButton />

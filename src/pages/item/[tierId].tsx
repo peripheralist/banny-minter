@@ -45,7 +45,7 @@ export default function Index() {
   return (
     <ToolbarBagView
       frame
-      header={`ITEM: ${tier?.name}`}
+      header={`ITEM: ${tier?.name ?? "--"}`}
       backButton={drop ? { href: `/drop/${drop.id}` } : undefined}
     >
       <div

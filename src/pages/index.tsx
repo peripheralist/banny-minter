@@ -1,6 +1,7 @@
 import TiersDemo from "@/components/TiersDemo";
 import ButtonPad from "@/components/shared/ButtonPad";
 import CloudSky from "@/components/shared/CloudSky";
+import Loading from "@/components/shared/Loading";
 import LoadingBanny from "@/components/shared/LoadingBanny";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
@@ -85,8 +86,7 @@ export default function Home() {
               alt="Musa 1"
               fill
               priority
-              objectFit="contain"
-              objectPosition="left"
+              style={{ objectFit: "contain", objectPosition: "left" }}
             />
           </div>
           <div style={{ position: "relative", width: "50%" }}>
@@ -95,8 +95,7 @@ export default function Home() {
               alt="Musa 2"
               fill
               priority
-              objectFit="contain"
-              objectPosition="right"
+              style={{ objectFit: "contain", objectPosition: "right" }}
             />
           </div>
         </div>
@@ -123,7 +122,7 @@ export default function Home() {
           }}
         >
           {loading ? (
-            <LoadingBanny size={heroHeight} />
+            <Loading />
           ) : (
             <TiersDemo size={heroHeight} pixelSize={8} />
           )}
@@ -164,8 +163,7 @@ export default function Home() {
               src={"/assets/looks_logo.svg"}
               fill
               alt="looks logo"
-              objectFit="contain"
-              objectPosition="left"
+              style={{ objectFit: "contain", objectPosition: "left" }}
             />
           </div>
 

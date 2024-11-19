@@ -79,8 +79,8 @@ export function useWriteContractHandler<
   const tx = useWaitForTransactionReceipt({
     hash,
     pollingInterval: 1000,
-    retryCount: 3,
-    retryDelay: 5000,
+    retryCount: 6,
+    retryDelay: ({ count }) => ~~(1 << count) * 200, // exponential backoff
   });
 
   useEffect(() => {
@@ -128,7 +128,12 @@ export function useWriteContractHandler<
     isComplete,
   ]);
 
-  console.log("asdf tx", isPending, tx.status, tx.error);
-
-  return { write, isPending: isPending || tx.isLoading, data, usedArgs };
+  return {
+    write,
+    isPending: isPending || tx.isLoading,
+    isSuccess: tx.isSuccess,
+    data,
+    usedArgs,
+    hash,
+  };
 }

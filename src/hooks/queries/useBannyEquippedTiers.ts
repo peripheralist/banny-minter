@@ -13,8 +13,6 @@ export function useBannyEquippedTiers(
   const resolverAddress = useResolverAddress();
   const allWornNfts = useNftsOf(resolverAddress);
 
-  console.log("asdf", { allWornNfts });
-
   const data = useMemo(() => {
     if (!allWornNfts.data || !bannyNft) return;
 
@@ -31,8 +29,6 @@ export function useBannyEquippedTiers(
 
     const decoded = decodeNFTInfo(bannyNft.tokenUri);
 
-    console.log("asdf", decoded);
-
     const allAssetIds = [...(decoded?.outfitIds ?? [])];
     if (decoded?.worldId) allAssetIds.push(decoded.worldId);
 
@@ -40,8 +36,6 @@ export function useBannyEquippedTiers(
       const assetTier = nfts.find(
         (nft) => nft.tokenId === BigInt(tokenId)
       )?.tier;
-
-      console.log("asdf", tokenId, assetTier);
 
       if (assetTier) {
         equipped[categoryOfId[assetTier.category]] = {
@@ -52,8 +46,6 @@ export function useBannyEquippedTiers(
         console.warn("Error finding tier for NFT with tokenId:", tokenId);
       }
     });
-
-    console.log("asdf", equipped);
 
     return equipped;
   }, [bannyNft, allWornNfts]);

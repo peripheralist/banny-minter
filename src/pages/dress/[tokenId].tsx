@@ -1,11 +1,10 @@
-import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import DressOwnedBanny from "@/pages/dress/DressOwnedBanny";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useAccount } from "wagmi";
 
 export default function Index() {
@@ -29,15 +28,23 @@ export default function Index() {
   const nft = useMemo(() => nfts?.nfts[0], [nfts?.nfts]);
 
   const isOwner = useMemo(
-    () => address?.toLowerCase() === nft?.owner.address.toLowerCase(),
+    () =>
+      nft
+        ? address?.toLowerCase() === nft?.owner.address.toLowerCase()
+        : undefined,
     [address, nft]
   );
 
+  useEffect(() => {
+    if (isOwner === false) {
+      router.push(`/nft/${nft?.tokenId.toString()}`);
+    }
+  }, [router, nft, isOwner]);
+
   const content = useMemo(() => {
     if (nftsLoading) return <FullscreenLoading />;
-    if (isOwner) return <DressOwnedBanny bannyNft={nft} />;
-    return <DressedBannyNftImage nft={nft} size={400} />;
-  }, [nftsLoading, isOwner, nft]);
+    return <DressOwnedBanny bannyNft={nft} />;
+  }, [nftsLoading, nft]);
 
   return (
     <ToolbarBagView header={`Dressing room: Banny #${_tokenId}`}>
