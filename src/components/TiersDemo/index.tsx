@@ -3,7 +3,7 @@ import { CATEGORIES, Category } from "@/constants/category";
 import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { EquippedTiers } from "@/model/tier";
 import { useEffect, useMemo, useState } from "react";
-import EquippedTiersPreview from "../EquippedTiersPreview";
+import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 
 export default function TiersDemo({
   size,

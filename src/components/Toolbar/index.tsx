@@ -1,52 +1,17 @@
-import { COLORS } from "@/constants/colors";
-import { FONT_SIZE } from "@/constants/fontSize";
-import { ShopContext } from "@/contexts/shopContext";
+import { useIsHover } from "@/hooks/useIsHover";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useContext, useMemo } from "react";
-import { useEnsName } from "wagmi";
-import Blinker from "../shared/Blinker";
-import CurrentChain from "./CurrentChain";
+import { CSSProperties, PropsWithChildren } from "react";
+import { useAccount } from "wagmi";
+import Loading from "../shared/Loading";
+import RoundedFrame from "../shared/RoundedFrame";
 import Wallet from "./Wallet";
 
-export const TOOLBAR_HEIGHT = 60;
+export const TOOLBAR_WIDTH = 140;
 
-export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
-  const { itemsQuantity } = useContext(ShopContext);
-
-  const router = useRouter();
-
-  const address = router.query["address"] as `0x${string}`;
-  const tokenId = router.query["tokenId"] as string;
-
-  const { data: ensName } = useEnsName({ address });
-
-  const formattedAddress = ensName
-    ? ensName
-    : address
-    ? `${address.substring(0, 6)}...${address.slice(38)}`
-    : undefined;
-
-  const currentPath = useMemo(() => {
-    const pathname = router.pathname;
-
-    if (pathname.includes("mint")) return "store";
-    if (pathname.includes("dress/")) return "dress";
-    if (pathname.includes("closet/")) return "closet";
-  }, [router.pathname]);
-
-  const pathText = useMemo(() => {
-    switch (currentPath) {
-      case "store":
-        return "STORE";
-      case "dress":
-        return `DRESSING ROOM: BANNY #${tokenId}`;
-      case "closet":
-        return `${formattedAddress}'s closet`;
-    }
-    return null;
-  }, [currentPath, formattedAddress, tokenId]);
+export default function Index() {
+  const { address: connectedAddress } = useAccount();
 
   const { isSmallScreen } = useWindowSize();
 
@@ -54,86 +19,115 @@ export default function Index({ onBagClick }: { onBagClick?: VoidFunction }) {
     <div
       style={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "space-between",
-        alignItems: "center",
-        padding: 10,
         boxSizing: "border-box",
-        gap: 20,
-        height: TOOLBAR_HEIGHT,
-        background: COLORS.bananaLite,
+        padding: 12,
+        paddingRight: 0,
+        gap: 24,
+        height: "100vh",
+        width: TOOLBAR_WIDTH,
         ...(isSmallScreen
           ? { fontSize: "0.8rem" }
           : { position: "fixed", top: 0, left: 0, right: 0 }),
-        zIndex: 10,
       }}
     >
+      <HomeButton />
+
       <div
         style={{
           display: "flex",
-          alignItems: "baseline",
-          gap: 20,
+          flexDirection: "column",
           flex: 1,
+          gap: 8,
         }}
       >
-        <Link href={"/"}>
-          <h1
-            style={{
-              margin: 0,
-              appearance: "none",
-              color: "black",
-              fontSize: FONT_SIZE["2xl"],
-              lineHeight: 0,
-              letterSpacing: 2,
-            }}
-          >
-            0_0
-          </h1>
-        </Link>
+        <_Link frame href={"/drops"}>
+          Drops
+        </_Link>
 
-        {pathText && (
-          <span
-            style={{
-              textTransform: "uppercase",
-              fontSize: FONT_SIZE["2xl"],
-              color: "black",
-            }}
-          >
-            {pathText}
-          </span>
+        <_Link frame href={"/catalog"}>
+          Catalog
+        </_Link>
+
+        {connectedAddress && (
+          <_Link frame href={"/locker/" + connectedAddress}>
+            Locker
+          </_Link>
         )}
-
-        <Link
-          href={"/mint"}
-          hidden={currentPath === "store"}
-          style={{
-            textTransform: "uppercase",
-            fontSize: FONT_SIZE.xl,
-            color: "black",
-            opacity: 0.7,
-          }}
-        >
-          Store
-        </Link>
       </div>
 
-      {isSmallScreen ? null : (
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            alignItems: "center",
-            fontSize: FONT_SIZE.sm,
-          }}
-        >
-          <Blinker />
-          Work in progress
-        </div>
-      )}
-
       {/* <MusicPlayer /> */}
-      <CurrentChain />
-      <div onClick={onBagClick}>{`Bag (${itemsQuantity})`}</div>
+      {/* <div onClick={onBagClick}>{`Bag (${itemsQuantity})`}</div> */}
+
       <Wallet />
     </div>
+  );
+}
+
+function _Link({
+  children,
+  frame,
+  ...props
+}: PropsWithChildren<{
+  href: string;
+  frame?: boolean;
+  onMouseEnter?: VoidFunction;
+  onMouseLeave?: VoidFunction;
+  style?: CSSProperties;
+}>) {
+  const { isHover, ...hoverProps } = useIsHover();
+
+  return (
+    <Link
+      {...hoverProps}
+      {...props}
+      style={{
+        position: "relative",
+        padding: 0,
+        ...props.style,
+      }}
+    >
+      {frame ? (
+        <RoundedFrame
+          background={isHover ? "white" : undefined}
+          style={{
+            color: "black",
+            fontWeight: "bold",
+            padding: "8px 16px",
+            height: 40,
+            textTransform: "uppercase",
+          }}
+        >
+          {children}
+        </RoundedFrame>
+      ) : (
+        children
+      )}
+    </Link>
+  );
+}
+
+function HomeButton() {
+  const { isHover, ...hoverProps } = useIsHover();
+
+  const width = TOOLBAR_WIDTH - 12;
+  const height = ((TOOLBAR_WIDTH - 12) * 8) / 14;
+
+  return (
+    <_Link href={"/"} {...hoverProps} style={{ width, height }}>
+      {isHover ? (
+        <div style={{ width, height }}>
+          <Loading />
+        </div>
+      ) : (
+        <Image
+          src={"/assets/banny_eyes.svg"}
+          width={width}
+          height={height}
+          alt="banny eyes"
+        />
+      )}
+    </_Link>
   );
 }

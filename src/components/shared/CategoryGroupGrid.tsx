@@ -4,7 +4,7 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import { CSSProperties } from "react";
 import RoundedFrame from "./RoundedFrame";
 
-export function CategoryGroupGrid2<I>({
+export function CategoryGroupGrid<I>({
   items,
   render,
   label,

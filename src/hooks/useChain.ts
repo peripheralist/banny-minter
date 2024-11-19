@@ -1,9 +1,7 @@
-import { mainnet, sepolia } from "viem/chains";
+import { SUPPORTED_CHAINS } from "@/constants/supportedChains";
 import { useAccount } from "wagmi";
 
-const supportedChains = [mainnet, sepolia] as const;
-
-export type ChainId = (typeof supportedChains)[number]["id"];
+export type ChainId = (typeof SUPPORTED_CHAINS)[number]["id"];
 
 const DEFAULT_CHAIN_ID = process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID;
 
@@ -17,11 +15,11 @@ export const useChain = () => {
   const { chain } = useAccount();
 
   if (chain) {
-    const _chain = supportedChains[chain.id];
+    const _chain = SUPPORTED_CHAINS[chain.id];
     if (_chain) return _chain;
   }
 
-  const defaultChain = supportedChains.find(
+  const defaultChain = SUPPORTED_CHAINS.find(
     (c) => c.id === parseInt(DEFAULT_CHAIN_ID)
   );
 

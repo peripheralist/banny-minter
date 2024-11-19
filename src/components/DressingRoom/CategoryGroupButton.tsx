@@ -1,12 +1,9 @@
-import { COLORS } from "@/constants/colors";
 import { CATEGORY_GROUPS, CategoryGroup } from "@/constants/category";
+import { COLORS } from "@/constants/colors";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useCallback, useContext, useMemo } from "react";
 import ButtonPad from "../shared/ButtonPad";
 import IconImage from "../shared/images/IconImage";
-import { FONT_SIZE } from "@/constants/fontSize";
-import Light from "../shared/Light";
-import RoundedFrame from "../shared/RoundedFrame";
 
 /**
  * Button for selecting

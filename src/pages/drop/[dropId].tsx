@@ -1,5 +1,4 @@
-import TierShopButton from "@/components/DressingRoom/TierShopButton";
-import { CategoryGroupGrid2 } from "@/components/shared/CategoryGroupGrid2";
+import { CategoryGroupGrid } from "@/components/shared/CategoryGroupGrid";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import {
@@ -13,6 +12,7 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Tier } from "@/model/tier";
+import TierShopButton from "@/pages/drop/TierShopButton";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
 import TierDetailModal from "./TierDetailModal";
@@ -108,7 +108,7 @@ export default function Drop() {
             gap: 64,
           }}
         >
-          <CategoryGroupGrid2
+          <CategoryGroupGrid
             items={categoryGroupTiers}
             label
             render={(t) => (

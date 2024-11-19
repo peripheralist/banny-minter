@@ -11,7 +11,7 @@ import { Tier } from "@/model/tier";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
-import EquippedTiersPreview from "../EquippedTiersPreview";
+import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import ButtonPad from "../shared/ButtonPad";
 import Modal from "../shared/Modal";
 import RoundedFrame from "../shared/RoundedFrame";
@@ -100,7 +100,7 @@ function ConfirmDressModal({
         )
       )
       .filter((t) => !!t) as Tier[];
-  }, [approvals, availableTiers, approvedIds]);
+  }, [approvals, availableTiers, approvedIds, isApprovedForAll]);
 
   if (!open) return null;
 

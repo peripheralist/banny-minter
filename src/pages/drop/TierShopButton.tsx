@@ -1,12 +1,12 @@
+import FuzzMoment from "@/components/pixelRenderers/FuzzMoment";
+import ButtonPad from "@/components/shared/ButtonPad";
+import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { Tier } from "@/model/tier";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { formatEther } from "viem";
-import FuzzMoment from "../pixelRenderers/FuzzMoment";
-import ButtonPad from "../shared/ButtonPad";
-import TierImage from "../shared/TierImage";
 
 export default function TierShopButton({
   tier,
@@ -40,7 +40,7 @@ export default function TierShopButton({
     const { initialSupply, remainingSupply } = tier;
 
     const Supply = () => {
-      if (initialSupply === BigInt(999999999)) {
+      if (initialSupply >= BigInt(999999999)) {
         return <div style={{ opacity: 0.5 }}>Unlimited</div>;
       }
       if (remainingSupply <= BigInt(0)) {

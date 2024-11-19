@@ -1,4 +1,4 @@
-import EquippedTiersPreview from "@/components/EquippedTiersPreview";
+import EquippedTiersPreview from "@/components/shared/EquippedTiersPreview";
 import Fuzz from "@/components/pixelRenderers/Fuzz";
 import { NfTsQuery } from "@/generated/graphql";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";

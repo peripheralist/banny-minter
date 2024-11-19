@@ -9,20 +9,14 @@ import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Tier } from "@/model/tier";
 import { useContext, useMemo } from "react";
-import EquippedTiersPreview from "../EquippedTiersPreview";
-import { CategoryGroupGrid2 } from "../shared/CategoryGroupGrid2";
+import { CategoryGroupGrid } from "../shared/CategoryGroupGrid";
+import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import FullscreenLoading from "../shared/FullscreenLoading";
 import RoundedFrame from "../shared/RoundedFrame";
 import DecorateButton from "./DecorateButton";
 import OwnedTierButton from "./OwnedTierButton";
 
-export default function LargeView({
-  button,
-  includeBody,
-}: {
-  button: JSX.Element;
-  includeBody?: boolean;
-}) {
+export default function LargeView() {
   const { availableTiers, equipped, equippingCategory, unequippingCategory } =
     useContext(EquipmentContext);
 
@@ -69,7 +63,7 @@ export default function LargeView({
         }}
       >
         {CATEGORY_GROUP_NAMES.filter((g) => g !== "banny").map((g) => (
-          <CategoryGroupGrid2
+          <CategoryGroupGrid
             label
             items={availableTiersByCategoryGroup}
             key={g}

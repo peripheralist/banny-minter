@@ -1,7 +1,7 @@
-import { SUBGRAPH_KEY } from "@/constants/subgraph";
-import { useChain } from "./useChain";
 import { isBrowser } from "@/constants/browser";
+import { formatSubgraphUri } from "@/utils/formatSubgraphUri";
 import { useMemo } from "react";
+import { useChain } from "./useChain";
 
 export const useSubgraphUri = () => {
   const chain = useChain();
@@ -10,7 +10,7 @@ export const useSubgraphUri = () => {
 
   const uri = useMemo(() => {
     if (isBrowser()) {
-      return `https://subgraph.satsuma-prod.com/${SUBGRAPH_KEY}/juicebox/nana-${chainName.toLowerCase()}/api`;
+      return formatSubgraphUri(chainName.toLowerCase());
     } else {
       if (!process.env.SUBGRAPH_URL) {
         throw new Error("SUBGRAPH_URL environment variable not defined");

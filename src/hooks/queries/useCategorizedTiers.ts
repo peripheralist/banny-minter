@@ -1,14 +1,42 @@
 import { Category } from "@/constants/category";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
-import { useAllNftTiersQuery } from "@/generated/graphql";
+import { SUPPORTED_CHAINS } from "@/constants/supportedChains";
+import { NftTiersDocument, useAllNftTiersQuery } from "@/generated/graphql";
 import { Tier, Tiers } from "@/model/tier";
+import { createApolloClient } from "@/utils/createApolloClient";
 import { parseTier } from "@/utils/parseTier";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 /**
  * @returns All NFT tiers mapped to their respective category
  */
 export function useCategorizedTiers() {
+  useEffect(() => {
+    async function get() {
+      const promises = [];
+
+      for (const { name } of SUPPORTED_CHAINS) {
+        const client = createApolloClient(name);
+
+        promises.push(
+          client.query({
+            query: NftTiersDocument,
+            variables: {
+              collection: BANNYVERSE_COLLECTION_ID,
+            },
+          })
+        );
+      }
+
+      Promise.all(promises).then((_promises) =>
+        _promises.map((p, i) => ({
+          chain: SUPPORTED_CHAINS[i].name.toLowerCase(),
+          tiers: p,
+        }))
+      );
+    }
+  }, []);
+
   const { data: tiers, ...props } = useAllNftTiersQuery({
     variables: {
       collection: BANNYVERSE_COLLECTION_ID,

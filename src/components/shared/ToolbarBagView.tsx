@@ -1,4 +1,4 @@
-import { TOOLBAR_WIDTH } from "@/components/Toolbar2";
+import { TOOLBAR_WIDTH } from "@/components/Toolbar";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { EquipmentContext } from "@/contexts/equipmentContext";
@@ -17,12 +17,12 @@ import {
   useContext,
   useEffect,
 } from "react";
-import EquippedTiersPreview from "../EquippedTiersPreview";
 import ToolbarIcon from "../ToolbarIcon";
 import Bag from "./Bag";
+import EquippedTiersPreview from "./EquippedTiersPreview";
 import RoundedFrame from "./RoundedFrame";
 
-const Toolbar = dynamic(() => import("@/components/Toolbar2"), { ssr: false });
+const Toolbar = dynamic(() => import("@/components/Toolbar"), { ssr: false });
 
 const BAG_WIDTH = 340;
 const BAG_CLOSED_WIDTH = 80;
@@ -30,13 +30,11 @@ const BAG_CLOSED_WIDTH = 80;
 export default function ToolbarBagView({
   children,
   header,
-  subHeader,
   backButton,
   frame,
   frameStyle,
 }: PropsWithChildren<{
   header: string | JSX.Element;
-  subHeader?: string | JSX.Element;
   frame?: boolean;
   frameStyle?: CSSProperties;
   backButton?: {

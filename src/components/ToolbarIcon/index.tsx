@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { PropsWithChildren, useState } from "react";
-import Wallet from "../Toolbar2/Wallet";
+import Wallet from "../Toolbar/Wallet";
 import RoundedFrame from "../shared/RoundedFrame";
 import { useAccount } from "wagmi";
 import { COLORS } from "@/constants/colors";

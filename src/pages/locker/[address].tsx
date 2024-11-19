@@ -1,5 +1,5 @@
 import ButtonPad from "@/components/shared/ButtonPad";
-import { CategoryGroupGrid2 } from "@/components/shared/CategoryGroupGrid2";
+import { CategoryGroupGrid } from "@/components/shared/CategoryGroupGrid";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import Loading from "@/components/shared/Loading";
 import RoundedFrame from "@/components/shared/RoundedFrame";
@@ -99,7 +99,7 @@ export default function Index() {
             paddingBottom: 64,
           }}
         >
-          <CategoryGroupGrid2
+          <CategoryGroupGrid
             label
             items={nftsByCategoryGroup}
             gridStyle={{

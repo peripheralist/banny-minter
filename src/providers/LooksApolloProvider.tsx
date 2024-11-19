@@ -1,18 +1,15 @@
+import { apolloCache } from "@/constants/apolloCache";
 import {
   ApolloClient,
   ApolloLink,
   ApolloProvider,
-  HttpLink,
-  InMemoryCache,
+  HttpLink
 } from "@apollo/client";
 import { FunctionsMap, withScalars } from "apollo-link-scalars";
 import { IntrospectionQuery, buildClientSchema } from "graphql";
 import { PropsWithChildren, useMemo } from "react";
 import introspectionResult from "../../graphql.schema.json";
 import { useSubgraphUri } from "../hooks/useSubgraphUri";
-
-// ensure the cache is created only once.
-const cache = new InMemoryCache();
 
 const typesMap: FunctionsMap = {
   BigInt: {
@@ -47,7 +44,7 @@ export function LooksApolloProvider({ children }: PropsWithChildren) {
     };
 
     return new ApolloClient({
-      cache,
+      cache: apolloCache,
       link: ApolloLink.from([scalarsLink, httpLink]),
     });
   }, [subgraphUri]);

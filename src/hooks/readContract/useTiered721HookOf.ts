@@ -1,14 +1,18 @@
+import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
 import { useQuery } from "@tanstack/react-query";
 import { readContract } from "@wagmi/core";
+import { zeroAddress } from "viem";
 import { config } from "../../../config.wagmi";
 import { ChainId, useChain } from "../useChain";
-import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
 
 export function useTiered721Hook() {
   const chain = useChain();
 
   const revDeployerAddress: Record<ChainId, `0x${string}`> = {
-    "1": "0xasdf", // TODO
+    // TODO
+    "11155420": zeroAddress,
+    "421614": zeroAddress,
+    "84532": zeroAddress,
     "11155111": "0x25bC5D5A708c2E426eF3a5196cc18dE6b2d5A3d1",
   };
 
