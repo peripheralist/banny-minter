@@ -1,9 +1,14 @@
-import { CATEGORY_GROUP_NAMES } from "@/constants/category";
+import {
+  CATEGORY_GROUPS,
+  CATEGORY_GROUP_NAMES,
+  CategoryGroup,
+} from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { useContext } from "react";
+import { Tier } from "@/model/tier";
+import { useContext, useMemo } from "react";
 import EquippedTiersPreview from "../EquippedTiersPreview";
 import { CategoryGroupGrid2 } from "../shared/CategoryGroupGrid2";
 import FullscreenLoading from "../shared/FullscreenLoading";
@@ -24,6 +29,20 @@ export default function LargeView({
   const { measuredRef: previewRef, width: previewWidth } = useMeasuredRef();
 
   const { isSmallScreen } = useWindowSize();
+
+  const availableTiersByCategoryGroup = useMemo(() => {
+    if (!availableTiers) return;
+
+    return Object.entries(CATEGORY_GROUPS).reduce(
+      (acc, [group, categories]) => {
+        return {
+          ...acc,
+          [group]: categories.flatMap((c) => availableTiers[c]),
+        };
+      },
+      {} as Record<CategoryGroup, Tier[]>
+    );
+  }, [availableTiers]);
 
   if (!availableTiers) return <FullscreenLoading />;
 
@@ -52,11 +71,13 @@ export default function LargeView({
         {CATEGORY_GROUP_NAMES.filter((g) => g !== "banny").map((g) => (
           <CategoryGroupGrid2
             label
-            tiers={availableTiers}
-            group={g}
+            items={availableTiersByCategoryGroup}
             key={g}
-            button={(t) => <OwnedTierButton tier={t} size={200} />}
-            imgSize={200}
+            render={(t) => <OwnedTierButton tier={t} size={200} />}
+            gridStyle={{
+              gridTemplateColumns: `repeat(auto-fit, ${200}px)`,
+              gap: 16,
+            }}
           />
         ))}
       </RoundedFrame>

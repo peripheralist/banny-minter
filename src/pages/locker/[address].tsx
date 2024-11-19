@@ -1,4 +1,5 @@
 import ButtonPad from "@/components/shared/ButtonPad";
+import { CategoryGroupGrid2 } from "@/components/shared/CategoryGroupGrid2";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import Loading from "@/components/shared/Loading";
 import RoundedFrame from "@/components/shared/RoundedFrame";
@@ -6,23 +7,21 @@ import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import {
   CATEGORY_GROUPS,
-  CATEGORY_GROUP_NAMES,
   CATEGORY_IDS,
   CategoryGroup,
   categoryOfId,
 } from "@/constants/category";
-import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { NfTsQuery } from "@/generated/graphql";
 import { useNftsOf } from "@/hooks/queries/useNftsOf";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { parseTier } from "@/utils/parseTier";
+import { formatEthAddress } from "juice-sdk-core";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { isAddress } from "viem";
 import { useEnsName } from "wagmi";
-
-const IMG_SIZE = 240;
 
 export default function Index() {
   const router = useRouter();
@@ -49,125 +48,34 @@ export default function Index() {
     );
   }, [nfts]);
 
-  const TokenId = useCallback(
-    ({ tokenId }: { tokenId: bigint }) => (
-      <div
-        style={{
-          position: "absolute",
-          bottom: -12,
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          color: "black",
-          fontSize: FONT_SIZE.xs,
-        }}
-      >
-        #{tokenId.toString()}
-      </div>
-    ),
-    []
+  const { isSmallScreen, width } = useWindowSize();
+
+  const imgSize = useMemo(
+    () => (isSmallScreen ? (width ? (width - 40) / 2 : 320) : 240),
+    [isSmallScreen, width]
   );
-
-  const CategoryGrids = useCallback(() => {
-    return CATEGORY_GROUP_NAMES.map((g) => {
-      const contents = nftsByCategoryGroup[g].map((nft) => {
-        const content =
-          nft.category === CATEGORY_IDS["naked"] ? (
-            <>
-              <DressedBannyNftImage size={IMG_SIZE - 8} nft={nft} />
-              <TokenId tokenId={nft.tokenId} />
-            </>
-          ) : (
-            <>
-              <TierImage tier={parseTier(nft.tier)} size={IMG_SIZE - 8} />
-              <TokenId tokenId={nft.tokenId} />
-            </>
-          );
-
-        return (
-          <Link key={nft.tokenId} href={`/nft/${nft.tokenId}`}>
-            <div>
-              <RoundedFrame
-                background={"white"}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  pointerEvents: "none",
-                }}
-              >
-                {content}
-              </RoundedFrame>
-            </div>
-
-            {nft.category === CATEGORY_IDS["naked"] && (
-              <Link href={`/dress/${nft.tokenId.toString()}`}>
-                <ButtonPad
-                  containerStyle={{ marginTop: 12 }}
-                  style={{ padding: 8 }}
-                >
-                  Dress
-                </ButtonPad>
-              </Link>
-            )}
-          </Link>
-        );
-      });
-
-      return (
-        <div key={g + "_grid"} style={{ padding: 12, paddingLeft: 160 }}>
-          <div
-            style={{
-              position: "sticky",
-              top: 12,
-              textTransform: "uppercase",
-              margin: 0,
-            }}
-          >
-            <div
-              style={{
-                position: "absolute",
-                left: -168,
-              }}
-            >
-              <RoundedFrame
-                background={"black"}
-                style={{
-                  padding: "12px 16px",
-                  height: 40,
-                  color: COLORS.bananaLite,
-                }}
-              >
-                {g} ({contents.length})
-              </RoundedFrame>
-            </div>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(auto-fit, ${IMG_SIZE}px)`,
-              gap: 12,
-            }}
-          >
-            {contents?.length ? (
-              contents
-            ) : (
-              <div key={g} style={{ padding: "12px 0" }}>
-                No items
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    });
-  }, [TokenId, nftsByCategoryGroup]);
 
   if (!address || Array.isArray(address) || !isAddress(address)) {
     return <div>Bad route</div>;
   }
 
   return (
-    <ToolbarBagView frame header={`${ensName ?? address}'s locker`}>
+    <ToolbarBagView
+      frame
+      header={`${ensName ?? formatEthAddress(address)}'s locker`}
+      frameStyle={{
+        position: "relative",
+        ...(isSmallScreen
+          ? {
+              paddingTop: 16,
+            }
+          : {
+              padding: 48,
+              paddingLeft: 120,
+              paddingTop: 16,
+            }),
+      }}
+    >
       {loading ? (
         <div
           style={{
@@ -191,7 +99,63 @@ export default function Index() {
             paddingBottom: 64,
           }}
         >
-          <CategoryGrids />
+          <CategoryGroupGrid2
+            label
+            items={nftsByCategoryGroup}
+            gridStyle={{
+              gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
+              gap: 16,
+            }}
+            render={(nft) => (
+              <Link key={nft.tokenId} href={`/nft/${nft.tokenId}`}>
+                <div>
+                  <RoundedFrame
+                    background={"white"}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    {nft.category === CATEGORY_IDS["naked"] ? (
+                      <DressedBannyNftImage size={imgSize - 8} nft={nft} />
+                    ) : (
+                      <TierImage
+                        tier={parseTier(nft.tier)}
+                        size={imgSize - 8}
+                      />
+                    )}
+
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: -12,
+                        left: 0,
+                        right: 0,
+                        textAlign: "center",
+                        color: "black",
+                        fontSize: FONT_SIZE.xs,
+                      }}
+                    >
+                      #{nft.tokenId.toString()}
+                    </div>
+                  </RoundedFrame>
+                </div>
+
+                {nft.category === CATEGORY_IDS["naked"] && (
+                  <Link href={`/dress/${nft.tokenId.toString()}`}>
+                    <ButtonPad
+                      containerStyle={{ marginTop: 12 }}
+                      style={{ padding: 8 }}
+                    >
+                      Dress
+                    </ButtonPad>
+                  </Link>
+                )}
+              </Link>
+            )}
+          />
         </div>
       )}
     </ToolbarBagView>

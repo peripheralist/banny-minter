@@ -13,6 +13,7 @@ import { parseTier } from "@/utils/parseTier";
 import { formatEther } from "juice-sdk-core";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 export default function Index() {
   const { addItem } = useContext(ShopContext);
@@ -42,6 +43,8 @@ export default function Index() {
     return DROPS.find((d) => d.tierIds.includes(_tierId));
   }, [_tierId]);
 
+  const { isSmallScreen } = useWindowSize();
+
   return (
     <ToolbarBagView
       frame
@@ -70,7 +73,11 @@ export default function Index() {
             <NftTierInfo tier={tier} />
 
             <ButtonPad
-              containerStyle={{ position: "absolute", bottom: 24, left: 24 }}
+              containerStyle={{
+                position: isSmallScreen ? "fixed" : "absolute",
+                bottom: 24,
+                left: 24,
+              }}
               style={{ padding: 16, color: COLORS.pink }}
               onClick={() => addItem?.(tier)}
             >

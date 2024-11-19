@@ -2,11 +2,16 @@ import TierShopButton from "@/components/DressingRoom/TierShopButton";
 import { CategoryGroupGrid2 } from "@/components/shared/CategoryGroupGrid2";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import { CATEGORY_GROUP_NAMES } from "@/constants/category";
+import {
+  CATEGORY_GROUPS,
+  CATEGORY_GROUP_NAMES,
+  CategoryGroup,
+} from "@/constants/category";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { Tier } from "@/model/tier";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
 
@@ -26,11 +31,23 @@ export default function Drop() {
   const { width, isSmallScreen } = useWindowSize();
 
   const imgSize = useMemo(
-    () => (isSmallScreen ? (width ? width - 24 : 320) : 240),
+    () => (isSmallScreen ? (width ? (width - 40) / 2 : 320) : 240),
     [isSmallScreen, width]
   );
 
   const { availableTiers: tiers } = useContext(ShopContext);
+
+  const categoryGroupTiers = useMemo(() => {
+    if (!tiers) return;
+
+    return CATEGORY_GROUP_NAMES.reduce(
+      (acc, group) => ({
+        ...acc,
+        [group]: CATEGORY_GROUPS[group].flatMap((c) => tiers[c]),
+      }),
+      {} as Record<CategoryGroup, Tier[]>
+    );
+  }, [tiers]);
 
   if (!tiers) return <FullscreenLoading />;
 
@@ -76,19 +93,17 @@ export default function Drop() {
           gap: 64,
         }}
       >
-        {CATEGORY_GROUP_NAMES.map((g) => (
-          <div key={g}>
-            <CategoryGroupGrid2
-              group={g}
-              tiers={tiers}
-              label
-              imgSize={imgSize}
-              button={(t) => (
-                <TierShopButton key={t.tierId} tier={t} buttonSize={imgSize} />
-              )}
-            />
-          </div>
-        ))}
+        <CategoryGroupGrid2
+          items={categoryGroupTiers}
+          label
+          render={(t) => (
+            <TierShopButton key={t.tierId} tier={t} buttonSize={imgSize} />
+          )}
+          gridStyle={{
+            gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
+            gap: 16,
+          }}
+        />
       </div>
     </ToolbarBagView>
   );
