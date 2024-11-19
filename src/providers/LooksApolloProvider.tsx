@@ -50,7 +50,7 @@ export function LooksApolloProvider({ children }: PropsWithChildren) {
       cache,
       link: ApolloLink.from([scalarsLink, httpLink]),
     });
-  }, [subgraphUri, scalarsLink]);
+  }, [subgraphUri]);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 }

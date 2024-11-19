@@ -29,7 +29,7 @@ export default function DecorateButton() {
     if (initialEquipped || CATEGORIES.every((c) => !equipped[c])) return;
 
     setInitialEquipped(equipped);
-  }, [equipped]);
+  }, [equipped, initialEquipped]);
 
   const disabled = useMemo(() => {
     if (!initialEquipped || !equipped) return;
@@ -80,7 +80,7 @@ function ConfirmDressModal({
         (c) => c !== "naked" && !!equipped[c]?.tokenId && !equipped[c]?.equipped
       ).map((c) => BigInt(equipped[c]!.tokenId!)),
 
-    [equipped, approvedIds]
+    [equipped]
   );
 
   const { approvals } = useNFTApprovals(maybeUnapprovedTokenIds);
@@ -100,7 +100,7 @@ function ConfirmDressModal({
         )
       )
       .filter((t) => !!t) as Tier[];
-  }, [approvals, availableTiers]);
+  }, [approvals, availableTiers, approvedIds]);
 
   if (!open) return null;
 
@@ -237,7 +237,7 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
 
   const _onClose = useCallback(
     () => (isSuccess ? router.reload() : onClose?.()),
-    [isSuccess, onClose]
+    [isSuccess, onClose, router]
   );
 
   const content = useMemo(() => {
@@ -273,8 +273,8 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
 
         <p>
           When dressing a Banny, outfits & backgrounds will be transferred to
-          the Resolver contract. When removed, they'll be returned to whichever
-          wallet owns the Banny.
+          the Resolver contract. When removed, they{"'"}ll be returned to
+          whichever wallet owns the Banny.
         </p>
 
         <div style={{ display: "flex", gap: 12 }}>
@@ -291,6 +291,7 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
 
                 return (
                   <div
+                    key={c}
                     style={{ display: "flex", gap: 12, alignItems: "center" }}
                   >
                     <div>
