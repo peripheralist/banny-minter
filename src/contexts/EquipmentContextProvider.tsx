@@ -1,7 +1,7 @@
 import { CATEGORIES, Category, CategoryGroup } from "@/constants/category";
 import { categoryIncompatibles } from "@/constants/incompatibles";
-import { DisplayStrategy } from "@/model/displayStrategy";
-import { EquipTierFns, EquippedTiers, Tiers } from "@/model/tier";
+import { useLocalStorageState } from "@/hooks/useLocalStorageState";
+import { EquipTierFns, EquippedTiers, Tier } from "@/model/tier";
 import {
   PropsWithChildren,
   useCallback,
@@ -10,7 +10,6 @@ import {
   useState,
 } from "react";
 import { EquipmentContext } from "./equipmentContext";
-import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 
 export const EQUIP_DURATION_MILLIS = 400;
 
@@ -20,17 +19,15 @@ export default function EquipmentContextProvider({
   defaultGroup,
   availableTiers,
   defaultEquippedTierIds,
-  displayStrategy,
 }: PropsWithChildren<{
-  cacheKey: string;
+  cacheKey?: string;
   defaultGroup?: CategoryGroup;
-  availableTiers: Tiers;
+  availableTiers: Tier[];
   defaultEquippedTierIds?: Partial<Record<Category, number>>;
-  displayStrategy?: DisplayStrategy;
 }>) {
   const { value: equippedTierId, setValue: setEquippedTierId } =
     useLocalStorageState<Partial<Record<Category, number>>>(
-      "looks_equipped_" + cacheKey,
+      cacheKey ? `looks_equipped_${cacheKey}` : undefined,
       {
         initialValue: {},
         parse: (str) => (str ? JSON.parse(str) : {}),
@@ -46,7 +43,7 @@ export default function EquipmentContextProvider({
   const equipped = useMemo(
     () =>
       CATEGORIES.reduce((acc, category) => {
-        const equippedTierForCategory = availableTiers?.[category].find(
+        const equippedTierForCategory = availableTiers.find(
           (t) => t.tierId === equippedTierId[category]
         );
 
@@ -124,23 +121,12 @@ export default function EquipmentContextProvider({
     if (!availableTiers) return null;
 
     // Sum price of all selected assets
-    return Object.entries(availableTiers).reduce(
-      (acc, [category, tiersOfCategory]) => {
-        const tier = tiersOfCategory.find(
-          (t) => t.tierId === equipped[category as Category]?.tierId
-        );
+    return CATEGORIES.reduce((acc, category) => {
+      const tier = equipped[category as Category];
 
-        return tier?.price ? acc + tier.price : acc;
-      },
-      BigInt(0)
-    );
+      return tier?.price ? acc + tier.price : acc;
+    }, BigInt(0));
   }, [availableTiers, equipped]);
-
-  const _displayStrategy = useMemo(() => {
-    if (!displayStrategy) throw new Error("displayStrategy is undefined");
-
-    return displayStrategy;
-  }, [displayStrategy]);
 
   return (
     <EquipmentContext.Provider
@@ -154,7 +140,6 @@ export default function EquipmentContextProvider({
         equippingCategory,
         unequippingCategory,
         availableTiers,
-        displayStrategy: _displayStrategy,
       }}
     >
       {children}

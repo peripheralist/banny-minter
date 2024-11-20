@@ -1,5 +1,5 @@
 import { Category, CategoryGroup } from "@/constants/category";
-import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
+import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { Tier } from "@/model/tier";
 import {
@@ -19,7 +19,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
 
   const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("banny");
 
-  const { tiers } = useCategorizedTiers();
+  const { tiers } = useAllTiers();
 
   const { value: bag, setValue: setBag } = useLocalStorageState<ShoppingBag>(
     "looks_bag",
@@ -38,7 +38,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
                 quantity: number;
               }) => ({
                 quantity,
-                tier: tiers?.[category].find((t) => t.tierId === tierId),
+                tier: tiers?.find((t) => t.tierId === tierId),
               })
             )
           : [],
@@ -118,7 +118,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
         totalEquippedPrice,
         selectedGroup,
         setSelectedGroup,
-        availableTiers: tiers,
+        allTiers: tiers,
       }}
     >
       {children}

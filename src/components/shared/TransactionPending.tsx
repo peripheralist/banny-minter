@@ -1,15 +1,15 @@
-import React from "react";
-import Loading from "./Loading";
-import Link from "next/link";
-import { useChain } from "juice-sdk-react";
 import { FONT_SIZE } from "@/constants/fontSize";
+import { useChain } from "juice-sdk-react";
+import Link from "next/link";
+import { Address } from "viem";
+import Loading from "./Loading";
 
 export default function TransactionPending({
   text,
   hash,
 }: {
   text?: string;
-  hash: `0x${string}` | undefined;
+  hash: Address | undefined;
 }) {
   const chain = useChain();
 
@@ -32,9 +32,7 @@ export default function TransactionPending({
       {chain && hash && (
         <Link
           target="blank"
-          href={`https://${
-            chain.name !== "mainnet" ? `${chain.name}.` : ""
-          }etherscan.io/tx/${hash}`}
+          href={chain.blockExplorers?.default.url + `/tx/${hash}`}
           style={{ fontSize: FONT_SIZE.sm }}
         >
           View transaction

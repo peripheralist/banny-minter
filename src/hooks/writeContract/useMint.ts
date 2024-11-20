@@ -1,4 +1,4 @@
-import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
+import { LOOKS_REVNET_ID } from "@/constants/nfts";
 import { AlertContext } from "@/contexts/alertContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
@@ -71,7 +71,7 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     writeContract({
       address: terminalAddress,
       args: [
-        BigInt(BANNYVERSE_PROJECT_ID),
+        BigInt(LOOKS_REVNET_ID),
         NATIVE_TOKEN,
         totalEquippedPrice,
         connectedWalletAddress, // mint to connected wallet

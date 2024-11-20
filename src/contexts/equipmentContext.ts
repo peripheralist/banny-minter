@@ -1,6 +1,5 @@
 import { CATEGORIES, Category, CategoryGroup } from "@/constants/category";
-import { DisplayStrategy } from "@/model/displayStrategy";
-import { EquipTierFns, EquippedTiers, Tiers } from "@/model/tier";
+import { EquipTierFns, EquippedTiers, Tier } from "@/model/tier";
 import { createContext } from "react";
 
 type Context = {
@@ -12,8 +11,7 @@ type Context = {
   setSelectedGroup?: (g: CategoryGroup) => void;
   equippingCategory?: Category;
   unequippingCategory?: Category;
-  availableTiers?: Tiers;
-  displayStrategy?: DisplayStrategy;
+  availableTiers?: Tier[];
 };
 
 export const EquipmentContext = createContext<Context>({

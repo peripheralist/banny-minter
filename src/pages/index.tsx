@@ -9,6 +9,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import { Address } from "viem";
 import { useAccount } from "wagmi";
 
 const SAND_COLOR = "#EFD27C";
@@ -263,7 +264,7 @@ function LockerButton() {
   const { address } = useAccount();
 
   // state value suppresses hydration warning. idk man
-  const [_address, setAddress] = useState<`0x${string}`>();
+  const [_address, setAddress] = useState<Address>();
   useEffect(() => setAddress(address), [address]);
 
   if (!_address) return null;

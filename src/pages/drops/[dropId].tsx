@@ -1,17 +1,10 @@
 import { CategoryGroupGrid } from "@/components/shared/CategoryGroupGrid";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import {
-  CATEGORIES,
-  CATEGORY_GROUPS,
-  CATEGORY_GROUP_NAMES,
-  CategoryGroup,
-} from "@/constants/category";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { Tier } from "@/model/tier";
 import TierShopButton from "@/pages/drops/TierShopButton";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
@@ -37,33 +30,19 @@ export default function Drop() {
     [isSmallScreen, width]
   );
 
-  const { availableTiers: tiers } = useContext(ShopContext);
+  const { allTiers } = useContext(ShopContext);
 
   const tierDetail = useMemo(() => {
-    if (!tiers) return;
+    if (!allTiers) return;
 
     const tierId = parseInt(router.asPath.split("#")[1]);
 
     if (isNaN(tierId) || !drop?.tierIds.includes(tierId)) return;
 
-    return CATEGORIES.flatMap((c) => tiers[c]).find((t) => t.tierId === tierId);
-  }, [router, tiers, drop]);
+    return allTiers.find((t) => t.tierId === tierId);
+  }, [router, allTiers, drop]);
 
-  const categoryGroupTiers = useMemo(() => {
-    if (!tiers) return;
-
-    return CATEGORY_GROUP_NAMES.reduce(
-      (acc, group) => ({
-        ...acc,
-        [group]: CATEGORY_GROUPS[group].flatMap((c) =>
-          tiers[c].filter((t) => drop?.tierIds.includes(t.tierId))
-        ),
-      }),
-      {} as Record<CategoryGroup, Tier[]>
-    );
-  }, [tiers, drop]);
-
-  if (!tiers) return <FullscreenLoading />;
+  if (!allTiers) return <FullscreenLoading />;
 
   return (
     <>
@@ -117,7 +96,7 @@ export default function Drop() {
           }}
         >
           <CategoryGroupGrid
-            items={categoryGroupTiers}
+            items={allTiers}
             label
             render={(t) => (
               <TierShopButton

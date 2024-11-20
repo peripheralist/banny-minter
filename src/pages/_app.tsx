@@ -3,7 +3,7 @@ import AlertContextProvider from "@/contexts/AlertContextProvider";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import ShopContextProvider from "@/contexts/ShopContextProvider";
 import WalletContextProvider from "@/contexts/WalletContextProvider";
-import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
+import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { LooksApolloProvider } from "@/providers/LooksApolloProvider";
 import { LooksJBProvider } from "@/providers/LooksJBProvider";
 import "@/styles/globals.css";
@@ -38,16 +38,12 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 
 function _EquipmentContextProvider({ children }: PropsWithChildren) {
-  const { tiers } = useCategorizedTiers();
+  const { tiers } = useAllTiers();
 
   if (!tiers) return <FullscreenLoading />;
 
   return (
-    <EquipmentContextProvider
-      cacheKey="bag_preview"
-      availableTiers={tiers}
-      displayStrategy="mint"
-    >
+    <EquipmentContextProvider cacheKey="bag_preview" availableTiers={tiers}>
       {children}
     </EquipmentContextProvider>
   );

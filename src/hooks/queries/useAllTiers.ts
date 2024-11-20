@@ -1,21 +1,57 @@
-import { Category } from "@/constants/category";
-import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
+import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
 import { SUPPORTED_CHAINS } from "@/constants/supportedChains";
 import {
   NftTiersDocument,
   NftTiersQuery,
-  useAllNftTiersQuery,
+  useNftTiersQuery,
 } from "@/generated/graphql";
-import { Tier, Tiers } from "@/model/tier";
+import { Tier } from "@/model/tier";
 import { createApolloClient } from "@/utils/createApolloClient";
 import { parseTier } from "@/utils/parseTier";
 import { useEffect, useMemo, useState } from "react";
 import { ChainId } from "../useChain";
 
 /**
- * @returns All NFT tiers mapped to their respective category
+ * @returns All Looks NFT tiers
  */
-export function useCategorizedTiers() {
+export function useAllTiers() {
+  const { data: allTiers, ...props } = useNftTiersQuery({
+    variables: {
+      where: {
+        collection: LOOKS_COLLECTION_ID,
+      },
+    },
+  });
+
+  const multichainTiers = useMultiChainTiers();
+
+  const formattedTiers: Tier[] | undefined = useMemo(() => {
+    return allTiers?.nfttiers.map((t) => {
+      // Hack for pre-loading embedded images to ensure they render correctly
+      const svg = t?.svg;
+      const imgHref = '<image href="';
+
+      if (svg?.includes(imgHref)) {
+        let embeddedImageUrl = svg.split(imgHref)[1];
+        embeddedImageUrl = embeddedImageUrl.split('"')[0];
+        const img = new Image();
+        img.src = embeddedImageUrl;
+      }
+
+      return {
+        ...parseTier(t),
+        multiChainSupply: multichainTiers?.[t.tierId],
+      } as Tier;
+    });
+  }, [allTiers, multichainTiers]);
+
+  return {
+    ...props,
+    tiers: formattedTiers,
+  };
+}
+
+function useMultiChainTiers() {
   const [multichainTiers, setMultichainTiers] =
     useState<Record<number, Tier["multiChainSupply"]>>();
 
@@ -29,7 +65,7 @@ export function useCategorizedTiers() {
             query: NftTiersDocument,
             variables: {
               where: {
-                collection: BANNYVERSE_COLLECTION_ID,
+                collection: LOOKS_COLLECTION_ID,
               },
             },
             fetchPolicy: "no-cache",
@@ -96,56 +132,5 @@ export function useCategorizedTiers() {
     get();
   }, []);
 
-  const { data: tiers, ...props } = useAllNftTiersQuery({
-    variables: {
-      collection: BANNYVERSE_COLLECTION_ID,
-    },
-    fetchPolicy: "cache-first",
-  });
-
-  // console.log(
-  //   "asdf tiers",
-  //   CATEGORIES.reduce(
-  //     (acc, c) => [...acc, ...(tiers?.[c] ?? [])],
-  //     [] as AllNftTiersQuery[Category]
-  //   )
-  //     .sort((a, b) => (a.tierId < b.tierId ? -1 : 1))
-  //     .map((t) => `${parseTier(t)?.name} ${t.tierId}`)
-  // );
-
-  const formattedTiers: Tiers | undefined = useMemo(
-    () =>
-      tiers
-        ? Object.entries(tiers).reduce((acc, [k, tiers]) => {
-            const _tiers = tiers.map((t) => ({
-              ...parseTier(t),
-              multiChainSupply: multichainTiers?.[t.tierId],
-            }));
-
-            _tiers.forEach((t) => {
-              const svg = t?.svg;
-              if (!svg) return;
-
-              const imgHref = '<image href="';
-              if (!svg.includes(imgHref)) return;
-
-              let embeddedImageUrl = svg.split(imgHref)[1];
-              embeddedImageUrl = embeddedImageUrl.split('"')[0];
-              const img = new Image();
-              img.src = embeddedImageUrl;
-            });
-
-            return {
-              ...acc,
-              [k]: _tiers,
-            };
-          }, {} as Record<Category, Tier[]>)
-        : undefined,
-    [tiers, multichainTiers]
-  );
-
-  return {
-    ...props,
-    tiers: formattedTiers,
-  };
+  return multichainTiers;
 }

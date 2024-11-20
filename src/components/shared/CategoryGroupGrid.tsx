@@ -1,17 +1,22 @@
-import { CATEGORY_GROUP_NAMES, CategoryGroup } from "@/constants/category";
+import {
+  CATEGORY_GROUPS,
+  CATEGORY_GROUP_NAMES,
+  Category,
+  CategoryGroup,
+} from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { CSSProperties } from "react";
+import { CSSProperties, useMemo } from "react";
 import RoundedFrame from "./RoundedFrame";
 
-export function CategoryGroupGrid<I>({
+export function CategoryGroupGrid<I extends { category: Category }>({
   items,
   render,
   label,
   emptyText,
   gridStyle,
 }: {
-  items: Record<CategoryGroup, I[]> | undefined;
+  items: I[] | undefined;
   render: (i: I) => JSX.Element;
   label?: boolean;
   emptyText?: string;
@@ -19,10 +24,24 @@ export function CategoryGroupGrid<I>({
 }) {
   const { isSmallScreen } = useWindowSize();
 
-  if (!items) return null;
+  const groupedItems = useMemo(() => {
+    if (!items) return;
+
+    return Object.entries(CATEGORY_GROUPS).reduce(
+      (acc, [group, categories]) => ({
+        ...acc,
+        [group]: categories.flatMap((c) =>
+          items.filter((i) => i.category === c)
+        ),
+      }),
+      {} as Record<CategoryGroup, I[]>
+    );
+  }, [items]);
+
+  if (!groupedItems) return null;
 
   return CATEGORY_GROUP_NAMES.map((g) => {
-    const itemsOfGroup = items[g];
+    const itemsOfGroup = groupedItems[g];
 
     return (
       <div key={g}>
@@ -41,7 +60,6 @@ export function CategoryGroupGrid<I>({
                 ...(isSmallScreen
                   ? {
                       left: -20,
-                      // right: -12,
                       top: 0,
                     }
                   : {
@@ -69,8 +87,6 @@ export function CategoryGroupGrid<I>({
               display: "grid",
               paddingTop: isSmallScreen ? 56 : 0,
               ...gridStyle,
-              // gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
-              // gap: gap ?? 16,
             }}
           >
             {itemsOfGroup.map(render)}

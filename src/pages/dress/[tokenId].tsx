@@ -1,6 +1,6 @@
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
+import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import DressOwnedBanny from "@/pages/dress/DressOwnedBanny";
 import { useRouter } from "next/router";
@@ -20,7 +20,7 @@ export default function Index() {
     variables: {
       where: {
         tokenId: _tokenId as unknown as bigint,
-        collection: BANNYVERSE_COLLECTION_ID,
+        collection: LOOKS_COLLECTION_ID,
       },
     },
   });

@@ -18,6 +18,6 @@ export const parseTier = (
     price: tier.price,
     initialSupply: tier.initialSupply,
     remainingSupply: tier.remainingSupply,
-    svg: tier.svg?.includes("<script") ? null : tier.svg, // crude injected script protection
+    svg: tier.svg?.toLowerCase().includes("<script") ? null : tier.svg, // crude injected script protection
   };
 };

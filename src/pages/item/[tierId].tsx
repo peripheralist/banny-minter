@@ -5,7 +5,7 @@ import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
-import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
+import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
 import { ShopContext } from "@/contexts/shopContext";
 import { useNftTiersQuery } from "@/generated/graphql";
 import { useSingleImageSize } from "@/hooks/useSingleImageSize";
@@ -27,7 +27,7 @@ export default function Index() {
   const { data: tiers } = useNftTiersQuery({
     variables: {
       where: {
-        collection: BANNYVERSE_COLLECTION_ID,
+        collection: LOOKS_COLLECTION_ID,
       },
     },
   });

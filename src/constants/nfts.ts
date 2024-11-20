@@ -1,19 +1,21 @@
-export const BANNYVERSE_COLLECTION_ID = process.env
-  .NEXT_PUBLIC_BANNYVERSE_COLLECTION_ID as `0x${string}`;
+import { Address } from "viem";
 
-if (!BANNYVERSE_COLLECTION_ID) {
-  throw new Error("Missing Bannyverse collection ID");
+export const LOOKS_COLLECTION_ID = process.env
+  .NEXT_PUBLIC_LOOKS_COLLECTION_ID as Address;
+
+if (!LOOKS_COLLECTION_ID) {
+  throw new Error("Missing Looks collection ID");
 }
 
-export const BANNYVERSE_PROJECT_ID =
-  process.env.NEXT_PUBLIC_BANNYVERSE_PROJECT_ID!;
+export const LOOKS_REVNET_ID =
+  process.env.NEXT_PUBLIC_LOOKS_REVNET_ID!;
 
-if (!BANNYVERSE_PROJECT_ID) {
-  throw new Error("Missing Bannyverse projectId");
+if (!LOOKS_REVNET_ID) {
+  throw new Error("Missing Looks revnet id");
 }
 
 export const RESOLVER_ADDRESS = process.env
-  .NEXT_PUBLIC_RESOLVER_ADDRESS! as `0x${string}`;
+  .NEXT_PUBLIC_RESOLVER_ADDRESS! as Address;
 
 if (!RESOLVER_ADDRESS) {
   throw new Error("Missing resolver address");

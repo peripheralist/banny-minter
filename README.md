@@ -1,4 +1,4 @@
-# Bannyverse Minting App
+# Looks App
 
 Obnoxiously fun. Full of itself. Might crash your browser.
 

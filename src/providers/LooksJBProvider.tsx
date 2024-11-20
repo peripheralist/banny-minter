@@ -1,4 +1,4 @@
-import { BANNYVERSE_PROJECT_ID } from "@/constants/nfts";
+import { LOOKS_REVNET_ID } from "@/constants/nfts";
 import {
   JBChainId,
   JBContractProvider,
@@ -7,7 +7,7 @@ import {
 } from "juice-sdk-react";
 import { PropsWithChildren } from "react";
 
-const projectId = BigInt(BANNYVERSE_PROJECT_ID);
+const projectId = BigInt(LOOKS_REVNET_ID);
 
 export function LooksJBProvider({ children }: PropsWithChildren) {
   const chain = useChain();

@@ -5,14 +5,8 @@ import Loading from "@/components/shared/Loading";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import {
-  CATEGORY_GROUPS,
-  CATEGORY_IDS,
-  CategoryGroup,
-  categoryOfId,
-} from "@/constants/category";
+import { CATEGORY_IDS, categoryOfId } from "@/constants/category";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { NfTsQuery } from "@/generated/graphql";
 import { useNftsOf } from "@/hooks/queries/useNftsOf";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { parseTier } from "@/utils/parseTier";
@@ -20,33 +14,17 @@ import { formatEthAddress } from "juice-sdk-core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
-import { isAddress } from "viem";
+import { Address, isAddress } from "viem";
 import { useEnsName } from "wagmi";
 
 export default function Index() {
   const router = useRouter();
 
-  const address = router.query.address as `0x${string}` | undefined;
+  const address = router.query.address as Address | undefined;
 
   const { data: ensName } = useEnsName({ address });
 
   const { data: nfts, loading } = useNftsOf(address);
-
-  const nftsByCategoryGroup = useMemo(() => {
-    return Object.entries(CATEGORY_GROUPS).reduce(
-      (acc, [group, categories]) => {
-        const _nfts = nfts?.nfts.filter((nft) =>
-          categories.includes(categoryOfId[nft.category])
-        );
-
-        return {
-          ...acc,
-          [group]: [...(acc[group as CategoryGroup] ?? []), ...(_nfts ?? [])],
-        };
-      },
-      {} as Record<CategoryGroup, NfTsQuery["nfts"][number][]>
-    );
-  }, [nfts]);
 
   const { isSmallScreen, width } = useWindowSize();
 
@@ -101,7 +79,10 @@ export default function Index() {
         >
           <CategoryGroupGrid
             label
-            items={nftsByCategoryGroup}
+            items={nfts?.nfts.map((nft) => ({
+              ...nft,
+              category: categoryOfId[nft.category],
+            }))}
             gridStyle={{
               gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
               gap: 16,
@@ -118,8 +99,11 @@ export default function Index() {
                       pointerEvents: "none",
                     }}
                   >
-                    {nft.category === CATEGORY_IDS["naked"] ? (
-                      <DressedBannyNftImage size={imgSize - 8} nft={nft} />
+                    {nft.category === "naked" ? (
+                      <DressedBannyNftImage
+                        size={imgSize - 8}
+                        nft={{ ...nft, category: CATEGORY_IDS[nft.category] }}
+                      />
                     ) : (
                       <TierImage
                         tier={parseTier(nft.tier)}
@@ -143,7 +127,7 @@ export default function Index() {
                   </RoundedFrame>
                 </div>
 
-                {nft.category === CATEGORY_IDS["naked"] && (
+                {nft.category === "naked" && (
                   <Link href={`/dress/${nft.tokenId.toString()}`}>
                     <ButtonPad
                       containerStyle={{ marginTop: 12 }}

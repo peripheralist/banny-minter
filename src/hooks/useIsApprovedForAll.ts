@@ -1,9 +1,10 @@
-import { BANNYVERSE_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
+import { LOOKS_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
+import { Address } from "viem";
 import { config } from "../../config.wagmi";
 
-export function useIsApprovedForAll(wallet: `0x${string}` | undefined) {
+export function useIsApprovedForAll(wallet: Address | undefined) {
   const [loading, setLoading] = useState(false);
 
   const [isApprovedForAll, setIsApprovedForAll] = useState<boolean>();
@@ -41,7 +42,7 @@ export function useIsApprovedForAll(wallet: `0x${string}` | undefined) {
             stateMutability: "view",
           },
         ],
-        address: BANNYVERSE_COLLECTION_ID,
+        address: LOOKS_COLLECTION_ID,
         functionName: "isApprovedForAll",
         args: [wallet, RESOLVER_ADDRESS],
       });

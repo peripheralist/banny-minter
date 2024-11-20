@@ -10,9 +10,10 @@ import { useSetApprovalForAll } from "@/hooks/writeContract/useSetApprovalForAll
 import { Tier } from "@/model/tier";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { Address } from "viem";
 import { useAccount } from "wagmi";
-import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import ButtonPad from "../shared/ButtonPad";
+import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import Modal from "../shared/Modal";
 import RoundedFrame from "../shared/RoundedFrame";
 import TierImage from "../shared/TierImage";
@@ -94,9 +95,9 @@ function ConfirmDressModal({
       ?.filter(
         ({ approved, tokenId }) => !approved && !approvedIds.includes(tokenId)
       )
-      .flatMap(({ tokenId }) =>
-        CATEGORIES.map((c) =>
-          availableTiers?.[c].find((_t) => BigInt(_t.tokenId || 0) === tokenId)
+      .map(({ tokenId }) =>
+        availableTiers?.find(
+          (_t) => _t.tokenId && BigInt(_t.tokenId) === tokenId
         )
       )
       .filter((t) => !!t) as Tier[];
@@ -135,7 +136,7 @@ function ApproveNFTsModal({
 
   const { approve, isPending, usedArgs } = useApprove({
     onSuccess: (args: unknown) => {
-      onApproved?.([(args as [`0x${string}`, BigInt])[1]]);
+      onApproved?.([(args as [Address, BigInt])[1]]);
     },
   });
 

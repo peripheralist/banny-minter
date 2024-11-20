@@ -2,7 +2,7 @@ import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import { CATEGORY_IDS } from "@/constants/category";
-import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
+import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import Link from "next/link";
 
@@ -12,7 +12,7 @@ export default function Catalog() {
   const { data: bannys } = useNfTsQuery({
     variables: {
       where: {
-        collection: BANNYVERSE_COLLECTION_ID,
+        collection: LOOKS_COLLECTION_ID,
         category: CATEGORY_IDS["naked"],
       },
     },

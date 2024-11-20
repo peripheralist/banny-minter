@@ -14,15 +14,13 @@ export type Tier = {
   multiChainSupply?: Record<ChainId, { initial: bigint; remaining: bigint }> & {
     total: bigint;
   };
-  info?: NFTInfo
+  info?: NFTInfo;
 
   // Below only if NFT
   ownedSupply?: number;
   tokenId?: number;
   equipped?: boolean; // Only if NFT is equipped + owned by resolver contract
 };
-
-export type Tiers = Record<Category, Tier[]>;
 
 export type EquippedTiers = Partial<Record<Category, Tier | undefined>>;
 

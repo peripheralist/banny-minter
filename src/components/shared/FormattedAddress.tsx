@@ -1,10 +1,11 @@
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useIsHover } from "@/hooks/useIsHover";
+import { Address } from "viem";
 
 export default function FormattedAddress({
   address,
 }: {
-  address: `0x${string}` | undefined;
+  address: Address | undefined;
 }) {
   const { isHover, ...hoverProps } = useIsHover();
 

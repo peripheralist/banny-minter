@@ -1,11 +1,11 @@
 import { CategoryGroup } from "@/constants/category";
-import { Tier, Tiers } from "@/model/tier";
+import { Tier } from "@/model/tier";
 import { createContext } from "react";
 
 export type ShoppingBag = { quantity: number; tier: Tier }[];
 
 type Context = {
-  availableTiers?: Tiers;
+  allTiers?: Tier[];
   bag: ShoppingBag;
   addItem?: (t: Tier) => void;
   removeItem?: (t: Tier["tierId"]) => void;

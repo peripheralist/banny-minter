@@ -5,7 +5,7 @@ import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import { CATEGORY_IDS } from "@/constants/category";
-import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
+import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useSingleImageSize } from "@/hooks/useSingleImageSize";
 import { NFT } from "@/model/nft";
@@ -29,7 +29,7 @@ export default function Index() {
     variables: {
       where: {
         tokenId: tokenId as unknown as bigint,
-        collection: BANNYVERSE_COLLECTION_ID,
+        collection: LOOKS_COLLECTION_ID,
       },
     },
   });

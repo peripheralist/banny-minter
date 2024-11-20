@@ -1,9 +1,11 @@
-import { categoryIncompatibles } from "@/constants/incompatibles";
 import { CATEGORIES, Category } from "@/constants/category";
-import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
-import { EquippedTiers } from "@/model/tier";
-import { useEffect, useMemo, useState } from "react";
+import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
+import { EquipmentContext } from "@/contexts/equipmentContext";
+import { useAllTiers } from "@/hooks/queries/useAllTiers";
+import { useContext, useEffect, useState } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
+
+const excludedCategories: Category[] = ["world"];
 
 export default function TiersDemo({
   size,
@@ -12,103 +14,94 @@ export default function TiersDemo({
   size: number;
   pixelSize?: number;
 }) {
-  const [equippedTierId, setEquippedTierId] = useState<
-    Partial<Record<Category, number>>
-  >({});
-  const [category, setCategory] = useState<Category>("naked");
+  const { tiers } = useAllTiers();
 
-  const { tiers } = useCategorizedTiers();
+  if (!tiers) return null;
 
-  // exclude some categories
-  const filteredCategories = useMemo(
-    () => CATEGORIES.filter((c) => c !== "world"),
-    []
+  return (
+    <EquipmentContextProvider
+      availableTiers={tiers.filter(
+        (t) => !excludedCategories.includes(t.category)
+      )}
+    >
+      <_Demo size={size} pixelSize={pixelSize} />
+    </EquipmentContextProvider>
   );
+}
 
-  const equipped = useMemo(
-    () =>
-      filteredCategories.reduce((acc, category) => {
-        const equippedTierForCategory = tiers?.[category].find(
-          (t) => t.tierId === equippedTierId[category]
-        );
+function _Demo({
+  size,
+  pixelSize,
+}: {
+  size: number;
+  pixelSize: number | undefined;
+}) {
+  const {
+    equip,
+    equipped,
+    equippingCategory,
+    unequippingCategory,
+    availableTiers,
+  } = useContext(EquipmentContext);
 
-        return {
-          ...acc,
-          [category]: equippedTierForCategory,
-        };
-      }, {} as EquippedTiers),
-    [equippedTierId, tiers, filteredCategories]
-  );
+  const [_, setCategory] = useState<Category>("naked");
 
   useEffect(() => {
-    setEquippedTierId({
-      naked: Math.ceil(Math.random() * 4),
-    });
-  }, []);
+    // default equip body
+    equip?.naked(Math.ceil(Math.random() * 4));
+  }, [equip]);
 
   useEffect(() => {
     const id = setInterval(() => {
-      if (!tiers) return;
+      if (!availableTiers || !equip) return;
 
       let _category: Category;
 
-      setCategory((c) => {
-        let __category = c;
-        while (__category === c || !__category) {
-          __category =
-            filteredCategories[
-              Math.floor(Math.random() * filteredCategories.length)
-            ];
-        }
+      setCategory((prevCategory) => {
+        const availableCategories = CATEGORIES.filter(
+          (_c) => ![...excludedCategories, prevCategory].includes(_c)
+        );
 
-        _category = __category;
-        return __category;
+        _category =
+          availableCategories[
+            Math.floor(Math.random() * availableCategories.length)
+          ];
+
+        return _category;
       });
 
       if (!_category!) return;
 
-      const tiersOfCategory = tiers[_category];
+      const tiersOfCategory = availableTiers.filter(
+        (t) => t.category === _category
+      );
 
-      if (!tiersOfCategory.length) return;
+      let newTierId = equipped[_category]?.tierId;
 
-      setEquippedTierId((e) => {
-        let newTierIdOfCategory = e[_category];
-
-        if (newTierIdOfCategory && tiersOfCategory.length === 1) {
-          newTierIdOfCategory = undefined;
-        } else {
-          while (newTierIdOfCategory == e[_category]) {
-            newTierIdOfCategory =
-              tiersOfCategory[
-                Math.floor(Math.random() * tiersOfCategory.length)
-              ].tierId;
-          }
+      if (newTierId && tiersOfCategory.length === 1) {
+        // remove if only tier in category
+        newTierId = undefined;
+      } else {
+        while (newTierId === equipped[_category]) {
+          newTierId =
+            tiersOfCategory[Math.floor(Math.random() * tiersOfCategory.length)]
+              .tierId;
         }
+      }
 
-        return {
-          ...e,
-          [_category]: newTierIdOfCategory,
-          // Remove any incompatible tiers
-          ...categoryIncompatibles[_category]?.reduce(
-            (acc, incompatibleTier) => ({
-              ...acc,
-              [incompatibleTier]: undefined,
-            }),
-            {}
-          ),
-        };
-      });
+      equip[_category](newTierId);
     }, 3000);
 
     return () => clearInterval(id);
-  }, [tiers, filteredCategories]);
+  }, [availableTiers, equip, equipped]);
 
   return (
     <EquippedTiersPreview
       size={size}
       pixelSize={pixelSize}
       equipped={equipped}
-      equippingCategory={category}
+      equippingCategory={equippingCategory}
+      unequippingCategory={unequippingCategory}
     />
   );
 }

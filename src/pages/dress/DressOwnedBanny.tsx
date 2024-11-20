@@ -4,8 +4,7 @@ import { Category } from "@/constants/category";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { NfTsQuery } from "@/generated/graphql";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
-import { useOwnedCategorizedTiers } from "@/hooks/queries/useOwnedCategorizedTiers";
-import { Tiers } from "@/model/tier";
+import { useOwnedTiers } from "@/hooks/queries/useOwnedTiers";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
 
@@ -17,54 +16,56 @@ export default function DressOwnedBanny({
   const { address } = useAccount();
 
   const { tiers: ownedTiers, loading: tiersLoading } =
-    useOwnedCategorizedTiers(address);
+    useOwnedTiers(address);
 
   const { data: equippedTiers } = useBannyEquippedTiers(bannyNft);
 
   const formattedAvailableTiers = useMemo(() => {
     if (!ownedTiers || !equippedTiers) return;
 
-    // Format and add owned nft tiers (equipped items are unowned)
-    const formattedOwnedTiers = Object.entries(ownedTiers).reduce(
-      (acc, [category, tiersOfCategory]) => ({
-        ...acc,
-        [category]: tiersOfCategory
-          .filter(
-            ({ tier }) =>
-              equippedTiers[category as Category]?.tierId !== tier.tierId // only add tier if not equipped
-          )
-          .map((t) => {
-            const tokenId =
-              category === "naked" && bannyNft
-                ? bannyNft.tokenId
-                : t.nfts[0].tokenId; // override tier tokenId with tokenId of first NFT, or bannyNft
+    // Format owned nft tiers (equipped nfts are unowned)
+    const formattedOwnedTiers = ownedTiers
+      .filter(
+        ({ tier }) => equippedTiers[tier.category]?.tierId !== tier.tierId // only add tier if not equipped
+      )
+      .map(({ tier, nfts }) => {
+        const tokenId =
+          tier.category === "naked" && bannyNft
+            ? bannyNft.tokenId
+            : nfts[0].tokenId; // override tier tokenId with tokenId of first NFT, or bannyNft
 
-            return {
-              ...t.tier,
-              tokenId,
-              ownedSupply: t.nfts.length,
-            };
-          }),
-      }),
-      {} as Tiers
-    );
+        tier.tokenId = parseInt(tokenId.toString());
+        tier.ownedSupply = nfts.length;
 
-    // Format and add equipped nft tiers
-    const formattedEquippedTiers = Object.entries(equippedTiers).reduce(
-      (acc, [category, tier]) => ({
-        ...acc,
-        [category]: [
-          ...acc[category as Category],
+        return tier;
+      });
+
+    // Add equipped nft tiers
+    const allFormattedTiers = Object.values(equippedTiers).reduce(
+      (acc, tier) => {
+        if (acc.some((t) => t.tierId === tier.tierId)) {
+          return acc.map((t) =>
+            t.tierId === tier.tierId
+              ? {
+                  ...t,
+                  equipped: true,
+                }
+              : t
+          );
+        }
+
+        return [
+          ...acc,
           {
             ...tier,
             equipped: true,
           },
-        ],
-      }),
+        ];
+      },
       formattedOwnedTiers
     );
 
-    return { ...formattedOwnedTiers, ...formattedEquippedTiers };
+    return allFormattedTiers;
   }, [ownedTiers, bannyNft, equippedTiers]);
 
   const equippedTierIds = useMemo(() => {
@@ -84,7 +85,6 @@ export default function DressOwnedBanny({
       availableTiers={formattedAvailableTiers}
       defaultEquippedTierIds={equippedTierIds}
       defaultGroup="head"
-      displayStrategy="dress"
     >
       <DressingRoom />
     </EquipmentContextProvider>
