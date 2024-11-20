@@ -2,6 +2,7 @@ import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ITEM_DESCRIPTIONS } from "@/constants/itemDescriptions";
+import { SUPPORTED_CHAINS } from "@/constants/supportedChains";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
@@ -9,27 +10,17 @@ import { Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { formatEther } from "juice-sdk-core";
 import Link from "next/link";
-import { CSSProperties, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { isAddressEqual } from "viem";
 import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
 import FormattedAddress from "./FormattedAddress";
 import RoundedFrame from "./RoundedFrame";
 
-export default function NftTierInfo({
-  tier,
-  nft,
-  style,
-}: {
-  tier: Tier;
-  nft?: NFT;
-  style?: CSSProperties;
-}) {
+export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
   const { address } = useAccount();
 
   const { data: equippedTiers } = useBannyEquippedTiers(nft);
-
-  const decoded = decodeNFTInfo(nft?.tokenUri);
 
   const isOwned = useMemo(
     () =>
@@ -40,10 +31,6 @@ export default function NftTierInfo({
   );
 
   const { isSmallScreen } = useWindowSize();
-
-  const drop = useMemo(() => {
-    return DROPS.find((d) => d.tierIds.includes(tier.tierId));
-  }, [tier]);
 
   const NftInfoRow = useCallback(
     ({
@@ -78,30 +65,64 @@ export default function NftTierInfo({
     []
   );
 
-  return (
-    <div style={style}>
-      <h1>{tier.name}</h1>
+  const NameDesc = useCallback(() => {
+    return (
+      <div>
+        <h1>{tier.name}</h1>
 
-      <div style={{ display: "flex" }}>
-        <RoundedFrame
-          background={"black"}
-          containerStyle={{ width: "auto" }}
-          style={{ padding: "8px 12px", color: "white" }}
-        >
-          {formatEther(BigInt(tier.price))} ETH
-        </RoundedFrame>
+        <div style={{ display: "flex", marginTop: 12 }}>
+          <RoundedFrame
+            background={"black"}
+            containerStyle={{ width: "auto" }}
+            style={{ padding: "8px 12px", color: "white" }}
+          >
+            {formatEther(BigInt(tier.price))} ETH
+          </RoundedFrame>
+        </div>
+
+        <p style={{ marginTop: 12, maxWidth: 400 }}>
+          {ITEM_DESCRIPTIONS[tier.tierId]}
+        </p>
       </div>
+    );
+  }, [tier]);
 
-      <p style={{ margin: 0, marginTop: 12, maxWidth: 400 }}>
-        {ITEM_DESCRIPTIONS[tier.tierId]}
-      </p>
+  const Stock = useCallback(() => {
+    if (!tier.multiChainSupply) return null;
 
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          fontSize: FONT_SIZE.sm,
+          gap: 8,
+        }}
+      >
+        {SUPPORTED_CHAINS.map(({ id, name }) => (
+          <NftInfoRow
+            key={id}
+            label={name}
+            value={`${
+              tier.multiChainSupply?.[id]?.remaining.toString() ?? "--"
+            }/${tier.multiChainSupply?.[id]?.initial.toString() ?? "--"}`}
+          />
+        ))}
+      </div>
+    );
+  }, [tier.multiChainSupply, NftInfoRow]);
+
+  const Specs = useCallback(() => {
+    const decoded = decodeNFTInfo(nft?.tokenUri);
+
+    const drop = DROPS.find((d) => d.tierIds.includes(tier.tierId));
+
+    return (
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           gap: 8,
-          marginTop: 24,
           fontSize: FONT_SIZE.sm,
         }}
       >
@@ -116,12 +137,6 @@ export default function NftTierInfo({
             }
           />
         )}
-        <NftInfoRow
-          label="Supply"
-          value={`${tier.remainingSupply.toString()}/${tier.initialSupply.toString()} available ${
-            tier.remainingSupply === BigInt(0) ? "(Sold out)" : ""
-          }`}
-        />
         {drop && <NftInfoRow label="Drop" value={`#${drop.id} ${drop.name}`} />}
         <NftInfoRow
           label="Type"
@@ -129,7 +144,6 @@ export default function NftTierInfo({
             CATEGORY_GROUPS[n].includes(tier.category)
           )}
         />
-        <NftInfoRow label="Token category" value={tier.category} />
         {decoded?.wornByNakedBannyId ? (
           <NftInfoRow
             label="Equipped"
@@ -146,8 +160,63 @@ export default function NftTierInfo({
           />
         ) : null}
         {nft && <NftInfoRow label="Token Id" value={nft.tokenId.toString()} />}
-        {/* <NftInfoRow label="UPC" value={tier.tierId} /> */}
       </div>
+    );
+  }, [NftInfoRow, nft, equippedTiers, isOwned, tier]);
+
+  const Details = useCallback(() => {
+    if (tier.multiChainSupply) {
+      return (
+        <>
+          <div>
+            <div
+              style={{
+                fontSize: FONT_SIZE.sm,
+                textTransform: "uppercase",
+              }}
+            >
+              Available Stock
+            </div>
+            <RoundedFrame
+              borderColor={"#ffffff88"}
+              background={"#ffffff88"}
+              style={{ padding: 12 }}
+              containerStyle={{ marginTop: 4 }}
+            >
+              <Stock />
+            </RoundedFrame>
+          </div>
+
+          <div>
+            <div
+              style={{
+                fontSize: FONT_SIZE.sm,
+                textTransform: "uppercase",
+              }}
+            >
+              Specs
+            </div>
+            <RoundedFrame
+              borderColor={"#ffffff88"}
+              background={"#ffffff88"}
+              style={{ padding: 12 }}
+              containerStyle={{ marginTop: 4 }}
+            >
+              <Specs />
+            </RoundedFrame>
+          </div>
+        </>
+      );
+    }
+
+    return <Specs />;
+  }, [tier.multiChainSupply, Stock, Specs]);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
+      <NameDesc />
+
+      <Details />
 
       {nft && isOwned && nft?.category === 0 && (
         <Link

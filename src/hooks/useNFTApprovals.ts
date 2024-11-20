@@ -1,9 +1,8 @@
-import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
+import { BANNYVERSE_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { isAddressEqual } from "viem";
 import { config } from "../../config.wagmi";
-import { useResolverAddress } from "./useResolverAddress";
 
 /**
  * Check which tokenIds are approved for transfer to resolver contract
@@ -17,8 +16,6 @@ export function useNFTApprovals(tokenIds: bigint[]) {
       approved: boolean;
     }[]
   >();
-
-  const resolverAddress = useResolverAddress();
 
   useEffect(() => {
     async function getApprovals() {
@@ -58,7 +55,7 @@ export function useNFTApprovals(tokenIds: bigint[]) {
       setApprovals(
         tokenIds.map((tokenId, i) => ({
           tokenId,
-          approved: isAddressEqual(approvals[i], resolverAddress),
+          approved: isAddressEqual(approvals[i], RESOLVER_ADDRESS),
         }))
       );
 
@@ -66,7 +63,7 @@ export function useNFTApprovals(tokenIds: bigint[]) {
     }
 
     getApprovals();
-  }, [tokenIds, resolverAddress]);
+  }, [tokenIds]);
 
   return { approvals, loading };
 }

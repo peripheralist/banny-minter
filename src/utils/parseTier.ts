@@ -8,17 +8,16 @@ export const parseTier = (
 ): Tier | undefined => {
   const info = decodeNFTInfo(tier.resolvedUri);
 
-  return info
-    ? {
-        ...info,
-        tokenId: parseInt(info.tokenId),
-        name: info.productName,
-        category: categoryOfId[tier.category],
-        tierId: tier.tierId,
-        price: tier.price,
-        initialSupply: tier.initialSupply,
-        remainingSupply: tier.remainingSupply,
-        svg: tier.svg?.includes("<script") ? null : tier.svg, // crude injected script protection
-      }
-    : undefined;
+  return {
+    info,
+    image: info?.image,
+    tokenId: info?.tokenId ? parseInt(info.tokenId) : undefined,
+    name: info?.productName,
+    category: categoryOfId[tier.category],
+    tierId: tier.tierId,
+    price: tier.price,
+    initialSupply: tier.initialSupply,
+    remainingSupply: tier.remainingSupply,
+    svg: tier.svg?.includes("<script") ? null : tier.svg, // crude injected script protection
+  };
 };

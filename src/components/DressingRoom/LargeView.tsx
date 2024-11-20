@@ -62,20 +62,16 @@ export default function LargeView() {
           gap: 48,
         }}
       >
-        {CATEGORY_GROUP_NAMES.filter((g) => g !== "banny").map((g) => (
-          <CategoryGroupGrid
-            label
-            items={availableTiersByCategoryGroup}
-            key={g}
-            render={(t) => (
-              <OwnedTierButton key={t.tierId} tier={t} size={200} />
-            )}
-            gridStyle={{
-              gridTemplateColumns: `repeat(auto-fit, ${200}px)`,
-              gap: 16,
-            }}
-          />
-        ))}
+        <CategoryGroupGrid
+          label
+          emptyText="None owned"
+          items={availableTiersByCategoryGroup}
+          render={(t) => <OwnedTierButton key={t.tierId} tier={t} size={200} />}
+          gridStyle={{
+            gridTemplateColumns: `repeat(auto-fit, ${200}px)`,
+            gap: 16,
+          }}
+        />
       </RoundedFrame>
 
       <div

@@ -1,17 +1,16 @@
 import { categoryOfId } from "@/constants/category";
+import { RESOLVER_ADDRESS } from "@/constants/nfts";
 import { NfTsQuery } from "@/generated/graphql";
 import { EquippedTiers, Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { parseTier } from "@/utils/parseTier";
 import { useMemo } from "react";
-import { useResolverAddress } from "../useResolverAddress";
 import { useNftsOf } from "./useNftsOf";
 
 export function useBannyEquippedTiers(
   bannyNft: NfTsQuery["nfts"][number] | undefined
 ) {
-  const resolverAddress = useResolverAddress();
-  const allWornNfts = useNftsOf(resolverAddress);
+  const allWornNfts = useNftsOf(RESOLVER_ADDRESS);
 
   const data = useMemo(() => {
     if (!allWornNfts.data || !bannyNft) return;

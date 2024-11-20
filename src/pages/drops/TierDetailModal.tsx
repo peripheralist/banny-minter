@@ -1,14 +1,12 @@
-import ButtonPad from "@/components/shared/ButtonPad";
 import Modal from "@/components/shared/Modal";
 import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
-import { COLORS } from "@/constants/colors";
 import { ShopContext } from "@/contexts/shopContext";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Tier } from "@/model/tier";
+import { formatEther } from "juice-sdk-core";
 import { useContext, useMemo } from "react";
-import { formatEther } from "viem";
 
 export default function TierDetailModal({
   tier,
@@ -32,16 +30,10 @@ export default function TierDetailModal({
     <Modal
       open
       onClose={onClose}
-      // footer={
-      //   <ButtonPad
-      //     fillFg={COLORS.pink}
-      //     style={{ padding: 12, color: "white" }}
-      //     onClick={() => addItem?.(tier)}
-      //     shadow="sm"
-      //   >
-      //     Add to bag Ξ{formatEther(tier.price)}
-      //   </ButtonPad>
-      // }
+      action={{
+        onClick: () => addItem?.(tier),
+        text: `Add to bag Ξ${formatEther(tier.price)}`,
+      }}
     >
       <div
         style={{
@@ -56,19 +48,7 @@ export default function TierDetailModal({
           </RoundedFrame>
         </div>
 
-        <div>
-          <NftTierInfo tier={tier} />
-
-          <ButtonPad
-            fillFg={COLORS.pink}
-            containerStyle={{ marginTop: 36 }}
-            style={{ padding: 12, color: "white" }}
-            onClick={() => addItem?.(tier)}
-            shadow="sm"
-          >
-            Add to bag Ξ{formatEther(tier.price)}
-          </ButtonPad>
-        </div>
+        <NftTierInfo tier={tier} />
       </div>
     </Modal>
   );

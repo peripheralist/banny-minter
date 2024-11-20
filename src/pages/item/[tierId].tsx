@@ -1,19 +1,19 @@
-import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import ButtonPad from "@/components/shared/ButtonPad";
 import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { ShopContext } from "@/contexts/shopContext";
 import { useNftTiersQuery } from "@/generated/graphql";
 import { useSingleImageSize } from "@/hooks/useSingleImageSize";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { parseTier } from "@/utils/parseTier";
 import { formatEther } from "juice-sdk-core";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
-import { useWindowSize } from "@/hooks/useWindowSize";
 
 export default function Index() {
   const { addItem } = useContext(ShopContext);
@@ -24,7 +24,7 @@ export default function Index() {
 
   const _tierId = !tierId || isNaN(parseInt(tierId)) ? 0 : parseInt(tierId);
 
-  const tiers = useNftTiersQuery({
+  const { data: tiers } = useNftTiersQuery({
     variables: {
       where: {
         collection: BANNYVERSE_COLLECTION_ID,
@@ -33,7 +33,7 @@ export default function Index() {
   });
 
   const tier = useMemo(() => {
-    const _tier = tiers.data?.nfttiers.find((t) => t.tierId === _tierId);
+    const _tier = tiers?.nfttiers.find((t) => t.tierId === _tierId);
     if (_tier) return parseTier(_tier);
   }, [tiers, _tierId]);
 
@@ -49,7 +49,7 @@ export default function Index() {
     <ToolbarBagView
       frame
       header={`ITEM: ${tier?.name ?? "--"}`}
-      backButton={drop ? { href: `/drop/${drop.id}` } : undefined}
+      backButton={drop ? { href: `/drops/${drop.id}` } : undefined}
     >
       <div
         style={{

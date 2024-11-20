@@ -8,11 +8,13 @@ export function CategoryGroupGrid<I>({
   items,
   render,
   label,
+  emptyText,
   gridStyle,
 }: {
   items: Record<CategoryGroup, I[]> | undefined;
   render: (i: I) => JSX.Element;
   label?: boolean;
+  emptyText?: string;
   gridStyle?: CSSProperties;
 }) {
   const { isSmallScreen } = useWindowSize();
@@ -30,7 +32,6 @@ export function CategoryGroupGrid<I>({
               position: "sticky",
               top: isSmallScreen ? 8 : 0,
               textTransform: "uppercase",
-              margin: 0,
               zIndex: 2,
             }}
           >
@@ -75,7 +76,9 @@ export function CategoryGroupGrid<I>({
             {itemsOfGroup.map(render)}
           </div>
         ) : (
-          <div style={{ columnSpan: "all" }}>None</div>
+          <div style={{ columnSpan: "all", padding: 12 }}>
+            {emptyText ?? "None"}
+          </div>
         )}
       </div>
     );

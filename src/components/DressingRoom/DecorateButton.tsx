@@ -142,7 +142,7 @@ function ApproveNFTsModal({
   if (!nftTiers) return null;
 
   return (
-    <Modal open onClose={onClose}>
+    <Modal open onClose={onClose} size="sm">
       <div
         style={{
           display: "flex",
@@ -240,7 +240,7 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
     [isSuccess, onClose, router]
   );
 
-  const { content, footer } = useMemo(() => {
+  const { content, action } = useMemo(() => {
     if (isSuccess) {
       return {
         content: (
@@ -272,18 +272,10 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
     }
 
     return {
-      footer: (
-        <ButtonPad
-          fillFg={COLORS.pink}
-          style={{ padding: 12, color: "white" }}
-          onClick={decorate}
-        >
-          Dress
-        </ButtonPad>
-      ),
+      action: { onClick: decorate, text: "Dress" },
       content: (
         <>
-          <h1 style={{ margin: 0 }}>New fit?</h1>
+          <h1>New fit?</h1>
 
           <p>
             When dressing a Banny, outfits & backgrounds will be transferred to
@@ -330,7 +322,7 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
   }, [decorate, hash, isPending, isSuccess, equipped]);
 
   return (
-    <Modal open onClose={_onClose} footer={footer}>
+    <Modal open onClose={_onClose} action={action} size="sm">
       {content}
     </Modal>
   );

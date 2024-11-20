@@ -14,7 +14,7 @@ function DropLink({ drop }: { drop: Drop }) {
 
   return (
     <Link
-      href={`/drop/${drop.id}`}
+      href={`/drops/${drop.id}`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -35,14 +35,13 @@ function DropLink({ drop }: { drop: Drop }) {
               alignItems: "baseline",
               justifyContent: "space-between",
               padding: 4,
-              margin: 0,
               color: COLORS.bananaLite,
               fontSize: FONT_SIZE.md,
               textTransform: "uppercase",
             }}
           >
             <div>
-              Drop #{drop.id.toString().padStart(3, "0")} | {drop.itemCount}{" "}
+              Drop #{drop.id.toString().padStart(2, "0")} | {drop.itemCount}{" "}
               items
             </div>
 
@@ -70,21 +69,13 @@ function DropLink({ drop }: { drop: Drop }) {
           <h1
             style={{
               boxSizing: "border-box",
-              margin: 0,
               fontSize: FONT_SIZE["3xl"],
             }}
           >
             {drop.name}
           </h1>
 
-          <p
-            style={{
-              margin: 0,
-              fontSize: FONT_SIZE.sm,
-            }}
-          >
-            {drop.summary}
-          </p>
+          <p style={{ fontSize: FONT_SIZE.sm }}>{drop.summary}</p>
         </div>
       </ButtonPad>
     </Link>

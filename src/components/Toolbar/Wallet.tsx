@@ -18,7 +18,7 @@ export default function Wallet() {
   return address ? (
     <div style={{}}>
       <div>
-        <h4 style={{ margin: 0, textAlign: "center" }}>Wallet</h4>
+        <h4 style={{ textAlign: "center" }}>Wallet</h4>
 
         <RoundedFrame
           background={COLORS.bananaLite}

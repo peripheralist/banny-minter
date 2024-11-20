@@ -135,7 +135,6 @@ export default function ToolbarBagView({
               style={{
                 textTransform: "uppercase",
                 padding: "4px 8px",
-                margin: 0,
                 color: COLORS.banana,
               }}
             >
@@ -216,7 +215,6 @@ function SmallScreenView({
       <h4
         style={{
           textTransform: "uppercase",
-          margin: 0,
           color: COLORS.banana,
           background: "black",
           padding: 12,

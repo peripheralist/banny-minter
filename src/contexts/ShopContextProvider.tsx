@@ -101,7 +101,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
       // Sum price of all selected assets
       bag.reduce(
         (acc, { tier, quantity }) =>
-          tier?.price ? acc + tier.price * BigInt(quantity) : acc,
+          tier.price ? acc + tier.price * BigInt(quantity) : acc,
         BigInt(0)
       ),
     [bag]

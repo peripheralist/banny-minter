@@ -1,16 +1,18 @@
 import { COLORS } from "@/constants/colors";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import ButtonPad from "./ButtonPad";
 import RoundedFrame from "./RoundedFrame";
-import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 
 export default function Modal({
   open,
-  footer,
+  action,
   onClose,
   children,
+  size,
 }: PropsWithChildren<{
-  footer?: JSX.Element;
+  size?: "sm";
+  action?: { onClick: VoidFunction; text: string };
   open?: boolean;
   onClose?: VoidFunction;
 }>) {
@@ -56,6 +58,7 @@ export default function Modal({
           containerStyle={{ height: "auto" }}
           style={{
             minWidth: 320,
+            width: size === "sm" ? 640 : undefined,
             maxWidth: "calc(100vw - 144px)",
             maxHeight: `calc(100vh - ${footerHeight + 80}px)`,
             padding: 48,
@@ -75,7 +78,19 @@ export default function Modal({
             zIndex: 999,
           }}
         >
-          {footer}
+          {action ? (
+            <ButtonPad
+              onClick={action.onClick}
+              fillFg={COLORS.pink}
+              style={{
+                padding: "12px 16px",
+                color: "white",
+              }}
+              shadow="sm"
+            >
+              {action.text}
+            </ButtonPad>
+          ) : null}
 
           <ButtonPad
             onClick={_onClose}

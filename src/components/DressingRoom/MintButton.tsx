@@ -37,25 +37,21 @@ export default function MintButton() {
       <Modal
         open={isConfirming}
         onClose={() => setIsConfirming(false)}
-        footer={
-          <ButtonPad
-            onClick={mint}
-            fillFg={COLORS.pink}
-            style={{
-              padding: "12px 16px",
-              color: "white",
-              fontSize: FONT_SIZE.lg,
-            }}
-          >
-            Mint ({formatEther(totalEquippedPrice)} ETH)
-          </ButtonPad>
+        size="sm"
+        action={
+          isPending
+            ? undefined
+            : {
+                onClick: mint,
+                text: `Mint (${formatEther(totalEquippedPrice)} ETH)`,
+              }
         }
       >
         {isPending ? (
           <TransactionPending hash={hash} text="Minting..." />
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <h1 style={{ margin: 0 }}>Mint NFTs</h1>
+            <h1>Mint NFTs</h1>
 
             <BagItems />
 
@@ -88,7 +84,7 @@ export default function MintButton() {
             alignItems: "center",
           }}
         >
-          <h1 style={{ margin: 0 }}>Minted!</h1>
+          <h1>Minted!</h1>
 
           <BagItems />
 

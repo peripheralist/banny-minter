@@ -1,4 +1,6 @@
 import { Category } from "@/constants/category";
+import { ChainId } from "@/hooks/useChain";
+import { NFTInfo } from "./nftInfo";
 
 export type Tier = {
   category: Category;
@@ -9,6 +11,10 @@ export type Tier = {
   price: bigint;
   initialSupply: bigint;
   remainingSupply: bigint;
+  multiChainSupply?: Record<ChainId, { initial: bigint; remaining: bigint }> & {
+    total: bigint;
+  };
+  info?: NFTInfo
 
   // Below only if NFT
   ownedSupply?: number;

@@ -1,13 +1,10 @@
-import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
-import { useResolverAddress } from "../useResolverAddress";
+import { BANNYVERSE_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
 import {
   WriteContractHandlerOptions,
   useWriteContractHandler,
 } from "./useWriteContractHandler";
 
 export function useApprove(options?: WriteContractHandlerOptions) {
-  const resolverAddress = useResolverAddress();
-
   const { write: approve, ...data } = useWriteContractHandler(
     {
       address: BANNYVERSE_COLLECTION_ID,
@@ -32,7 +29,7 @@ export function useApprove(options?: WriteContractHandlerOptions) {
         },
       ],
       functionName: "approve",
-      args: ({ tokenId }: { tokenId: bigint }) => [resolverAddress, tokenId],
+      args: ({ tokenId }: { tokenId: bigint }) => [RESOLVER_ADDRESS, tokenId],
     },
     options
   );

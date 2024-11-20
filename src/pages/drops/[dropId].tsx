@@ -12,7 +12,7 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Tier } from "@/model/tier";
-import TierShopButton from "@/pages/drop/TierShopButton";
+import TierShopButton from "@/pages/drops/TierShopButton";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
 import TierDetailModal from "./TierDetailModal";
@@ -81,10 +81,18 @@ export default function Drop() {
                 paddingTop: 16,
               }),
         }}
-        header={`Drop #${drop?.id.toString().padStart(3, "0")} | ${drop?.name}`}
+        header={`Drop #${drop?.id.toString().padStart(2, "0")} | ${drop?.name}`}
         backButton={{ href: "/drops" }}
       >
-        <div style={{ marginBottom: 80 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 24,
+            marginTop: 80,
+            marginBottom: 80,
+          }}
+        >
           <h1
             style={{
               fontSize: isSmallScreen ? FONT_SIZE["3xl"] : FONT_SIZE["4xl"],

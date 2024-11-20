@@ -11,3 +11,10 @@ export const BANNYVERSE_PROJECT_ID =
 if (!BANNYVERSE_PROJECT_ID) {
   throw new Error("Missing Bannyverse projectId");
 }
+
+export const RESOLVER_ADDRESS = process.env
+  .NEXT_PUBLIC_RESOLVER_ADDRESS! as `0x${string}`;
+
+if (!RESOLVER_ADDRESS) {
+  throw new Error("Missing resolver address");
+}

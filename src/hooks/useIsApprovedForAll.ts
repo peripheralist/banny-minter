@@ -1,15 +1,12 @@
-import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
+import { BANNYVERSE_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { config } from "../../config.wagmi";
-import { useResolverAddress } from "./useResolverAddress";
 
 export function useIsApprovedForAll(wallet: `0x${string}` | undefined) {
   const [loading, setLoading] = useState(false);
 
   const [isApprovedForAll, setIsApprovedForAll] = useState<boolean>();
-
-  const resolverAddress = useResolverAddress();
 
   useEffect(() => {
     async function getIsApprovedForAll() {
@@ -46,7 +43,7 @@ export function useIsApprovedForAll(wallet: `0x${string}` | undefined) {
         ],
         address: BANNYVERSE_COLLECTION_ID,
         functionName: "isApprovedForAll",
-        args: [wallet, resolverAddress],
+        args: [wallet, RESOLVER_ADDRESS],
       });
 
       setIsApprovedForAll(result);
@@ -55,7 +52,7 @@ export function useIsApprovedForAll(wallet: `0x${string}` | undefined) {
     }
 
     getIsApprovedForAll();
-  }, [wallet, resolverAddress]);
+  }, [wallet]);
 
   return { isApprovedForAll, loading };
 }

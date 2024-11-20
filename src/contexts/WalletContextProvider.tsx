@@ -24,7 +24,7 @@ export default function WalletContextProvider({ children }: PropsWithChildren) {
       {children}
 
       <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-        <h2 style={{ margin: 0, marginBottom: 24 }}>Select wallet</h2>
+        <h2 style={{ marginBottom: 24 }}>Select wallet</h2>
 
         <div
           style={{

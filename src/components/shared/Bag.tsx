@@ -32,7 +32,6 @@ export default function Bag({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "baseline",
-          margin: 0,
           padding: 12,
           paddingBottom: 0,
           paddingTop: 8,
@@ -81,7 +80,6 @@ export default function Bag({
         style={{
           display: "flex",
           justifyContent: "space-between",
-          margin: 0,
           padding: 48,
           transform: `rotate(90deg)`,
           whiteSpace: "pre",

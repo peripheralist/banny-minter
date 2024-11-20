@@ -2,7 +2,8 @@ import { useIsHover } from "@/hooks/useIsHover";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import Image from "next/image";
 import Link from "next/link";
-import { CSSProperties, PropsWithChildren } from "react";
+import { useRouter } from "next/router";
+import { CSSProperties, PropsWithChildren, useMemo } from "react";
 import { useAccount } from "wagmi";
 import Loading from "../shared/Loading";
 import RoundedFrame from "../shared/RoundedFrame";
@@ -42,8 +43,8 @@ export default function Index() {
           gap: 8,
         }}
       >
-        <_Link frame href={"/drops"}>
-          Drops
+        <_Link frame href={"/drops/1"}>
+          Drop #01
         </_Link>
 
         <_Link frame href={"/catalog"}>
@@ -78,6 +79,13 @@ function _Link({
 }>) {
   const { isHover, ...hoverProps } = useIsHover();
 
+  const router = useRouter();
+
+  const active = useMemo(
+    () => router.asPath === props.href,
+    [router.asPath, props.href]
+  );
+
   return (
     <Link
       {...hoverProps}
@@ -85,12 +93,13 @@ function _Link({
       style={{
         position: "relative",
         padding: 0,
+        pointerEvents: active ? "none" : undefined,
         ...props.style,
       }}
     >
       {frame ? (
         <RoundedFrame
-          background={isHover ? "white" : undefined}
+          background={isHover || active ? "white" : undefined}
           style={{
             color: "black",
             fontWeight: "bold",

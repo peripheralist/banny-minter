@@ -1,11 +1,10 @@
 import DressingRoom from "@/components/DressingRoom";
-import DecorateButton from "@/components/DressingRoom/DecorateButton";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import { Category } from "@/constants/category";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { NfTsQuery } from "@/generated/graphql";
-import { useOwnedCategorizedTiers } from "@/hooks/queries/useOwnedCategorizedTiers";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
+import { useOwnedCategorizedTiers } from "@/hooks/queries/useOwnedCategorizedTiers";
 import { Tiers } from "@/model/tier";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
@@ -72,7 +71,7 @@ export default function DressOwnedBanny({
     if (!equippedTiers) return {};
 
     return Object.entries(equippedTiers).reduce(
-      (acc, [category, tier]) => ({ ...acc, [category]: tier?.tierId }),
+      (acc, [category, tier]) => ({ ...acc, [category]: tier.tierId }),
       {} as Partial<Record<Category, number>>
     );
   }, [equippedTiers]);
@@ -87,7 +86,7 @@ export default function DressOwnedBanny({
       defaultGroup="head"
       displayStrategy="dress"
     >
-      <DressingRoom button={<DecorateButton />} />
+      <DressingRoom />
     </EquipmentContextProvider>
   ) : (
     <FullscreenLoading />

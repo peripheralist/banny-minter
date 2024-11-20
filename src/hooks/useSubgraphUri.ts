@@ -10,7 +10,7 @@ export const useSubgraphUri = () => {
 
   const uri = useMemo(() => {
     if (isBrowser()) {
-      return formatSubgraphUri(chainName.toLowerCase());
+      return formatSubgraphUri(chainName);
     } else {
       if (!process.env.SUBGRAPH_URL) {
         throw new Error("SUBGRAPH_URL environment variable not defined");

@@ -1,12 +1,9 @@
 import TiersDemo from "@/components/TiersDemo";
 import ButtonPad from "@/components/shared/ButtonPad";
 import CloudSky from "@/components/shared/CloudSky";
-import Loading from "@/components/shared/Loading";
-import LoadingBanny from "@/components/shared/LoadingBanny";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { useCategorizedTiers } from "@/hooks/queries/useCategorizedTiers";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import Head from "next/head";
 import Image from "next/image";
@@ -17,8 +14,6 @@ import { useAccount } from "wagmi";
 const SAND_COLOR = "#EFD27C";
 
 export default function Home() {
-  const { loading } = useCategorizedTiers();
-
   const { measuredRef, height: heroHeight } = useMeasuredRef();
 
   const NumberedText = useCallback(
@@ -53,7 +48,7 @@ export default function Home() {
           style={{
             position: "absolute",
             inset: 0,
-            bottom: "66%",
+            bottom: "69%",
             top: "6%",
           }}
         >
@@ -66,7 +61,7 @@ export default function Home() {
             bottom: 0,
             right: 0,
             left: 0,
-            height: "52.5%",
+            height: "55.5%",
             background: SAND_COLOR,
           }}
         />
@@ -78,6 +73,7 @@ export default function Home() {
             display: "flex",
             justifyContent: "space-between",
             width: "100%",
+            marginTop: "-3%",
           }}
         >
           <div style={{ position: "relative", width: "50%" }}>
@@ -121,15 +117,11 @@ export default function Home() {
             justifyContent: "center",
           }}
         >
-          {loading ? (
-            <Loading />
-          ) : (
-            <TiersDemo size={heroHeight} pixelSize={8} />
-          )}
+          <TiersDemo size={heroHeight} pixelSize={8} />
         </div>
       </>
     ),
-    [heroHeight, loading]
+    [heroHeight]
   );
 
   const LogoButtonsInfo = useCallback(
@@ -183,7 +175,7 @@ export default function Home() {
             gap: 12,
           }}
         >
-          <Link href={`/drop/${DROPS[0].id}`}>
+          <Link href={`/drops/${DROPS[0].id}`}>
             <ButtonPad
               fillFg={COLORS.pink}
               style={{

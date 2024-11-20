@@ -1,40 +1,99 @@
 import { Category } from "@/constants/category";
 import { BANNYVERSE_COLLECTION_ID } from "@/constants/nfts";
 import { SUPPORTED_CHAINS } from "@/constants/supportedChains";
-import { NftTiersDocument, useAllNftTiersQuery } from "@/generated/graphql";
+import {
+  NftTiersDocument,
+  NftTiersQuery,
+  useAllNftTiersQuery,
+} from "@/generated/graphql";
 import { Tier, Tiers } from "@/model/tier";
 import { createApolloClient } from "@/utils/createApolloClient";
 import { parseTier } from "@/utils/parseTier";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { ChainId } from "../useChain";
 
 /**
  * @returns All NFT tiers mapped to their respective category
  */
 export function useCategorizedTiers() {
+  const [multichainTiers, setMultichainTiers] =
+    useState<Record<number, Tier["multiChainSupply"]>>();
+
   useEffect(() => {
     async function get() {
-      const promises = [];
+      Promise.allSettled(
+        SUPPORTED_CHAINS.map((chain) => {
+          const client = createApolloClient(chain);
 
-      for (const { name } of SUPPORTED_CHAINS) {
-        const client = createApolloClient(name);
-
-        promises.push(
-          client.query({
+          return client.query<NftTiersQuery>({
             query: NftTiersDocument,
             variables: {
-              collection: BANNYVERSE_COLLECTION_ID,
+              where: {
+                collection: BANNYVERSE_COLLECTION_ID,
+              },
             },
-          })
-        );
-      }
+            fetchPolicy: "no-cache",
+          });
+        })
+      ).then((promises) => {
+        const tiersByChain: Partial<Record<ChainId, Tier[]>> = {};
 
-      Promise.all(promises).then((_promises) =>
-        _promises.map((p, i) => ({
-          chain: SUPPORTED_CHAINS[i].name.toLowerCase(),
-          tiers: p,
-        }))
-      );
+        promises.forEach((p, i) => {
+          if (p.status === "rejected") {
+            console.log("asdf rejected", p);
+
+            return;
+          }
+
+          const chainId = SUPPORTED_CHAINS[i].id;
+
+          tiersByChain[chainId] = p.value.data.nfttiers
+            .map(parseTier)
+            .filter((t) => !!t) as Tier[];
+        });
+
+        const supplies = Object.entries(tiersByChain).reduce(
+          (acc, [chainId, tiers]) => {
+            const tierSupplies = tiers.reduce(
+              (_acc, { tierId, initialSupply, remainingSupply }) => {
+                const _chainId = chainId as unknown as ChainId;
+                // console.log("asdf chainId", _chainId, tierId, remainingSupply);
+
+                const existingSupplies = acc?.[tierId];
+
+                const total =
+                  (existingSupplies?.total ?? BigInt(0)) +
+                  initialSupply +
+                  remainingSupply;
+
+                return {
+                  ..._acc,
+                  [tierId]: {
+                    ...(existingSupplies ?? {}),
+                    [_chainId]: {
+                      initial: initialSupply,
+                      remaining: remainingSupply,
+                    },
+                    total,
+                  } as Tier["multiChainSupply"],
+                };
+              },
+              {} as Record<number, Tier["multiChainSupply"]>
+            );
+
+            return {
+              ...acc,
+              ...(tierSupplies ?? {}),
+            };
+          },
+          {} as Record<number, Tier["multiChainSupply"]>
+        );
+
+        setMultichainTiers(supplies);
+      });
     }
+
+    get();
   }, []);
 
   const { data: tiers, ...props } = useAllNftTiersQuery({
@@ -58,7 +117,11 @@ export function useCategorizedTiers() {
     () =>
       tiers
         ? Object.entries(tiers).reduce((acc, [k, tiers]) => {
-            const _tiers = tiers.map(parseTier);
+            const _tiers = tiers.map((t) => ({
+              ...parseTier(t),
+              multiChainSupply: multichainTiers?.[t.tierId],
+            }));
+
             _tiers.forEach((t) => {
               const svg = t?.svg;
               if (!svg) return;
@@ -78,7 +141,7 @@ export function useCategorizedTiers() {
             };
           }, {} as Record<Category, Tier[]>)
         : undefined,
-    [tiers]
+    [tiers, multichainTiers]
   );
 
   return {

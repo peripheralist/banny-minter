@@ -1,6 +1,6 @@
+import { RESOLVER_ADDRESS } from "@/constants/nfts";
 import { Tier } from "@/model/tier";
 import { useTiered721Hook } from "../readContract/useTiered721HookOf";
-import { useResolverAddress } from "../useResolverAddress";
 import {
   WriteContractHandlerOptions,
   useWriteContractHandler,
@@ -38,14 +38,12 @@ const decorateBannyWithAbi = [
 ];
 
 export function useDecorateBanny(options?: WriteContractHandlerOptions) {
-  const resolverAddress = useResolverAddress();
-
   const { data: jb721DataHookQueryAddress } = useTiered721Hook();
 
   const { write: decorateBanny, ...data } = useWriteContractHandler(
     {
       abi: decorateBannyWithAbi,
-      address: resolverAddress,
+      address: RESOLVER_ADDRESS,
       functionName: "decorateBannyWith",
       args: ({
         nakedBanny,
