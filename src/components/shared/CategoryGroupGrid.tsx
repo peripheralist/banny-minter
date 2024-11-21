@@ -49,7 +49,7 @@ export function CategoryGroupGrid<I extends { category: Category }>({
           <div
             style={{
               position: "sticky",
-              top: isSmallScreen ? 8 : 0,
+              top: isSmallScreen ? 48 : 0,
               textTransform: "uppercase",
               zIndex: 2,
             }}
@@ -71,7 +71,6 @@ export function CategoryGroupGrid<I extends { category: Category }>({
                 background={"black"}
                 style={{
                   padding: "12px 16px",
-                  height: 40,
                   color: COLORS.bananaLite,
                 }}
               >

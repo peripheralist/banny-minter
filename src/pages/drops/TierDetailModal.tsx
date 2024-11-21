@@ -17,11 +17,11 @@ export default function TierDetailModal({
 }) {
   const { addItem } = useContext(ShopContext);
 
-  const { width, height } = useWindowSize();
+  const { width } = useWindowSize();
 
   const imgSize = useMemo(
-    () => Math.max(Math.min(width, height) * 0.4, 180),
-    [width, height]
+    () => Math.min(Math.max(width - 144, 180), 360),
+    [width]
   );
 
   if (!tier) return null;
@@ -39,6 +39,7 @@ export default function TierDetailModal({
         style={{
           display: "flex",
           alignItems: "flex-start",
+          flexWrap: "wrap",
           gap: 36,
         }}
       >

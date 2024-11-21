@@ -5,6 +5,7 @@ import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,6 +17,8 @@ const SAND_COLOR = "#EFD27C";
 
 export default function Home() {
   const { measuredRef, height: heroHeight } = useMeasuredRef();
+
+  const { isSmallScreen } = useWindowSize();
 
   const NumberedText = useCallback(
     ({ n, children }: PropsWithChildren<{ n: number }>) => (
@@ -174,6 +177,9 @@ export default function Home() {
             display: "flex",
             flexWrap: "wrap",
             gap: 12,
+            ...(isSmallScreen
+              ? { flexDirection: "column", width: "100%" }
+              : {}),
           }}
         >
           <Link href={`/drops/${DROPS[0].id}`}>
@@ -218,7 +224,7 @@ export default function Home() {
         </div>
       </div>
     ),
-    [NumberedText]
+    [NumberedText, isSmallScreen]
   );
 
   return (

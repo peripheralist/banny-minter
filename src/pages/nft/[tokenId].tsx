@@ -13,9 +13,12 @@ import { parseTier } from "@/utils/parseTier";
 import { isArray } from "@apollo/client/utilities";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 export default function Index() {
   const router = useRouter();
+
+  const { isSmallScreen } = useWindowSize();
 
   const tokenId = useMemo(() => {
     const _tokenId = router.query.tokenId;
@@ -42,27 +45,26 @@ export default function Index() {
 
   const NftImage = useCallback(() => {
     if (nft?.category === CATEGORY_IDS["naked"]) {
-      return <DressedBannyNftImage nft={nft} size={size} />;
+      return <DressedBannyNftImage nft={nft} size={size - 8} />;
     }
 
     if (!nft?.tier) {
       return <Fuzz width={size} height={size} pixelSize={8} fill="#808080" />;
     }
 
-    return <TierImage tier={parseTier(nft?.tier)} size={size} />;
+    return <TierImage tier={parseTier(nft?.tier)} size={size - 8} />;
   }, [nft, size]);
 
   return (
-    <ToolbarBagView frame header={`Token: ${tier?.name ?? "--"} #${tokenId}`}>
+    <ToolbarBagView frame header={`NFT: ${tier?.name ?? "--"} #${tokenId}`}>
       <div
         style={{
           display: "flex",
           alignItems: "flex-start",
           flexWrap: "wrap",
-          padding: 24,
-          paddingTop: 20,
-          gap: 24,
+          padding: isSmallScreen ? 12 : 24,
           paddingBottom: 80,
+          gap: 24,
         }}
       >
         <div>

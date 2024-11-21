@@ -44,15 +44,15 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
         style={{
           display: "flex",
           margin: "0 auto",
-          width: "100%",
+          boxSizing: "border-box",
           gap: 24,
-          minWidth: 400,
+          width: "100%",
         }}
       >
         <div
           style={{
             fontWeight: "bolder",
-            minWidth: 180,
+            minWidth: 144,
             textTransform: "uppercase",
             opacity: 0.5,
           }}
@@ -67,25 +67,33 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
 
   const NameDesc = useCallback(() => {
     return (
-      <div>
-        <h1>{tier.name}</h1>
+      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <h1 style={{ marginTop: 24 }}>{tier.name}</h1>
 
-        <div style={{ display: "flex", marginTop: 12 }}>
+        <div style={{ display: "flex" }}>
           <RoundedFrame
             background={"black"}
             containerStyle={{ width: "auto" }}
-            style={{ padding: "8px 12px", color: "white" }}
+            style={{
+              padding: "8px 12px",
+              color: "white",
+              fontSize: FONT_SIZE.sm,
+            }}
           >
             {formatEther(BigInt(tier.price))} ETH
           </RoundedFrame>
         </div>
 
-        <p style={{ marginTop: 12, maxWidth: 400 }}>
+        <p
+          style={{
+            maxWidth: isSmallScreen ? "calc(100vw - 48px)" : 400,
+          }}
+        >
           {ITEM_DESCRIPTIONS[tier.tierId]}
         </p>
       </div>
     );
-  }, [tier]);
+  }, [tier, isSmallScreen]);
 
   const Stock = useCallback(() => {
     if (!tier.multiChainSupply) return null;

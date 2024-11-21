@@ -5,8 +5,8 @@ import { CATEGORY_IDS } from "@/constants/category";
 import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import Link from "next/link";
-
-const IMG_SIZE = 320;
+import { useMemo } from "react";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 export default function Catalog() {
   const { data: bannys } = useNfTsQuery({
@@ -18,15 +18,23 @@ export default function Catalog() {
     },
   });
 
+  const { width, isSmallScreen } = useWindowSize();
+
+  const imgSize = useMemo(() => {
+    return isSmallScreen ? width - 40 : 320;
+  }, [isSmallScreen, width]);
+
   return (
     <ToolbarBagView
+      dynamicToolbar
       header={`CATALOG | ${bannys?.nfts.length ?? "--"} minted bannys`}
     >
       <div
         style={{
           display: "grid",
           paddingTop: 20,
-          gridTemplateColumns: `repeat(auto-fit, ${IMG_SIZE}px)`,
+          gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
+          justifyContent: isSmallScreen ? "center" : undefined,
           gap: 16,
         }}
       >
@@ -40,12 +48,9 @@ export default function Catalog() {
               background={"white"}
               style={{
                 pointerEvents: "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
               }}
             >
-              <DressedBannyNftImage nft={nft} size={IMG_SIZE - 8} />
+              <DressedBannyNftImage nft={nft} size={imgSize - 8} />
             </RoundedFrame>
           </Link>
         ))}

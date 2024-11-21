@@ -35,7 +35,7 @@ export default function RoundedFrame({
       <PixelCorner
         fillInner={background}
         fillBorder={_borderColor}
-        style={_style}
+        style={{ ..._style, zIndex: 1 }}
       />
     ),
     [background, _borderColor]
@@ -57,17 +57,17 @@ export default function RoundedFrame({
           alignItems: "center",
           justifyContent: "center",
           height: "100%",
-          // width: "100%",
         }}
       >
         <div
           style={{
-            width: "calc(100% - 24px)",
             position: "absolute",
-            margin: "0 auto",
-            background,
-            bottom: 12,
+            left: borderSize,
+            right: borderSize,
+            bottom: borderSize,
             top: borderSize,
+            background,
+            zIndex: 1
           }}
         />
 
@@ -76,8 +76,6 @@ export default function RoundedFrame({
             zIndex: 1,
             padding: 4,
             boxSizing: "border-box",
-            maxHeight: "calc(100% - 8px)",
-            maxWidth: "100%",
             width: "100%",
             height: "100%",
             ...style,
@@ -88,77 +86,102 @@ export default function RoundedFrame({
         </div>
       </div>
 
+      {/* top */}
       <div
         style={{
           position: "absolute",
           top: 0,
-          left: 0,
-          right: 0,
-          display: "flex",
+          left: 12,
+          right: 12,
+          height: 4,
+          background: _borderColor,
+          zIndex: 1,
         }}
-      >
-        <Corner />
+      />
 
-        <div style={{ flex: 1, background: _borderColor, height: 4 }} />
-
-        <Corner _style={{ transform: "scale(-1, 1)" }} />
-      </div>
-
+      {/* bottom */}
       <div
         style={{
           position: "absolute",
           bottom: 0,
+          left: 12,
+          right: 12,
+          height: 4,
+          background: _borderColor,
+          zIndex: 1,
+        }}
+      />
+
+      {/* left */}
+      <div
+        style={{
+          position: "absolute",
           left: 0,
-          right: 0,
+          top: 0,
+          bottom: 0,
           display: "flex",
+          flexDirection: "column",
         }}
       >
-        <Corner _style={{ transform: "scale(1, -1)" }} />
+        <Corner />
 
         <div style={{ flex: 1 }}>
-          <div style={{ width: "100%", background, height: 8 }} />
-          <div style={{ width: "100%", background: _borderColor, height: 4 }} />
+          <div
+            style={{
+              height: "100%",
+              background: _borderColor,
+              width: 4,
+              float: "left",
+              zIndex: 1,
+            }}
+          />
+          <div
+            style={{
+              height: "100%",
+              background,
+              width: 8,
+              float: "right",
+            }}
+          />
+        </div>
+
+        <Corner _style={{ transform: "scale(1, -1)" }} />
+      </div>
+
+      {/* right */}
+      <div
+        style={{
+          position: "absolute",
+          right: 0,
+          top: 0,
+          bottom: 0,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Corner _style={{ transform: "scale(-1, 1)" }} />
+
+        <div style={{ flex: 1 }}>
+          <div
+            style={{
+              float: "left",
+              height: "100%",
+              background,
+              width: 8,
+            }}
+          />
+          <div
+            style={{
+              height: "100%",
+              background: _borderColor,
+              width: 4,
+              float: "right",
+              zIndex: 1,
+            }}
+          />
         </div>
 
         <Corner _style={{ transform: "scale(-1, -1)" }} />
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 12,
-          bottom: 12,
-          display: "flex",
-        }}
-      >
-        <div style={{ height: "100%", background: _borderColor, width: 4 }} />
-        <div
-          style={{
-            height: "100%",
-            background,
-            width: 8,
-          }}
-        />
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          right: 0,
-          top: 12,
-          bottom: 12,
-          display: "flex",
-        }}
-      >
-        <div
-          style={{
-            height: "100%",
-            background,
-            width: 8,
-          }}
-        />
-        <div style={{ height: "100%", background: _borderColor, width: 4 }} />
       </div>
 
       {shadow && (

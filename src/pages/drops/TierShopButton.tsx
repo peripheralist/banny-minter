@@ -4,6 +4,7 @@ import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { Tier } from "@/model/tier";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { formatEther } from "viem";
@@ -36,6 +37,8 @@ export default function TierShopButton({
     [tier.remainingSupply, tier.tokenId]
   );
 
+  const { isSmallScreen } = useWindowSize();
+
   const Label = useCallback(() => {
     const { initialSupply, remainingSupply } = tier;
 
@@ -65,47 +68,52 @@ export default function TierShopButton({
     };
 
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        <div style={{ fontSize: FONT_SIZE.md }}>{tier.name}</div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 4,
+          paddingLeft: 8,
+          paddingRight: 8,
+        }}
+      >
+        <div style={{ fontSize: isSmallScreen ? FONT_SIZE.sm : FONT_SIZE.md }}>
+          {tier.name}
+        </div>
         <div style={{ fontSize: FONT_SIZE.xs }}>
           <Supply />
         </div>
       </div>
     );
-  }, [tier]);
+  }, [tier, isSmallScreen]);
 
   return (
     <ButtonPad
       fillFg={"white"}
       fillBorder={"white"}
       style={{ opacity: isSoldOut ? 0.7 : 1 }}
-      containerStyle={{ maxWidth: buttonSize }}
       shadow="sm"
     >
-      <div
-        style={{
-          position: "relative",
-          width: buttonSize,
-          height: buttonSize + 72,
-          borderRadius: 2,
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <div onClick={onClick}>
-          <div
-            style={{ marginTop: 12, marginBottom: 12, pointerEvents: "none" }}
-          >
+      <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            height: "100%",
+            paddingBottom: 8,
+            gap: 12,
+          }}
+          onClick={onClick}
+        >
+          <div style={{ pointerEvents: "none", marginTop: 8 }}>
             <FuzzMoment
               width={buttonSize - 16}
               height={buttonSize - 16}
               fill={"white"}
               style={{ zIndex: 2, position: "absolute", margin: 8 }}
             />
-            <TierImage tier={tier} size={buttonSize - 36} />
+            <TierImage tier={tier} size={buttonSize - 16} />
           </div>
 
           <Label />

@@ -103,8 +103,7 @@ function _Link({
           style={{
             color: "black",
             fontWeight: "bold",
-            padding: "8px 16px",
-            height: 40,
+            padding: "12px 16px",
             textTransform: "uppercase",
           }}
         >

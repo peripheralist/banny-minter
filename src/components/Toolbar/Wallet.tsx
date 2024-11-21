@@ -16,7 +16,7 @@ export default function Wallet() {
   const { data: ensName } = useEnsName({ address });
 
   return address ? (
-    <div style={{}}>
+    <div>
       <div>
         <h4 style={{ textAlign: "center" }}>Wallet</h4>
 
@@ -44,6 +44,7 @@ export default function Wallet() {
               padding: 10,
               color: "black",
             }}
+            containerStyle={{ width: "100%" }}
             shadow="sm"
           >
             Disconnect

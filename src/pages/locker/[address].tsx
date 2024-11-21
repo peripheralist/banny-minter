@@ -29,7 +29,7 @@ export default function Index() {
   const { isSmallScreen, width } = useWindowSize();
 
   const imgSize = useMemo(
-    () => (isSmallScreen ? (width ? (width - 40) / 2 : 320) : 240),
+    () => (isSmallScreen ? (width ? (width - 32) / 2 : 320) : 240),
     [isSmallScreen, width]
   );
 
@@ -40,18 +40,13 @@ export default function Index() {
   return (
     <ToolbarBagView
       frame
+      dynamicToolbar
       header={`${ensName ?? formatEthAddress(address)}'s locker`}
       frameStyle={{
         position: "relative",
-        ...(isSmallScreen
-          ? {
-              paddingTop: 16,
-            }
-          : {
-              padding: 48,
-              paddingLeft: 120,
-              paddingTop: 16,
-            }),
+        padding: 48,
+        paddingLeft: 120,
+        paddingTop: 16,
       }}
     >
       {loading ? (
@@ -85,7 +80,8 @@ export default function Index() {
             }))}
             gridStyle={{
               gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
-              gap: 16,
+              columnGap: isSmallScreen ? 8 : 16,
+              rowGap: 16,
             }}
             render={(nft) => (
               <Link key={nft.tokenId} href={`/nft/${nft.tokenId}`}>

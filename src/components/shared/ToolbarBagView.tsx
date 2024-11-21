@@ -21,6 +21,7 @@ import ToolbarIcon from "../ToolbarIcon";
 import Bag from "./Bag";
 import EquippedTiersPreview from "./EquippedTiersPreview";
 import RoundedFrame from "./RoundedFrame";
+import useDebounce from "@/hooks/useDebounce";
 
 const Toolbar = dynamic(() => import("@/components/Toolbar"), { ssr: false });
 
@@ -29,11 +30,13 @@ const BAG_CLOSED_WIDTH = 80;
 
 export default function ToolbarBagView({
   children,
+  dynamicToolbar,
   header,
   backButton,
   frame,
   frameStyle,
 }: PropsWithChildren<{
+  dynamicToolbar?: boolean;
   header: string | JSX.Element;
   frame?: boolean;
   frameStyle?: CSSProperties;
@@ -74,6 +77,7 @@ export default function ToolbarBagView({
         header={header}
         bagIsOpen={bagIsOpen}
         setBagIsOpen={setBagIsOpen}
+        dynamicToolbar={dynamicToolbar}
       >
         {children}
       </SmallScreenView>
@@ -180,62 +184,93 @@ export default function ToolbarBagView({
 
 function SmallScreenView({
   children,
+  dynamicToolbar,
   header,
   bagIsOpen,
   setBagIsOpen,
 }: PropsWithChildren<{
+  dynamicToolbar?: boolean;
   header: string | JSX.Element;
   bagIsOpen?: boolean;
   setBagIsOpen: Dispatch<SetStateAction<boolean | undefined>>;
 }>) {
   const { bag } = useContext(ShopContext);
 
-  const { ref, direction, onScroll } = useScrollDirection();
+  const { ref, direction, onScroll, scrollPosition } = useScrollDirection();
 
-  const showHeader = !direction || direction === "up";
+  const showHeader = dynamicToolbar ? !direction || direction === "up" : true;
+
+  const { width: windowWidth } = useWindowSize();
+
+  const _showHeader = useDebounce(showHeader, 125);
+
+  const { measuredRef: toolbarRef, height: toolbarHeight } = useMeasuredRef(
+    scrollPosition
+    // pass as dependency to ensure height is recalculated on scroll
+  );
 
   return (
-    <div style={{ height: "100vh", width: "100vw", overflow: "hidden" }}>
-      {direction !== "down" && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: 12,
-            boxSizing: "border-box",
-          }}
-        >
-          <ToolbarIcon />
-
-          <div onClick={() => setBagIsOpen(true)}>BAG ({bag.length || 0})</div>
-        </div>
-      )}
-
-      <h4
+    <div
+      ref={ref}
+      onScroll={onScroll}
+      style={{
+        height: "100vh",
+        width: "100vw",
+        overflow: "auto",
+      }}
+    >
+      <div
+        ref={toolbarRef}
         style={{
-          textTransform: "uppercase",
-          color: COLORS.banana,
-          background: "black",
-          padding: 12,
+          position: "sticky",
+          top: 0,
+          background: COLORS.banana,
+          ...(_showHeader ? { maxHeight: 68 } : { maxHeight: 0 }),
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          transition: "max-height 0.1s ease-in",
+          boxSizing: "border-box",
+          zIndex: 101,
         }}
       >
-        {header}
-      </h4>
+        <div style={{ padding: 12, opacity: _showHeader ? 1 : 0 }}>
+          <ToolbarIcon />
+        </div>
+
+        <div
+          style={{ padding: 12, opacity: _showHeader ? 1 : 0 }}
+          onClick={() => setBagIsOpen(true)}
+        >
+          BAG ({bag.length || 0})
+        </div>
+      </div>
 
       <div
-        ref={ref}
-        onScroll={onScroll}
         style={{
-          position: "fixed",
-          top: showHeader ? 110 : 42,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          paddingLeft: 12,
-          paddingRight: 12,
-          paddingBottom: 80,
-          overflow: "auto",
+          display: "flex",
+          alignItems: "baseline",
+          justifyContent: "space-between",
+          position: "sticky",
+          top: toolbarHeight,
+          padding: 12,
+          zIndex: 100,
+          background: "black",
+          color: COLORS.banana,
+          textTransform: "uppercase",
+        }}
+      >
+        <h4>{header}</h4>
+
+        <div hidden={_showHeader} onClick={() => setBagIsOpen(true)}>
+          BAG ({bag.length || 0})
+        </div>
+      </div>
+
+      <div
+        style={{
+          padding: 12,
+          paddingBottom: 40,
         }}
       >
         {children}
@@ -249,7 +284,7 @@ function SmallScreenView({
           pointerEvents: bagIsOpen ? "all" : "none",
           transition: "opacity 0.1s ease-in",
           background: "#00000088",
-          zIndex: 100,
+          zIndex: 200,
         }}
         onClick={() => setBagIsOpen(false)}
       >
@@ -258,14 +293,14 @@ function SmallScreenView({
             position: "fixed",
             top: 0,
             bottom: 0,
-            left: bagIsOpen ? 80 : "100%",
+            width: bagIsOpen ? Math.min(480, windowWidth - 48) : 0,
             right: 0,
-            transition: "left 0.1s ease-in",
+            transition: "width 0.1s ease-in",
             background: COLORS.bananaLite,
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          <Bag open />
+          <Bag open onClose={() => setBagIsOpen(false)} />
         </div>
       </div>
     </div>
@@ -296,7 +331,7 @@ function Drawer({
         right: 12,
         transition: "width 0.1s ease-in",
         width: open ? BAG_WIDTH : BAG_CLOSED_WIDTH,
-        zIndex: 1,
+        zIndex: 200,
         overflow: "auto",
       }}
       onClick={onClick}

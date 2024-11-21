@@ -7,16 +7,18 @@ export function useScrollDirection() {
   const ref = useRef<HTMLDivElement>(null);
 
   const onScroll = useCallback(() => {
-    const currentScrollPos = ref.current?.scrollTop ?? 0;
+    setPrevScrollPos((prev) => {
+      const currentScrollPos = ref.current?.scrollTop ?? 0;
 
-    if (prevScrollPos > currentScrollPos) {
-      setDirection("up");
-    } else {
-      setDirection("down");
-    }
+      if (prev > currentScrollPos) {
+        setDirection("up");
+      } else {
+        setDirection("down");
+      }
 
-    setPrevScrollPos(currentScrollPos);
-  }, [prevScrollPos]);
+      return currentScrollPos;
+    });
+  }, []);
 
-  return { direction, ref, onScroll };
+  return { direction, ref, onScroll, scrollPosition: prevScrollPos };
 }

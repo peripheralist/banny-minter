@@ -26,7 +26,7 @@ export default function Drop() {
   const { width, isSmallScreen } = useWindowSize();
 
   const imgSize = useMemo(
-    () => (isSmallScreen ? (width ? (width - 40) / 2 : 320) : 240),
+    () => (isSmallScreen ? (width ? (width - 32) / 2 : 320) : 240),
     [isSmallScreen, width]
   );
 
@@ -48,17 +48,12 @@ export default function Drop() {
     <>
       <ToolbarBagView
         frame
+        dynamicToolbar
         frameStyle={{
           position: "relative",
-          ...(isSmallScreen
-            ? {
-                paddingTop: 16,
-              }
-            : {
-                padding: 48,
-                paddingLeft: 120,
-                paddingTop: 16,
-              }),
+          padding: 48,
+          paddingLeft: 120,
+          paddingTop: 16,
         }}
         header={`Drop #${drop?.id.toString().padStart(2, "0")} | ${drop?.name}`}
         backButton={{ href: "/drops" }}
@@ -108,7 +103,7 @@ export default function Drop() {
             )}
             gridStyle={{
               gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
-              gap: 16,
+              gap: isSmallScreen ? 8 : 16,
             }}
           />
         </div>
