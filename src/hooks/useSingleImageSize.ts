@@ -8,7 +8,7 @@ export function useSingleImageSize() {
   const { width } = useWindowSize();
 
   const size = useMemo(
-    () => Math.min(Math.max(width ? width - 48 : 0, 320), 480),
+    () => Math.min(Math.max(width ? width - 48 : 0, 320), 420),
     [width]
   );
 

@@ -1,9 +1,9 @@
 import { COLORS } from "@/constants/colors";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import ButtonPad from "./ButtonPad";
 import RoundedFrame from "./RoundedFrame";
-import { useWindowSize } from "@/hooks/useWindowSize";
 
 export default function Modal({
   open,
@@ -28,6 +28,19 @@ export default function Modal({
     onClose?.();
   }, [onClose]);
 
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        _onClose();
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener("keyup", fn);
+
+    return () => window.removeEventListener("keyup", fn);
+  }, [_onClose]);
+
   const { measuredRef: footerRef, height: footerHeight } = useMeasuredRef();
 
   const ActionButton = useCallback(() => {
@@ -40,6 +53,7 @@ export default function Modal({
         style={{
           padding: "12px 16px",
           color: "white",
+          minWidth: 240,
         }}
         shadow="sm"
       >
@@ -54,7 +68,7 @@ export default function Modal({
         onClick={_onClose}
         fillFg={"white"}
         shadow="sm"
-        style={{ padding: 12 }}
+        style={{ padding: 12, minWidth: 240 }}
       >
         Close
       </ButtonPad>
@@ -68,10 +82,10 @@ export default function Modal({
         <>
           <RoundedFrame
             background={COLORS.bananaHint}
-            containerStyle={{ height: "auto", marginBottom: footerHeight }}
+            containerStyle={{ height: "auto", marginBottom: footerHeight + 16 }}
             style={{
               width: "calc(100vw - 24px)",
-              maxHeight: `calc(100vh - ${footerHeight + 48}px)`,
+              maxHeight: `calc(100vh - ${footerHeight + 32}px)`,
               padding: 24,
               overflow: "auto",
             }}
@@ -83,7 +97,7 @@ export default function Modal({
             ref={footerRef}
             style={{
               position: "fixed",
-              bottom: 12,
+              bottom: 8,
               left: 12,
               right: 12,
               display: "flex",
@@ -109,7 +123,7 @@ export default function Modal({
             minWidth: 320,
             width: size === "sm" ? 640 : undefined,
             maxWidth: "calc(100vw - 144px)",
-            maxHeight: `calc(100vh - ${footerHeight + 80}px)`,
+            maxHeight: `calc(100vh - ${footerHeight + 48}px)`,
             padding: 48,
             overflow: "auto",
           }}
@@ -121,15 +135,16 @@ export default function Modal({
           ref={footerRef}
           style={{
             display: "flex",
-            flexDirection: "column",
+            justifyContent: "space-between",
+            flexWrap: "wrap-reverse",
             gap: 8,
             marginTop: 8,
             zIndex: 999,
           }}
         >
-          <ActionButton />
-
           <CloseButton />
+
+          <ActionButton />
         </div>
       </>
     );
@@ -145,7 +160,7 @@ export default function Modal({
 
   if (!isOpen) return null;
 
-  const shadowColor = `#00000088`;
+  const shadowColor = `#000000aa`;
 
   return (
     <div // backdrop
@@ -155,7 +170,7 @@ export default function Modal({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: isSmallScreen ? "flex-end" : "center",
         width: "100vw",
         height: "100vh",
         zIndex: 999,

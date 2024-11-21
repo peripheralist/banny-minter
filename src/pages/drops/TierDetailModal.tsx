@@ -3,10 +3,10 @@ import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import { ShopContext } from "@/contexts/shopContext";
-import { useWindowSize } from "@/hooks/useWindowSize";
+import { useSingleImageSize } from "@/hooks/useSingleImageSize";
 import { Tier } from "@/model/tier";
 import { formatEther } from "juice-sdk-core";
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 
 export default function TierDetailModal({
   tier,
@@ -17,12 +17,7 @@ export default function TierDetailModal({
 }) {
   const { addItem } = useContext(ShopContext);
 
-  const { width } = useWindowSize();
-
-  const imgSize = useMemo(
-    () => Math.min(Math.max(width - 144, 180), 360),
-    [width]
-  );
+  const imgSize = useSingleImageSize();
 
   if (!tier) return null;
 
@@ -45,7 +40,7 @@ export default function TierDetailModal({
       >
         <div>
           <RoundedFrame background={"white"}>
-            <TierImage tier={tier} size={imgSize} />
+            <TierImage tier={tier} size={imgSize - 32} />
           </RoundedFrame>
         </div>
 

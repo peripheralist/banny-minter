@@ -35,7 +35,7 @@ export default function RoundedFrame({
       <PixelCorner
         fillInner={background}
         fillBorder={_borderColor}
-        style={{ ..._style, zIndex: 1 }}
+        style={_style}
       />
     ),
     [background, _borderColor]
@@ -62,12 +62,12 @@ export default function RoundedFrame({
         <div
           style={{
             position: "absolute",
-            left: borderSize,
-            right: borderSize,
+            left: borderSize * 3,
+            right: borderSize * 3,
             bottom: borderSize,
             top: borderSize,
             background,
-            zIndex: 1
+            zIndex: 1,
           }}
         />
 

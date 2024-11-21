@@ -16,6 +16,7 @@ import {
   SetStateAction,
   useContext,
   useEffect,
+  useMemo,
 } from "react";
 import ToolbarIcon from "../ToolbarIcon";
 import Bag from "./Bag";
@@ -195,12 +196,19 @@ function SmallScreenView({
   setBagIsOpen: Dispatch<SetStateAction<boolean | undefined>>;
 }>) {
   const { bag } = useContext(ShopContext);
+  const { equipped, equippingCategory, unequippingCategory } =
+    useContext(EquipmentContext);
 
   const { ref, direction, onScroll, scrollPosition } = useScrollDirection();
 
   const showHeader = dynamicToolbar ? !direction || direction === "up" : true;
 
   const { width: windowWidth } = useWindowSize();
+
+  const bagWidth = useMemo(
+    () => Math.min(480, windowWidth - 48),
+    [windowWidth]
+  );
 
   const _showHeader = useDebounce(showHeader, 125);
 
@@ -293,13 +301,38 @@ function SmallScreenView({
             position: "fixed",
             top: 0,
             bottom: 0,
-            width: bagIsOpen ? Math.min(480, windowWidth - 48) : 0,
+            width: bagIsOpen ? bagWidth : 0,
             right: 0,
             transition: "width 0.1s ease-in",
             background: COLORS.bananaLite,
+            display: "flex",
+            flexDirection: "column",
           }}
           onClick={(e) => e.stopPropagation()}
         >
+          <div style={{ padding: 12 }}>
+            <RoundedFrame background={"white"}>
+              <EquippedTiersPreview
+                equipped={equipped}
+                size={bagWidth - 24}
+                equippingCategory={equippingCategory}
+                unequippingCategory={unequippingCategory}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  top: 8,
+                  left: 8,
+                  background: "white",
+                  padding: "4px 8px",
+                  fontSize: FONT_SIZE.xs,
+                }}
+              >
+                PREVIEW
+              </div>
+            </RoundedFrame>
+          </div>
+
           <Bag open onClose={() => setBagIsOpen(false)} />
         </div>
       </div>
