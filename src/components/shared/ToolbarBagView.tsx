@@ -201,7 +201,11 @@ function SmallScreenView({
 
   const { ref, direction, onScroll, scrollPosition } = useScrollDirection();
 
-  const showHeader = dynamicToolbar ? !direction || direction === "up" : true;
+  const showHeader =
+    scrollPosition < 100 ||
+    (dynamicToolbar ? !direction || direction === "up" : true);
+
+  const _showHeader = useDebounce(showHeader, 200);
 
   const { width: windowWidth } = useWindowSize();
 
@@ -209,8 +213,6 @@ function SmallScreenView({
     () => Math.min(480, windowWidth - 48),
     [windowWidth]
   );
-
-  const _showHeader = useDebounce(showHeader, 125);
 
   const { measuredRef: toolbarRef, height: toolbarHeight } = useMeasuredRef(
     scrollPosition
@@ -227,12 +229,14 @@ function SmallScreenView({
         overflow: "auto",
       }}
     >
+      <style>{`body{background: ${COLORS.bananaLite}}`}</style>
+
       <div
         ref={toolbarRef}
         style={{
           position: "sticky",
           top: 0,
-          background: COLORS.banana,
+          background: COLORS.bananaLite,
           ...(_showHeader ? { maxHeight: 68 } : { maxHeight: 0 }),
           display: "flex",
           justifyContent: "space-between",
@@ -242,12 +246,18 @@ function SmallScreenView({
           zIndex: 101,
         }}
       >
-        <div style={{ padding: 12, opacity: _showHeader ? 1 : 0 }}>
+        <div
+          style={{
+            padding: "8px 12px",
+            opacity: _showHeader ? 1 : 0,
+            maxHeight: 40,
+          }}
+        >
           <ToolbarIcon />
         </div>
 
         <div
-          style={{ padding: 12, opacity: _showHeader ? 1 : 0 }}
+          style={{ padding: "8px 12px", opacity: _showHeader ? 1 : 0 }}
           onClick={() => setBagIsOpen(true)}
         >
           BAG ({bag.length || 0})
@@ -261,10 +271,10 @@ function SmallScreenView({
           justifyContent: "space-between",
           position: "sticky",
           top: toolbarHeight,
-          padding: 12,
+          padding: "8px 12px",
           zIndex: 100,
           background: "black",
-          color: COLORS.banana,
+          color: COLORS.bananaLite,
           textTransform: "uppercase",
         }}
       >

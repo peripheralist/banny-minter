@@ -49,7 +49,7 @@ export function CategoryGroupGrid<I extends { category: Category }>({
           <div
             style={{
               position: "sticky",
-              top: isSmallScreen ? 48 : 0,
+              top: isSmallScreen ? 40 : 0,
               textTransform: "uppercase",
               zIndex: 2,
             }}
@@ -59,8 +59,8 @@ export function CategoryGroupGrid<I extends { category: Category }>({
                 position: "absolute",
                 ...(isSmallScreen
                   ? {
-                      left: -20,
-                      top: 0,
+                      left: 0,
+                      right: 0,
                     }
                   : {
                       left: -128,
@@ -70,7 +70,7 @@ export function CategoryGroupGrid<I extends { category: Category }>({
               <RoundedFrame
                 background={"black"}
                 style={{
-                  padding: "12px 16px",
+                  padding: isSmallScreen ? "8px 16px" : "12px 16px",
                   color: COLORS.bananaLite,
                 }}
               >
@@ -84,7 +84,7 @@ export function CategoryGroupGrid<I extends { category: Category }>({
           <div
             style={{
               display: "grid",
-              paddingTop: isSmallScreen ? 56 : 0,
+              paddingTop: isSmallScreen ? 40 : 0,
               ...gridStyle,
             }}
           >

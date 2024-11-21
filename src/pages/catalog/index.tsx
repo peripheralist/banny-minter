@@ -21,21 +21,22 @@ export default function Catalog() {
   const { width, isSmallScreen } = useWindowSize();
 
   const imgSize = useMemo(() => {
-    return isSmallScreen ? width - 40 : 320;
+    return isSmallScreen ? width - 40 : 280;
   }, [isSmallScreen, width]);
 
   return (
     <ToolbarBagView
+      frame
       dynamicToolbar
       header={`CATALOG | ${bannys?.nfts.length ?? "--"} minted bannys`}
     >
       <div
         style={{
           display: "grid",
-          paddingTop: 20,
           gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
           justifyContent: isSmallScreen ? "center" : undefined,
-          gap: 16,
+          gap: 12,
+          padding: 12,
         }}
       >
         {bannys?.nfts.map((nft) => (

@@ -17,15 +17,13 @@ export default function ToolbarIcon() {
 
   return (
     <div>
-      <div>
-        <Image
-          src={"/assets/banny_eyes.svg"}
-          width={(TOOLBAR_ICON_SIZE * 14) / 8}
-          height={TOOLBAR_ICON_SIZE}
-          alt="banny eyes"
-          onClick={() => setIsOpen(true)}
-        />
-      </div>
+      <Image
+        src={"/assets/looks_logo.svg"}
+        width={(TOOLBAR_ICON_SIZE * 294) / 80}
+        height={TOOLBAR_ICON_SIZE}
+        alt="looks logo"
+        onClick={() => setIsOpen(true)}
+      />
 
       <div
         style={{
@@ -49,7 +47,7 @@ export default function ToolbarIcon() {
             display: "flex",
             flexDirection: "column",
             boxSizing: "border-box",
-            padding: 12,
+            padding: '8px 12px',
             gap: 12,
             maxWidth: 320,
             transition: "width 0.1s ease-in",
@@ -58,10 +56,10 @@ export default function ToolbarIcon() {
           onClick={(e) => e.stopPropagation()}
         >
           <Image
-            src={"/assets/banny_eyes.svg"}
-            width={(TOOLBAR_ICON_SIZE * 14) / 8}
+            src={"/assets/looks_logo.svg"}
+            width={(TOOLBAR_ICON_SIZE * 294) / 80}
             height={TOOLBAR_ICON_SIZE}
-            alt="banny eyes"
+            alt="looks logo"
             onClick={() => setIsOpen(false)}
             style={{ marginBottom: 24 }}
           />
