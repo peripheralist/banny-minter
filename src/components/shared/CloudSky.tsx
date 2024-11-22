@@ -1,6 +1,6 @@
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useMemo } from "react";
-import RandCloud from "./images/Cloud";
+import RandCloud from "./Cloud";
 
 export default function CloudSky() {
   const { measuredRef, width, height } = useMeasuredRef();

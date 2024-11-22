@@ -1,7 +1,7 @@
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { useContext } from "react";
-import MintButton from "../DressingRoom/MintButton";
+import MintButton from "./MintButton";
 import BagItems from "./BagItems";
 import RoundedFrame from "./RoundedFrame";
 import TierImage from "./TierImage";

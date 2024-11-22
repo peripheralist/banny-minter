@@ -2,7 +2,7 @@ import { LOOKS_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { isAddressEqual } from "viem";
-import { config } from "../../config.wagmi";
+import { config } from "../../../config.wagmi";
 
 /**
  * Check which tokenIds are approved for transfer to resolver contract

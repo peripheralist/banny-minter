@@ -7,7 +7,7 @@ import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
 import TierImage from "../shared/TierImage";
 
-export default function OwnedTierButton({
+export default function TierEquipButton({
   tier,
   size,
 }: {

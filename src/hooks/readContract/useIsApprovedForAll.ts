@@ -2,7 +2,7 @@ import { LOOKS_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { Address } from "viem";
-import { config } from "../../config.wagmi";
+import { config } from "../../../config.wagmi";
 
 export function useIsApprovedForAll(wallet: Address | undefined) {
   const [loading, setLoading] = useState(false);

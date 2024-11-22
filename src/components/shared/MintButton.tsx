@@ -8,10 +8,10 @@ import { formatEther } from "juice-sdk-core";
 import Link from "next/link";
 import { useCallback, useContext, useState } from "react";
 import { useAccount } from "wagmi";
-import BagItems from "../shared/BagItems";
-import ButtonPad from "../shared/ButtonPad";
-import Modal from "../shared/Modal";
-import TransactionPending from "../shared/TransactionPending";
+import BagItems from "./BagItems";
+import ButtonPad from "./ButtonPad";
+import Modal from "./Modal";
+import TransactionPending from "./TransactionPending";
 
 export default function MintButton() {
   const [isConfirming, setIsConfirming] = useState(false);

@@ -8,7 +8,7 @@ import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import FullscreenLoading from "../shared/FullscreenLoading";
 import RoundedFrame from "../shared/RoundedFrame";
 import DecorateButton from "./DecorateButton";
-import OwnedTierButton from "./OwnedTierButton";
+import TierEquipButton from "./TierEquipButton";
 
 export default function LargeView() {
   const { availableTiers, equipped, equippingCategory, unequippingCategory } =
@@ -46,7 +46,7 @@ export default function LargeView() {
           label
           emptyText="None owned"
           items={availableTiers}
-          render={(t) => <OwnedTierButton key={t.tierId} tier={t} size={200} />}
+          render={(t) => <TierEquipButton key={t.tierId} tier={t} size={200} />}
           gridStyle={{
             gridTemplateColumns: `repeat(auto-fit, ${200}px)`,
             gap: 16,
