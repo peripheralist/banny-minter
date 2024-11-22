@@ -5,10 +5,10 @@ import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import TierShopButton from "@/pages/drops/TierShopButton";
+import TierShopButton from "@/components/shared/TierShopButton";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
-import TierDetailModal from "./TierDetailModal";
+import TierDetailModal from "../../components/modals/TierDetailModal";
 
 export default function Drop() {
   const router = useRouter();

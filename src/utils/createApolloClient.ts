@@ -10,6 +10,11 @@ import { IntrospectionQuery, buildClientSchema } from "graphql";
 import introspectionResult from "../../graphql.schema.json";
 import { formatSubgraphUri } from "./formatSubgraphUri";
 
+// https://github.com/reduxjs/redux-devtools/issues/1541#issuecomment-1834205251
+(BigInt.prototype as unknown as { toJSON: unknown }).toJSON = function () {
+  return this.toString();
+};
+
 // ensure the cache is created only once.
 const apolloCache = new InMemoryCache();
 

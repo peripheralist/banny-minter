@@ -1,7 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
-import { useWindowSize } from "@/hooks/useWindowSize";
 import { useContext } from "react";
 import { CategoryGroupGrid } from "../shared/CategoryGroupGrid";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
@@ -16,7 +15,7 @@ export default function LargeView() {
 
   const { measuredRef: previewRef, width: previewWidth } = useMeasuredRef();
 
-  const { isSmallScreen } = useWindowSize();
+  const imgSize = 200;
 
   if (!availableTiers) return <FullscreenLoading />;
 
@@ -37,7 +36,7 @@ export default function LargeView() {
           flexDirection: "column",
           overflow: "auto",
           padding: 24,
-          paddingLeft: isSmallScreen ? 24 : 120,
+          paddingLeft: 120,
           paddingBottom: 80,
           gap: 48,
         }}
@@ -46,11 +45,14 @@ export default function LargeView() {
           label
           emptyText="None owned"
           items={availableTiers}
-          render={(t) => <TierEquipButton key={t.tierId} tier={t} size={200} />}
+          render={(t) => (
+            <TierEquipButton key={t.tierId} tier={t} size={imgSize} />
+          )}
           gridStyle={{
-            gridTemplateColumns: `repeat(auto-fit, ${200}px)`,
-            gap: 16,
+            gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
+            gap: 4,
           }}
+          excludeGroups={["banny"]}
         />
       </RoundedFrame>
 

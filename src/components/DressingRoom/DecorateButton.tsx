@@ -278,13 +278,13 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
         <>
           <h1>New fit?</h1>
 
-          <p>
+          <p style={{ marginTop: 12, marginBottom: 24 }}>
             When dressing a Banny, outfits & backgrounds will be transferred to
             the Resolver contract. When removed, they{"'"}ll be returned to
             whichever wallet owns the Banny.
           </p>
 
-          <div style={{ display: "flex", gap: 12 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
             <div>
               <RoundedFrame background={"white"}>
                 <EquippedTiersPreview size={240} equipped={equipped} />

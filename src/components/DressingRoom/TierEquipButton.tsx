@@ -2,7 +2,7 @@ import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { Tier } from "@/model/tier";
-import { useCallback, useContext, useMemo } from "react";
+import { CSSProperties, useCallback, useContext, useMemo } from "react";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
 import TierImage from "../shared/TierImage";
@@ -10,9 +10,11 @@ import TierImage from "../shared/TierImage";
 export default function TierEquipButton({
   tier,
   size,
+  labelStyle,
 }: {
   tier: Tier;
   size: number;
+  labelStyle?: CSSProperties;
 }) {
   const { equipped, equip } = useContext(EquipmentContext);
 
@@ -23,8 +25,16 @@ export default function TierEquipButton({
 
   const Label = useCallback(() => {
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        <div style={{ fontSize: FONT_SIZE.md }}>{tier.name}</div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 4,
+          fontSize: FONT_SIZE.md,
+          ...labelStyle,
+        }}
+      >
+        <div>{tier.name}</div>
         <div
           style={{
             fontSize: FONT_SIZE.xs,
@@ -35,7 +45,7 @@ export default function TierEquipButton({
         </div>
       </div>
     );
-  }, [tier]);
+  }, [tier, labelStyle]);
 
   return (
     <ButtonPad

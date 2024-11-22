@@ -15,12 +15,14 @@ export function CategoryGroupGrid<I extends { category: Category }>({
   label,
   emptyText,
   gridStyle,
+  excludeGroups,
 }: {
   items: I[] | undefined;
   render: (i: I) => JSX.Element;
   label?: boolean;
   emptyText?: string;
   gridStyle?: CSSProperties;
+  excludeGroups?: CategoryGroup[];
 }) {
   const { isSmallScreen } = useWindowSize();
 
@@ -40,68 +42,72 @@ export function CategoryGroupGrid<I extends { category: Category }>({
 
   if (!groupedItems) return null;
 
-  return CATEGORY_GROUP_NAMES.map((g) => {
-    const itemsOfGroup = groupedItems[g];
+  return CATEGORY_GROUP_NAMES.filter((g) => !excludeGroups?.includes(g)).map(
+    (g) => {
+      const itemsOfGroup = groupedItems[g];
 
-    return (
-      <div key={g}>
-        {label && (
-          <div
-            style={{
-              position: "sticky",
-              top: isSmallScreen ? 40 : 0,
-              textTransform: "uppercase",
-              zIndex: 2,
-            }}
-          >
+      return (
+        <div key={g}>
+          {label && (
             <div
               style={{
-                position: "absolute",
-                ...(isSmallScreen
-                  ? {
-                      left: -20,
-                      top: 0,
-                    }
-                  : {
-                      left: -128,
-                    }),
+                position: "sticky",
+                top: isSmallScreen ? 40 : 0,
+                left: 0,
+                textTransform: "uppercase",
+                zIndex: 2,
               }}
             >
-              <RoundedFrame
-                background={"black"}
+              <div
                 style={{
-                  padding: isSmallScreen ? "8px 16px 8px 20px" : "12px 16px",
-                  color: COLORS.bananaLite,
+                  position: "absolute",
+                  ...(isSmallScreen
+                    ? {
+                        left: -20,
+                        top: 0,
+                      }
+                    : {
+                        left: -128,
+                      }),
                 }}
               >
-                {g}
-              </RoundedFrame>
+                <RoundedFrame
+                  background={"black"}
+                  style={{
+                    padding: isSmallScreen ? "8px 16px 8px 20px" : "12px 16px",
+                    color: COLORS.bananaLite,
+                  }}
+                >
+                  {g}
+                </RoundedFrame>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {itemsOfGroup.length ? (
-          <div
-            style={{
-              display: "grid",
-              paddingTop: isSmallScreen ? 56 : 0,
-              ...gridStyle,
-            }}
-          >
-            {itemsOfGroup.map(render)}
-          </div>
-        ) : (
-          <div
-            style={{
-              columnSpan: "all",
-              padding: 12,
-              paddingTop: isSmallScreen ? 56 : 0,
-            }}
-          >
-            {emptyText ?? "None"}
-          </div>
-        )}
-      </div>
-    );
-  });
+          {itemsOfGroup.length ? (
+            <div
+              style={{
+                display: "grid",
+                paddingTop: isSmallScreen ? 56 : 0,
+                ...gridStyle,
+              }}
+            >
+              {itemsOfGroup.map(render)}
+            </div>
+          ) : (
+            <div
+              style={{
+                columnSpan: "all",
+                padding: 12,
+                paddingTop: isSmallScreen ? 56 : 0,
+                minWidth: 120,
+              }}
+            >
+              {emptyText ?? "None"}
+            </div>
+          )}
+        </div>
+      );
+    }
+  );
 }
