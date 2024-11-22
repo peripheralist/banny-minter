@@ -39,7 +39,7 @@ export default function TierDetailModal({
         }}
       >
         <div>
-          <RoundedFrame background={"white"}>
+          <RoundedFrame borderColor="white" background={"white"}>
             <TierImage tier={tier} size={imgSize - 32} />
           </RoundedFrame>
         </div>

@@ -103,7 +103,7 @@ export default function Drop() {
             )}
             gridStyle={{
               gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
-              gap: isSmallScreen ? 8 : 16,
+              gap: 4,
             }}
           />
         </div>

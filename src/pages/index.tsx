@@ -65,7 +65,7 @@ export default function Home() {
             bottom: 0,
             right: 0,
             left: 0,
-            height: "55.5%",
+            height: "56.5%",
             background: SAND_COLOR,
           }}
         />

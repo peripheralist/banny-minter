@@ -98,13 +98,13 @@ export default function ToolbarBagView({
       <div
         style={{
           position: "fixed",
-          padding: 12,
-          paddingBottom: frame ? 12 : 0,
+          padding: 8,
+          paddingBottom: frame ? 8 : 0,
           top: 0,
           bottom: 0,
           left: TOOLBAR_WIDTH,
           right: bag.length
-            ? (bagIsOpen ? BAG_WIDTH : BAG_CLOSED_WIDTH) + 12
+            ? (bagIsOpen ? BAG_WIDTH : BAG_CLOSED_WIDTH) + 8
             : 0,
           transition: "right 0.1s ease-in, left 0.1s ease-in",
           overflow: "hidden",
@@ -112,7 +112,7 @@ export default function ToolbarBagView({
       >
         <div
           ref={headerRef}
-          style={{ display: "flex", gap: 12, paddingBottom: 12 }}
+          style={{ display: "flex", gap: 8, paddingBottom: 8 }}
         >
           {backButton && (
             <RoundedFrame
@@ -368,10 +368,10 @@ function Drawer({
         position: "fixed",
         display: "flex",
         flexDirection: "column",
-        gap: 12,
-        top: 12,
-        bottom: 12,
-        right: 12,
+        gap: 8,
+        top: 8,
+        bottom: 8,
+        right: 8,
         transition: "width 0.1s ease-in",
         width: open ? BAG_WIDTH : BAG_CLOSED_WIDTH,
         zIndex: 200,
@@ -382,7 +382,7 @@ function Drawer({
       <RoundedFrame
         background={"white"}
         containerStyle={{
-          height: open ? BAG_WIDTH + 12 : BAG_CLOSED_WIDTH + 4,
+          height: open ? BAG_WIDTH + 8 : BAG_CLOSED_WIDTH + 4,
           transition: "height 0.1s ease-in",
           flexShrink: 0,
           marginBottom: -32,

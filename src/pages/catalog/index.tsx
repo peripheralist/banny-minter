@@ -35,7 +35,7 @@ export default function Catalog() {
           display: "grid",
           gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
           justifyContent: isSmallScreen ? "center" : undefined,
-          gap: 12,
+          gap: 4,
           padding: 12,
         }}
       >
@@ -46,12 +46,18 @@ export default function Catalog() {
             href={`/nft/${nft.tokenId.toString()}`}
           >
             <RoundedFrame
+              borderColor="white"
               background={"white"}
               style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 pointerEvents: "none",
+                paddingTop: 8,
+                paddingBottom: 8,
               }}
             >
-              <DressedBannyNftImage nft={nft} size={imgSize - 8} />
+              <DressedBannyNftImage nft={nft} size={imgSize - 16} />
             </RoundedFrame>
           </Link>
         ))}

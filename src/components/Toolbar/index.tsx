@@ -23,7 +23,7 @@ export default function Index() {
         flexDirection: "column",
         justifyContent: "space-between",
         boxSizing: "border-box",
-        padding: 12,
+        padding: 8,
         paddingRight: 0,
         gap: 24,
         height: "100vh",
@@ -119,8 +119,8 @@ function _Link({
 function HomeButton() {
   const { isHover, ...hoverProps } = useIsHover();
 
-  const width = TOOLBAR_WIDTH - 12;
-  const height = ((TOOLBAR_WIDTH - 12) * 8) / 14;
+  const width = TOOLBAR_WIDTH - 16;
+  const height = ((TOOLBAR_WIDTH - 16) * 8) / 14;
 
   return (
     <_Link href={"/"} {...hoverProps} style={{ width, height }}>

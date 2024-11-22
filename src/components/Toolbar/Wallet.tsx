@@ -24,28 +24,25 @@ export default function Wallet() {
           background={COLORS.bananaLite}
           style={{
             padding: 12,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            gap: 8,
             width: "100%",
-            fontSize: FONT_SIZE.sm,
+            fontSize: FONT_SIZE.xs,
           }}
         >
-          <CurrentChain />
-
-          <div style={{ fontWeight: "bold" }}>
+          <div style={{ fontWeight: "bold", marginBottom: 8 }}>
             {ensName ?? <FormattedAddress address={address} />}
           </div>
+
+          <CurrentChain />
 
           <ButtonPad
             onClick={() => disconnect()}
             style={{
               padding: 10,
               color: "black",
+              fontSize: FONT_SIZE.xs,
             }}
-            containerStyle={{ width: "100%" }}
-            shadow="sm"
+            containerStyle={{ margin: -4, marginTop: 8 }}
+            shadow="none"
           >
             Disconnect
           </ButtonPad>

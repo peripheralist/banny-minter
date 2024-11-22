@@ -70,7 +70,7 @@ export function CategoryGroupGrid<I extends { category: Category }>({
               <RoundedFrame
                 background={"black"}
                 style={{
-                  padding: isSmallScreen ? '8px 16px 8px 20px' : "12px 16px",
+                  padding: isSmallScreen ? "8px 16px 8px 20px" : "12px 16px",
                   color: COLORS.bananaLite,
                 }}
               >
@@ -91,7 +91,13 @@ export function CategoryGroupGrid<I extends { category: Category }>({
             {itemsOfGroup.map(render)}
           </div>
         ) : (
-          <div style={{ columnSpan: "all", padding: 12 }}>
+          <div
+            style={{
+              columnSpan: "all",
+              padding: 12,
+              paddingTop: isSmallScreen ? 56 : 0,
+            }}
+          >
             {emptyText ?? "None"}
           </div>
         )}

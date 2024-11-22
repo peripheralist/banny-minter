@@ -2,7 +2,6 @@ import ButtonPad from "@/components/shared/ButtonPad";
 import { CategoryGroupGrid } from "@/components/shared/CategoryGroupGrid";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import Loading from "@/components/shared/Loading";
-import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_IDS, categoryOfId } from "@/constants/category";
@@ -79,60 +78,67 @@ export default function Index() {
               category: categoryOfId[nft.category],
             }))}
             gridStyle={{
-              gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
-              columnGap: isSmallScreen ? 8 : 16,
-              rowGap: 16,
+              gridTemplateColumns: `repeat(auto-fit, ${imgSize + 2}px)`,
+              gap: 4,
             }}
             render={(nft) => (
               <Link key={nft.tokenId} href={`/nft/${nft.tokenId}`}>
-                <div>
-                  <RoundedFrame
-                    background={"white"}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      pointerEvents: "none",
-                    }}
-                  >
+                <ButtonPad
+                  fillBorder="white"
+                  fillFg={"white"}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: 4,
+                    paddingTop: 8,
+                  }}
+                  shadow="sm"
+                >
+                  <div style={{ pointerEvents: "none" }}>
                     {nft.category === "naked" ? (
                       <DressedBannyNftImage
-                        size={imgSize - 8}
+                        size={imgSize - 16}
                         nft={{ ...nft, category: CATEGORY_IDS[nft.category] }}
                       />
                     ) : (
                       <TierImage
                         tier={parseTier(nft.tier)}
-                        size={imgSize - 8}
+                        size={imgSize - 16}
                       />
                     )}
+                  </div>
 
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: -12,
-                        left: 0,
-                        right: 0,
-                        textAlign: "center",
-                        color: "black",
-                        fontSize: FONT_SIZE.xs,
-                      }}
-                    >
+                  <div
+                    style={{
+                      color: "black",
+                      background: "white",
+                      width: "100%",
+                      padding: 8,
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <div>{parseTier(nft.tier)?.name}</div>
+                    <div style={{ fontSize: FONT_SIZE.xs, opacity: 0.5 }}>
                       #{nft.tokenId.toString()}
                     </div>
-                  </RoundedFrame>
-                </div>
+                  </div>
 
-                {nft.category === "naked" && (
-                  <Link href={`/dress/${nft.tokenId.toString()}`}>
-                    <ButtonPad
-                      containerStyle={{ marginTop: 12 }}
-                      style={{ padding: 8 }}
+                  {nft.category === "naked" && (
+                    <Link
+                      href={`/dress/${nft.tokenId.toString()}`}
+                      style={{ width: "100%" }}
                     >
-                      Dress
-                    </ButtonPad>
-                  </Link>
-                )}
+                      <ButtonPad
+                        containerStyle={{ marginBottom: 4 }}
+                        style={{ padding: 8 }}
+                        shadow="sm"
+                      >
+                        Dress
+                      </ButtonPad>
+                    </Link>
+                  )}
+                </ButtonPad>
               </Link>
             )}
           />
