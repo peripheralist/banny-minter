@@ -57,7 +57,7 @@ export function useFuzz({
   useEffect(() => {
     if (!variations) return;
 
-    const _interval = interval ?? 120;
+    const _interval = interval ?? 125;
 
     if (loop) {
       setIdx(0);

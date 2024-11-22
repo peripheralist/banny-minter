@@ -1,24 +1,28 @@
-import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import Fuzz from "@/components/pixelRenderers/Fuzz";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_IDS } from "@/constants/category";
 import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
-import { useSingleImageSize } from "@/hooks/useSingleImageSize";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
 import { parseTier } from "@/utils/parseTier";
 import { isArray } from "@apollo/client/utilities";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
-import { useWindowSize } from "@/hooks/useWindowSize";
 
 export default function Index() {
   const router = useRouter();
 
-  const { isSmallScreen } = useWindowSize();
+  const { isSmallScreen, width } = useWindowSize();
+
+  const size = useMemo(
+    () => Math.min(Math.max(width ? width - 48 : 0, 240), 420),
+    [width]
+  );
 
   const tokenId = useMemo(() => {
     const _tokenId = router.query.tokenId;
@@ -36,8 +40,6 @@ export default function Index() {
       },
     },
   });
-
-  const size = useSingleImageSize();
 
   const nft: NFT | undefined = useMemo(() => data?.nfts[0], [data?.nfts]);
 
