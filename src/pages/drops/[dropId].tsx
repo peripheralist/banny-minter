@@ -1,11 +1,11 @@
 import { CategoryGroupGrid } from "@/components/shared/CategoryGroupGrid";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
+import TierShopButton from "@/components/shared/TierShopButton";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import TierShopButton from "@/components/shared/TierShopButton";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
 import TierDetailModal from "../../components/modals/TierDetailModal";
@@ -98,7 +98,11 @@ export default function Drop() {
                 key={t.tierId}
                 tier={t}
                 buttonSize={imgSize}
-                onClick={() => router.push({ hash: t.tierId.toString() })}
+                onClick={() => {
+                  router.push({ hash: t.tierId.toString() }, undefined, {
+                    shallow: true,
+                  });
+                }}
               />
             )}
             gridStyle={{

@@ -8,7 +8,8 @@ import {
 import { Tier } from "@/model/tier";
 import { createApolloClient } from "@/utils/createApolloClient";
 import { parseTier } from "@/utils/parseTier";
-import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { ChainId } from "../useChain";
 
 /**
@@ -23,7 +24,7 @@ export function useAllTiers() {
     },
   });
 
-  const multichainTiers = useMultiChainTiers();
+  const { data: multichainTiers } = useMultiChainTiers();
 
   const formattedTiers: Tier[] | undefined = useMemo(() => {
     return allTiers?.nfttiers.map((t) => {
@@ -52,11 +53,9 @@ export function useAllTiers() {
 }
 
 function useMultiChainTiers() {
-  const [multichainTiers, setMultichainTiers] =
-    useState<Record<number, Tier["multiChainSupply"]>>();
-
-  useEffect(() => {
-    async function get() {
+  return useQuery({
+    queryKey: ["multichain-tiers"],
+    queryFn: () =>
       Promise.allSettled(
         SUPPORTED_CHAINS.map((chain) => {
           const client = createApolloClient(chain);
@@ -125,12 +124,7 @@ function useMultiChainTiers() {
           {} as Record<number, Tier["multiChainSupply"]>
         );
 
-        setMultichainTiers(supplies);
-      });
-    }
-
-    get();
-  }, []);
-
-  return multichainTiers;
+        return supplies;
+      }),
+  });
 }
