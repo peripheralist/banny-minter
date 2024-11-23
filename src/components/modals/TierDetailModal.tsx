@@ -58,9 +58,9 @@ export default function TierDetailModal({
               Wear it like:
             </div>
             <div style={{ display: "flex", gap: 4 }}>
-              <Look key={1} tier={tier} size={imgSize / 3 - (4 * 2) / 3} />
-              <Look key={2} tier={tier} size={imgSize / 3 - (4 * 2) / 3} />
-              <Look key={3} tier={tier} size={imgSize / 3 - (4 * 2) / 3} />
+              <Look key={1} tier={tier} size={imgSize / 3} />
+              <Look key={2} tier={tier} size={imgSize / 3} />
+              <Look key={3} tier={tier} size={imgSize / 3} />
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@ function Look({ tier, size }: { tier: Tier; size: number }) {
         fill="#ccc"
         onFinished={
           <EquippedTiersPreview
-            size={size + 24}
+            size={size + 20}
             equipped={displayTiers.reduce(
               (acc, _tier) => ({
                 ...acc,
