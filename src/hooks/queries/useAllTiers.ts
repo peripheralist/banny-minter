@@ -92,7 +92,6 @@ function useMultiChainTiers() {
             const tierSupplies = tiers.reduce(
               (_acc, { tierId, initialSupply, remainingSupply }) => {
                 const _chainId = chainId as unknown as ChainId;
-                // console.log("asdf chainId", _chainId, tierId, remainingSupply);
 
                 const existingSupplies = acc?.[tierId];
 
