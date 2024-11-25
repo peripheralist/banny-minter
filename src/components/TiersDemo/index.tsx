@@ -55,41 +55,41 @@ function _Demo({
     const id = setInterval(() => {
       if (!availableTiers || !equip) return;
 
-      let _category: Category;
+      let newCategory: Category;
 
       setCategory((prevCategory) => {
         const availableCategories = CATEGORIES.filter(
           (_c) => ![...excludedCategories, prevCategory].includes(_c)
         );
 
-        _category =
+        newCategory =
           availableCategories[
             Math.floor(Math.random() * availableCategories.length)
           ];
 
-        return _category;
+        return newCategory;
       });
 
-      if (!_category!) return;
+      if (!newCategory!) return;
 
       const tiersOfCategory = availableTiers.filter(
-        (t) => t.category === _category
+        (t) => t.category === newCategory
       );
 
-      let newTierId = equipped[_category]?.tierId;
+      let newTierId = equipped[newCategory]?.tierId;
 
       if (newTierId && tiersOfCategory.length === 1) {
         // remove if only tier in category
         newTierId = undefined;
       } else {
-        while (newTierId === equipped[_category]) {
+        while (newTierId === equipped[newCategory]?.tierId) {
           newTierId =
             tiersOfCategory[Math.floor(Math.random() * tiersOfCategory.length)]
               .tierId;
         }
       }
 
-      equip[_category](newTierId);
+      equip[newCategory](newTierId);
     }, 3000);
 
     return () => clearInterval(id);
