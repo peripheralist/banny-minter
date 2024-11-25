@@ -3,6 +3,7 @@ import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { ShopContext } from "@/contexts/shopContext";
+import useDebounce from "@/hooks/useDebounce";
 import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
@@ -15,14 +16,12 @@ import {
   PropsWithChildren,
   SetStateAction,
   useContext,
-  useEffect,
   useMemo,
 } from "react";
 import ToolbarIcon from "../ToolbarIcon";
 import Bag from "./Bag";
 import EquippedTiersPreview from "./EquippedTiersPreview";
 import RoundedFrame from "./RoundedFrame";
-import useDebounce from "@/hooks/useDebounce";
 
 const Toolbar = dynamic(() => import("@/components/Toolbar"), { ssr: false });
 
@@ -49,7 +48,7 @@ export default function ToolbarBagView({
   const { value: bagIsOpen, setValue: setBagIsOpen } = useLocalStorageState(
     "looks_bag_open",
     {
-      initialValue: undefined,
+      initialValue: true,
       parse: (v) => (v === "true" ? true : false),
       serialize: (v) => (v ? "true" : "false"),
     }
@@ -57,20 +56,9 @@ export default function ToolbarBagView({
 
   const { measuredRef: headerRef, height: headerHeight } = useMeasuredRef();
 
-  const { width } = useWindowSize();
-
   const { bag } = useContext(ShopContext);
 
   const { isSmallScreen } = useWindowSize();
-
-  useEffect(() => {
-    if (width && width > 1500 && bagIsOpen === undefined) {
-      setBagIsOpen(true);
-    }
-  }, [width, bagIsOpen, setBagIsOpen]);
-
-  // don't render while checking if bag is open
-  if (bagIsOpen === undefined) return null;
 
   if (isSmallScreen) {
     return (
@@ -193,7 +181,7 @@ function SmallScreenView({
   dynamicToolbar?: boolean;
   header: string | JSX.Element;
   bagIsOpen?: boolean;
-  setBagIsOpen: Dispatch<SetStateAction<boolean | undefined>>;
+  setBagIsOpen: Dispatch<SetStateAction<boolean>>;
 }>) {
   const { bag } = useContext(ShopContext);
   const { equipped, equippingCategory, unequippingCategory } =
