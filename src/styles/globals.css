@@ -35,7 +35,6 @@
   font-family: "VT323", monospace;
   font-family: "Tronica Mono", monospace;
   /* font-family: "Departure Mono", monospace; */
-  cursor: crosshair;
   /* perspective: 1px; */
 }
 
@@ -65,7 +64,6 @@ button {
   appearance: none;
   outline: none;
   border: none;
-  cursor: crosshair;
   letter-spacing: 2px;
   white-space: nowrap;
 }

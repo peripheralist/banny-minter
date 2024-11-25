@@ -1,16 +1,16 @@
 import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
-import { SUPPORTED_CHAINS } from "@/constants/supportedChains";
 import {
   NftTiersDocument,
   NftTiersQuery,
   useNftTiersQuery,
 } from "@/generated/graphql";
+import { ChainId } from "@/model/chain";
 import { Tier } from "@/model/tier";
 import { createApolloClient } from "@/utils/createApolloClient";
 import { parseTier } from "@/utils/parseTier";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { ChainId } from "../useChain";
+import { useSupportedChains } from "../useSupportedChains";
 
 /**
  * @returns All Looks NFT tiers
@@ -53,11 +53,13 @@ export function useAllTiers() {
 }
 
 function useMultiChainTiers() {
+  const chains = useSupportedChains();
+
   return useQuery({
     queryKey: ["multichain-tiers"],
     queryFn: () =>
       Promise.allSettled(
-        SUPPORTED_CHAINS.map((chain) => {
+        chains.map((chain) => {
           const client = createApolloClient(chain);
 
           return client.query<NftTiersQuery>({
@@ -75,18 +77,19 @@ function useMultiChainTiers() {
 
         promises.forEach((p, i) => {
           if (p.status === "rejected") {
-            console.log("Cross-chain query failed", p);
+            console.log("asdf Cross-chain query failed", p);
 
             return;
           }
 
-          const chainId = SUPPORTED_CHAINS[i].id;
+          const chainId = chains[i].id;
 
           tiersByChain[chainId] = p.value.data.nfttiers
             .map(parseTier)
             .filter((t) => !!t) as Tier[];
         });
 
+        // Get supplies from each chain and add to each tier
         const supplies = Object.entries(tiersByChain).reduce(
           (acc, [chainId, tiers]) => {
             const tierSupplies = tiers.reduce(

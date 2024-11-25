@@ -20,24 +20,24 @@ function transportUrl(prefix: string) {
 
 export const config = createConfig({
   connectors: [
+    // metamask is loaded by default (if metamask is in browser at least). idk why
     ...(walletConnectProjectId
       ? [
           walletConnect({
             projectId: walletConnectProjectId,
-            showQrModal: true,
           }),
         ]
-      : []), // metamask is loaded by default (if metamask is in browser at least). idk why
+      : []),
   ],
   chains: [
-    mainnet,
     sepolia,
-    optimism,
-    optimismSepolia,
-    base,
-    baseSepolia,
-    arbitrum,
     arbitrumSepolia,
+    baseSepolia,
+    optimismSepolia,
+    mainnet,
+    arbitrum,
+    base,
+    optimism,
   ],
   transports: {
     [mainnet.id]: http(transportUrl("mainnet")),
@@ -49,5 +49,4 @@ export const config = createConfig({
     [arbitrum.id]: http(transportUrl("arbitrum")),
     [arbitrumSepolia.id]: http(transportUrl("arbitrum-sepolia")),
   },
-  pollingInterval: 2000,
 });

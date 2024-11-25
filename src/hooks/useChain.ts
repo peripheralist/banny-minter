@@ -1,29 +1,19 @@
-import { SUPPORTED_CHAINS } from "@/constants/supportedChains";
+import { mainnet, sepolia } from "viem/chains";
 import { useAccount } from "wagmi";
+import { config } from "../../config.wagmi";
 
-export type ChainId = (typeof SUPPORTED_CHAINS)[number]["id"];
+const defaultChain =
+  process.env.NEXT_PUBLIC_IS_TESTNET === "true" ? sepolia : mainnet;
 
-const DEFAULT_CHAIN_ID = process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID;
-
-if (!DEFAULT_CHAIN_ID) {
-  throw new Error(
-    "NEXT_PUBLIC_DEFAULT_CHAIN_ID environment variable not defined"
-  );
-}
-
+// this could be deprecated by a default chain in wagmi.config. idk how on current version
 export const useChain = () => {
   const { chain } = useAccount();
 
   if (chain) {
-    const _chain = SUPPORTED_CHAINS[chain.id];
+    // restrict chain to supported chains
+    const _chain = config.chains[chain.id];
     if (_chain) return _chain;
   }
-
-  const defaultChain = SUPPORTED_CHAINS.find(
-    (c) => c.id === parseInt(DEFAULT_CHAIN_ID)
-  );
-
-  if (!defaultChain) throw new Error("Error getting default chain");
 
   return defaultChain;
 };

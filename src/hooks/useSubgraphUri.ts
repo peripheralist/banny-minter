@@ -6,7 +6,7 @@ export const useSubgraphUri = () => {
   const chain = useChain();
 
   const url = useMemo(() => {
-    let _url = new URL(formatSubgraphUri(chain.name));
+    let _url = new URL(formatSubgraphUri(chain));
 
     if (_url.pathname.match(/graphql$/g)) {
       return _url.href.slice(0, _url.href.lastIndexOf("/"));

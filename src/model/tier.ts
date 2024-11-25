@@ -1,5 +1,5 @@
 import { Category } from "@/constants/category";
-import { ChainId } from "@/hooks/useChain";
+import { ChainId } from "./chain";
 import { NFTInfo } from "./nftInfo";
 
 export type Tier = {

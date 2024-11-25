@@ -1,4 +1,4 @@
-import { SUPPORTED_CHAINS } from "@/constants/supportedChains";
+import { Chain } from "@/model/chain";
 import {
   ApolloClient,
   ApolloLink,
@@ -39,9 +39,9 @@ const typesMap: FunctionsMap = {
 
 const scalarsLink = withScalars({ schema, typesMap });
 
-export function createApolloClient(chain: (typeof SUPPORTED_CHAINS)[number]) {
+export function createApolloClient(chain: Chain) {
   const httpLink = new HttpLink({
-    uri: formatSubgraphUri(chain.name),
+    uri: formatSubgraphUri(chain),
   });
 
   return new ApolloClient({

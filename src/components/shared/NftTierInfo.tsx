@@ -2,8 +2,8 @@ import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ITEM_DESCRIPTIONS } from "@/constants/itemDescriptions";
-import { SUPPORTED_CHAINS } from "@/constants/supportedChains";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
+import { useSupportedChains } from "@/hooks/useSupportedChains";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
 import { Tier } from "@/model/tier";
@@ -19,6 +19,8 @@ import RoundedFrame from "./RoundedFrame";
 
 export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
   const { address } = useAccount();
+
+  const chains = useSupportedChains();
 
   const { data: equippedTiers } = useBannyEquippedTiers(nft);
 
@@ -107,7 +109,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
           gap: 8,
         }}
       >
-        {SUPPORTED_CHAINS.map(({ id, name }) => (
+        {chains.map(({ id, name }) => (
           <NftInfoRow
             key={id}
             label={name}
@@ -118,7 +120,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
         ))}
       </div>
     );
-  }, [tier.multiChainSupply, NftInfoRow]);
+  }, [tier.multiChainSupply, NftInfoRow, chains]);
 
   const Specs = useCallback(() => {
     const decoded = decodeNFTInfo(nft?.tokenUri);

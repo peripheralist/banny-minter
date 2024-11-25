@@ -1,8 +1,8 @@
 import { isBrowser } from "@/constants/browser";
 import { PUBLIC_SUBGRAPH_KEY } from "@/constants/subgraph";
-import { ChainName } from "@/model/chainName";
+import { Chain } from "@/model/chain";
 
-export function formatSubgraphUri(chainName: ChainName) {
+export function formatSubgraphUri(chain: Chain) {
   if (!isBrowser()) {
     if (!process.env.SUBGRAPH_URL) {
       throw new Error("SATSUMA_KEY environment variable not defined");
@@ -12,19 +12,27 @@ export function formatSubgraphUri(chainName: ChainName) {
   }
 
   return `https://subgraph.satsuma-prod.com/${PUBLIC_SUBGRAPH_KEY}/juicebox/nana-${formatSubgraphPrefix(
-    chainName
+    chain
   )}/api`;
 }
 
-function formatSubgraphPrefix(chainName: ChainName) {
-  switch (chainName) {
-    case "Arbitrum Sepolia":
-      return "arbitrum-sepolia";
-    case "Base Sepolia":
-      return "base-sepolia";
-    case "OP Sepolia":
-      return "optimism-sepolia";
+function formatSubgraphPrefix(chain: Chain) {
+  switch (chain.name) {
+    case "Ethereum":
+      return "mainnet";
     case "Sepolia":
       return "sepolia";
+    case "Arbitrum One":
+      return "arbitrum";
+    case "Arbitrum Sepolia":
+      return "arbitrum-sepolia";
+    case "Base":
+      return "base";
+    case "Base Sepolia":
+      return "base-sepolia";
+    case "OP Mainnet":
+      return "optimism";
+    case "OP Sepolia":
+      return "optimism-sepolia";
   }
 }
