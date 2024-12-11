@@ -56,7 +56,7 @@ function useMultiChainTiers() {
   const chains = useSupportedChains();
 
   return useQuery({
-    queryKey: ["multichain-tiers"],
+    queryKey: ["multichain-tiers", ...chains.map((c) => c.id)],
     queryFn: () =>
       Promise.allSettled(
         chains.map((chain) => {
@@ -69,7 +69,6 @@ function useMultiChainTiers() {
                 collection: LOOKS_COLLECTION_ID,
               },
             },
-            fetchPolicy: "no-cache",
           });
         })
       ).then((promises) => {

@@ -5608,6 +5608,20 @@ export enum _SubgraphErrorPolicy_ {
   deny = 'deny'
 }
 
+export type PayEventsQueryVariables = Exact<{
+  where?: InputMaybe<PayEvent_Filter>;
+}>;
+
+
+export type PayEventsQuery = { payEvents: Array<{ id: string, timestamp: number, txHash: any, caller: any, beneficiary: any, amount: bigint, note: string, beneficiaryTokenCount: bigint }> };
+
+export type DecorateBannyEventsQueryVariables = Exact<{
+  where?: InputMaybe<DecorateBannyEvent_Filter>;
+}>;
+
+
+export type DecorateBannyEventsQuery = { decorateBannyEvents: Array<{ id: string, timestamp: number, txHash: any, caller: any, nakedBannyId: bigint, outfitIds: Array<bigint>, worldId: bigint }> };
+
 export type TierDataFragment = { id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } };
 
 export type NfTsQueryVariables = Exact<{
@@ -6463,6 +6477,99 @@ export const TierDataFragmentDoc = gql`
   category
 }
     `;
+export const PayEventsDocument = gql`
+    query PayEvents($where: PayEvent_filter) {
+  payEvents(where: $where) {
+    id
+    timestamp
+    txHash
+    caller
+    beneficiary
+    amount
+    note
+    beneficiaryTokenCount
+  }
+}
+    `;
+
+/**
+ * __usePayEventsQuery__
+ *
+ * To run a query within a React component, call `usePayEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePayEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePayEventsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function usePayEventsQuery(baseOptions?: Apollo.QueryHookOptions<PayEventsQuery, PayEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PayEventsQuery, PayEventsQueryVariables>(PayEventsDocument, options);
+      }
+export function usePayEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PayEventsQuery, PayEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PayEventsQuery, PayEventsQueryVariables>(PayEventsDocument, options);
+        }
+export function usePayEventsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PayEventsQuery, PayEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PayEventsQuery, PayEventsQueryVariables>(PayEventsDocument, options);
+        }
+export type PayEventsQueryHookResult = ReturnType<typeof usePayEventsQuery>;
+export type PayEventsLazyQueryHookResult = ReturnType<typeof usePayEventsLazyQuery>;
+export type PayEventsSuspenseQueryHookResult = ReturnType<typeof usePayEventsSuspenseQuery>;
+export type PayEventsQueryResult = Apollo.QueryResult<PayEventsQuery, PayEventsQueryVariables>;
+export const DecorateBannyEventsDocument = gql`
+    query DecorateBannyEvents($where: DecorateBannyEvent_filter) {
+  decorateBannyEvents(where: $where) {
+    id
+    timestamp
+    txHash
+    caller
+    nakedBannyId
+    outfitIds
+    worldId
+  }
+}
+    `;
+
+/**
+ * __useDecorateBannyEventsQuery__
+ *
+ * To run a query within a React component, call `useDecorateBannyEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDecorateBannyEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDecorateBannyEventsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useDecorateBannyEventsQuery(baseOptions?: Apollo.QueryHookOptions<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>(DecorateBannyEventsDocument, options);
+      }
+export function useDecorateBannyEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>(DecorateBannyEventsDocument, options);
+        }
+export function useDecorateBannyEventsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>(DecorateBannyEventsDocument, options);
+        }
+export type DecorateBannyEventsQueryHookResult = ReturnType<typeof useDecorateBannyEventsQuery>;
+export type DecorateBannyEventsLazyQueryHookResult = ReturnType<typeof useDecorateBannyEventsLazyQuery>;
+export type DecorateBannyEventsSuspenseQueryHookResult = ReturnType<typeof useDecorateBannyEventsSuspenseQuery>;
+export type DecorateBannyEventsQueryResult = Apollo.QueryResult<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>;
 export const NfTsDocument = gql`
     query NFTs($where: NFT_filter) {
   nfts(where: $where) {

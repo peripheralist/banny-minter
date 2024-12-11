@@ -1,13 +1,14 @@
-import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import RoundedFrame from "@/components/shared/RoundedFrame";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_IDS } from "@/constants/category";
 import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
+import { useAllActivity } from "@/hooks/queries/useAllActivity";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import Link from "next/link";
 import { useMemo } from "react";
-import { useWindowSize } from "@/hooks/useWindowSize";
-import Head from "next/head";
+import ActivityEventElem from "./ActivityEventElem";
 import CustomHead from "@/components/shared/CustomHead";
 
 export default function Activity() {
@@ -20,31 +21,45 @@ export default function Activity() {
     },
   });
 
+  const { events } = useAllActivity();
+
   const { width, isSmallScreen } = useWindowSize();
 
   const imgSize = useMemo(() => {
-    return isSmallScreen ? width - 40 : 280;
+    return isSmallScreen ? width - 40 : 400;
   }, [isSmallScreen, width]);
 
   return (
     <>
-      <CustomHead title={`Activity`} />
+      <CustomHead title="Activity" />
 
-      <main>
-        <ToolbarBagView
-          frame
-          dynamicToolbar
-          header={`ACTIVITY | ${bannys?.nfts.length ?? "--"} minted bannys`}
+      <ToolbarBagView
+        dynamicToolbar
+        header={`ACTIVITY | ${bannys?.nfts.length ?? "--"} minted bannys`}
+      >
+        <div
+          style={{
+            display: "flex",
+            gap: 24,
+            padding: 24,
+            overflow: "hidden",
+            maxHeight: "100%",
+            maxWidth: 800,
+          }}
         >
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
-              justifyContent: isSmallScreen ? "center" : undefined,
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
               gap: 4,
-              padding: 12,
+              width: imgSize,
+              maxWidth: imgSize,
+              overflow: "auto",
             }}
           >
+            <h4 style={{ marginBottom: 24 }}>Minted Bannys</h4>
+
             {bannys?.nfts.map((nft) => (
               <Link
                 key={nft.tokenId.toString()}
@@ -68,8 +83,24 @@ export default function Activity() {
               </Link>
             ))}
           </div>
-        </ToolbarBagView>
-      </main>
+
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+              overflow: "auto",
+            }}
+          >
+            <h4 style={{ marginBottom: 24 }}>Activity</h4>
+
+            {events.map((e) => (
+              <ActivityEventElem key={e.id} event={e} />
+            ))}
+          </div>
+        </div>
+      </ToolbarBagView>
     </>
   );
 }
