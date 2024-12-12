@@ -53,8 +53,10 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     error,
   } = useWriteJbMultiTerminalPay();
 
+  const { chain } = useAccount();
+
   const mint = useCallback(() => {
-    if (!tierIds.length) return;
+    if (!tierIds.length || !chain) return;
 
     if (!connectedWalletAddress || !terminalAddress || !totalEquippedPrice) {
       console.error("Missing something smh", {

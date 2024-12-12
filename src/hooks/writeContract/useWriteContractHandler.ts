@@ -1,7 +1,11 @@
 import { AlertContext } from "@/contexts/alertContext";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Abi, ContractFunctionArgs, ContractFunctionName } from "viem";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import { WriteContractVariables } from "wagmi/query";
 import { config } from "../../../config.wagmi";
 
@@ -44,6 +48,7 @@ export function useWriteContractHandler<
   variables: Omit<variables, "args"> & { args: args | ((x: meta) => args) },
   options?: WriteContractHandlerOptions<args>
 ) {
+  const { chain } = useAccount();
   const [isComplete, setIsComplete] = useState(false);
   const [usedArgs, setUsedArgs] = useState<args>();
 
@@ -58,6 +63,8 @@ export function useWriteContractHandler<
 
   const write = useCallback(
     (a: meta) => {
+      if (!chain) return;
+
       setIsComplete(false);
 
       const { args } = variables;
@@ -73,7 +80,7 @@ export function useWriteContractHandler<
 
       writeContract<abi, functionName, args, chainId>(v, undefined);
     },
-    [variables, writeContract]
+    [variables, writeContract, chain]
   );
 
   const tx = useWaitForTransactionReceipt({

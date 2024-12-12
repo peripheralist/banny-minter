@@ -34,7 +34,7 @@ export const config = createConfig({
     arbitrumSepolia,
     baseSepolia,
     optimismSepolia,
-    mainnet,
+    // mainnet,
     arbitrum,
     base,
     optimism,

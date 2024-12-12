@@ -2,7 +2,6 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
 import Blinker from "../shared/Blinker";
-import { COLORS } from "@/constants/colors";
 
 export default function CurrentChain() {
   const { address, chain } = useAccount();
