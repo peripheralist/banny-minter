@@ -2,7 +2,7 @@ import { LOOKS_REVNET_ID } from "@/constants/nfts";
 import { ChainId } from "@/model/chain";
 import { useQuery } from "@tanstack/react-query";
 import { readContract } from "@wagmi/core";
-import { Address, zeroAddress } from "viem";
+import { Address, Chain, zeroAddress } from "viem";
 import {
   arbitrum,
   arbitrumSepolia,
@@ -21,7 +21,7 @@ export function useTiered721Hook() {
 
   const revDeployerAddress: Record<ChainId, Address> = {
     // TODO
-    [mainnet.id]: zeroAddress,
+    // [mainnet.id]: zeroAddress,
     [sepolia.id]: "0x25bC5D5A708c2E426eF3a5196cc18dE6b2d5A3d1",
     [base.id]: zeroAddress,
     [baseSepolia.id]: zeroAddress,
@@ -35,7 +35,7 @@ export function useTiered721Hook() {
     queryKey: ["looks-hook", revDeployerAddress],
     queryFn: () =>
       readContract(config, {
-        address: revDeployerAddress[chain.id],
+        address: revDeployerAddress[chain.id as ChainId],
         functionName: "tiered721HookOf",
         args: [BigInt(LOOKS_REVNET_ID)],
         abi: [
