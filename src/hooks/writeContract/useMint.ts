@@ -92,6 +92,7 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     terminalAddress,
     setAlert,
     tierIds,
+    chain,
   ]);
 
   const tx = useWaitForTransactionReceipt({

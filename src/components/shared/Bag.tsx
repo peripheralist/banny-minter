@@ -56,7 +56,7 @@ export default function Bag({
         </span>
       </h1>
 
-      <div style={{ padding: 12, flex: 1 }}>
+      <div style={{ padding: 12, flex: 1, overflow: "auto" }}>
         <BagItems canRemove />
       </div>
 
