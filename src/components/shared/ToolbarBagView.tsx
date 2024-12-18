@@ -46,7 +46,7 @@ export default function ToolbarBagView({
   };
 }>) {
   const { value: bagIsOpen, setValue: setBagIsOpen } = useLocalStorageState(
-    "looks_bag_open",
+    "bag_open",
     {
       initialValue: true,
       parse: (v) => (v === "true" ? true : false),
@@ -138,7 +138,7 @@ export default function ToolbarBagView({
 
         {frame ? (
           <RoundedFrame
-            background={COLORS.bananaLite}
+            background={COLORS.bananaHint}
             style={{ overflow: "auto", ...frameStyle }}
             containerStyle={{
               width: "100%",
@@ -224,7 +224,6 @@ function SmallScreenView({
         style={{
           position: "sticky",
           top: 0,
-          background: COLORS.bananaLite,
           ...(_showHeader ? { maxHeight: 68 } : { maxHeight: 0 }),
           display: "flex",
           justifyContent: "space-between",
@@ -406,7 +405,7 @@ function Drawer({
       </RoundedFrame>
 
       <RoundedFrame
-        background={COLORS.bananaLite}
+        background={COLORS.bananaHint}
         containerStyle={{
           height: open ? `calc(100% - ${BAG_WIDTH - 20}px)` : "100%",
           minHeight: 360,

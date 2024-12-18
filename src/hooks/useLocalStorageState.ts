@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export function useLocalStorageState<V>(
   key: string | undefined,
@@ -12,26 +12,31 @@ export function useLocalStorageState<V>(
     serialize?: (v: V) => string;
   }
 ) {
-  const [didSetInitial, setDidSetInitial] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   const [value, setValue] = useState<V>(initialValue);
+
+  const _key = useMemo(() => (key ? `looks_${key}` : undefined), [key]);
 
   // read from cache
   useEffect(() => {
-    if (didSetInitial || !key) return;
+    if (initialized || !_key) return;
 
-    const raw = localStorage.getItem(key);
+    const raw = localStorage.getItem(_key);
 
     setValue(parse ? parse(raw) : (raw as V));
 
-    setDidSetInitial(true);
-  }, [key, parse, didSetInitial]);
+    setInitialized(true);
+  }, [_key, parse, initialized]);
 
   // update cache
   useEffect(() => {
-    if (!key) return;
+    if (!initialized || !_key) return;
 
-    localStorage.setItem(key, serialize ? serialize(value) : (value as string));
-  }, [key, value, serialize]);
+    localStorage.setItem(
+      _key,
+      serialize ? serialize(value) : (value as string)
+    );
+  }, [_key, value, serialize, initialized]);
 
   return { value, setValue };
 }

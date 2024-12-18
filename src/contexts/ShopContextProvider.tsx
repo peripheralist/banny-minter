@@ -22,7 +22,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
   const { tiers } = useAllTiers();
 
   const { value: bag, setValue: setBag } = useLocalStorageState<ShoppingBag>(
-    "looks_bag",
+    "bag_content",
     {
       initialValue: [],
       parse: (str) =>

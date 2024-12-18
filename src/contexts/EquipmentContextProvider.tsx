@@ -27,7 +27,7 @@ export default function EquipmentContextProvider({
 }>) {
   const { value: equippedTierId, setValue: setEquippedTierId } =
     useLocalStorageState<Partial<Record<Category, number>>>(
-      cacheKey ? `looks_equipped_${cacheKey}` : undefined,
+      cacheKey ? `equipped_${cacheKey}` : undefined,
       {
         initialValue: {},
         parse: (str) => (str ? JSON.parse(str) : {}),

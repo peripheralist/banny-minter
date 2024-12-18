@@ -9,6 +9,10 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
 import TierDetailModal from "../../components/modals/TierDetailModal";
+import RoundedFrame from "@/components/shared/RoundedFrame";
+import Link from "next/link";
+import { COLORS } from "@/constants/colors";
+import ButtonPad from "@/components/shared/ButtonPad";
 
 export default function Drop() {
   const router = useRouter();
@@ -53,7 +57,7 @@ export default function Drop() {
           position: "relative",
           padding: 48,
           paddingLeft: 120,
-          paddingTop: 16,
+          paddingTop: 80,
         }}
         header={`Drop #${drop?.id.toString().padStart(2, "0")} | ${drop?.name}`}
         backButton={{ href: "/drops" }}
@@ -63,8 +67,8 @@ export default function Drop() {
             display: "flex",
             flexDirection: "column",
             gap: 24,
-            marginTop: 80,
             marginBottom: 80,
+            maxWidth: 800,
           }}
         >
           <h1
@@ -76,10 +80,35 @@ export default function Drop() {
           </h1>
 
           <div style={{ fontWeight: "bold" }}>
-            {drop?.dateCreated} | {drop?.itemCount} items
+            {drop?.dateCreated} | {drop?.tierIds.length} items
           </div>
 
           <p>{drop?.summary}</p>
+        </div>
+
+        <div style={{ display: "inline-block", marginBottom: 48 }}>
+          <RoundedFrame
+            style={{
+              padding: 12,
+              display: "flex",
+              alignItems: "baseline",
+              gap: 12,
+              color: COLORS.pink
+            }}
+            background={"white"}
+            borderColor="white"
+          >
+            Still need a Banny? The drip won{"'"}t wear itself.{" "}
+            <Link href={"/bannys"}>
+              <ButtonPad
+                fillFg={COLORS.pink}
+                style={{ color: "white", padding: 12 }}
+                shadow="sm"
+              >
+                Shop Bannys
+              </ButtonPad>
+            </Link>
+          </RoundedFrame>
         </div>
 
         <div
@@ -91,8 +120,9 @@ export default function Drop() {
           }}
         >
           <CategoryGroupGrid
-            items={allTiers}
+            items={allTiers.filter((t) => t.category !== "naked")}
             label
+            excludeGroups={["banny"]}
             render={(t) => (
               <TierShopButton
                 key={t.tierId}

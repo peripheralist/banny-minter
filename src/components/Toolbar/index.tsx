@@ -9,7 +9,7 @@ import Loading from "../shared/Loading";
 import RoundedFrame from "../shared/RoundedFrame";
 import Wallet from "./Wallet";
 
-export const TOOLBAR_WIDTH = 140;
+export const TOOLBAR_WIDTH = 144;
 
 export default function Index() {
   const { address: connectedAddress } = useAccount();
@@ -43,6 +43,10 @@ export default function Index() {
           gap: 8,
         }}
       >
+        <_Link frame href={"/bannys"}>
+          Banny shop
+        </_Link>
+
         <_Link frame href={"/drops/1"}>
           Drop #01
         </_Link>
