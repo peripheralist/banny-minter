@@ -24,7 +24,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
   const { value: bag, setValue: setBag } = useLocalStorageState<ShoppingBag>(
     "bag_content",
     {
-      initialValue: [],
+      defaultValue: [],
       parse: (str) =>
         str
           ? JSON.parse(str).map(

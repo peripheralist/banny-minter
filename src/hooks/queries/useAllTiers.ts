@@ -77,7 +77,7 @@ function useMultiChainTiers() {
 
         promises.forEach((p, i) => {
           if (p.status === "rejected") {
-            console.log("asdf Cross-chain query failed", p);
+            console.log("Cross-chain query failed", p);
 
             return;
           }

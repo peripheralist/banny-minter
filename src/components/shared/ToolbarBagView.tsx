@@ -16,6 +16,7 @@ import {
   PropsWithChildren,
   SetStateAction,
   useContext,
+  useEffect,
   useMemo,
 } from "react";
 import ToolbarIcon from "../ToolbarIcon";
@@ -48,7 +49,7 @@ export default function ToolbarBagView({
   const { value: bagIsOpen, setValue: setBagIsOpen } = useLocalStorageState(
     "bag_open",
     {
-      initialValue: true,
+      defaultValue: undefined,
       parse: (v) => (v === "true" ? true : false),
       serialize: (v) => (v ? "true" : "false"),
     }
@@ -57,6 +58,10 @@ export default function ToolbarBagView({
   const { measuredRef: headerRef, height: headerHeight } = useMeasuredRef();
 
   const { bag } = useContext(ShopContext);
+
+  useEffect(() => {
+    if (bag.length) setBagIsOpen(true);
+  }, [bag.length, setBagIsOpen]);
 
   const { isSmallScreen } = useWindowSize();
 
@@ -83,84 +88,86 @@ export default function ToolbarBagView({
     >
       <Toolbar />
 
-      <div
-        style={{
-          position: "fixed",
-          padding: 8,
-          paddingBottom: frame ? 8 : 0,
-          top: 0,
-          bottom: 0,
-          left: TOOLBAR_WIDTH,
-          right: bag.length
-            ? (bagIsOpen ? BAG_WIDTH : BAG_CLOSED_WIDTH) + 8
-            : 0,
-          transition: "right 0.1s ease-in, left 0.1s ease-in",
-          overflow: "hidden",
-        }}
-      >
+      {bagIsOpen !== undefined && (
         <div
-          ref={headerRef}
-          style={{ display: "flex", gap: 8, paddingBottom: 8 }}
+          style={{
+            position: "fixed",
+            padding: 8,
+            paddingBottom: frame ? 8 : 0,
+            top: 0,
+            bottom: 0,
+            left: TOOLBAR_WIDTH,
+            right: bag.length
+              ? (bagIsOpen ? BAG_WIDTH : BAG_CLOSED_WIDTH) + 8
+              : 0,
+            transition: "right 0.1s ease-in, left 0.1s ease-in",
+            overflow: "hidden",
+          }}
         >
-          {backButton && (
-            <RoundedFrame
-              background={"black"}
-              containerStyle={{ width: "auto" }}
-            >
-              <Link
-                href={backButton.href}
+          <div
+            ref={headerRef}
+            style={{ display: "flex", gap: 8, paddingBottom: 8 }}
+          >
+            {backButton && (
+              <RoundedFrame
+                background={"black"}
+                containerStyle={{ width: "auto" }}
+              >
+                <Link
+                  href={backButton.href}
+                  style={{
+                    display: "flex",
+                    padding: "4px 8px",
+                    gap: 8,
+                    alignItems: "baseline",
+                    color: COLORS.banana,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <span>{"<"}</span>
+                  {backButton.label || null}
+                </Link>
+              </RoundedFrame>
+            )}
+            <RoundedFrame background={"black"} containerStyle={{ flex: 1 }}>
+              <h4
                 style={{
-                  display: "flex",
-                  padding: "4px 8px",
-                  gap: 8,
-                  alignItems: "baseline",
-                  color: COLORS.banana,
                   textTransform: "uppercase",
+                  padding: "4px 8px",
+                  color: COLORS.banana,
                 }}
               >
-                <span>{"<"}</span>
-                {backButton.label || null}
-              </Link>
+                {header}
+              </h4>
             </RoundedFrame>
-          )}
-          <RoundedFrame background={"black"} containerStyle={{ flex: 1 }}>
-            <h4
-              style={{
-                textTransform: "uppercase",
-                padding: "4px 8px",
-                color: COLORS.banana,
+          </div>
+
+          {frame ? (
+            <RoundedFrame
+              background={COLORS.bananaHint}
+              style={{ overflow: "auto", ...frameStyle }}
+              containerStyle={{
+                width: "100%",
+                height: `calc(100% - ${headerHeight}px)`,
               }}
             >
-              {header}
-            </h4>
-          </RoundedFrame>
+              {children}
+            </RoundedFrame>
+          ) : (
+            <div
+              style={{
+                position: "relative",
+                overflow: "auto",
+                height: `calc(100% - ${headerHeight}px)`,
+              }}
+            >
+              {children}
+            </div>
+          )}
         </div>
+      )}
 
-        {frame ? (
-          <RoundedFrame
-            background={COLORS.bananaHint}
-            style={{ overflow: "auto", ...frameStyle }}
-            containerStyle={{
-              width: "100%",
-              height: `calc(100% - ${headerHeight}px)`,
-            }}
-          >
-            {children}
-          </RoundedFrame>
-        ) : (
-          <div
-            style={{
-              position: "relative",
-              overflow: "auto",
-              height: `calc(100% - ${headerHeight}px)`,
-            }}
-          >
-            {children}
-          </div>
-        )}
-      </div>
-
-      {bag.length > 0 && (
+      {bag.length > 0 && bagIsOpen !== undefined && (
         <Drawer
           open={bagIsOpen}
           onClick={bagIsOpen ? undefined : () => setBagIsOpen(true)}
@@ -181,7 +188,7 @@ function SmallScreenView({
   dynamicToolbar?: boolean;
   header: string | JSX.Element;
   bagIsOpen?: boolean;
-  setBagIsOpen: Dispatch<SetStateAction<boolean>>;
+  setBagIsOpen: Dispatch<SetStateAction<boolean | undefined>>;
 }>) {
   const { bag } = useContext(ShopContext);
   const { equipped, equippingCategory, unequippingCategory } =

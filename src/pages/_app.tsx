@@ -12,6 +12,7 @@ import type { AppProps } from "next/app";
 import { PropsWithChildren } from "react";
 import { WagmiProvider } from "wagmi";
 import { config } from "../../config.wagmi";
+import TierDetailModal from "@/components/modals/TierDetailModal";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,8 @@ export default function App({ Component, pageProps }: AppProps) {
                 <_EquipmentContextProvider>
                   <ShopContextProvider>
                     <Component {...pageProps} />
+
+                    <TierDetailModal />
                   </ShopContextProvider>
                 </_EquipmentContextProvider>
               </WalletContextProvider>

@@ -41,8 +41,8 @@ function DropLink({ drop }: { drop: Drop }) {
             }}
           >
             <div>
-              Drop #{drop.id.toString().padStart(2, "0")} | {drop.itemCount}{" "}
-              items
+              Drop #{drop.id.toString().padStart(2, "0")} |{" "}
+              {drop.tierIds.length} items
             </div>
 
             <div>{drop.dateCreated}</div>

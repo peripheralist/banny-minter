@@ -2,19 +2,43 @@ import { CategoryGroupGrid } from "@/components/shared/CategoryGroupGrid";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import TierShopButton from "@/components/shared/TierShopButton";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
+import { CATEGORY_IDS } from "@/constants/category";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
+import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
 import { ShopContext } from "@/contexts/shopContext";
+import { useNfTsQuery } from "@/generated/graphql";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
+import { useAccount } from "wagmi";
 import TierDetailModal from "../../components/modals/TierDetailModal";
-import RoundedFrame from "@/components/shared/RoundedFrame";
-import Link from "next/link";
-import { COLORS } from "@/constants/colors";
-import ButtonPad from "@/components/shared/ButtonPad";
 
 export default function Drop() {
+  const { address } = useAccount();
+
+  const { bag } = useContext(ShopContext);
+
+  const bannyNfts = useNfTsQuery({
+    variables: {
+      where: {
+        collection: LOOKS_COLLECTION_ID,
+        category: CATEGORY_IDS.naked,
+        owner_: {
+          wallet: address?.toLowerCase() ?? null,
+        },
+      },
+    },
+  });
+
+  const needsBanny = useMemo(
+    () =>
+      (!bag.length || bag.every((b) => b.tier.category !== "naked")) &&
+      !bannyNfts.data?.nfts.length &&
+      !bannyNfts.loading,
+    [bannyNfts, bag]
+  );
+
   const router = useRouter();
 
   const dropId = useMemo(() => {
@@ -36,100 +60,41 @@ export default function Drop() {
 
   const { allTiers } = useContext(ShopContext);
 
-  const tierDetail = useMemo(() => {
-    if (!allTiers) return;
-
-    const tierId = parseInt(router.asPath.split("#")[1]);
-
-    if (isNaN(tierId) || !drop?.tierIds.includes(tierId)) return;
-
-    return allTiers.find((t) => t.tierId === tierId);
-  }, [router, allTiers, drop]);
-
   if (!allTiers) return <FullscreenLoading />;
 
   return (
-    <>
-      <ToolbarBagView
-        frame
-        dynamicToolbar
-        frameStyle={{
-          position: "relative",
-          padding: 48,
-          paddingLeft: 120,
-          paddingTop: 80,
-        }}
-        header={`Drop #${drop?.id.toString().padStart(2, "0")} | ${drop?.name}`}
-        backButton={{ href: "/drops" }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 24,
-            marginBottom: 80,
-            maxWidth: 800,
-          }}
-        >
-          <h1
-            style={{
-              fontSize: isSmallScreen ? FONT_SIZE["3xl"] : FONT_SIZE["4xl"],
-            }}
-          >
-            {drop?.name}
-          </h1>
-
-          <div style={{ fontWeight: "bold" }}>
-            {drop?.dateCreated} | {drop?.tierIds.length} items
+    <ToolbarBagView
+      frame
+      dynamicToolbar
+      frameStyle={{
+        position: "relative",
+        padding: 48,
+        paddingLeft: 120,
+        paddingTop: 24,
+      }}
+      header={`Drop #${drop?.id.toString().padStart(2, "0")} | ${drop?.name}`}
+      backButton={{ href: "/drops" }}
+    >
+      {needsBanny ? (
+        <div style={{ marginTop: 80, marginBottom: 48 }}>
+          <div style={{ marginBottom: 48 }}>
+            <h2>It{"'"}s dangerous to go alone. Take one of these!</h2>
+            <p style={{ marginTop: 12 }}>
+              Add a Banny to your bag to get started.
+            </p>
           </div>
 
-          <p>{drop?.summary}</p>
-        </div>
-
-        <div style={{ display: "inline-block", marginBottom: 48 }}>
-          <RoundedFrame
-            style={{
-              padding: 12,
-              display: "flex",
-              alignItems: "baseline",
-              gap: 12,
-              color: COLORS.pink
-            }}
-            background={"white"}
-            borderColor="white"
-          >
-            Still need a Banny? The drip won{"'"}t wear itself.{" "}
-            <Link href={"/bannys"}>
-              <ButtonPad
-                fillFg={COLORS.pink}
-                style={{ color: "white", padding: 12 }}
-                shadow="sm"
-              >
-                Shop Bannys
-              </ButtonPad>
-            </Link>
-          </RoundedFrame>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            gap: 64,
-          }}
-        >
           <CategoryGroupGrid
-            items={allTiers.filter((t) => t.category !== "naked")}
+            items={allTiers.filter((t) => t.category === "naked")}
             label
-            excludeGroups={["banny"]}
+            excludeGroups={["head", "outfit", "special", "world"]}
             render={(t) => (
               <TierShopButton
                 key={t.tierId}
                 tier={t}
                 buttonSize={imgSize}
                 onClick={() => {
-                  router.push({ hash: t.tierId.toString() }, undefined, {
+                  router.push(router.asPath + `?tier=${t.tierId}`, undefined, {
                     shallow: true,
                   });
                 }}
@@ -141,17 +106,69 @@ export default function Drop() {
             }}
           />
         </div>
-      </ToolbarBagView>
+      ) : (
+        <>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 24,
+              marginBottom: 80,
+              marginTop: 80,
+              maxWidth: 960,
+            }}
+          >
+            <h1
+              style={{
+                fontSize: isSmallScreen ? FONT_SIZE["3xl"] : FONT_SIZE["4xl"],
+              }}
+            >
+              {drop?.name}
+            </h1>
 
-      <TierDetailModal
-        tier={tierDetail}
-        onClose={() => {
-          if (router.asPath.includes("#")) {
-            const newPath = router.asPath.split("#")[0];
-            router.replace(newPath, undefined, { shallow: true });
-          }
-        }}
-      />
-    </>
+            <div style={{ fontWeight: "bold" }}>
+              {drop?.dateCreated} | {drop?.tierIds.length} items
+            </div>
+
+            <p style={{ fontSize: FONT_SIZE.sm }}>{drop?.summary}</p>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              gap: 64,
+            }}
+          >
+            <CategoryGroupGrid
+              items={allTiers.filter((t) => t.category !== "naked")}
+              label
+              excludeGroups={["banny"]}
+              render={(t) => (
+                <TierShopButton
+                  key={t.tierId}
+                  tier={t}
+                  buttonSize={imgSize}
+                  onClick={() => {
+                    router.push(
+                      router.asPath + `?tier=${t.tierId}`,
+                      undefined,
+                      {
+                        shallow: true,
+                      }
+                    );
+                  }}
+                />
+              )}
+              gridStyle={{
+                gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
+                gap: 4,
+              }}
+            />
+          </div>
+        </>
+      )}
+    </ToolbarBagView>
   );
 }

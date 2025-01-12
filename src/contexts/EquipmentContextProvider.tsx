@@ -29,7 +29,7 @@ export default function EquipmentContextProvider({
     useLocalStorageState<Partial<Record<Category, number>>>(
       cacheKey ? `equipped_${cacheKey}` : undefined,
       {
-        initialValue: {},
+        defaultValue: {},
         parse: (str) => (str ? JSON.parse(str) : {}),
         serialize: (v) => JSON.stringify(v),
       }

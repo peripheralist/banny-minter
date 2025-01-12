@@ -5,36 +5,102 @@ import TierImage from "@/components/shared/TierImage";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { categoryIncompatibles } from "@/constants/incompatibles";
 import { ShopContext } from "@/contexts/shopContext";
-import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Tier } from "@/model/tier";
 import { formatEther } from "juice-sdk-core";
-import { useCallback, useContext, useMemo } from "react";
-import FuzzMoment from "../pixelRenderers/FuzzMoment";
+import { useRouter } from "next/router";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 
-export default function TierDetailModal({
-  tier,
-  onClose,
-}: {
-  tier: Tier | undefined;
-  onClose?: VoidFunction;
-}) {
-  const { addItem } = useContext(ShopContext);
+const IMG_COUNT = 5;
+
+export default function TierDetailModal() {
+  const [imgIdx, setImgIdx] = useState(0);
+
+  const { addItem, allTiers } = useContext(ShopContext);
 
   const { width } = useWindowSize();
+
+  const router = useRouter();
+
+  const tier = useMemo(() => {
+    const tierId = parseInt(router.query.tier as string);
+
+    if (!tierId || isNaN(tierId)) return;
+
+    return allTiers?.find((t) => t.tierId === tierId);
+  }, [allTiers, router]);
+
+  // Sets of tiers to equip in preview images
+  const previewTierSets = useMemo(() => {
+    function generateTiers() {
+      if (!tier) return [];
+
+      const setLength = 3;
+
+      const _tiers: Tier[] = [tier];
+
+      for (let i = 0; i < setLength; i++) {
+        const options = allTiers?.filter(
+          (t) =>
+            _tiers.every((_t) => t.tierId !== _t.tierId) &&
+            !categoryIncompatibles[tier.category]?.includes(t.category) &&
+            t.category !== tier.category &&
+            t.category !== "world" && // no worlds
+            (i === 0 ? t.category === "naked" : t.category !== "naked") // ensure 1 naked
+        );
+
+        if (options?.length) {
+          _tiers.push(options[Math.floor(Math.random() * options.length)]);
+        }
+      }
+
+      return _tiers;
+    }
+
+    const sets = [];
+    for (let i = 0; i < IMG_COUNT; i++) {
+      sets.push(generateTiers());
+    }
+    return sets;
+  }, [tier, allTiers]);
 
   const imgSize = useMemo(
     () => Math.min(Math.max(width ? width - 96 : 0, 240), 420),
     [width]
   );
 
+  const images = useCallback(
+    (size: number) => {
+      const _imgs = [<TierImage key={0} tier={tier} size={size} />];
+
+      for (let i = 0; i < IMG_COUNT; i++) {
+        _imgs.push(<Look key={i + 1} tiers={previewTierSets[i]} size={size} />);
+      }
+
+      return _imgs;
+    },
+    [tier, previewTierSets]
+  );
+
+  const bigImages = useMemo(() => images(imgSize), [imgSize, images]);
+  const smallImages = useMemo(() => images(80), [images]);
+
+  useEffect(() => {
+    document.getElementById(`preview-${imgIdx}`)?.scrollIntoView();
+  }, [imgIdx]);
+
   if (!tier) return null;
 
   return (
     <Modal
       open
-      onClose={onClose}
+      onClose={() => {
+        if (!router.query.tier) return;
+
+        const newPath = router.asPath.split("?tier=")[0];
+        router.replace(newPath, undefined, { shallow: true });
+      }}
       action={{
         onClick: () => addItem?.(tier),
         text: `Add to bag Ξ${formatEther(tier.price)}`,
@@ -48,19 +114,67 @@ export default function TierDetailModal({
           gap: 36,
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            position: "relative",
+          }}
+        >
           <RoundedFrame borderColor="white" background={"white"}>
-            <TierImage tier={tier} size={imgSize} />
+            {bigImages[imgIdx]}
           </RoundedFrame>
 
-          <div>
-            <div style={{ fontSize: FONT_SIZE.sm, marginBottom: 8 }}>
-              Wear it like:
+          <div
+            style={{
+              display: "flex",
+              gap: 4,
+              maxWidth: imgSize + 12,
+              overflow: "auto",
+              marginTop: 8,
+              paddingBottom: 12,
+            }}
+          >
+            {smallImages.map((img, i) => (
+              <div id={`preview-${i}`} key={i} onClick={() => setImgIdx(i)}>
+                <RoundedFrame
+                  borderColor={imgIdx === i ? "black" : "white"}
+                  background="white"
+                  style={{ pointerEvents: "none" }}
+                >
+                  {img}
+                </RoundedFrame>
+              </div>
+            ))}
+          </div>
+
+          <div
+            style={{
+              position: "absolute",
+              display: "flex",
+              justifyContent: "space-between",
+              top: imgSize / 2,
+              right: 12,
+              left: 12,
+              zIndex: 1,
+              fontSize: FONT_SIZE.lg,
+            }}
+          >
+            <div
+              style={{
+                cursor: "pointer",
+                height: 80,
+              }}
+              onClick={() => setImgIdx((i) => (i ? i - 1 : IMG_COUNT - 1))}
+            >
+              {"<"}
             </div>
-            <div style={{ display: "flex", gap: 4 }}>
-              <Look key={1} tier={tier} size={imgSize / 3} />
-              <Look key={2} tier={tier} size={imgSize / 3} />
-              <Look key={3} tier={tier} size={imgSize / 3} />
+
+            <div
+              style={{ cursor: "pointer", height: 80 }}
+              onClick={() => setImgIdx((i) => (i + 1) % IMG_COUNT)}
+            >
+              {">"}
             </div>
           </div>
         </div>
@@ -71,69 +185,32 @@ export default function TierDetailModal({
   );
 }
 
-function Look({ tier, size }: { tier: Tier; size: number }) {
-  const { tiers } = useAllTiers();
-
-  const count = 3;
-
-  const displayTiers = useMemo(() => {
-    const _displayTiers: Tier[] = [tier];
-
-    for (let i = 0; i < count; i++) {
-      const options = tiers?.filter(
-        (t) =>
-          _displayTiers.every((_t) => t.tierId !== _t.tierId) &&
-          !categoryIncompatibles[tier.category]?.includes(t.category) &&
-          t.category !== tier.category &&
-          t.category !== "world" && // no worlds
-          (i === 0 ? t.category === "naked" : t.category !== "naked") // ensure 1 naked
-      );
-
-      if (options?.length) {
-        _displayTiers.push(options[Math.floor(Math.random() * options.length)]);
-      }
-    }
-
-    return _displayTiers;
-  }, [tiers, tier]);
-
-  const Preview = useCallback(
-    () => (
-      <FuzzMoment
-        width={size}
-        height={size}
-        fill="#ccc"
-        onFinished={
-          <EquippedTiersPreview
-            size={size + 20}
-            equipped={displayTiers.reduce(
-              (acc, _tier) => ({
-                ...acc,
-                [_tier.category]: _tier,
-              }),
-              { [tier.category]: tier }
-            )}
-          />
-        }
-      />
-    ),
-    [displayTiers, size, tier]
+function Look({ tiers, size }: { tiers: Tier[]; size: number }) {
+  const equipped = useMemo(
+    () =>
+      tiers.reduce(
+        (acc, _tier) => ({
+          ...acc,
+          [_tier.category]: _tier,
+        }),
+        {}
+      ),
+    [tiers]
   );
 
-  if (!displayTiers) return null;
-
   return (
-    <RoundedFrame
-      containerStyle={{ width: size, height: size }}
-      background={"white"}
-      borderColor="white"
+    <div
       style={{
+        width: size,
+        height: size,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        paddingLeft: "7%",
+        overflow: "hidden",
       }}
     >
-      <Preview />
-    </RoundedFrame>
+      <EquippedTiersPreview size={size * 1.2} equipped={equipped} />
+    </div>
   );
 }

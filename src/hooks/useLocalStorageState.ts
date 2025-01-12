@@ -3,17 +3,17 @@ import { useEffect, useMemo, useState } from "react";
 export function useLocalStorageState<V>(
   key: string | undefined,
   {
-    initialValue,
+    defaultValue,
     parse,
     serialize,
   }: {
-    initialValue: V;
+    defaultValue: V;
     parse?: (v: string | null) => V;
     serialize?: (v: V) => string;
   }
 ) {
   const [initialized, setInitialized] = useState(false);
-  const [value, setValue] = useState<V>(initialValue);
+  const [value, setValue] = useState<V>(defaultValue);
 
   const _key = useMemo(() => (key ? `looks_${key}` : undefined), [key]);
 
