@@ -56,7 +56,7 @@ export default function Bag({
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: 'end',
+            alignItems: "end",
             fontSize: FONT_SIZE.sm,
             textTransform: "uppercase",
           }}
@@ -129,9 +129,7 @@ export default function Bag({
                   background={"white"}
                   style={{ padding: 8 }}
                 >
-                  <div style={{ marginTop: -4, marginBottom: 4 }}>
-                    <TierImage size={40} tier={tier} />
-                  </div>
+                  <TierImage size={40} tier={tier} />
                 </RoundedFrame>
               </div>
             );

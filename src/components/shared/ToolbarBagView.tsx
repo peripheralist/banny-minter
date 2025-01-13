@@ -408,7 +408,7 @@ function Drawer({
       </RoundedFrame>
 
       <RoundedFrame
-        background={COLORS.bananaHint}
+        background={COLORS.bananaLite}
         containerStyle={{
           height: open ? `calc(100% - ${BAG_WIDTH - 20}px)` : "100%",
           minHeight: 360,
