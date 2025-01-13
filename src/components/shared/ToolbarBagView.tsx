@@ -46,22 +46,19 @@ export default function ToolbarBagView({
     label?: string | JSX.Element;
   };
 }>) {
-  const { value: bagIsOpen, setValue: setBagIsOpen } = useLocalStorageState(
-    "bag_open",
-    {
-      defaultValue: undefined,
-      parse: (v) => (v === "true" ? true : false),
-      serialize: (v) => (v ? "true" : "false"),
-    }
-  );
+  const {
+    value: bagIsOpen,
+    setValue: setBagIsOpen,
+    initialized: bagInitialized,
+  } = useLocalStorageState("bag_open", {
+    defaultValue: true,
+    parse: (v) => (v === "true" ? true : false),
+    serialize: (v) => (v ? "true" : "false"),
+  });
 
   const { measuredRef: headerRef, height: headerHeight } = useMeasuredRef();
 
   const { bag } = useContext(ShopContext);
-
-  useEffect(() => {
-    if (bag.length) setBagIsOpen(true);
-  }, [bag.length, setBagIsOpen]);
 
   const { isSmallScreen } = useWindowSize();
 
@@ -88,11 +85,12 @@ export default function ToolbarBagView({
     >
       <Toolbar />
 
-      {bagIsOpen !== undefined && (
+      {bagInitialized && (
         <div
           style={{
             position: "fixed",
             padding: 8,
+            paddingLeft: 0,
             paddingBottom: frame ? 8 : 0,
             top: 0,
             bottom: 0,
@@ -108,32 +106,28 @@ export default function ToolbarBagView({
             ref={headerRef}
             style={{ display: "flex", gap: 8, paddingBottom: 8 }}
           >
-            {backButton && (
-              <RoundedFrame
-                background={"black"}
-                containerStyle={{ width: "auto" }}
-              >
+            <RoundedFrame
+              background={"black"}
+              style={{ display: "flex", alignItems: "baseline" }}
+              containerStyle={{
+                flex: 1,
+                marginBottom: frame ? -24 : 0,
+                paddingBottom: frame ? 10 : 0,
+              }}
+            >
+              {backButton && (
                 <Link
                   href={backButton.href}
-                  style={{
-                    display: "flex",
-                    padding: "4px 8px",
-                    gap: 8,
-                    alignItems: "baseline",
-                    color: COLORS.banana,
-                    textTransform: "uppercase",
-                  }}
+                  style={{ padding: "0px 12px", color: "white" }}
                 >
-                  <span>{"<"}</span>
-                  {backButton.label || null}
+                  {"<"}
                 </Link>
-              </RoundedFrame>
-            )}
-            <RoundedFrame background={"black"} containerStyle={{ flex: 1 }}>
+              )}
+
               <h4
                 style={{
                   textTransform: "uppercase",
-                  padding: "4px 8px",
+                  padding: "4px 12px",
                   color: COLORS.banana,
                 }}
               >
@@ -167,7 +161,7 @@ export default function ToolbarBagView({
         </div>
       )}
 
-      {bag.length > 0 && bagIsOpen !== undefined && (
+      {bag.length > 0 && bagInitialized && (
         <Drawer
           open={bagIsOpen}
           onClick={bagIsOpen ? undefined : () => setBagIsOpen(true)}
@@ -188,7 +182,7 @@ function SmallScreenView({
   dynamicToolbar?: boolean;
   header: string | JSX.Element;
   bagIsOpen?: boolean;
-  setBagIsOpen: Dispatch<SetStateAction<boolean | undefined>>;
+  setBagIsOpen: Dispatch<SetStateAction<boolean>>;
 }>) {
   const { bag } = useContext(ShopContext);
   const { equipped, equippingCategory, unequippingCategory } =
@@ -238,6 +232,7 @@ function SmallScreenView({
           transition: "max-height 0.1s ease-in",
           boxSizing: "border-box",
           zIndex: 101,
+          background: COLORS.bananaLite
         }}
       >
         <div
@@ -250,12 +245,12 @@ function SmallScreenView({
           <ToolbarIcon />
         </div>
 
-        <div
+        <h4
           style={{ padding: "8px 12px", opacity: _showHeader ? 1 : 0 }}
           onClick={() => setBagIsOpen(true)}
         >
           BAG ({bag.length || 0})
-        </div>
+        </h4>
       </div>
 
       <div
@@ -274,9 +269,9 @@ function SmallScreenView({
       >
         <h4>{header}</h4>
 
-        <div hidden={_showHeader} onClick={() => setBagIsOpen(true)}>
+        <h4 hidden={_showHeader} onClick={() => setBagIsOpen(true)}>
           BAG ({bag.length || 0})
-        </div>
+        </h4>
       </div>
 
       <div
@@ -363,8 +358,8 @@ function Drawer({
         display: "flex",
         flexDirection: "column",
         gap: 8,
-        top: 8,
-        bottom: 8,
+        top: 0,
+        bottom: 0,
         right: 8,
         transition: "width 0.1s ease-in",
         width: open ? BAG_WIDTH : BAG_CLOSED_WIDTH,
@@ -381,6 +376,7 @@ function Drawer({
           flexShrink: 0,
           marginBottom: -32,
           paddingTop: 4,
+          marginTop: 8,
         }}
         style={{
           textAlign: "center",
@@ -416,6 +412,7 @@ function Drawer({
         containerStyle={{
           height: open ? `calc(100% - ${BAG_WIDTH - 20}px)` : "100%",
           minHeight: 360,
+          marginBottom: 8,
         }}
       >
         <Bag open={open} onClose={onClose} />

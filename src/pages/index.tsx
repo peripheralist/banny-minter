@@ -193,6 +193,7 @@ export default function Home() {
                 flexDirection: "column",
                 alignItems: "center",
               }}
+              dimension
             >
               <div style={{ fontSize: FONT_SIZE.lg, fontWeight: "bold" }}>
                 Drop {DROPS[0].id}: {DROPS[0].name}
@@ -208,7 +209,7 @@ export default function Home() {
             </ButtonPad>
           </Link>
 
-          <Link href={`/catalog`}>
+          <Link href={`/activity`}>
             <ButtonPad
               style={{
                 padding: "12px 16px",
@@ -216,7 +217,7 @@ export default function Home() {
                 fontSize: FONT_SIZE.lg,
               }}
             >
-              Catalog
+              Activity
             </ButtonPad>
           </Link>
 

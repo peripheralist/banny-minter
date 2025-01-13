@@ -18,7 +18,20 @@ export default function Wallet() {
   return address ? (
     <div>
       <div>
-        <h4 style={{ textAlign: "center" }}>Wallet</h4>
+        <RoundedFrame
+          background={"black"}
+          containerStyle={{ marginBottom: -16, paddingBottom: 10 }}
+        >
+          <h4
+            style={{
+              color: COLORS.banana,
+              fontSize: FONT_SIZE.sm,
+              textAlign: "center",
+            }}
+          >
+            WALLET
+          </h4>
+        </RoundedFrame>
 
         <RoundedFrame
           background={COLORS.bananaLite}
@@ -26,13 +39,18 @@ export default function Wallet() {
             padding: 12,
             width: "100%",
             fontSize: FONT_SIZE.xs,
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
           }}
         >
-          <div style={{ fontWeight: "bold", marginBottom: 8 }}>
-            {ensName ?? <FormattedAddress address={address} />}
+          <div style={{ fontSize: FONT_SIZE.md }}>
+            <CurrentChain />
           </div>
 
-          <CurrentChain />
+          <div style={{ fontWeight: "bold" }}>
+            {ensName ?? <FormattedAddress address={address} />}
+          </div>
 
           <ButtonPad
             onClick={() => disconnect()}
@@ -41,8 +59,9 @@ export default function Wallet() {
               color: "black",
               fontSize: FONT_SIZE.xs,
             }}
-            containerStyle={{ margin: -4, marginTop: 8 }}
+            containerStyle={{ margin: -4 }}
             shadow="none"
+            dimension
           >
             Disconnect
           </ButtonPad>
@@ -59,6 +78,7 @@ export default function Wallet() {
       shadow="sm"
       fillFg={COLORS.pink}
       onClick={connect}
+      dimension
     >
       Connect
     </ButtonPad>

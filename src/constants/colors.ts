@@ -1,8 +1,8 @@
 export const COLORS = {
   // banana: "#ffd482",
-  banana: "#ffca66",
-  bananaLite: "#ffdfa4",
-  bananaHint: "#fff2da",
+  banana: "#f9d87a",
+  bananaLite: "#fce7ae",
+  bananaHint: "#fef6df",
 
   brown: "#AB6C0F",
   pink: "#e221a0",

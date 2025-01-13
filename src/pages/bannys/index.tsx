@@ -39,7 +39,13 @@ export default function Index() {
           gap: 48,
         }}
       >
-        <h1 style={{ fontSize: FONT_SIZE["3xl"] }}>Banny Shop</h1>
+        <h1
+          style={{
+            fontSize: isSmallScreen ? FONT_SIZE["3xl"] : FONT_SIZE["4xl"],
+          }}
+        >
+          Banny Shop
+        </h1>
 
         <p>
           Choosing your Banny is the first step. Once you have yours, you can

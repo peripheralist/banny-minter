@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import { COLORS } from "@/constants/colors";
 import { useIsHover } from "@/hooks/useIsHover";
 import { useRouter } from "next/router";
+import ButtonPad from "../shared/ButtonPad";
 
 export const TOOLBAR_ICON_SIZE = 40;
 
@@ -66,7 +67,7 @@ export default function ToolbarIcon() {
 
           <_Link href="/">Home</_Link>
           <_Link href="/drops/1">Drop #01</_Link>
-          <_Link href={"/catalog"}>Catalog</_Link>
+          <_Link href={"/activity"}>Activity</_Link>
 
           {connectedAddress && (
             <_Link href={"/locker/" + connectedAddress}>Locker</_Link>
@@ -102,17 +103,18 @@ function _Link({ children, ...props }: PropsWithChildren<{ href: string }>) {
         padding: 0,
       }}
     >
-      <RoundedFrame
-        background={isHover || active ? "white" : undefined}
+      <ButtonPad
+        fillFg={isHover || active ? "white" : COLORS.bananaHint}
         style={{
           color: "black",
           fontWeight: "bold",
           padding: 16,
           textTransform: "uppercase",
         }}
+        dimension
       >
         {children}
-      </RoundedFrame>
+      </ButtonPad>
     </Link>
   );
 }

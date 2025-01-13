@@ -73,12 +73,13 @@ export default function Drop() {
         paddingTop: 24,
       }}
       header={`Drop #${drop?.id.toString().padStart(2, "0")} | ${drop?.name}`}
-      backButton={{ href: "/drops" }}
     >
       {needsBanny ? (
         <div style={{ marginTop: 80, marginBottom: 48 }}>
           <div style={{ marginBottom: 48 }}>
-            <h2>It{"'"}s dangerous to go alone. Take one of these!</h2>
+            <h1 style={{ fontSize: FONT_SIZE["3xl"] }}>
+              It{"'"}s dangerous to go alone. Take one of these!
+            </h1>
             <p style={{ marginTop: 12 }}>
               Add a Banny to your bag to get started.
             </p>
@@ -86,7 +87,6 @@ export default function Drop() {
 
           <CategoryGroupGrid
             items={allTiers.filter((t) => t.category === "naked")}
-            label
             excludeGroups={["head", "outfit", "special", "world"]}
             render={(t) => (
               <TierShopButton
@@ -114,7 +114,7 @@ export default function Drop() {
               flexDirection: "column",
               gap: 24,
               marginBottom: 80,
-              marginTop: 80,
+              marginTop: 56,
               maxWidth: 960,
             }}
           >

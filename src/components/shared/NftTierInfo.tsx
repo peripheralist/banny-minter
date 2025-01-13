@@ -70,7 +70,9 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
   const NameDesc = useCallback(() => {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-        <h1 style={{ marginTop: 24 }}>{tier.name}</h1>
+        <h1 style={{ fontSize: FONT_SIZE["3xl"], marginTop: 24 }}>
+          {tier.name}
+        </h1>
 
         <div style={{ display: "flex" }}>
           <RoundedFrame
@@ -88,6 +90,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
 
         <p
           style={{
+            fontSize: FONT_SIZE.sm,
             maxWidth: isSmallScreen ? "calc(100vw - 48px)" : 400,
           }}
         >
@@ -238,7 +241,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
           }}
           href={`/dress/${nft.tokenId.toString()}`}
         >
-          <ButtonPad style={{ padding: 16 }}>Dressing room</ButtonPad>
+          <ButtonPad style={{ padding: 16 }} dimension>Dressing room</ButtonPad>
         </Link>
       )}
     </div>

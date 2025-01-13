@@ -72,14 +72,30 @@ export function CategoryGroupGrid<I extends { category: Category }>({
                 }}
               >
                 <RoundedFrame
-                  background={"black"}
+                  background={
+                    isSmallScreen ? COLORS.bananaLite : COLORS.bananaHint
+                  }
+                  borderColor={"black"}
                   style={{
                     padding: isSmallScreen ? "8px 16px 8px 20px" : "12px 16px",
-                    color: COLORS.bananaLite,
+                    color: "black",
+                    borderLeft: "2px solid black",
                   }}
                 >
                   {g}
                 </RoundedFrame>
+
+                <div
+                  hidden={isSmallScreen}
+                  style={{
+                    background: "black",
+                    position: "absolute",
+                    left: 8,
+                    top: 0,
+                    bottom: 0,
+                    width: 4,
+                  }}
+                />
               </div>
             </div>
           )}

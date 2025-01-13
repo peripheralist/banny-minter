@@ -51,6 +51,7 @@ export default function DecorateButton() {
         disabled={disabled}
         shadow="sm"
         style={{ padding: 12, fontSize: FONT_SIZE.lg, color: "white" }}
+        dimension
       >
         Dress
       </ButtonPad>
@@ -276,9 +277,11 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
       action: { onClick: decorate, text: "Dress" },
       content: (
         <>
-          <h1>New fit?</h1>
+          <h1 style={{ fontSize: FONT_SIZE["3xl"] }}>New fit?</h1>
 
-          <p style={{ marginTop: 12, marginBottom: 24 }}>
+          <p
+            style={{ marginTop: 12, marginBottom: 24, fontSize: FONT_SIZE.sm }}
+          >
             When dressing a Banny, outfits & backgrounds will be transferred to
             the Resolver contract. When removed, they{"'"}ll be returned to
             whichever wallet owns the Banny.

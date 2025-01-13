@@ -18,6 +18,7 @@ export default function ButtonPad({
   fillFg,
   fillBorder,
   shadow,
+  dimension,
   onClick,
   pressed,
   containerStyle,
@@ -29,6 +30,7 @@ export default function ButtonPad({
   fillFg?: CSSProperties["background"];
   fillBorder?: CSSProperties["borderColor"];
   shadow?: "sm" | "md" | "none";
+  dimension?: boolean;
   onClick?: MouseEventHandler<HTMLDivElement>;
   pressed?: boolean;
   containerStyle?: CSSProperties;
@@ -115,6 +117,33 @@ export default function ButtonPad({
         }}
       >
         {loading ? <Fuzz {...loading} interval={500} /> : children}
+
+        {dimension && (
+          <>
+            <div
+              style={{
+                position: "absolute",
+                background: "black",
+                opacity: 0.15,
+                bottom: 0,
+                right: 8,
+                left: 8,
+                height: 8,
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                background: "white",
+                opacity: 0.2,
+                top: 0,
+                right: 8,
+                left: 8,
+                height: 8,
+              }}
+            />
+          </>
+        )}
       </RoundedFrame>
     </div>
   );

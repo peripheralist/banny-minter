@@ -6,10 +6,11 @@ import { useRouter } from "next/router";
 import { CSSProperties, PropsWithChildren, useMemo } from "react";
 import { useAccount } from "wagmi";
 import Loading from "../shared/Loading";
-import RoundedFrame from "../shared/RoundedFrame";
 import Wallet from "./Wallet";
+import { COLORS } from "@/constants/colors";
+import ButtonPad from "../shared/ButtonPad";
 
-export const TOOLBAR_WIDTH = 144;
+export const TOOLBAR_WIDTH = 156;
 
 export default function Index() {
   const { address: connectedAddress } = useAccount();
@@ -24,10 +25,11 @@ export default function Index() {
         justifyContent: "space-between",
         boxSizing: "border-box",
         padding: 8,
-        paddingRight: 0,
+        paddingTop: 12,
         gap: 24,
         height: "100vh",
         width: TOOLBAR_WIDTH,
+        overflow: "auto",
         ...(isSmallScreen
           ? { fontSize: "0.8rem" }
           : { position: "fixed", top: 0, left: 0, right: 0 }),
@@ -51,8 +53,8 @@ export default function Index() {
           Drop #01
         </_Link>
 
-        <_Link frame href={"/catalog"}>
-          Catalog
+        <_Link frame href={"/activity"}>
+          Activity
         </_Link>
 
         {connectedAddress && (
@@ -102,17 +104,19 @@ function _Link({
       }}
     >
       {frame ? (
-        <RoundedFrame
-          background={isHover || active ? "white" : undefined}
+        <ButtonPad
+          fillFg={isHover || active ? "white" : COLORS.bananaLite}
           style={{
             color: "black",
             fontWeight: "bold",
             padding: "12px 16px",
             textTransform: "uppercase",
           }}
+          shadow="sm"
+          dimension
         >
           {children}
-        </RoundedFrame>
+        </ButtonPad>
       ) : (
         children
       )}
@@ -123,11 +127,11 @@ function _Link({
 function HomeButton() {
   const { isHover, ...hoverProps } = useIsHover();
 
-  const width = TOOLBAR_WIDTH - 16;
-  const height = ((TOOLBAR_WIDTH - 16) * 8) / 14;
+  const width = TOOLBAR_WIDTH - 24;
+  const height = (width * 8) / 14;
 
   return (
-    <_Link href={"/"} {...hoverProps} style={{ width, height }}>
+    <_Link href={"/"} {...hoverProps} style={{ width, height, padding: 4 }}>
       {isHover ? (
         <div style={{ width, height }}>
           <Loading />

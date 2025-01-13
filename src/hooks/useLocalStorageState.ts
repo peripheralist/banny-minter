@@ -38,5 +38,5 @@ export function useLocalStorageState<V>(
     );
   }, [_key, value, serialize, initialized]);
 
-  return { value, setValue };
+  return { value, setValue, initialized };
 }

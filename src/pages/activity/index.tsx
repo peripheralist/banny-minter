@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 
-export default function Catalog() {
+export default function Activity() {
   const { data: bannys } = useNfTsQuery({
     variables: {
       where: {
@@ -28,7 +28,7 @@ export default function Catalog() {
     <ToolbarBagView
       frame
       dynamicToolbar
-      header={`CATALOG | ${bannys?.nfts.length ?? "--"} minted bannys`}
+      header={`ACTIVITY | ${bannys?.nfts.length ?? "--"} minted bannys`}
     >
       <div
         style={{

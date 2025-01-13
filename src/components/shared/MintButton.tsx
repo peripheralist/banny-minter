@@ -51,17 +51,18 @@ export default function MintButton() {
           <TransactionPending hash={hash} text="Minting..." />
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <h1>Mint NFTs</h1>
+            <h1 style={{fontSize: FONT_SIZE["3xl"]}}>Mint NFTs</h1>
 
             <BagItems />
 
-            <p>
+            <p style={{fontSize: FONT_SIZE.sm}}>
               By minting Looks NFTs, you{"'"}re paying the on-chain{" "}
               <Link href={"https://revnet.eth.sucks/memo/"}>Looks Revnet</Link>{" "}
               treasury and earning $BAN in return.
             </p>
 
             <div>$BAN earned by this payment: 69420</div>
+            {/* TODO calculate $BAN */}
           </div>
         )}
       </Modal>
@@ -107,6 +108,8 @@ export default function MintButton() {
         style={{ padding: 12 }}
         fillFg={COLORS.pink}
         onClick={address ? () => setIsConfirming(true) : connect}
+        shadow="sm"
+        dimension
       >
         <div style={{ width: "100%" }}>
           <div

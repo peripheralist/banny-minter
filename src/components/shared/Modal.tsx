@@ -56,6 +56,7 @@ export default function Modal({
           minWidth: 240,
         }}
         shadow="sm"
+        dimension
       >
         {action.text}
       </ButtonPad>

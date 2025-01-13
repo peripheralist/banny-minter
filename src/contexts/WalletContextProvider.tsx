@@ -3,6 +3,7 @@ import Modal from "@/components/shared/Modal";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { useAccount, useConnect } from "wagmi";
 import { WalletContext } from "./walletContext";
+import { FONT_SIZE } from "@/constants/fontSize";
 
 export default function WalletContextProvider({ children }: PropsWithChildren) {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +27,15 @@ export default function WalletContextProvider({ children }: PropsWithChildren) {
       {children}
 
       <Modal open={isOpen} onClose={onClose}>
-        <h2 style={{ marginBottom: 24 }}>Select wallet</h2>
+        <h2
+          style={{
+            marginBottom: 24,
+            fontSize: FONT_SIZE["2xl"],
+            textAlign: "center",
+          }}
+        >
+          Choose your wallet
+        </h2>
 
         <div
           style={{

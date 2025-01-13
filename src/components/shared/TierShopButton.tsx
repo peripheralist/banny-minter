@@ -91,8 +91,9 @@ export default function TierShopButton({
     <ButtonPad
       fillFg={"white"}
       fillBorder={"white"}
-      style={{ opacity: isSoldOut ? 0.7 : 1 }}
+      style={{ opacity: isSoldOut ? 0.7 : 1, cursor: "default" }}
       shadow="sm"
+      disabled
     >
       <div>
         <div
@@ -122,7 +123,7 @@ export default function TierShopButton({
         <ButtonPad
           style={{ padding: 8, color: COLORS.pink }}
           fillFg={added ? COLORS.pinkLite : "white"}
-          fillBorder={added ? COLORS.pink : "black"}
+          fillBorder={added ? COLORS.pink : "#00000064"}
           containerStyle={{ marginBottom: 4, width: "100%" }}
           onClick={onClickAdd}
           shadow="sm"

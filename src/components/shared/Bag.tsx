@@ -5,6 +5,7 @@ import MintButton from "./MintButton";
 import BagItems from "./BagItems";
 import RoundedFrame from "./RoundedFrame";
 import TierImage from "./TierImage";
+import { COLORS } from "@/constants/colors";
 
 export default function Bag({
   open,
@@ -13,7 +14,7 @@ export default function Bag({
   open?: boolean;
   onClose?: VoidFunction;
 }) {
-  const { bag, itemsQuantity } = useContext(ShopContext);
+  const { bag, itemsQuantity, emptyBag } = useContext(ShopContext);
 
   return open ? (
     <div
@@ -27,17 +28,17 @@ export default function Bag({
         overflow: "hidden",
       }}
     >
-      <h1
+      <div
         style={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "baseline",
+          alignItems: "center",
           padding: 12,
           paddingBottom: 0,
           paddingTop: 8,
         }}
       >
-        <span>
+        <h4 style={{ fontSize: FONT_SIZE["2xl"], flex: 1 }}>
           <span
             style={{
               marginBottom: 6,
@@ -49,12 +50,28 @@ export default function Bag({
             {">"}
           </span>{" "}
           Bag
-        </span>
+        </h4>
 
-        <span style={{ fontSize: FONT_SIZE.sm, textTransform: "uppercase" }}>
-          {itemsQuantity} item{itemsQuantity && itemsQuantity > 1 ? "s" : ""}
-        </span>
-      </h1>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: 'end',
+            fontSize: FONT_SIZE.sm,
+            textTransform: "uppercase",
+          }}
+        >
+          <div>
+            {itemsQuantity} item{itemsQuantity && itemsQuantity > 1 ? "s" : ""}
+          </div>
+
+          {itemsQuantity && (
+            <div onClick={emptyBag} style={{ color: COLORS.pink }}>
+              Clear
+            </div>
+          )}
+        </div>
+      </div>
 
       <div style={{ padding: 12, flex: 1, overflow: "auto" }}>
         <BagItems canRemove />
@@ -76,17 +93,18 @@ export default function Bag({
         boxSizing: "border-box",
       }}
     >
-      <h1
+      <h4
         style={{
           display: "flex",
           justifyContent: "space-between",
           padding: 48,
           transform: `rotate(90deg)`,
           whiteSpace: "pre",
+          fontSize: FONT_SIZE["2xl"],
         }}
       >
         {">"} Bag
-      </h1>
+      </h4>
 
       <div
         style={{
