@@ -19,7 +19,7 @@ function DropLink({ drop }: { drop: Drop }) {
       onMouseLeave={() => setHover(false)}
     >
       <ButtonPad
-        fillFg={COLORS.bananaLite}
+        fillFg={COLORS.banana100}
         style={{
           color: "black",
           display: "flex",
@@ -35,7 +35,7 @@ function DropLink({ drop }: { drop: Drop }) {
               alignItems: "baseline",
               justifyContent: "space-between",
               padding: 4,
-              color: COLORS.bananaLite,
+              color: COLORS.banana100,
               fontSize: FONT_SIZE.md,
               textTransform: "uppercase",
             }}

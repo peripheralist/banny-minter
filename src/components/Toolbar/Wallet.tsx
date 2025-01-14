@@ -24,7 +24,7 @@ export default function Wallet() {
         >
           <h4
             style={{
-              color: COLORS.banana,
+              color: COLORS.banana200,
               fontSize: FONT_SIZE.sm,
               textAlign: "center",
             }}
@@ -34,7 +34,7 @@ export default function Wallet() {
         </RoundedFrame>
 
         <RoundedFrame
-          background={COLORS.bananaLite}
+          background={COLORS.banana100}
           style={{
             padding: 12,
             width: "100%",

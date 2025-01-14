@@ -82,7 +82,7 @@ export default function Modal({
       return (
         <>
           <RoundedFrame
-            background={COLORS.bananaHint}
+            background={COLORS.banana50}
             containerStyle={{ height: "auto", marginBottom: footerHeight + 16 }}
             style={{
               width: "calc(100vw - 24px)",
@@ -118,7 +118,7 @@ export default function Modal({
     return (
       <>
         <RoundedFrame
-          background={COLORS.bananaHint}
+          background={COLORS.banana50}
           containerStyle={{ height: "auto" }}
           style={{
             minWidth: 320,

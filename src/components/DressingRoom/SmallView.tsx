@@ -70,7 +70,7 @@ export default function SmallView() {
                   background={"black"}
                   containerStyle={{ height: 24, width: 120 }}
                   style={{
-                    color: COLORS.bananaLite,
+                    color: COLORS.banana100,
                     textTransform: "uppercase",
                     padding: "4px 24px",
                     textAlign: "center",

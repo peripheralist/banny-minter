@@ -51171,7 +51171,7 @@
             "deprecationReason": null
           },
           {
-            "name": "storeAutoMintAmountEvent",
+            "name": "storeAutoIssuanceAmountEvent",
             "description": null,
             "args": [
               {
@@ -51221,14 +51221,14 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "StoreAutoMintAmountEvent",
+              "name": "StoreAutoIssuanceAmountEvent",
               "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "storeAutoMintAmountEvents",
+            "name": "storeAutoIssuanceAmountEvents",
             "description": null,
             "args": [
               {
@@ -51260,7 +51260,7 @@
                 "description": null,
                 "type": {
                   "kind": "ENUM",
-                  "name": "StoreAutoMintAmountEvent_orderBy",
+                  "name": "StoreAutoIssuanceAmountEvent_orderBy",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -51312,7 +51312,7 @@
                 "description": null,
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "StoreAutoMintAmountEvent_filter",
+                  "name": "StoreAutoIssuanceAmountEvent_filter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -51331,7 +51331,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "StoreAutoMintAmountEvent",
+                    "name": "StoreAutoIssuanceAmountEvent",
                     "ofType": null
                   }
                 }
@@ -51688,7 +51688,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "StoreAutoMintAmountEvent",
+        "name": "StoreAutoIssuanceAmountEvent",
         "description": null,
         "fields": [
           {
@@ -51795,7 +51795,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "StoreAutoMintAmountEvent_filter",
+        "name": "StoreAutoIssuanceAmountEvent_filter",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -51819,7 +51819,7 @@
               "name": null,
               "ofType": {
                 "kind": "INPUT_OBJECT",
-                "name": "StoreAutoMintAmountEvent_filter",
+                "name": "StoreAutoIssuanceAmountEvent_filter",
                 "ofType": null
               }
             },
@@ -52331,7 +52331,7 @@
               "name": null,
               "ofType": {
                 "kind": "INPUT_OBJECT",
-                "name": "StoreAutoMintAmountEvent_filter",
+                "name": "StoreAutoIssuanceAmountEvent_filter",
                 "ofType": null
               }
             },
@@ -52570,7 +52570,7 @@
       },
       {
         "kind": "ENUM",
-        "name": "StoreAutoMintAmountEvent_orderBy",
+        "name": "StoreAutoIssuanceAmountEvent_orderBy",
         "description": null,
         "fields": null,
         "inputFields": null,
@@ -56226,7 +56226,7 @@
             "deprecationReason": null
           },
           {
-            "name": "storeAutoMintAmountEvent",
+            "name": "storeAutoIssuanceAmountEvent",
             "description": null,
             "args": [
               {
@@ -56276,14 +56276,14 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "StoreAutoMintAmountEvent",
+              "name": "StoreAutoIssuanceAmountEvent",
               "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "storeAutoMintAmountEvents",
+            "name": "storeAutoIssuanceAmountEvents",
             "description": null,
             "args": [
               {
@@ -56315,7 +56315,7 @@
                 "description": null,
                 "type": {
                   "kind": "ENUM",
-                  "name": "StoreAutoMintAmountEvent_orderBy",
+                  "name": "StoreAutoIssuanceAmountEvent_orderBy",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -56367,7 +56367,7 @@
                 "description": null,
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "StoreAutoMintAmountEvent_filter",
+                  "name": "StoreAutoIssuanceAmountEvent_filter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -56386,7 +56386,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "StoreAutoMintAmountEvent",
+                    "name": "StoreAutoIssuanceAmountEvent",
                     "ofType": null
                   }
                 }

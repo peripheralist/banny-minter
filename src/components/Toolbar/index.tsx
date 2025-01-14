@@ -105,7 +105,7 @@ function _Link({
     >
       {frame ? (
         <ButtonPad
-          fillFg={isHover || active ? "white" : COLORS.bananaLite}
+          fillFg={isHover || active ? "white" : COLORS.banana100}
           style={{
             color: "black",
             fontWeight: "bold",

@@ -128,7 +128,7 @@ export default function ToolbarBagView({
                 style={{
                   textTransform: "uppercase",
                   padding: "4px 12px",
-                  color: COLORS.banana,
+                  color: COLORS.banana200,
                 }}
               >
                 {header}
@@ -138,7 +138,7 @@ export default function ToolbarBagView({
 
           {frame ? (
             <RoundedFrame
-              background={COLORS.bananaHint}
+              background={COLORS.banana50}
               style={{ overflow: "auto", ...frameStyle }}
               containerStyle={{
                 width: "100%",
@@ -218,7 +218,7 @@ function SmallScreenView({
         overflow: "auto",
       }}
     >
-      <style>{`body{background: ${COLORS.bananaLite}}`}</style>
+      <style>{`body{background: ${COLORS.banana100}}`}</style>
 
       <div
         ref={toolbarRef}
@@ -232,7 +232,7 @@ function SmallScreenView({
           transition: "max-height 0.1s ease-in",
           boxSizing: "border-box",
           zIndex: 101,
-          background: COLORS.bananaLite
+          background: COLORS.banana100
         }}
       >
         <div
@@ -263,7 +263,7 @@ function SmallScreenView({
           padding: "8px 12px",
           zIndex: 100,
           background: "black",
-          color: COLORS.bananaLite,
+          color: COLORS.banana100,
           textTransform: "uppercase",
         }}
       >
@@ -303,7 +303,7 @@ function SmallScreenView({
             width: bagIsOpen ? bagWidth : 0,
             right: 0,
             transition: "width 0.1s ease-in",
-            background: COLORS.bananaLite,
+            background: COLORS.banana100,
             display: "flex",
             flexDirection: "column",
           }}
@@ -408,7 +408,7 @@ function Drawer({
       </RoundedFrame>
 
       <RoundedFrame
-        background={COLORS.bananaLite}
+        background={COLORS.banana100}
         containerStyle={{
           height: open ? `calc(100% - ${BAG_WIDTH - 20}px)` : "100%",
           minHeight: 360,

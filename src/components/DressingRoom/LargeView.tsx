@@ -30,7 +30,7 @@ export default function LargeView() {
     >
       <RoundedFrame
         containerStyle={{ height: "auto" }}
-        background={COLORS.bananaLite}
+        background={COLORS.banana100}
         style={{
           display: "flex",
           flexDirection: "column",

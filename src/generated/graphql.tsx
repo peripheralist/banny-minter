@@ -4249,8 +4249,8 @@ export type Query = {
   projects: Array<Project>;
   protocolLog: Maybe<ProtocolLog>;
   protocolLogs: Array<ProtocolLog>;
-  storeAutoMintAmountEvent: Maybe<StoreAutoMintAmountEvent>;
-  storeAutoMintAmountEvents: Array<StoreAutoMintAmountEvent>;
+  storeAutoIssuanceAmountEvent: Maybe<StoreAutoIssuanceAmountEvent>;
+  storeAutoIssuanceAmountEvents: Array<StoreAutoIssuanceAmountEvent>;
   useAllowanceEvent: Maybe<UseAllowanceEvent>;
   useAllowanceEvents: Array<UseAllowanceEvent>;
   wallet: Maybe<Wallet>;
@@ -4651,21 +4651,21 @@ export type QueryProtocolLogsArgs = {
 };
 
 
-export type QueryStoreAutoMintAmountEventArgs = {
+export type QueryStoreAutoIssuanceAmountEventArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID']['input'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryStoreAutoMintAmountEventsArgs = {
+export type QueryStoreAutoIssuanceAmountEventsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<StoreAutoMintAmountEvent_OrderBy>;
+  orderBy?: InputMaybe<StoreAutoIssuanceAmountEvent_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<StoreAutoMintAmountEvent_Filter>;
+  where?: InputMaybe<StoreAutoIssuanceAmountEvent_Filter>;
 };
 
 
@@ -4704,7 +4704,7 @@ export type QueryWalletsArgs = {
   where?: InputMaybe<Wallet_Filter>;
 };
 
-export type StoreAutoMintAmountEvent = {
+export type StoreAutoIssuanceAmountEvent = {
   beneficiary: Scalars['Bytes']['output'];
   caller: Scalars['Bytes']['output'];
   count: Scalars['BigInt']['output'];
@@ -4713,10 +4713,10 @@ export type StoreAutoMintAmountEvent = {
   stageId: Scalars['BigInt']['output'];
 };
 
-export type StoreAutoMintAmountEvent_Filter = {
+export type StoreAutoIssuanceAmountEvent_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
-  and?: InputMaybe<Array<InputMaybe<StoreAutoMintAmountEvent_Filter>>>;
+  and?: InputMaybe<Array<InputMaybe<StoreAutoIssuanceAmountEvent_Filter>>>;
   beneficiary?: InputMaybe<Scalars['Bytes']['input']>;
   beneficiary_contains?: InputMaybe<Scalars['Bytes']['input']>;
   beneficiary_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -4753,7 +4753,7 @@ export type StoreAutoMintAmountEvent_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  or?: InputMaybe<Array<InputMaybe<StoreAutoMintAmountEvent_Filter>>>;
+  or?: InputMaybe<Array<InputMaybe<StoreAutoIssuanceAmountEvent_Filter>>>;
   revnetId?: InputMaybe<Scalars['BigInt']['input']>;
   revnetId_gt?: InputMaybe<Scalars['BigInt']['input']>;
   revnetId_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -4772,7 +4772,7 @@ export type StoreAutoMintAmountEvent_Filter = {
   stageId_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
 };
 
-export enum StoreAutoMintAmountEvent_OrderBy {
+export enum StoreAutoIssuanceAmountEvent_OrderBy {
   beneficiary = 'beneficiary',
   caller = 'caller',
   count = 'count',
@@ -4826,8 +4826,8 @@ export type Subscription = {
   projects: Array<Project>;
   protocolLog: Maybe<ProtocolLog>;
   protocolLogs: Array<ProtocolLog>;
-  storeAutoMintAmountEvent: Maybe<StoreAutoMintAmountEvent>;
-  storeAutoMintAmountEvents: Array<StoreAutoMintAmountEvent>;
+  storeAutoIssuanceAmountEvent: Maybe<StoreAutoIssuanceAmountEvent>;
+  storeAutoIssuanceAmountEvents: Array<StoreAutoIssuanceAmountEvent>;
   useAllowanceEvent: Maybe<UseAllowanceEvent>;
   useAllowanceEvents: Array<UseAllowanceEvent>;
   wallet: Maybe<Wallet>;
@@ -5218,21 +5218,21 @@ export type SubscriptionProtocolLogsArgs = {
 };
 
 
-export type SubscriptionStoreAutoMintAmountEventArgs = {
+export type SubscriptionStoreAutoIssuanceAmountEventArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID']['input'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionStoreAutoMintAmountEventsArgs = {
+export type SubscriptionStoreAutoIssuanceAmountEventsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<StoreAutoMintAmountEvent_OrderBy>;
+  orderBy?: InputMaybe<StoreAutoIssuanceAmountEvent_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<StoreAutoMintAmountEvent_Filter>;
+  where?: InputMaybe<StoreAutoIssuanceAmountEvent_Filter>;
 };
 
 
@@ -5780,9 +5780,9 @@ export type ResolversTypes = {
   ProtocolLog_filter: ProtocolLog_Filter;
   ProtocolLog_orderBy: ProtocolLog_OrderBy;
   Query: ResolverTypeWrapper<{}>;
-  StoreAutoMintAmountEvent: ResolverTypeWrapper<StoreAutoMintAmountEvent>;
-  StoreAutoMintAmountEvent_filter: StoreAutoMintAmountEvent_Filter;
-  StoreAutoMintAmountEvent_orderBy: StoreAutoMintAmountEvent_OrderBy;
+  StoreAutoIssuanceAmountEvent: ResolverTypeWrapper<StoreAutoIssuanceAmountEvent>;
+  StoreAutoIssuanceAmountEvent_filter: StoreAutoIssuanceAmountEvent_Filter;
+  StoreAutoIssuanceAmountEvent_orderBy: StoreAutoIssuanceAmountEvent_OrderBy;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
   Timestamp: ResolverTypeWrapper<Scalars['Timestamp']['output']>;
@@ -5852,8 +5852,8 @@ export type ResolversParentTypes = {
   ProtocolLog: ProtocolLog;
   ProtocolLog_filter: ProtocolLog_Filter;
   Query: {};
-  StoreAutoMintAmountEvent: StoreAutoMintAmountEvent;
-  StoreAutoMintAmountEvent_filter: StoreAutoMintAmountEvent_Filter;
+  StoreAutoIssuanceAmountEvent: StoreAutoIssuanceAmountEvent;
+  StoreAutoIssuanceAmountEvent_filter: StoreAutoIssuanceAmountEvent_Filter;
   String: Scalars['String']['output'];
   Subscription: {};
   Timestamp: Scalars['Timestamp']['output'];
@@ -6286,15 +6286,15 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectsArgs, 'first' | 'skip' | 'subgraphError'>>;
   protocolLog?: Resolver<Maybe<ResolversTypes['ProtocolLog']>, ParentType, ContextType, RequireFields<QueryProtocolLogArgs, 'id' | 'subgraphError'>>;
   protocolLogs?: Resolver<Array<ResolversTypes['ProtocolLog']>, ParentType, ContextType, RequireFields<QueryProtocolLogsArgs, 'first' | 'skip' | 'subgraphError'>>;
-  storeAutoMintAmountEvent?: Resolver<Maybe<ResolversTypes['StoreAutoMintAmountEvent']>, ParentType, ContextType, RequireFields<QueryStoreAutoMintAmountEventArgs, 'id' | 'subgraphError'>>;
-  storeAutoMintAmountEvents?: Resolver<Array<ResolversTypes['StoreAutoMintAmountEvent']>, ParentType, ContextType, RequireFields<QueryStoreAutoMintAmountEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  storeAutoIssuanceAmountEvent?: Resolver<Maybe<ResolversTypes['StoreAutoIssuanceAmountEvent']>, ParentType, ContextType, RequireFields<QueryStoreAutoIssuanceAmountEventArgs, 'id' | 'subgraphError'>>;
+  storeAutoIssuanceAmountEvents?: Resolver<Array<ResolversTypes['StoreAutoIssuanceAmountEvent']>, ParentType, ContextType, RequireFields<QueryStoreAutoIssuanceAmountEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   useAllowanceEvent?: Resolver<Maybe<ResolversTypes['UseAllowanceEvent']>, ParentType, ContextType, RequireFields<QueryUseAllowanceEventArgs, 'id' | 'subgraphError'>>;
   useAllowanceEvents?: Resolver<Array<ResolversTypes['UseAllowanceEvent']>, ParentType, ContextType, RequireFields<QueryUseAllowanceEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   wallet?: Resolver<Maybe<ResolversTypes['Wallet']>, ParentType, ContextType, RequireFields<QueryWalletArgs, 'id' | 'subgraphError'>>;
   wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType, RequireFields<QueryWalletsArgs, 'first' | 'skip' | 'subgraphError'>>;
 };
 
-export type StoreAutoMintAmountEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['StoreAutoMintAmountEvent'] = ResolversParentTypes['StoreAutoMintAmountEvent']> = {
+export type StoreAutoIssuanceAmountEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['StoreAutoIssuanceAmountEvent'] = ResolversParentTypes['StoreAutoIssuanceAmountEvent']> = {
   beneficiary?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   caller?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   count?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -6348,8 +6348,8 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   projects?: SubscriptionResolver<Array<ResolversTypes['Project']>, "projects", ParentType, ContextType, RequireFields<SubscriptionProjectsArgs, 'first' | 'skip' | 'subgraphError'>>;
   protocolLog?: SubscriptionResolver<Maybe<ResolversTypes['ProtocolLog']>, "protocolLog", ParentType, ContextType, RequireFields<SubscriptionProtocolLogArgs, 'id' | 'subgraphError'>>;
   protocolLogs?: SubscriptionResolver<Array<ResolversTypes['ProtocolLog']>, "protocolLogs", ParentType, ContextType, RequireFields<SubscriptionProtocolLogsArgs, 'first' | 'skip' | 'subgraphError'>>;
-  storeAutoMintAmountEvent?: SubscriptionResolver<Maybe<ResolversTypes['StoreAutoMintAmountEvent']>, "storeAutoMintAmountEvent", ParentType, ContextType, RequireFields<SubscriptionStoreAutoMintAmountEventArgs, 'id' | 'subgraphError'>>;
-  storeAutoMintAmountEvents?: SubscriptionResolver<Array<ResolversTypes['StoreAutoMintAmountEvent']>, "storeAutoMintAmountEvents", ParentType, ContextType, RequireFields<SubscriptionStoreAutoMintAmountEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  storeAutoIssuanceAmountEvent?: SubscriptionResolver<Maybe<ResolversTypes['StoreAutoIssuanceAmountEvent']>, "storeAutoIssuanceAmountEvent", ParentType, ContextType, RequireFields<SubscriptionStoreAutoIssuanceAmountEventArgs, 'id' | 'subgraphError'>>;
+  storeAutoIssuanceAmountEvents?: SubscriptionResolver<Array<ResolversTypes['StoreAutoIssuanceAmountEvent']>, "storeAutoIssuanceAmountEvents", ParentType, ContextType, RequireFields<SubscriptionStoreAutoIssuanceAmountEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   useAllowanceEvent?: SubscriptionResolver<Maybe<ResolversTypes['UseAllowanceEvent']>, "useAllowanceEvent", ParentType, ContextType, RequireFields<SubscriptionUseAllowanceEventArgs, 'id' | 'subgraphError'>>;
   useAllowanceEvents?: SubscriptionResolver<Array<ResolversTypes['UseAllowanceEvent']>, "useAllowanceEvents", ParentType, ContextType, RequireFields<SubscriptionUseAllowanceEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   wallet?: SubscriptionResolver<Maybe<ResolversTypes['Wallet']>, "wallet", ParentType, ContextType, RequireFields<SubscriptionWalletArgs, 'id' | 'subgraphError'>>;
@@ -6432,7 +6432,7 @@ export type Resolvers<ContextType = any> = {
   ProjectEvent?: ProjectEventResolvers<ContextType>;
   ProtocolLog?: ProtocolLogResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  StoreAutoMintAmountEvent?: StoreAutoMintAmountEventResolvers<ContextType>;
+  StoreAutoIssuanceAmountEvent?: StoreAutoIssuanceAmountEventResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Timestamp?: GraphQLScalarType;
   UseAllowanceEvent?: UseAllowanceEventResolvers<ContextType>;

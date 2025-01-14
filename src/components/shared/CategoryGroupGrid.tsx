@@ -72,7 +72,7 @@ export function CategoryGroupGrid<I extends { category: Category }>({
               >
                 <RoundedFrame
                   background={
-                    isSmallScreen ? COLORS.bananaLite : COLORS.bananaHint
+                    isSmallScreen ? COLORS.banana100 : COLORS.banana50
                   }
                   borderColor={"black"}
                   style={{

@@ -52,7 +52,7 @@ export default function ToolbarIcon() {
             gap: 12,
             maxWidth: 320,
             transition: "width 0.1s ease-in",
-            background: COLORS.banana,
+            background: COLORS.banana200,
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -104,7 +104,7 @@ function _Link({ children, ...props }: PropsWithChildren<{ href: string }>) {
       }}
     >
       <ButtonPad
-        fillFg={isHover || active ? "white" : COLORS.bananaHint}
+        fillFg={isHover || active ? "white" : COLORS.banana50}
         style={{
           color: "black",
           fontWeight: "bold",
