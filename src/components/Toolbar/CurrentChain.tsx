@@ -31,7 +31,7 @@ export default function CurrentChain() {
   return (
     <div
       style={{
-        color: COLORS.pink,
+        color: COLORS.blue400,
       }}
     >
       {text}

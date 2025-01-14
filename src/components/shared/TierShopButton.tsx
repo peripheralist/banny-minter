@@ -62,7 +62,7 @@ export default function TierShopButton({
       return (
         <div>
           <span>{remainingSupply.toString()}</span>
-          <span style={{ opacity: 0.5 }}>/{_initialSupply} available</span>
+          <span style={{ opacity: 0.5 }}>/{_initialSupply} in stock</span>
         </div>
       );
     };

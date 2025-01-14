@@ -6,7 +6,7 @@ export function useNftsOf(wallet: Address | undefined) {
   return useNfTsQuery({
     variables: {
       where: {
-        collection: LOOKS_COLLECTION_ID,
+        collection: LOOKS_COLLECTION_ID.toLowerCase(),
         owner_: {
           wallet: wallet?.toLowerCase() ?? null,
         },

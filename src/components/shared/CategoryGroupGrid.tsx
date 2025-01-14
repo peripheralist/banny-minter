@@ -53,9 +53,8 @@ export function CategoryGroupGrid<I extends { category: Category }>({
               style={{
                 position: "sticky",
                 top: isSmallScreen ? 40 : 0,
-                left: 0,
                 textTransform: "uppercase",
-                zIndex: 2,
+                zIndex: isSmallScreen ? 2 : undefined,
               }}
             >
               <div

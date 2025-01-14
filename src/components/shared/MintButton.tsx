@@ -51,11 +51,11 @@ export default function MintButton() {
           <TransactionPending hash={hash} text="Minting..." />
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <h1 style={{fontSize: FONT_SIZE["3xl"]}}>Mint NFTs</h1>
+            <h1 style={{ fontSize: FONT_SIZE["3xl"] }}>Mint NFTs</h1>
 
             <BagItems />
 
-            <p style={{fontSize: FONT_SIZE.sm}}>
+            <p style={{ fontSize: FONT_SIZE.sm }}>
               By minting Looks NFTs, you{"'"}re paying the on-chain{" "}
               <Link href={"https://revnet.eth.sucks/memo/"}>Looks Revnet</Link>{" "}
               treasury and earning $BAN in return.
@@ -85,7 +85,7 @@ export default function MintButton() {
             alignItems: "center",
           }}
         >
-          <h1>Minted!</h1>
+          <h1 style={{fontSize: FONT_SIZE["3xl"]}}>Minted!</h1>
 
           <BagItems />
 
@@ -95,6 +95,10 @@ export default function MintButton() {
               locker
             </Link>
             .
+          </div>
+
+          <div style={{ fontSize: FONT_SIZE.xs }}>
+            It may take a minute or two for items to appear in your Locker.
           </div>
         </div>
       </Modal>

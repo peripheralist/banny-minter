@@ -4,6 +4,14 @@ export const COLORS = {
   bananaLite: "#fce7ae",
   bananaHint: "#fef6df",
 
+  blue600: "#004de7",
+  blue500: "#0056f2",
+  blue400: "#4471f6",
+  blue300: "#6e8cf8",
+  blue200: "#9cadf9",
+  blue100: "#c5cdfb",
+  blue50: "#e8ebfe",
+
   brown: "#AB6C0F",
   pink: "#e221a0",
   pinkLite: "#ffdcf3",

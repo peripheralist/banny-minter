@@ -38,7 +38,6 @@ export default function Wallet() {
           style={{
             padding: 12,
             width: "100%",
-            fontSize: FONT_SIZE.xs,
             display: "flex",
             flexDirection: "column",
             gap: 12,
@@ -48,7 +47,7 @@ export default function Wallet() {
             <CurrentChain />
           </div>
 
-          <div style={{ fontWeight: "bold" }}>
+          <div style={{ fontSize: FONT_SIZE.sm }}>
             {ensName ?? <FormattedAddress address={address} />}
           </div>
 
