@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/colors";
 import { useIsHover } from "@/hooks/useIsHover";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import Image from "next/image";
@@ -5,10 +6,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { CSSProperties, PropsWithChildren, useMemo } from "react";
 import { useAccount } from "wagmi";
+import ButtonPad from "../shared/ButtonPad";
 import Loading from "../shared/Loading";
 import Wallet from "./Wallet";
-import { COLORS } from "@/constants/colors";
-import ButtonPad from "../shared/ButtonPad";
 
 export const TOOLBAR_WIDTH = 156;
 
@@ -20,6 +20,8 @@ export default function Index() {
   return (
     <div
       style={{
+        position: "fixed",
+        zIndex: 300,
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",

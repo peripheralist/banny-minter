@@ -74,7 +74,6 @@ export function CategoryGroupGrid<I extends { category: Category }>({
                   background={
                     isSmallScreen ? COLORS.banana100 : COLORS.banana50
                   }
-                  borderColor={"black"}
                   style={{
                     padding: isSmallScreen ? "8px 16px 8px 20px" : "12px 16px",
                     color: "black",

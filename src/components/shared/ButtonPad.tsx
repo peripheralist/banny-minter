@@ -112,7 +112,7 @@ export default function ButtonPad({
           alignItems: "center",
           justifyContent: "center",
           opacity: disabled ? 0.6 : 1,
-          cursor: disabled ? "not-allowed" : undefined,
+          cursor: disabled ? "not-allowed" : "pointer",
           ...style,
         }}
       >

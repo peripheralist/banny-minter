@@ -1,8 +1,8 @@
 import { FONT_SIZE } from "@/constants/fontSize";
-import { useChain } from "juice-sdk-react";
 import Link from "next/link";
 import { Address } from "viem";
 import Loading from "./Loading";
+import { useChain } from "@/hooks/useChain";
 
 export default function TransactionPending({
   text,

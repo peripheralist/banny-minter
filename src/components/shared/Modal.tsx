@@ -136,7 +136,7 @@ export default function Modal({
           ref={footerRef}
           style={{
             display: "flex",
-            justifyContent: action ? "space-between" : 'center',
+            justifyContent: action ? "space-between" : "center",
             flexWrap: "wrap-reverse",
             gap: 8,
             marginTop: 8,
@@ -157,7 +157,7 @@ export default function Modal({
     footerRef,
     isSmallScreen,
     size,
-    action
+    action,
   ]);
 
   if (!isOpen) return null;

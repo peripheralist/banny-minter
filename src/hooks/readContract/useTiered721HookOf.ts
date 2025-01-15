@@ -2,13 +2,12 @@ import { LOOKS_REVNET_ID } from "@/constants/nfts";
 import { ChainId } from "@/model/chain";
 import { useQuery } from "@tanstack/react-query";
 import { readContract } from "@wagmi/core";
-import { Address, Chain, zeroAddress } from "viem";
+import { Address, zeroAddress } from "viem";
 import {
   arbitrum,
   arbitrumSepolia,
   base,
   baseSepolia,
-  mainnet,
   optimism,
   optimismSepolia,
   sepolia,
