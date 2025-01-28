@@ -11,8 +11,11 @@ export const CATEGORY_IDS = {
   suitBottom: 9,
   suitTop: 10,
   headTop: 11,
-  fist: 12,
-  topping: 13,
+  hand: 12,
+  specialSuit: 13,
+  specialLegs: 14,
+  specialHead: 15,
+  specialBody: 16,
 } as const;
 
 export type Category = keyof typeof CATEGORY_IDS;
@@ -39,8 +42,11 @@ export const CATEGORIES: Category[] = [
   "suit",
   "necklace",
   "headTop",
-  "fist",
-  "topping",
+  "hand",
+  "specialSuit",
+  "specialLegs",
+  "specialHead",
+  "specialBody",
 ];
 
 export const CATEGORY_GROUP_NAMES = [
@@ -56,9 +62,18 @@ export type CategoryGroup = (typeof CATEGORY_GROUP_NAMES)[number];
 // Groups of similar asset categories, not including body
 export const CATEGORY_GROUPS: Record<CategoryGroup, Category[]> = {
   banny: ["naked"],
-  head: ["glasses", "head", "headTop", "mouth"],
-  outfit: ["necklace", "legs", "suit", "suitBottom", "suitTop"],
-  special: ["fist", "topping", "backside"],
+  head: ["glasses", "head", "headTop", "specialHead", "mouth"],
+  outfit: [
+    "suit",
+    "suitBottom",
+    "suitTop",
+    "specialSuit",
+    "specialBody",
+    "necklace",
+    "legs",
+    "specialLegs",
+  ],
+  special: ["hand", "backside"],
   world: ["world"],
 };
 

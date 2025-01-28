@@ -81,6 +81,7 @@ export default function Index() {
               gridTemplateColumns: `repeat(auto-fit, ${imgSize + 2}px)`,
               gap: 4,
             }}
+            emptyText="None owned"
             render={(nft) => (
               <Link key={nft.tokenId} href={`/nft/${nft.tokenId}`}>
                 <ButtonPad

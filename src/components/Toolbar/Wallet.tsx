@@ -66,20 +66,38 @@ export default function Wallet() {
           borderColor={COLORS.pink}
           containerStyle={{ paddingBottom: 12, marginBottom: -20 }}
         >
-          <div
-            style={{
-              color: COLORS.pink,
-              padding: 8,
-              textAlign: "center",
-              fontSize: FONT_SIZE.sm,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              cursor: "pointer",
-            }}
-            onClick={() => setModalIsOpen(true)}
-          >
-            {activeChain.name}
-          </div>
+          {address && !walletChain ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                color: "#f42",
+                fontWeight: "bold",
+                fontSize: FONT_SIZE.xs,
+                padding: 8,
+                cursor: "pointer",
+              }}
+              onClick={() => switchChain({ chainId: activeChain.id })}
+            >
+              <Blinker offColor={"#f42"} /> Switch to {activeChain.name}
+            </div>
+          ) : (
+            <div
+              style={{
+                color: COLORS.pink,
+                padding: 8,
+                textAlign: "center",
+                fontSize: FONT_SIZE.sm,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                cursor: "pointer",
+              }}
+              onClick={() => setModalIsOpen(true)}
+            >
+              {activeChain.name}
+            </div>
+          )}
         </RoundedFrame>
       </div>
 

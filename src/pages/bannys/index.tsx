@@ -61,6 +61,7 @@ export default function Index() {
             excludeGroups={["head", "outfit", "special", "world"]}
             render={(t) => (
               <TierShopButton
+                key={t.tierId}
                 tier={t}
                 buttonSize={imgSize}
                 onClick={() => {

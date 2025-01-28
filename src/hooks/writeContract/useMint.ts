@@ -56,9 +56,13 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
   const { chain } = useAccount();
 
   const mint = useCallback(() => {
-    if (!tierIds.length || !chain) return;
-
-    if (!connectedWalletAddress || !terminalAddress || !totalEquippedPrice) {
+    if (
+      !tierIds.length ||
+      !chain ||
+      !connectedWalletAddress ||
+      !terminalAddress ||
+      !totalEquippedPrice
+    ) {
       console.error("Missing something smh", {
         connectedWalletAddress,
         terminalAddress,

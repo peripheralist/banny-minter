@@ -90,19 +90,24 @@ export default function TierDetailModal() {
     document.getElementById(`preview-${imgIdx}`)?.scrollIntoView();
   }, [imgIdx]);
 
+  const onClose = useCallback(() => {
+    if (!router.query.tier) return;
+
+    const newPath = router.asPath.split("?tier=")[0];
+    router.replace(newPath, undefined, { shallow: true });
+  }, [router]);
+
   if (!tier) return null;
 
   return (
     <Modal
       open
-      onClose={() => {
-        if (!router.query.tier) return;
-
-        const newPath = router.asPath.split("?tier=")[0];
-        router.replace(newPath, undefined, { shallow: true });
-      }}
+      onClose={onClose}
       action={{
-        onClick: () => addItem?.(tier),
+        onClick: () => {
+          addItem?.(tier);
+          onClose();
+        },
         text: `Add to bag Ξ${formatEther(tier.price)}`,
       }}
     >

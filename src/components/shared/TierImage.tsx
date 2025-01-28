@@ -66,9 +66,12 @@ export default function TierImage({
           />
         );
       case "naked":
-      case "topping":
       case "backside":
-      case "fist":
+      case "hand":
+      case "specialBody":
+      case "specialHead":
+      case "specialLegs":
+      case "specialSuit":
         return (
           <object
             style={{ position: "absolute", top: "-15%", left: "-10%" }}

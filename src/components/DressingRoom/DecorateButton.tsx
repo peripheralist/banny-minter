@@ -40,7 +40,6 @@ export default function DecorateButton() {
     );
   }, [initialEquipped, equipped]);
 
-  // TODO need to disable button until unworn outfits are equipped
   const [isConfirming, setIsConfirming] = useState(false);
 
   return (

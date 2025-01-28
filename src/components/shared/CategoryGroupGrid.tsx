@@ -113,7 +113,7 @@ export function CategoryGroupGrid<I extends { category: Category }>({
               style={{
                 columnSpan: "all",
                 padding: 12,
-                paddingTop: isSmallScreen ? 56 : 0,
+                paddingTop: isSmallScreen ? 56 : 12,
                 minWidth: 120,
               }}
             >

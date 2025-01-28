@@ -9,7 +9,7 @@ import {
   optimismSepolia,
   sepolia,
 } from "wagmi/chains";
-import { walletConnect } from "wagmi/connectors";
+import { coinbaseWallet, walletConnect } from "wagmi/connectors";
 
 const walletConnectProjectId =
   process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
@@ -28,6 +28,9 @@ export const config = createConfig({
           }),
         ]
       : []),
+    coinbaseWallet({
+      appName: "Banny Retail",
+    }),
   ],
   chains: [
     sepolia,

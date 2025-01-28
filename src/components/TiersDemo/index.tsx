@@ -85,7 +85,7 @@ function _Demo({
         while (newTierId === equipped[newCategory]?.tierId) {
           newTierId =
             tiersOfCategory[Math.floor(Math.random() * tiersOfCategory.length)]
-              .tierId;
+              ?.tierId;
         }
       }
 

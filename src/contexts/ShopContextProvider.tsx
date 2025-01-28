@@ -27,20 +27,20 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
       defaultValue: [],
       parse: (str) =>
         str
-          ? JSON.parse(str).map(
-              ({
-                tierId,
-                category,
-                quantity,
-              }: {
-                tierId: number;
-                category: Category;
-                quantity: number;
-              }) => ({
-                quantity,
-                tier: tiers?.find((t) => t.tierId === tierId),
-              })
-            )
+          ? JSON.parse(str)
+              .map(
+                ({
+                  tierId,
+                  quantity,
+                }: {
+                  tierId: number;
+                  quantity: number;
+                }) => ({
+                  quantity,
+                  tier: tiers?.find((t) => t.tierId === tierId),
+                })
+              )
+              .filter(({ tier }: { tier: Tier }) => !!tier)
           : [],
       serialize: (b) =>
         JSON.stringify(

@@ -1,16 +1,14 @@
+import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
+import { FONT_SIZE } from "@/constants/fontSize";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
-import { useContext, useMemo } from "react";
-import { CategoryGroupGrid } from "../shared/CategoryGroupGrid";
+import { useContext } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import FullscreenLoading from "../shared/FullscreenLoading";
 import RoundedFrame from "../shared/RoundedFrame";
 import DecorateButton from "./DecorateButton";
 import TierEquipButton from "./TierEquipButton";
-import { useWindowSize } from "@/hooks/useWindowSize";
-import { FONT_SIZE } from "@/constants/fontSize";
-import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
 
 export default function SmallView() {
   const { availableTiers, equipped, equippingCategory, unequippingCategory } =

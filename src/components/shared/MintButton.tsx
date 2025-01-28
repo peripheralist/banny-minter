@@ -24,6 +24,7 @@ export default function MintButton() {
   const { mint, isPending, isSuccess, hash } = useMint({
     onSuccess: () => {
       setIsConfirming(false);
+      emptyBag?.();
     },
   });
 
@@ -70,13 +71,15 @@ export default function MintButton() {
   }, [isPending, isConfirming, totalEquippedPrice, mint, hash]);
 
   const SucccessModal = useCallback(() => {
+    if (!isSuccess) return null;
+
     const onClose = () => {
       emptyBag?.();
       unequipAll?.();
     };
 
     return (
-      <Modal open={isSuccess} onClose={onClose}>
+      <Modal onClose={onClose}>
         <div
           style={{
             display: "flex",
@@ -85,7 +88,7 @@ export default function MintButton() {
             alignItems: "center",
           }}
         >
-          <h1 style={{fontSize: FONT_SIZE["3xl"]}}>Minted!</h1>
+          <h1 style={{ fontSize: FONT_SIZE["3xl"] }}>Minted!</h1>
 
           <BagItems />
 

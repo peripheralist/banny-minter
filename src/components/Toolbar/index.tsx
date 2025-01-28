@@ -20,7 +20,6 @@ export default function Index() {
   return (
     <div
       style={{
-        position: "fixed",
         zIndex: 300,
         display: "flex",
         flexDirection: "column",
@@ -32,9 +31,7 @@ export default function Index() {
         height: "100vh",
         width: TOOLBAR_WIDTH,
         overflow: "auto",
-        ...(isSmallScreen
-          ? { fontSize: "0.8rem" }
-          : { position: "fixed", top: 0, left: 0, right: 0 }),
+        ...(isSmallScreen ? { fontSize: "0.8rem" } : {}),
       }}
     >
       <HomeButton />

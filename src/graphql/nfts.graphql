@@ -73,10 +73,19 @@ query AllNFTTiers($orderBy: NFTTier_orderBy, $collection: String) {
   headTop: nfttiers(where: {category: 11, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  fist: nfttiers(where: {category: 12, collection: $collection}, orderBy: $orderBy) {
+  hand: nfttiers(where: {category: 12, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  topping: nfttiers(where: {category: 13, collection: $collection}, orderBy: $orderBy) {
+  specialSuit: nfttiers(where: {category: 13, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  specialLegs: nfttiers(where: {category: 13, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  specialHead: nfttiers(where: {category: 13, collection: $collection}, orderBy: $orderBy) {
+    ...TierData
+  }
+  specialBody: nfttiers(where: {category: 13, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
 }

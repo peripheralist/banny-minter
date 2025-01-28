@@ -16,7 +16,6 @@ import {
   PropsWithChildren,
   SetStateAction,
   useContext,
-  useEffect,
   useMemo,
 } from "react";
 import ToolbarIcon from "../ToolbarIcon";

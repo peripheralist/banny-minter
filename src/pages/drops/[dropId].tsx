@@ -136,11 +136,20 @@ export default function Drop() {
                 color: COLORS.blue500,
               }}
             >
-              <div style={{ margin: -12 }}>
-                <TierImage
-                  tier={allTiers.find((t) => t.tierId === 4)}
-                  size={56}
-                />
+              <div
+                style={{
+                  width: 32,
+                  height: 56,
+                  margin: '-12px 0px',
+                  overflow: "hidden",
+                }}
+              >
+                <div style={{ marginLeft: -36 }}>
+                  <TierImage
+                    tier={allTiers.find((t) => t.tierId === 4)}
+                    size={116}
+                  />
+                </div>
               </div>
               Looking for Banny? Check the{" "}
               <Link href={"/bannys"}>Banny Shop</Link>
