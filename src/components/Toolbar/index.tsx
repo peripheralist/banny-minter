@@ -126,11 +126,11 @@ function _Link({
 function HomeButton() {
   const { isHover, ...hoverProps } = useIsHover();
 
-  const width = TOOLBAR_WIDTH - 24;
-  const height = (width * 8) / 14;
+  const width = TOOLBAR_WIDTH - 32;
+  const height = (width * 80) / 136;
 
   return (
-    <_Link href={"/"} {...hoverProps} style={{ width, height, padding: 4 }}>
+    <_Link href={"/"} {...hoverProps} style={{ width, height }}>
       {isHover ? (
         <div style={{ width, height }}>
           <Loading />

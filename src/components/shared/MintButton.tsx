@@ -57,12 +57,11 @@ export default function MintButton() {
             <BagItems />
 
             <p style={{ fontSize: FONT_SIZE.sm }}>
-              By minting Looks NFTs, you{"'"}re paying the on-chain{" "}
-              <Link href={"https://revnet.eth.sucks/memo/"}>Looks Revnet</Link>{" "}
-              treasury and earning $BAN in return.
+              Payments go to the
+              <Link href={"https://revnet.eth.sucks/memo/"}>$BAN Revnet</Link>.
             </p>
 
-            <div>$BAN earned by this payment: 69420</div>
+            <div>You{"'"}ll earn 69420 $BAN from this purchase.</div>
             {/* TODO calculate $BAN */}
           </div>
         )}

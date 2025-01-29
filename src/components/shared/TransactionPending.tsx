@@ -23,7 +23,7 @@ export default function TransactionPending({
         gap: 24,
       }}
     >
-      <div style={{ width: 200, height: 200 * (80 / 138), margin: "0 auto" }}>
+      <div style={{ width: 200, height: 200 * (80 / 136), margin: "0 auto" }}>
         <Loading />
       </div>
 

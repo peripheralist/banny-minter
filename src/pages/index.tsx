@@ -157,9 +157,9 @@ export default function Home() {
             }}
           >
             <Image
-              src={"/assets/looks_logo.svg"}
+              src={"/assets/banny_logo.svg"}
               fill
-              alt="looks logo"
+              alt="banny logo"
               style={{ objectFit: "contain", objectPosition: "left" }}
             />
           </div>

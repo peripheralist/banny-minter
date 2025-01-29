@@ -15,9 +15,9 @@ export default function Loading() {
     height,
   } = useMeasuredRef(containerWidth);
 
-  const fuzzWidth = width * 0.116;
-  const fuzzHeight = height * 0.25;
-  const top = height * 0.2;
+  const fuzzWidth = (width * 16) / 136;
+  const fuzzHeight = height / 4;
+  const top = height / 5;
 
   const fuzzStyle: CSSProperties = {
     background: "black",
@@ -40,9 +40,9 @@ export default function Loading() {
         ref={imageRef}
         style={{
           position: "relative",
-          height: containerWidth * (80 / 138),
+          height: containerWidth * (80 / 136),
           marginTop: Math.max(
-            (containerHeight - containerWidth * (80 / 138)) / 2,
+            (containerHeight - containerWidth * (80 / 136)) / 2,
             0
           ),
         }}
@@ -61,7 +61,7 @@ export default function Loading() {
           interval={500}
           style={{
             ...fuzzStyle,
-            left: width * 0.256,
+            left: (width * 36) / 136,
           }}
         />
 
@@ -72,7 +72,7 @@ export default function Loading() {
           interval={500}
           style={{
             ...fuzzStyle,
-            left: width * 0.785,
+            left: (width * 108) / 136,
           }}
         />
       </div>

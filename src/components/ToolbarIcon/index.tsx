@@ -19,8 +19,8 @@ export default function ToolbarIcon() {
   return (
     <div>
       <Image
-        src={"/assets/looks_logo.svg"}
-        width={(TOOLBAR_ICON_SIZE * 294) / 80}
+        src={"/assets/banny_logo.svg"}
+        width={(TOOLBAR_ICON_SIZE * 456) / 80}
         height={TOOLBAR_ICON_SIZE}
         alt="looks logo"
         onClick={() => setIsOpen(true)}
@@ -57,8 +57,8 @@ export default function ToolbarIcon() {
           onClick={(e) => e.stopPropagation()}
         >
           <Image
-            src={"/assets/looks_logo.svg"}
-            width={(TOOLBAR_ICON_SIZE * 294) / 80}
+            src={"/assets/banny_logo.svg"}
+            width={(TOOLBAR_ICON_SIZE * 456) / 80}
             height={TOOLBAR_ICON_SIZE}
             alt="looks logo"
             onClick={() => setIsOpen(false)}
