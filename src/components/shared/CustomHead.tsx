@@ -12,9 +12,13 @@ export default function CustomHead({
 
   return (
     <Head>
+      <meta property="og:type" content="website" />
+      <meta name="twitter:card" content="summary_large_image" />
+
       <title>{_title}</title>
       <meta property="og:title" content={_title} />
       <meta property="twitter:title" content={_title} />
+
       {description && (
         <>
           <meta name="description" content={description} />
