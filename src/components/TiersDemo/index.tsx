@@ -5,7 +5,7 @@ import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useContext, useEffect, useState } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 
-const excludedCategories: Category[] = ["world"];
+const excludedCategories: Category[] = ["world", "specialSuit"];
 
 export default function TiersDemo({
   size,
@@ -44,33 +44,32 @@ function _Demo({
     availableTiers,
   } = useContext(EquipmentContext);
 
-  const [_, setCategory] = useState<Category>("naked");
-
   useEffect(() => {
     // default equip body
     equip?.naked(Math.ceil(Math.random() * 4));
   }, [equip]);
 
+  // periodically equip/unequip random tiers of a random available category
   useEffect(() => {
+    if (!availableTiers || !equip) return;
+
+    let prevCategory: Category | undefined;
+
+    function availableCategories() {
+      // omit excluded categories, previous category, and any categories with no available tiers
+      return CATEGORIES.filter(
+        (c) => ![...excludedCategories, prevCategory].includes(c)
+      ).filter((c) => availableTiers?.some((t) => t.category === c));
+    }
+
     const id = setInterval(() => {
-      if (!availableTiers || !equip) return;
+      // select category of next item to be equipped
+      const _availableCategories = availableCategories();
 
-      let newCategory: Category;
-
-      setCategory((prevCategory) => {
-        const availableCategories = CATEGORIES.filter(
-          (_c) => ![...excludedCategories, prevCategory].includes(_c)
-        );
-
-        newCategory =
-          availableCategories[
-            Math.floor(Math.random() * availableCategories.length)
-          ];
-
-        return newCategory;
-      });
-
-      if (!newCategory!) return;
+      const newCategory =
+        _availableCategories[
+          Math.floor(Math.random() * _availableCategories.length)
+        ];
 
       const tiersOfCategory = availableTiers.filter(
         (t) => t.category === newCategory
@@ -79,9 +78,10 @@ function _Demo({
       let newTierId = equipped[newCategory]?.tierId;
 
       if (newTierId && tiersOfCategory.length === 1) {
-        // remove if only tier in category
+        // remove if only tier in category is equipped
         newTierId = undefined;
       } else {
+        // find a new tier of category that isn't equipped
         while (newTierId === equipped[newCategory]?.tierId) {
           newTierId =
             tiersOfCategory[Math.floor(Math.random() * tiersOfCategory.length)]
@@ -90,6 +90,8 @@ function _Demo({
       }
 
       equip[newCategory](newTierId);
+
+      prevCategory = newCategory;
     }, 3000);
 
     return () => clearInterval(id);

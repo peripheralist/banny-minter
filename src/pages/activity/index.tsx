@@ -7,6 +7,7 @@ import { useNfTsQuery } from "@/generated/graphql";
 import Link from "next/link";
 import { useMemo } from "react";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import Head from "next/head";
 
 export default function Activity() {
   const { data: bannys } = useNfTsQuery({
@@ -25,43 +26,54 @@ export default function Activity() {
   }, [isSmallScreen, width]);
 
   return (
-    <ToolbarBagView
-      frame
-      dynamicToolbar
-      header={`ACTIVITY | ${bannys?.nfts.length ?? "--"} minted bannys`}
-    >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
-          justifyContent: isSmallScreen ? "center" : undefined,
-          gap: 4,
-          padding: 12,
-        }}
-      >
-        {bannys?.nfts.map((nft) => (
-          <Link
-            key={nft.tokenId.toString()}
-            style={{ display: "block" }}
-            href={`/nft/${nft.tokenId.toString()}`}
+    <>
+      <Head>
+        <title>Activity</title>
+        <meta property="og:image" content="/assets/homepage.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main>
+        <ToolbarBagView
+          frame
+          dynamicToolbar
+          header={`ACTIVITY | ${bannys?.nfts.length ?? "--"} minted bannys`}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
+              justifyContent: isSmallScreen ? "center" : undefined,
+              gap: 4,
+              padding: 12,
+            }}
           >
-            <RoundedFrame
-              borderColor="white"
-              background={"white"}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                pointerEvents: "none",
-                paddingTop: 8,
-                paddingBottom: 8,
-              }}
-            >
-              <DressedBannyNftImage nft={nft} size={imgSize - 16} />
-            </RoundedFrame>
-          </Link>
-        ))}
-      </div>
-    </ToolbarBagView>
+            {bannys?.nfts.map((nft) => (
+              <Link
+                key={nft.tokenId.toString()}
+                style={{ display: "block" }}
+                href={`/nft/${nft.tokenId.toString()}`}
+              >
+                <RoundedFrame
+                  borderColor="white"
+                  background={"white"}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    pointerEvents: "none",
+                    paddingTop: 8,
+                    paddingBottom: 8,
+                  }}
+                >
+                  <DressedBannyNftImage nft={nft} size={imgSize - 16} />
+                </RoundedFrame>
+              </Link>
+            ))}
+          </div>
+        </ToolbarBagView>
+      </main>
+    </>
   );
 }

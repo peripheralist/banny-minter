@@ -231,8 +231,9 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Banny Factory</title>
-        <meta name="description" content="Banny factory" />
+        <title>Banny Retail</title>
+        <meta property="og:image" content="/assets/homepage.png" />
+        <meta name="description" content="Banny Retail" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
