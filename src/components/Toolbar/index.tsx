@@ -10,7 +10,7 @@ import ButtonPad from "../shared/ButtonPad";
 import Loading from "../shared/Loading";
 import Wallet from "./Wallet";
 
-export const TOOLBAR_WIDTH = 156;
+export const TOOLBAR_WIDTH = 164;
 
 export default function Index() {
   const { address: connectedAddress } = useAccount();
