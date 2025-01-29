@@ -8,16 +8,15 @@ export default function CustomHead({
   title?: string;
   description?: string;
 }) {
-  const _title = title ?? "Banny Retail";
-
   return (
     <Head>
-      <meta property="og:type" content="website" />
-      <meta name="twitter:card" content="summary_large_image" />
-
-      <title>{_title}</title>
-      <meta property="og:title" content={_title} />
-      <meta property="twitter:title" content={_title} />
+      {title && (
+        <>
+          <title>{title}</title>
+          <meta property="og:title" content={title} key="og:title" />
+          <meta property="twitter:title" content={title} key="twitter:title" />
+        </>
+      )}
 
       {description && (
         <>

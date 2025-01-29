@@ -4,11 +4,17 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <link rel="icon" href="/favicon.ico" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Banny Retail" key="og:title" />
         <meta property="og:image" content="/assets/homepage.png" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Banny Retail" key="twitter:title" />
         <meta property="twitter:image" content="/assets/homepage.png" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -17,6 +23,7 @@ export default function Document() {
           rel="stylesheet"
         />
       </Head>
+
       <body>
         <Main />
         <NextScript />
