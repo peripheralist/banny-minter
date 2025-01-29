@@ -1,4 +1,5 @@
 import { CategoryGroupGrid } from "@/components/shared/CategoryGroupGrid";
+import CustomHead from "@/components/shared/CustomHead";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
@@ -68,12 +69,10 @@ export default function Drop() {
 
   return (
     <>
-      <Head>
-        <title>
-          Drop {drop?.id}: {drop?.name}
-        </title>
-        <meta name="description" content={drop?.summary} />
-      </Head>
+      <CustomHead
+        title={`Drop ${drop?.id}: ${drop?.name}`}
+        description={drop?.summary}
+      />
 
       <main>
         <ToolbarBagView

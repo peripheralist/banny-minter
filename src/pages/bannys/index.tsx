@@ -1,10 +1,10 @@
 import { CategoryGroupGrid } from "@/components/shared/CategoryGroupGrid";
+import CustomHead from "@/components/shared/CustomHead";
 import TierShopButton from "@/components/shared/TierShopButton";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 
@@ -22,9 +22,7 @@ export default function Index() {
 
   return (
     <>
-      <Head>
-        <title>Banny Store</title>
-      </Head>
+      <CustomHead title={`Banny Store`} />
 
       <main>
         <ToolbarBagView

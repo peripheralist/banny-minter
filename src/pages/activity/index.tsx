@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import Head from "next/head";
+import CustomHead from "@/components/shared/CustomHead";
 
 export default function Activity() {
   const { data: bannys } = useNfTsQuery({
@@ -27,9 +28,7 @@ export default function Activity() {
 
   return (
     <>
-      <Head>
-        <title>Activity</title>
-      </Head>
+      <CustomHead title={`Activity`} />
 
       <main>
         <ToolbarBagView

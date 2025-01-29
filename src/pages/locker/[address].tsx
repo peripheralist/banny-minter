@@ -1,5 +1,6 @@
 import ButtonPad from "@/components/shared/ButtonPad";
 import { CategoryGroupGrid } from "@/components/shared/CategoryGroupGrid";
+import CustomHead from "@/components/shared/CustomHead";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import Loading from "@/components/shared/Loading";
 import TierImage from "@/components/shared/TierImage";
@@ -10,7 +11,6 @@ import { useNftsOf } from "@/hooks/queries/useNftsOf";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { parseTier } from "@/utils/parseTier";
 import { formatEthAddress } from "juice-sdk-core";
-import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
@@ -39,9 +39,7 @@ export default function Index() {
 
   return (
     <>
-      <Head>
-        <title>Locker - {address}</title>
-      </Head>
+      <CustomHead title={`Locker - ${address}`} />
 
       <main>
         <ToolbarBagView

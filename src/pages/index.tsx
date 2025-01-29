@@ -1,6 +1,7 @@
 import TiersDemo from "@/components/TiersDemo";
 import ButtonPad from "@/components/shared/ButtonPad";
 import CloudSky from "@/components/shared/CloudSky";
+import CustomHead from "@/components/shared/CustomHead";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
@@ -230,9 +231,7 @@ export default function Home() {
 
   return (
     <>
-      <Head>
-        <title>Banny Retail</title>
-      </Head>
+      <CustomHead />
 
       <main>
         <div
