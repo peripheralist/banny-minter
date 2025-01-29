@@ -1,5 +1,9 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
+const title = "Banny Retail";
+const description =
+  "Digital fashion brought to you by Juicebox. Dress your Banny in a curated selection of iconic wearables, with new items available in each Drop.";
+
 export default function Document() {
   return (
     <Html lang="en">
@@ -7,11 +11,21 @@ export default function Document() {
         <link rel="icon" href="/favicon.ico" />
 
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Banny Retail" key="og:title" />
+        <meta property="og:title" content={title} key="og:title" />
+        <meta
+          property="og:description"
+          content={description}
+          key="og:description"
+        />
         <meta property="og:image" content="/assets/homepage.png" />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Banny Retail" key="twitter:title" />
+        <meta name="twitter:title" content={title} key="twitter:title" />
+        <meta
+          property="twitter:description"
+          content={description}
+          key="twitter:description"
+        />
         <meta property="twitter:image" content="/assets/homepage.png" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
