@@ -38,12 +38,13 @@ export default function Bag({
           paddingTop: 8,
         }}
       >
-        <h4 style={{ fontSize: FONT_SIZE["2xl"], flex: 1 }}>
+        <h4 style={{ fontSize: FONT_SIZE["2xl"], flex: 1, cursor: "default" }}>
           <span
             style={{
               marginBottom: 6,
               display: "inline-block",
               verticalAlign: "middle",
+              cursor: "pointer",
             }}
             onClick={onClose}
           >
@@ -91,6 +92,7 @@ export default function Bag({
         justifyContent: "space-between",
         height: "100%",
         boxSizing: "border-box",
+        cursor: "pointer",
       }}
     >
       <h4

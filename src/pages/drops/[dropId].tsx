@@ -155,6 +155,7 @@ export default function Drop() {
                   <div
                     style={{
                       width: 32,
+                      minWidth: 32,
                       height: 56,
                       margin: "-16px 0px -20px",
                       overflow: "hidden",
@@ -167,8 +168,12 @@ export default function Drop() {
                       />
                     </div>
                   </div>
-                  Looking for Banny? Check the{" "}
-                  <Link href={"/bannys"}>Banny Shop</Link>
+                  <span style={{ maxHeight: 20 }}>
+                    Looking for Banny? Check the{" "}
+                    <Link style={{ display: "inline" }} href={"/bannys"}>
+                      Banny Shop
+                    </Link>
+                  </span>
                 </div>
               </>
             )}

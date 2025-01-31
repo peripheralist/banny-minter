@@ -8,6 +8,7 @@ import {
   useWriteJbMultiTerminalPay,
 } from "juice-sdk-react";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useReadRevDeployerTiered721HookOf } from "revnet-sdk";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useTiered721Hook } from "../readContract/useTiered721HookOf";
 
@@ -18,7 +19,11 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
   const { setAlert } = useContext(AlertContext);
   const { bag, totalEquippedPrice } = useContext(ShopContext);
 
+  // TODO
+  // const { data: jb721DataHookQueryAddress } =
+  //   useReadRevDeployerTiered721HookOf();
   const { data: jb721DataHookQueryAddress } = useTiered721Hook();
+
   const terminalAddress = contracts.primaryNativeTerminal.data;
 
   const tierIds = useMemo(

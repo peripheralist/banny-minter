@@ -4,21 +4,28 @@ import { EquipmentContext } from "@/contexts/equipmentContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { WalletContext } from "@/contexts/walletContext";
 import { useMint } from "@/hooks/writeContract/useMint";
-import { formatEther } from "juice-sdk-core";
+import { FixedInt } from "fpnum";
+import { formatEther, getTokenAToBQuote } from "juice-sdk-core";
+import { useJBRuleset, useJBRulesetMetadata } from "juice-sdk-react";
 import Link from "next/link";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 import BagItems from "./BagItems";
 import ButtonPad from "./ButtonPad";
 import Modal from "./Modal";
 import TransactionPending from "./TransactionPending";
+import { useChain } from "@/hooks/useChain";
+import FormattedAddress from "./FormattedAddress";
+import RoundedFrame from "./RoundedFrame";
 
 export default function MintButton() {
   const [isConfirming, setIsConfirming] = useState(false);
 
+  const chain = useChain();
+
   const { address } = useAccount();
   const { connect } = useContext(WalletContext);
-  const { totalEquippedPrice, emptyBag } = useContext(ShopContext);
+  const { totalEquippedPrice, emptyBag, bag } = useContext(ShopContext);
   const { unequipAll } = useContext(EquipmentContext);
 
   const { mint, isPending, isSuccess, hash } = useMint({
@@ -28,8 +35,32 @@ export default function MintButton() {
     },
   });
 
-  const noMintableItems =
-    !totalEquippedPrice || totalEquippedPrice == BigInt(0);
+  const ruleset = useJBRuleset();
+  const rulesetMetadata = useJBRulesetMetadata();
+
+  const formattedPayerTokens = useMemo(() => {
+    if (!totalEquippedPrice || !ruleset.data || !rulesetMetadata.data) {
+      return "--";
+    }
+
+    const { weight } = ruleset.data;
+
+    const { reservedPercent } = rulesetMetadata.data;
+
+    const tokenAAmt = new FixedInt(BigInt(totalEquippedPrice), 18);
+
+    const { payerTokens } = getTokenAToBQuote(tokenAAmt, {
+      weight,
+      reservedPercent,
+    });
+
+    return new FixedInt(payerTokens, 18).format(18);
+  }, [ruleset, rulesetMetadata, totalEquippedPrice]);
+
+  const formattedPrice = useMemo(
+    () => `${totalEquippedPrice ? formatEther(totalEquippedPrice) : "--"} ETH`,
+    [totalEquippedPrice]
+  );
 
   const ConfirmCheckoutModal = useCallback(() => {
     if (!totalEquippedPrice) return null;
@@ -57,17 +88,81 @@ export default function MintButton() {
             <BagItems />
 
             <p style={{ fontSize: FONT_SIZE.sm }}>
-              Payments go to the
-              <Link href={"https://revnet.eth.sucks/memo/"}>$BAN Revnet</Link>.
+              Payments go to the{" "}
+              <Link
+                href={`https://www.revnet.app/${chain.name.toLowerCase()}/5`}
+                target="blank"
+              >
+                $BAN Revnet
+              </Link>{" "}
+              earning $BAN in return.
             </p>
 
-            <div>You{"'"}ll earn 69420 $BAN from this purchase.</div>
-            {/* TODO calculate $BAN */}
+            <RoundedFrame
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+                padding: 16,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                Wallet:
+                <FormattedAddress
+                  address={address}
+                  position="left"
+                  style={{ color: COLORS.blue500 }}
+                />
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div>Total:</div>
+                <div>{formattedPrice}</div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                Earn:
+                <Link
+                  href={`https://www.revnet.app/${chain.name.toLowerCase()}/5`}
+                  target="blank"
+                >
+                  {(formattedPayerTokens ?? "--").toString()} $BAN
+                </Link>
+              </div>
+            </RoundedFrame>
           </div>
         )}
       </Modal>
     );
-  }, [isPending, isConfirming, totalEquippedPrice, mint, hash]);
+  }, [
+    isPending,
+    isConfirming,
+    totalEquippedPrice,
+    mint,
+    hash,
+    formattedPayerTokens,
+    formattedPrice,
+    chain,
+    address,
+  ]);
 
   const SucccessModal = useCallback(() => {
     if (!isSuccess) return null;
@@ -110,7 +205,7 @@ export default function MintButton() {
   return (
     <>
       <ButtonPad
-        disabled={noMintableItems}
+        disabled={!bag.length}
         style={{ padding: 12 }}
         fillFg={COLORS.pink}
         onClick={address ? () => setIsConfirming(true) : connect}
@@ -132,9 +227,7 @@ export default function MintButton() {
           >
             <div>Checkout</div>
 
-            <div>
-              {totalEquippedPrice ? formatEther(totalEquippedPrice) : "--"} ETH
-            </div>
+            <div>{formattedPrice}</div>
           </div>
 
           {!address && (

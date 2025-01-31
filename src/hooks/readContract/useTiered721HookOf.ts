@@ -21,7 +21,7 @@ export function useTiered721Hook() {
   const revDeployerAddress: Record<ChainId, Address> = {
     // TODO
     // [mainnet.id]: zeroAddress,
-    [sepolia.id]: "0x25bC5D5A708c2E426eF3a5196cc18dE6b2d5A3d1",
+    [sepolia.id]: "0xf2c46429b656a4da4f079754d149eefb52051dcc",
     [base.id]: zeroAddress,
     [baseSepolia.id]: zeroAddress,
     [arbitrum.id]: zeroAddress,
