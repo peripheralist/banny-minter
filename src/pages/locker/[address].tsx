@@ -88,7 +88,10 @@ export default function Index() {
                     }}
                     emptyText="None owned"
                     render={(nft) => (
-                      <Link key={nft.tokenId} href={`/nft/${nft.tokenId}`}>
+                      <Link
+                        key={nft.tokenId}
+                        href={`${router.asPath}?nft=${nft.tokenId}`}
+                      >
                         <ButtonPad
                           fillBorder="white"
                           fillFg={"white"}

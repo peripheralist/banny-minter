@@ -233,15 +233,12 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
 
       {nft && isOwned && nft?.category === 0 && (
         <Link
-          style={{
-            display: "block",
-            position: isSmallScreen ? "fixed" : "absolute",
-            bottom: 24,
-            left: 24,
-          }}
+          style={{ display: "block" }}
           href={`/dress/${nft.tokenId.toString()}`}
         >
-          <ButtonPad style={{ padding: 16 }} dimension>Dressing room</ButtonPad>
+          <ButtonPad style={{ padding: 16 }} dimension>
+            Dressing room
+          </ButtonPad>
         </Link>
       )}
     </div>

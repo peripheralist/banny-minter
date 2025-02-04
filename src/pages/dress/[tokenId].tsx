@@ -10,6 +10,7 @@ import { useOwnedTiers } from "@/hooks/queries/useOwnedTiers";
 import { NFT } from "@/model/nft";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
+import { isAddressEqual } from "viem";
 import { useAccount } from "wagmi";
 
 export default function Index() {
@@ -38,15 +39,19 @@ export default function Index() {
 
   const isOwner = useMemo(
     () =>
-      nft
-        ? address?.toLowerCase() === nft?.owner.address.toLowerCase()
-        : undefined,
+      nft && address ? isAddressEqual(address, nft.owner.address) : undefined,
     [address, nft]
   );
 
   useEffect(() => {
     if (isOwner === false) {
-      router.push(`/nft/${nft?.tokenId.toString()}`);
+      router.push(
+        router.asPath + `?nft=${nft?.tokenId.toString()}`,
+        undefined,
+        {
+          shallow: true,
+        }
+      );
     }
   }, [router, nft, isOwner]);
 

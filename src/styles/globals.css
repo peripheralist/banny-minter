@@ -18,10 +18,6 @@ a, a:visited {
   text-decoration: none;
 }
 
-a:hover {
-  font-weight: bold;
-}
-
 h1, h2, h3 {
   font-family: "Jersey 10", monospace;
   font-weight: normal;

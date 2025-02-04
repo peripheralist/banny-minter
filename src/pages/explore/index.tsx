@@ -10,6 +10,7 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import Link from "next/link";
 import { useMemo } from "react";
 import ActivityEventElem from "./ActivityEventElem";
+import { useRouter } from "next/router";
 
 export default function Activity() {
   const { data: bannys } = useNfTsQuery({
@@ -20,6 +21,8 @@ export default function Activity() {
       },
     },
   });
+
+  const router = useRouter();
 
   const { events } = useAllActivity();
 
@@ -76,7 +79,7 @@ export default function Activity() {
                       <Link
                         key={nft.tokenId.toString()}
                         style={{ display: "block" }}
-                        href={`/nft/${nft.tokenId.toString()}`}
+                        href={`${router.asPath}?nft=${nft.tokenId.toString()}`}
                       >
                         <RoundedFrame
                           borderColor="white"

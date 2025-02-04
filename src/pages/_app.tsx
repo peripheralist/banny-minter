@@ -13,6 +13,7 @@ import { PropsWithChildren } from "react";
 import { WagmiProvider } from "wagmi";
 import { config } from "../../config.wagmi";
 import TierDetailModal from "@/components/modals/TierDetailModal";
+import NFTDetailModal from "@/components/modals/NFTDetailModal";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     <Component {...pageProps} />
 
                     <TierDetailModal />
+                    <NFTDetailModal />
                   </ShopContextProvider>
                 </_EquipmentContextProvider>
               </WalletContextProvider>
