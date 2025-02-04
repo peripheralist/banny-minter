@@ -1,20 +1,25 @@
-import { FONT_SIZE } from "@/constants/fontSize";
+import { COLORS } from "@/constants/colors";
 import { ShopContext } from "@/contexts/shopContext";
-import { useContext } from "react";
-import MintButton from "./MintButton";
+import { useCallback, useContext } from "react";
 import BagItems from "./BagItems";
+import MintButton from "./MintButton";
 import RoundedFrame from "./RoundedFrame";
 import TierImage from "./TierImage";
-import { COLORS } from "@/constants/colors";
+import { FONT_SIZE } from "@/constants/fontSize";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 
-export default function Bag({
-  open,
-  onClose,
-}: {
-  open?: boolean;
-  onClose?: VoidFunction;
-}) {
+export default function Bag({ open }: { open?: boolean }) {
   const { bag, itemsQuantity, emptyBag } = useContext(ShopContext);
+  const { unequipAll } = useContext(EquipmentContext);
+
+  const ItemsQuantity = useCallback(
+    () => (
+      <div>
+        {itemsQuantity} item{itemsQuantity && itemsQuantity > 1 ? "s" : ""}
+      </div>
+    ),
+    [itemsQuantity]
+  );
 
   return open ? (
     <div
@@ -34,44 +39,22 @@ export default function Bag({
           justifyContent: "space-between",
           alignItems: "center",
           padding: 12,
-          paddingBottom: 0,
-          paddingTop: 8,
+          marginBottom: 12,
         }}
       >
-        <h4 style={{ fontSize: FONT_SIZE["2xl"], flex: 1, cursor: "default" }}>
-          <span
-            style={{
-              marginBottom: 6,
-              display: "inline-block",
-              verticalAlign: "middle",
-              cursor: "pointer",
+        <ItemsQuantity />
+
+        {itemsQuantity && (
+          <div
+            onClick={() => {
+              emptyBag?.();
+              unequipAll?.();
             }}
-            onClick={onClose}
+            style={{ color: COLORS.pink }}
           >
-            {">"}
-          </span>{" "}
-          Bag
-        </h4>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "end",
-            fontSize: FONT_SIZE.sm,
-            textTransform: "uppercase",
-          }}
-        >
-          <div>
-            {itemsQuantity} item{itemsQuantity && itemsQuantity > 1 ? "s" : ""}
+            Clear
           </div>
-
-          {itemsQuantity && (
-            <div onClick={emptyBag} style={{ color: COLORS.pink }}>
-              Clear
-            </div>
-          )}
-        </div>
+        )}
       </div>
 
       <div style={{ padding: 12, flex: 1, overflow: "auto" }}>
@@ -95,19 +78,6 @@ export default function Bag({
         cursor: "pointer",
       }}
     >
-      <h4
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: 48,
-          transform: `rotate(90deg)`,
-          whiteSpace: "pre",
-          fontSize: FONT_SIZE["2xl"],
-        }}
-      >
-        {">"} Bag
-      </h4>
-
       <div
         style={{
           display: "flex",
@@ -120,6 +90,10 @@ export default function Bag({
           marginTop: 24,
         }}
       >
+        <div style={{ fontSize: FONT_SIZE.sm }}>
+          <ItemsQuantity />
+        </div>
+
         {bag.length ? (
           bag.map(({ tier }) => {
             const { tierId } = tier;

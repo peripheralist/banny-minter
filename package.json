@@ -16,6 +16,7 @@
     "graphql": "^16.8.1",
     "juice-sdk-core": "^13.0.0-alpha",
     "juice-sdk-react": "^13.0.0-alpha",
+    "moment": "^2.30.1",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18",

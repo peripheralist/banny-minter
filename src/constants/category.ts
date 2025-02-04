@@ -51,8 +51,8 @@ export const CATEGORIES: Category[] = [
 
 export const CATEGORY_GROUP_NAMES = [
   "banny",
-  "head",
   "outfit",
+  "head",
   "special",
   "world",
 ] as const;

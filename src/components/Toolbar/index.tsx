@@ -20,7 +20,7 @@ export default function Index() {
   return (
     <div
       style={{
-        zIndex: 300,
+        position: "fixed",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -44,16 +44,16 @@ export default function Index() {
           gap: 8,
         }}
       >
+        <_Link frame href={"/explore"}>
+          Explore
+        </_Link>
+
         <_Link frame href={"/bannys"}>
           Banny shop
         </_Link>
 
         <_Link frame href={"/drops/1"}>
           Drop #01
-        </_Link>
-
-        <_Link frame href={"/activity"}>
-          Activity
         </_Link>
 
         {connectedAddress && (

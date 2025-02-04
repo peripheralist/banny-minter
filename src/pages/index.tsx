@@ -210,7 +210,7 @@ export default function Home() {
             </ButtonPad>
           </Link>
 
-          <Link href={`/activity`}>
+          <Link href={`/explore`}>
             <ButtonPad
               style={{
                 padding: "12px 16px",
@@ -218,7 +218,7 @@ export default function Home() {
                 fontSize: FONT_SIZE.lg,
               }}
             >
-              Activity
+              Explore
             </ButtonPad>
           </Link>
 

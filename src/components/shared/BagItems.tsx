@@ -71,7 +71,7 @@ export default function BagItems({ canRemove }: { canRemove?: boolean }) {
 
                 {canRemove && (
                   <div
-                    style={{ padding: 8 }}
+                    style={{ padding: 8, cursor: "pointer" }}
                     onClick={() => {
                       if (equipped?.[category]?.tierId === tierId) {
                         // unequip when removing

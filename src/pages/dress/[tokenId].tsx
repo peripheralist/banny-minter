@@ -127,12 +127,7 @@ function DressOwnedBanny({ bannyNft }: { bannyNft: NFT | undefined }) {
       defaultEquippedTierIds={equippedTierIds}
       defaultGroup="head"
     >
-      <ToolbarBagView
-        dynamicToolbar
-        header={`Dress Banny #${bannyNft?.tokenId.toString()}`}
-      >
-        <DressingRoom />
-      </ToolbarBagView>
+      {bannyNft && <DressingRoom tokenId={bannyNft.tokenId} />}
     </EquipmentContextProvider>
   ) : (
     <FullscreenLoading />

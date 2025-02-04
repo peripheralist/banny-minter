@@ -9,19 +9,26 @@ import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import {
   CSSProperties,
   Dispatch,
-  PropsWithChildren,
   SetStateAction,
   useContext,
   useMemo,
+  useState,
 } from "react";
 import ToolbarIcon from "../ToolbarIcon";
 import Bag from "./Bag";
 import EquippedTiersPreview from "./EquippedTiersPreview";
+import HeaderFrame from "./HeaderFrame";
 import RoundedFrame from "./RoundedFrame";
+
+type Section = {
+  header: string | JSX.Element;
+  content: JSX.Element;
+  contentStyle?: CSSProperties;
+  sectionStyle?: CSSProperties;
+};
 
 const Toolbar = dynamic(() => import("@/components/Toolbar"), { ssr: false });
 
@@ -29,22 +36,12 @@ const BAG_WIDTH = 340;
 const BAG_CLOSED_WIDTH = 80;
 
 export default function ToolbarBagView({
-  children,
+  sections,
   dynamicToolbar,
-  header,
-  backButton,
-  frame,
-  frameStyle,
-}: PropsWithChildren<{
+}: {
+  sections: Section[];
   dynamicToolbar?: boolean;
-  header: string | JSX.Element;
-  frame?: boolean;
-  frameStyle?: CSSProperties;
-  backButton?: {
-    href: string;
-    label?: string | JSX.Element;
-  };
-}>) {
+}) {
   const {
     value: bagIsOpen,
     setValue: setBagIsOpen,
@@ -55,8 +52,6 @@ export default function ToolbarBagView({
     serialize: (v) => (v ? "true" : "false"),
   });
 
-  const { measuredRef: headerRef, height: headerHeight } = useMeasuredRef();
-
   const { bag } = useContext(ShopContext);
 
   const { isSmallScreen } = useWindowSize();
@@ -64,13 +59,11 @@ export default function ToolbarBagView({
   if (isSmallScreen) {
     return (
       <SmallScreenView
-        header={header}
         bagIsOpen={bagIsOpen}
         setBagIsOpen={setBagIsOpen}
         dynamicToolbar={dynamicToolbar}
-      >
-        {children}
-      </SmallScreenView>
+        sections={sections}
+      />
     );
   }
 
@@ -87,105 +80,76 @@ export default function ToolbarBagView({
       {bagInitialized && (
         <div
           style={{
+            display: "flex",
             position: "fixed",
             padding: 8,
             paddingLeft: 0,
-            paddingBottom: frame ? 8 : 0,
+            paddingBottom: 8,
             top: 0,
             bottom: 0,
+            gap: 8,
             left: TOOLBAR_WIDTH,
-            right: bag.length
-              ? (bagIsOpen ? BAG_WIDTH : BAG_CLOSED_WIDTH) + 8
-              : 0,
+            right: 0,
             transition: "right 0.1s ease-in, left 0.1s ease-in",
             overflow: "hidden",
           }}
         >
-          <div
-            ref={headerRef}
-            style={{ display: "flex", gap: 8, paddingBottom: 8 }}
-          >
-            <RoundedFrame
-              background={"black"}
-              style={{ display: "flex", alignItems: "baseline" }}
-              containerStyle={{
-                flex: 1,
-                marginBottom: frame ? -24 : 0,
-                paddingBottom: frame ? 10 : 0,
-              }}
-            >
-              {backButton && (
-                <Link
-                  href={backButton.href}
-                  style={{ padding: "0px 12px", color: "white" }}
-                >
-                  {"<"}
-                </Link>
-              )}
-
-              <h4
-                style={{
-                  textTransform: "uppercase",
-                  padding: "4px 12px",
-                  color: COLORS.banana200,
-                }}
+          {sections.map(
+            ({ header, content, contentStyle, sectionStyle }, i) => (
+              <HeaderFrame
+                key={i}
+                header={header}
+                contentStyle={contentStyle}
+                sectionStyle={sectionStyle}
               >
-                {header}
-              </h4>
-            </RoundedFrame>
-          </div>
+                {content}
+              </HeaderFrame>
+            )
+          )}
 
-          {frame ? (
-            <RoundedFrame
-              background={COLORS.banana50}
-              style={{ overflow: "auto", ...frameStyle }}
-              containerStyle={{
-                width: "100%",
-                height: `calc(100% - ${headerHeight}px)`,
-              }}
-            >
-              {children}
-            </RoundedFrame>
-          ) : (
-            <div
-              style={{
-                position: "relative",
-                overflow: "auto",
-                height: `calc(100% - ${headerHeight}px)`,
-              }}
-            >
-              {children}
-            </div>
+          {bag.length > 0 && bagInitialized && (
+            <Drawer
+              open={bagIsOpen}
+              onClick={bagIsOpen ? undefined : () => setBagIsOpen(true)}
+              onClose={() => setBagIsOpen(false)}
+            />
           )}
         </div>
-      )}
-
-      {bag.length > 0 && bagInitialized && (
-        <Drawer
-          open={bagIsOpen}
-          onClick={bagIsOpen ? undefined : () => setBagIsOpen(true)}
-          onClose={() => setBagIsOpen(false)}
-        />
       )}
     </div>
   );
 }
 
 function SmallScreenView({
-  children,
+  sections,
   dynamicToolbar,
-  header,
   bagIsOpen,
   setBagIsOpen,
-}: PropsWithChildren<{
+}: {
+  sections: Section[];
   dynamicToolbar?: boolean;
-  header: string | JSX.Element;
   bagIsOpen?: boolean;
   setBagIsOpen: Dispatch<SetStateAction<boolean>>;
-}>) {
+}) {
   const { bag } = useContext(ShopContext);
   const { equipped, equippingCategory, unequippingCategory } =
     useContext(EquipmentContext);
+
+  const [selectedTabIdx, setSelectedTabIdx] = useState(0);
+
+  const Tabs = useMemo(
+    () =>
+      sections.map(({ header }, i) => (
+        <h4
+          key={header.toString()}
+          onClick={() => setSelectedTabIdx(i)}
+          style={{ color: selectedTabIdx === i ? "white" : COLORS.banana100 }}
+        >
+          {header}
+        </h4>
+      )),
+    [sections, selectedTabIdx]
+  );
 
   const { ref, direction, onScroll, scrollPosition } = useScrollDirection();
 
@@ -231,7 +195,7 @@ function SmallScreenView({
           transition: "max-height 0.1s ease-in",
           boxSizing: "border-box",
           zIndex: 101,
-          background: COLORS.banana100
+          background: COLORS.banana100,
         }}
       >
         <div
@@ -259,14 +223,14 @@ function SmallScreenView({
           justifyContent: "space-between",
           position: "sticky",
           top: toolbarHeight,
-          padding: "8px 12px",
+          padding: "10px 12px 8px",
           zIndex: 100,
           background: "black",
           color: COLORS.banana100,
           textTransform: "uppercase",
         }}
       >
-        <h4>{header}</h4>
+        <div style={{ display: "flex", gap: 24, overflow: "auto" }}>{Tabs}</div>
 
         <h4 hidden={_showHeader} onClick={() => setBagIsOpen(true)}>
           BAG ({bag.length || 0})
@@ -279,7 +243,7 @@ function SmallScreenView({
           paddingBottom: 40,
         }}
       >
-        {children}
+        {sections[selectedTabIdx].content}
       </div>
 
       <div
@@ -308,6 +272,8 @@ function SmallScreenView({
           }}
           onClick={(e) => e.stopPropagation()}
         >
+          <h4 style={{ padding: 12, fontSize: FONT_SIZE["2xl"] }}>Bag</h4>
+
           <div style={{ padding: 12 }}>
             <RoundedFrame background={"white"}>
               <EquippedTiersPreview
@@ -331,7 +297,7 @@ function SmallScreenView({
             </RoundedFrame>
           </div>
 
-          <Bag open onClose={() => setBagIsOpen(false)} />
+          <Bag open />
         </div>
       </div>
     </div>
@@ -351,21 +317,31 @@ function Drawer({
     useContext(EquipmentContext);
 
   return (
-    <div
-      style={{
-        position: "fixed",
+    <HeaderFrame
+      header={
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            cursor: "pointer",
+          }}
+          onClick={open ? onClose : onClick}
+        >
+          <span>{open ? ">" : "<"}</span>
+          <span>Bag</span>
+        </div>
+      }
+      sectionStyle={{ flex: 0 }}
+      contentStyle={{
         display: "flex",
         flexDirection: "column",
         gap: 8,
-        top: 0,
-        bottom: 0,
-        right: 8,
         transition: "width 0.1s ease-in",
         width: open ? BAG_WIDTH : BAG_CLOSED_WIDTH,
-        zIndex: 200,
         overflow: "auto",
+        padding: 0,
       }}
-      onClick={onClick}
+      onClick={open ? undefined : onClick}
     >
       <RoundedFrame
         background={"white"}
@@ -375,7 +351,6 @@ function Drawer({
           flexShrink: 0,
           marginBottom: -32,
           paddingTop: 4,
-          marginTop: 8,
         }}
         style={{
           textAlign: "center",
@@ -411,11 +386,10 @@ function Drawer({
         containerStyle={{
           height: open ? `calc(100% - ${BAG_WIDTH - 20}px)` : "100%",
           minHeight: 360,
-          marginBottom: 8,
         }}
       >
-        <Bag open={open} onClose={onClose} />
+        <Bag open={open} />
       </RoundedFrame>
-    </div>
+    </HeaderFrame>
   );
 }

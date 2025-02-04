@@ -31,7 +31,6 @@ export default function MintButton() {
   const { mint, isPending, isSuccess, hash } = useMint({
     onSuccess: () => {
       setIsConfirming(false);
-      emptyBag?.();
     },
   });
 
@@ -99,6 +98,7 @@ export default function MintButton() {
             </p>
 
             <RoundedFrame
+              background={"white"}
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -173,7 +173,7 @@ export default function MintButton() {
     };
 
     return (
-      <Modal onClose={onClose}>
+      <Modal open onClose={onClose}>
         <div
           style={{
             display: "flex",

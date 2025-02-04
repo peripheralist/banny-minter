@@ -153,7 +153,8 @@ function ApproveNFTsModal({
         }}
       >
         <h1>Some tokens need to be approved</h1>
-        <p>
+
+        <p style={{ marginTop: 12, marginBottom: 24, fontSize: FONT_SIZE.sm }}>
           When dressing a Banny, wearable NFTs are transferred to the Resolver
           contract. Approve those NFTs for transfer below.
         </p>
@@ -281,7 +282,7 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
           <p
             style={{ marginTop: 12, marginBottom: 24, fontSize: FONT_SIZE.sm }}
           >
-            When dressing a Banny, outfits & backgrounds will be transferred to
+            When dressing a Banny, wearable NFTs are transferred to
             the Resolver contract. When removed, they{"'"}ll be returned to
             whichever wallet owns the Banny.
           </p>

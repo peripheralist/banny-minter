@@ -3,10 +3,12 @@ import { useEffect, useMemo, useState } from "react";
 export function useLocalStorageState<V>(
   key: string | undefined,
   {
+    disabled,
     defaultValue,
     parse,
     serialize,
   }: {
+    disabled?: boolean;
     defaultValue: V;
     parse?: (v: string | null) => V;
     serialize?: (v: V) => string;
@@ -19,24 +21,24 @@ export function useLocalStorageState<V>(
 
   // read from cache
   useEffect(() => {
-    if (initialized || !_key) return;
+    if (disabled || initialized || !_key) return;
 
     const raw = localStorage.getItem(_key);
 
     setValue(parse ? parse(raw) : (raw as V));
 
-    setInitialized(true);
-  }, [_key, parse, initialized]);
+    setInitialized(true); // ensure initial read completes before updating cache
+  }, [_key, parse, initialized, disabled]);
 
   // update cache
   useEffect(() => {
-    if (!initialized || !_key) return;
+    if (disabled || !initialized || !_key) return;
 
     localStorage.setItem(
       _key,
       serialize ? serialize(value) : (value as string)
     );
-  }, [_key, value, serialize, initialized]);
+  }, [_key, value, serialize, initialized, disabled]);
 
   return { value, setValue, initialized };
 }

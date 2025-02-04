@@ -1,6 +1,7 @@
-import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import ButtonPad from "@/components/shared/ButtonPad";
+import CustomHead from "@/components/shared/CustomHead";
 import RoundedFrame from "@/components/shared/RoundedFrame";
+import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
@@ -86,21 +87,36 @@ export default function Drops() {
   const { isSmallScreen } = useWindowSize();
 
   return (
-    <ToolbarBagView header="DROPS">
-      <div style={{ position: "relative" }}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${isSmallScreen ? 1 : 2}, 1fr)`,
-            gap: 16,
-            paddingBottom: 80,
-          }}
-        >
-          {DROPS.map((d) => (
-            <DropLink key={d.id} drop={d} />
-          ))}
-        </div>
-      </div>
-    </ToolbarBagView>
+    <>
+      <CustomHead title="Drops" />
+
+      <main>
+        <ToolbarBagView
+          sections={[
+            {
+              header: "Drops",
+              content: (
+                <div style={{ position: "relative" }}>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: `repeat(${
+                        isSmallScreen ? 1 : 2
+                      }, 1fr)`,
+                      gap: 16,
+                      paddingBottom: 80,
+                    }}
+                  >
+                    {DROPS.map((d) => (
+                      <DropLink key={d.id} drop={d} />
+                    ))}
+                  </div>
+                </div>
+              ),
+            },
+          ]}
+        />
+      </main>
+    </>
   );
 }

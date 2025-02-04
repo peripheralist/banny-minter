@@ -68,6 +68,7 @@ export default function TierImage({
       case "naked":
       case "backside":
       case "hand":
+      case "suit":
       case "specialBody":
       case "specialHead":
       case "specialLegs":

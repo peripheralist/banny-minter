@@ -6,8 +6,11 @@ import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { ActivityEvent } from "@/model/activity";
-import { formatEthAddress } from "juice-sdk-core";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
+import moment from "moment";
+import FormattedAddress from "@/components/shared/FormattedAddress";
+import Link from "next/link";
+import ButtonPad from "@/components/shared/ButtonPad";
 
 export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   const { tiers } = useAllTiers();
@@ -30,11 +33,21 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   }, [event]);
 
   const Timestamp = useCallback(() => {
-    return <div>{new Date(event.timestamp * 1000).toLocaleString()}</div>;
+    return (
+      <div style={{ opacity: 0.5 }}>
+        {moment(event.timestamp * 1000).fromNow()}
+      </div>
+    );
   }, [event.timestamp]);
 
   const Caller = useCallback(() => {
-    return <div>{formatEthAddress(event.caller)}</div>;
+    return (
+      <FormattedAddress
+        position="left"
+        style={{ opacity: 0.5 }}
+        address={event.caller as `0x${string}`}
+      />
+    );
   }, [event.caller]);
 
   const Body = useCallback(() => {
@@ -54,11 +67,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
         return (
           <div style={{ display: "flex", gap: 4 }}>
             {_tiers.map((t) => (
-              <div key={t.tierId}>
-                <RoundedFrame background={"white"} borderColor="white">
-                  <TierImage tier={t} size={imgSize} />
-                </RoundedFrame>
-              </div>
+              <TierImage key={t.tierId} tier={t} size={imgSize} />
             ))}
           </div>
         );
@@ -66,8 +75,9 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
         if (!tiers) return "...";
 
         return (
-          <div style={{ display: "flex", gap: 4 }}>
+          <div style={{ display: "flex" }}>
             {[
+              event.nakedBannyId,
               ...(event.outfitIds ?? []),
               ...(event.worldId ? [event.worldId] : []),
             ].map((nftId) => {
@@ -78,9 +88,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
 
               return (
                 <div key={nftId}>
-                  <RoundedFrame background={"white"} borderColor="white">
-                    <TierImage tier={tier} size={imgSize} />
-                  </RoundedFrame>
+                  <TierImage tier={tier} size={imgSize} />
                 </div>
               );
             })}
@@ -89,37 +97,58 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
     }
   }, [event, tiers]);
 
-  const Chain = useCallback(() => event.chain.name, [event.chain.name]);
+  const Chain = useCallback(
+    () => (
+      <div style={{ color: COLORS.blue500 }}>
+        {event.chain.name.toUpperCase()}
+      </div>
+    ),
+    [event.chain.name]
+  );
+
+  const txUrl = useMemo(
+    () => `${event.chain.blockExplorers.default.url}/tx/${event.txHash}`,
+    [event]
+  );
 
   return (
-    <div>
-      <RoundedFrame
-        background={COLORS.bananaLite}
-        borderColor={COLORS.bananaLite}
-        style={{ padding: 12 }}
+    <Link href={txUrl} target="blank">
+      <ButtonPad
+        fillFg={"white"}
+        fillBorder={"white"}
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          flexDirection: "column",
+          gap: 8,
+          padding: 12,
+          color: "black",
+          width: "100%",
+        }}
+        shadow="none"
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontSize: FONT_SIZE.xs,
-              gap: 8,
-            }}
-          >
-            <Chain />
-            <Caller />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: FONT_SIZE.xs,
+            gap: 8,
+            fontWeight: "normal",
+            width: "100%",
+          }}
+        >
+          <Timestamp />
+          <Chain />
 
-            <div style={{ flex: 1 }} />
+          <div style={{ flex: 1 }} />
 
-            <Timestamp />
-          </div>
-
-          <Title />
-
-          <Body />
+          <Caller />
         </div>
-      </RoundedFrame>
-    </div>
+
+        <Title />
+
+        <Body />
+      </ButtonPad>
+    </Link>
   );
 }

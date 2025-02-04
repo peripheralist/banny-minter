@@ -182,6 +182,9 @@ export default function Modal({
       onClick={_onClose}
     >
       <div
+        style={{
+          zIndex: 999,
+        }}
         onClick={(e) => {
           e.stopPropagation();
         }}

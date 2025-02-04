@@ -1,4 +1,5 @@
 import Fuzz from "@/components/pixelRenderers/Fuzz";
+import CustomHead from "@/components/shared/CustomHead";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
@@ -57,26 +58,44 @@ export default function Index() {
     return <TierImage tier={parseTier(nft?.tier)} size={size - 8} />;
   }, [nft, size]);
 
-  return (
-    <ToolbarBagView frame header={`NFT: ${tier?.name ?? "--"} #${tokenId}`}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-          padding: isSmallScreen ? 12 : 24,
-          paddingBottom: 80,
-          gap: 24,
-        }}
-      >
-        <div>
-          <RoundedFrame background={"white"}>
-            <NftImage />
-          </RoundedFrame>
-        </div>
+  const title = useMemo(
+    () => `${tier?.name ?? "--"} #${tokenId}`,
+    [tier, tokenId]
+  );
 
-        {tier && <NftTierInfo nft={nft} tier={tier} />}
-      </div>
-    </ToolbarBagView>
+  return (
+    <>
+      <CustomHead title={title} />
+
+      <main>
+        <ToolbarBagView
+          sections={[
+            {
+              header: title,
+              content: (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    flexWrap: "wrap",
+                    padding: isSmallScreen ? 12 : 24,
+                    paddingBottom: 80,
+                    gap: 24,
+                  }}
+                >
+                  <div>
+                    <RoundedFrame background={"white"}>
+                      <NftImage />
+                    </RoundedFrame>
+                  </div>
+
+                  {tier && <NftTierInfo nft={nft} tier={tier} />}
+                </div>
+              ),
+            },
+          ]}
+        />
+      </main>
+    </>
   );
 }

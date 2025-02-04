@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { PropsWithChildren, useMemo, useState } from "react";
 import Wallet from "../Toolbar/Wallet";
-import RoundedFrame from "../shared/RoundedFrame";
 import { useAccount } from "wagmi";
 import { COLORS } from "@/constants/colors";
 import { useIsHover } from "@/hooks/useIsHover";
@@ -19,8 +18,8 @@ export default function ToolbarIcon() {
   return (
     <div>
       <Image
-        src={"/assets/banny_logo.svg"}
-        width={(TOOLBAR_ICON_SIZE * 456) / 80}
+        src={"/assets/banny_eyes.svg"}
+        width={(TOOLBAR_ICON_SIZE * 136) / 80}
         height={TOOLBAR_ICON_SIZE}
         alt="looks logo"
         onClick={() => setIsOpen(true)}
@@ -44,7 +43,7 @@ export default function ToolbarIcon() {
             left: 0,
             top: 0,
             bottom: 0,
-            width: isOpen ? 240 : 0,
+            width: isOpen ? 320 : 0,
             display: "flex",
             flexDirection: "column",
             boxSizing: "border-box",
@@ -67,7 +66,7 @@ export default function ToolbarIcon() {
 
           <_Link href="/">Home</_Link>
           <_Link href="/drops/1">Drop #01</_Link>
-          <_Link href={"/activity"}>Activity</_Link>
+          <_Link href={"/explore"}>Explore</_Link>
 
           {connectedAddress && (
             <_Link href={"/locker/" + connectedAddress}>Locker</_Link>

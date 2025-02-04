@@ -17,11 +17,10 @@ export default function FormattedAddress({
   if (!address) return null;
 
   return (
-    <div
-      style={{ position: "relative", cursor: "default", ...style }}
-      {...hoverProps}
-    >
-      {address.substring(0, 6)}…{address.substring(38)}
+    <div style={{ position: "relative", cursor: "default" }} {...hoverProps}>
+      <span style={style}>
+        {address.substring(0, 6)}…{address.substring(38)}
+      </span>
       {isHover && (
         <div
           style={{

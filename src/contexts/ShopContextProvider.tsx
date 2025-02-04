@@ -1,4 +1,4 @@
-import { Category, CategoryGroup } from "@/constants/category";
+import { CategoryGroup } from "@/constants/category";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { Tier } from "@/model/tier";
@@ -25,22 +25,15 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
     "bag_content",
     {
       defaultValue: [],
+      disabled: !tiers || !tiers.length,
       parse: (str) =>
         str
-          ? JSON.parse(str)
-              .map(
-                ({
-                  tierId,
-                  quantity,
-                }: {
-                  tierId: number;
-                  quantity: number;
-                }) => ({
-                  quantity,
-                  tier: tiers?.find((t) => t.tierId === tierId),
-                })
-              )
-              .filter(({ tier }: { tier: Tier }) => !!tier)
+          ? JSON.parse(str).map(
+              ({ tierId, quantity }: { tierId: number; quantity: number }) => ({
+                quantity,
+                tier: tiers?.find((t) => t.tierId === tierId),
+              })
+            )
           : [],
       serialize: (b) =>
         JSON.stringify(
