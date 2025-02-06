@@ -1,5 +1,5 @@
-import { Chain, ChainId } from "@/model/chain";
-import { useMemo, useState } from "react";
+import { Chain } from "@/model/chain";
+import { useMemo } from "react";
 import { mainnet, sepolia } from "viem/chains";
 import { useAccount } from "wagmi";
 import { config } from "../../config.wagmi";

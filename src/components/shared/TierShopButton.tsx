@@ -4,6 +4,7 @@ import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
+import { useIsHover } from "@/hooks/useIsHover";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Tier } from "@/model/tier";
 import { useCallback, useContext, useMemo, useState } from "react";
@@ -38,6 +39,8 @@ export default function TierShopButton({
   );
 
   const { isSmallScreen } = useWindowSize();
+
+  const { isHover, ...hoverProps } = useIsHover();
 
   const Label = useCallback(() => {
     const { initialSupply, remainingSupply } = tier;
@@ -120,16 +123,20 @@ export default function TierShopButton({
           <Label />
         </div>
 
-        <ButtonPad
-          style={{ padding: 8, color: COLORS.pink }}
-          fillFg={added ? COLORS.pinkLite : "white"}
-          fillBorder={added ? COLORS.pink : "#00000064"}
-          containerStyle={{ marginBottom: 4, width: "100%" }}
-          onClick={onClickAdd}
-          shadow="sm"
-        >
-          {added ? "Added" : `Add Ξ${formatEther(tier.price)}`}
-        </ButtonPad>
+        <div {...hoverProps}>
+          <ButtonPad
+            style={{ padding: 8, color: COLORS.pink }}
+            fillFg={added ? COLORS.pinkLite : "white"}
+            fillBorder={
+              added ? COLORS.pink : isHover ? "#000000aa" : "#00000064"
+            }
+            containerStyle={{ marginBottom: 4, width: "100%" }}
+            onClick={onClickAdd}
+            shadow="sm"
+          >
+            {added ? "Added" : `Add Ξ${formatEther(tier.price)}`}
+          </ButtonPad>
+        </div>
       </div>
     </ButtonPad>
   );

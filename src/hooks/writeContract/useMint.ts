@@ -49,6 +49,17 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
 
   const { chain } = useAccount();
 
+  console.log("Mint using params:", {
+    chain,
+    revnetId: LOOKS_REVNET_ID,
+    value: totalEquippedPrice,
+    wallet: connectedWalletAddress,
+    hook: LOOKS_COLLECTION_ID,
+    tierIds,
+    memo,
+    metadata,
+  });
+
   const mint = useCallback(() => {
     if (!chain || !connectedWalletAddress || !totalEquippedPrice || !metadata) {
       console.error("Missing something smh", {
