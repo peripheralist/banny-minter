@@ -20,3 +20,10 @@ export const RESOLVER_ADDRESS = process.env
 if (!RESOLVER_ADDRESS) {
   throw new Error("Missing resolver address");
 }
+
+export const TERMINAL_ADDRESS = process.env
+  .NEXT_PUBLIC_TERMINAL_ADDRESS! as Address;
+
+if (!TERMINAL_ADDRESS) {
+  throw new Error("Missing terminal address");
+}

@@ -1,6 +1,5 @@
-import { RESOLVER_ADDRESS } from "@/constants/nfts";
+import { LOOKS_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
 import { Tier } from "@/model/tier";
-import { useTiered721Hook } from "../readContract/useTiered721HookOf";
 import {
   WriteContractHandlerOptions,
   useWriteContractHandler,
@@ -38,8 +37,6 @@ const decorateBannyWithAbi = [
 ];
 
 export function useDecorateBanny(options?: WriteContractHandlerOptions) {
-  const { data: jb721DataHookQueryAddress } = useTiered721Hook();
-
   const { write: decorateBanny, ...data } = useWriteContractHandler(
     {
       abi: decorateBannyWithAbi,
@@ -58,12 +55,7 @@ export function useDecorateBanny(options?: WriteContractHandlerOptions) {
         const worldId = BigInt(world?.tokenId ?? 0);
         const outfitIds = outfits.map((o) => BigInt(o.tokenId!));
 
-        const args = [
-          jb721DataHookQueryAddress,
-          nakedBannyId,
-          worldId,
-          outfitIds,
-        ];
+        const args = [LOOKS_COLLECTION_ID, nakedBannyId, worldId, outfitIds];
 
         console.info("Creating transaction with args:", args);
 

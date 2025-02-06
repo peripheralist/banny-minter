@@ -1,30 +1,23 @@
-import { LOOKS_REVNET_ID } from "@/constants/nfts";
+import {
+  LOOKS_COLLECTION_ID,
+  LOOKS_REVNET_ID,
+  TERMINAL_ADDRESS,
+} from "@/constants/nfts";
 import { AlertContext } from "@/contexts/alertContext";
 import { ShopContext } from "@/contexts/shopContext";
-import { DEFAULT_METADATA, NATIVE_TOKEN } from "juice-sdk-core";
+import { NATIVE_TOKEN } from "juice-sdk-core";
 import {
-  useJBContractContext,
   usePreparePayMetadata,
   useWriteJbMultiTerminalPay,
 } from "juice-sdk-react";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { useReadRevDeployerTiered721HookOf } from "revnet-sdk";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
-import { useTiered721Hook } from "../readContract/useTiered721HookOf";
 
 export function useMint(props?: { onSuccess?: VoidFunction }) {
   const [isComplete, setIsComplete] = useState(false);
   const { address: connectedWalletAddress } = useAccount();
-  const { contracts } = useJBContractContext();
   const { setAlert } = useContext(AlertContext);
   const { bag, totalEquippedPrice } = useContext(ShopContext);
-
-  // TODO
-  // const { data: jb721DataHookQueryAddress } =
-  //   useReadRevDeployerTiered721HookOf();
-  const { data: jb721DataHookQueryAddress } = useTiered721Hook();
-
-  const terminalAddress = contracts.primaryNativeTerminal.data;
 
   const tierIds = useMemo(
     () =>
@@ -38,16 +31,12 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     [bag]
   );
 
-  const metadata = usePreparePayMetadata(
-    jb721DataHookQueryAddress
-      ? {
-          jb721Hook: {
-            dataHookAddress: jb721DataHookQueryAddress,
-            tierIdsToMint: tierIds,
-          },
-        }
-      : undefined
-  );
+  const metadata = usePreparePayMetadata({
+    jb721Hook: {
+      dataHookAddress: LOOKS_COLLECTION_ID,
+      tierIdsToMint: tierIds,
+    },
+  });
 
   const memo = useMemo(() => `Minted tiers ${tierIds.join(", ")}`, [tierIds]);
 
@@ -61,17 +50,12 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
   const { chain } = useAccount();
 
   const mint = useCallback(() => {
-    if (
-      !tierIds.length ||
-      !chain ||
-      !connectedWalletAddress ||
-      !terminalAddress ||
-      !totalEquippedPrice
-    ) {
+    if (!chain || !connectedWalletAddress || !totalEquippedPrice || !metadata) {
       console.error("Missing something smh", {
+        chain,
         connectedWalletAddress,
-        terminalAddress,
         totalEquippedPrice,
+        metadata,
       });
       setAlert?.({ body: "Something went wrong :(" });
       return;
@@ -80,7 +64,7 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     setIsComplete(false);
 
     writeContract({
-      address: terminalAddress,
+      address: TERMINAL_ADDRESS,
       args: [
         BigInt(LOOKS_REVNET_ID),
         NATIVE_TOKEN,
@@ -88,20 +72,18 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
         connectedWalletAddress, // mint to connected wallet
         BigInt(0),
         memo,
-        metadata ?? DEFAULT_METADATA,
+        metadata,
       ],
       value: totalEquippedPrice ?? undefined,
     });
   }, [
-    writeContract,
-    totalEquippedPrice,
-    connectedWalletAddress,
-    memo,
-    metadata,
-    terminalAddress,
-    setAlert,
-    tierIds,
     chain,
+    connectedWalletAddress,
+    totalEquippedPrice,
+    metadata,
+    setAlert,
+    writeContract,
+    memo,
   ]);
 
   const tx = useWaitForTransactionReceipt({
