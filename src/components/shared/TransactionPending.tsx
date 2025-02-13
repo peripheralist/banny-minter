@@ -2,7 +2,7 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import Link from "next/link";
 import { Address } from "viem";
 import Loading from "./Loading";
-import { useChain } from "@/hooks/useChain";
+import { useAppChain } from "@/hooks/useAppChain";
 
 export default function TransactionPending({
   text,
@@ -11,7 +11,7 @@ export default function TransactionPending({
   text?: string;
   hash: Address | undefined;
 }) {
-  const chain = useChain();
+  const appChain = useAppChain();
 
   return (
     <div
@@ -29,10 +29,10 @@ export default function TransactionPending({
 
       <div>{text ?? "Working..."}</div>
 
-      {chain && hash && (
+      {hash && (
         <Link
           target="blank"
-          href={chain.blockExplorers?.default.url + `/tx/${hash}`}
+          href={appChain.blockExplorers.default.url + `/tx/${hash}`}
           style={{ fontSize: FONT_SIZE.sm }}
         >
           View transaction

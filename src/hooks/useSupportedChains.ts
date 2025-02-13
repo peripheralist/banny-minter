@@ -1,9 +1,9 @@
 import { config } from "../../config.wagmi";
-import { useChain } from "./useChain";
+import { useAppChain } from "./useAppChain";
 
 export function useSupportedChains() {
-  const chain = useChain();
+  const appChain = useAppChain();
 
   // use testnet chains if connected to testnet
-  return config.chains.filter((c) => chain.testnet === c.testnet);
+  return config.chains.filter((c) => appChain.testnet === c.testnet);
 }

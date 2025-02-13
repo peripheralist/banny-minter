@@ -1,18 +1,18 @@
 import { LOOKS_REVNET_ID } from "@/constants/nfts";
-import { useChain } from "@/hooks/useChain";
+import { useAppChain } from "@/hooks/useAppChain";
 import { JBChainId, JBProjectProvider } from "juice-sdk-react";
 import { PropsWithChildren } from "react";
 
 const projectId = BigInt(LOOKS_REVNET_ID);
 
 export function LooksJBProvider({ children }: PropsWithChildren) {
-  const chain = useChain();
+  const appChain = useAppChain();
 
-  if (!chain) return null;
+  if (!appChain) return null;
 
   return (
     // TODO ChainId and JBChainId should be the same
-    <JBProjectProvider chainId={chain.id as JBChainId} projectId={projectId}>
+    <JBProjectProvider chainId={appChain.id as JBChainId} projectId={projectId}>
       {children}
     </JBProjectProvider>
   );

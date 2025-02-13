@@ -1,12 +1,12 @@
-import { useChain } from "@/hooks/useChain";
+import { useAppChain } from "@/hooks/useAppChain";
 import { createApolloClient } from "@/utils/createApolloClient";
 import { ApolloProvider } from "@apollo/client";
 import { PropsWithChildren } from "react";
 
 export function LooksApolloProvider({ children }: PropsWithChildren) {
-  const chain = useChain();
+  const appChain = useAppChain();
 
-  const client = createApolloClient(chain);
+  const client = createApolloClient(appChain);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 }

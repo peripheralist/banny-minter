@@ -8,8 +8,11 @@ const defaultChain = (
   process.env.NEXT_PUBLIC_IS_TESTNET === "true" ? sepolia : mainnet
 ) as Chain;
 
-// this could be deprecated by a default chain in wagmi.config. idk how on current version
-export const useChain = () => {
+/**
+ * Get the chain currently being preferred by the UI.
+ */
+// This could be deprecated by a default chain in wagmi.config? idk how on current version
+export const useAppChain = () => {
   const { chain } = useAccount();
 
   const _chain = useMemo(

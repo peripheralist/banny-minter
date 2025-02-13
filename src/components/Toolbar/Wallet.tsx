@@ -8,19 +8,19 @@ import FormattedAddress from "../shared/FormattedAddress";
 import RoundedFrame from "../shared/RoundedFrame";
 import { config } from "../../../config.wagmi";
 import { Chain } from "@/model/chain";
-import { useChain } from "@/hooks/useChain";
+import { useAppChain } from "@/hooks/useAppChain";
 import Blinker from "../shared/Blinker";
 import Modal from "../shared/Modal";
 
 export default function Wallet() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const { connect } = useContext(WalletContext);
+  const { connect, wrongNetwork } = useContext(WalletContext);
 
   const { address, chain: walletChain } = useAccount();
   const { disconnect } = useDisconnect();
   const { data: ensName } = useEnsName({ address });
-  const activeChain = useChain();
+  const appChain = useAppChain();
   const { switchChain } = useSwitchChain();
 
   const [mainchains, testnets] = [
@@ -30,7 +30,7 @@ export default function Wallet() {
 
   const ChainName = useCallback(
     ({ chain }: { chain: Chain }) => {
-      const active = chain.id === activeChain.id;
+      const active = chain.id === appChain.id;
 
       return (
         <RoundedFrame
@@ -55,7 +55,7 @@ export default function Wallet() {
         </RoundedFrame>
       );
     },
-    [activeChain, switchChain, address]
+    [appChain, switchChain, address]
   );
 
   return (
@@ -66,7 +66,7 @@ export default function Wallet() {
           borderColor={COLORS.pink}
           containerStyle={{ paddingBottom: 12, marginBottom: -20 }}
         >
-          {address && !walletChain ? (
+          {wrongNetwork ? (
             <div
               style={{
                 display: "flex",
@@ -78,9 +78,9 @@ export default function Wallet() {
                 padding: 8,
                 cursor: "pointer",
               }}
-              onClick={() => switchChain({ chainId: activeChain.id })}
+              onClick={() => switchChain({ chainId: appChain.id })}
             >
-              <Blinker offColor={"#f42"} /> Switch to {activeChain.name}
+              <Blinker offColor={"#f42"} /> Unsupported network
             </div>
           ) : (
             <div
@@ -95,7 +95,7 @@ export default function Wallet() {
               }}
               onClick={() => setModalIsOpen(true)}
             >
-              {activeChain.name}
+              {appChain.name}
             </div>
           )}
         </RoundedFrame>

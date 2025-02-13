@@ -14,17 +14,17 @@ import BagItems from "./BagItems";
 import ButtonPad from "./ButtonPad";
 import Modal from "./Modal";
 import TransactionPending from "./TransactionPending";
-import { useChain } from "@/hooks/useChain";
+import { useAppChain } from "@/hooks/useAppChain";
 import FormattedAddress from "./FormattedAddress";
 import RoundedFrame from "./RoundedFrame";
 
 export default function MintButton() {
   const [isConfirming, setIsConfirming] = useState(false);
 
-  const chain = useChain();
+  const appChain = useAppChain();
 
   const { address } = useAccount();
-  const { connect } = useContext(WalletContext);
+  const { connect, wrongNetwork, switchChain } = useContext(WalletContext);
   const { totalEquippedPrice, emptyBag, bag } = useContext(ShopContext);
   const { unequipAll } = useContext(EquipmentContext);
 
@@ -72,6 +72,11 @@ export default function MintButton() {
         action={
           isPending
             ? undefined
+            : wrongNetwork && switchChain
+            ? {
+                onClick: switchChain,
+                text: `Unsupported network!`,
+              }
             : {
                 onClick: mint,
                 text: `Mint (${formatEther(totalEquippedPrice)} ETH)`,
@@ -89,7 +94,7 @@ export default function MintButton() {
             <p style={{ fontSize: FONT_SIZE.sm }}>
               Payments go to the{" "}
               <Link
-                href={`https://www.revnet.app/${chain.name.toLowerCase()}/5`}
+                href={`https://www.revnet.app/${appChain.name.toLowerCase()}/5`}
                 target="blank"
               >
                 $BAN Revnet
@@ -113,6 +118,33 @@ export default function MintButton() {
                   justifyContent: "space-between",
                 }}
               >
+                <div>Total:</div>
+                <div>{formattedPrice}</div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                Earn:
+                <Link
+                  href={`https://www.revnet.app/${appChain.name.toLowerCase()}/5`}
+                  target="blank"
+                >
+                  {(formattedPayerTokens ?? "--").toString()} $BAN
+                </Link>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
                 Wallet:
                 <FormattedAddress
                   address={address}
@@ -128,24 +160,8 @@ export default function MintButton() {
                   justifyContent: "space-between",
                 }}
               >
-                <div>Total:</div>
-                <div>{formattedPrice}</div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
-                Earn:
-                <Link
-                  href={`https://www.revnet.app/${chain.name.toLowerCase()}/5`}
-                  target="blank"
-                >
-                  {(formattedPayerTokens ?? "--").toString()} $BAN
-                </Link>
+                Network:
+                <div>{appChain.name}</div>
               </div>
             </RoundedFrame>
           </div>
@@ -153,6 +169,8 @@ export default function MintButton() {
       </Modal>
     );
   }, [
+    switchChain,
+    wrongNetwork,
     isPending,
     isConfirming,
     totalEquippedPrice,
@@ -160,7 +178,7 @@ export default function MintButton() {
     hash,
     formattedPayerTokens,
     formattedPrice,
-    chain,
+    appChain,
     address,
   ]);
 
