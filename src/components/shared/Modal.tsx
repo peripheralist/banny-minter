@@ -80,10 +80,10 @@ export default function Modal({
   const _Modal = useCallback(() => {
     if (isSmallScreen) {
       return (
-        <div style={{ marginBottom: 16 }}>
+        <div style={{ position: "fixed", inset: 8, top: "auto" }}>
           <RoundedFrame
             background={COLORS.banana50}
-            containerStyle={{ height: "auto", marginBottom: 8 }}
+            containerStyle={{ height: "auto" }}
             style={{
               width: "calc(100vw - 24px)",
               maxHeight: `calc(100vh - ${footerHeight + 32}px)`,
@@ -101,6 +101,7 @@ export default function Modal({
               flexDirection: "column",
               gap: 8,
               zIndex: 999,
+              marginTop: 8,
             }}
           >
             <ActionButton />
