@@ -80,10 +80,10 @@ export default function Modal({
   const _Modal = useCallback(() => {
     if (isSmallScreen) {
       return (
-        <>
+        <div style={{ marginBottom: 16 }}>
           <RoundedFrame
             background={COLORS.banana50}
-            containerStyle={{ height: "auto", marginBottom: footerHeight + 16 }}
+            containerStyle={{ height: "auto", marginBottom: 8 }}
             style={{
               width: "calc(100vw - 24px)",
               maxHeight: `calc(100vh - ${footerHeight + 32}px)`,
@@ -97,10 +97,6 @@ export default function Modal({
           <div
             ref={footerRef}
             style={{
-              position: "fixed",
-              bottom: 8,
-              left: 12,
-              right: 12,
               display: "flex",
               flexDirection: "column",
               gap: 8,
@@ -111,7 +107,7 @@ export default function Modal({
 
             <CloseButton />
           </div>
-        </>
+        </div>
       );
     }
 

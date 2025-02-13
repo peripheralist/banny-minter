@@ -56,7 +56,10 @@ export default function Activity() {
                   }}
                 >
                   {events.map((e) => (
-                    <ActivityEventElem key={e.id} event={e} />
+                    <ActivityEventElem
+                      key={`${e.chain.id}-${e.id}`}
+                      event={e}
+                    />
                   ))}
                 </div>
               ),

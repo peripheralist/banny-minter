@@ -67,9 +67,12 @@ export default function ToolbarBagView({
     );
   }
 
+  if (!bagInitialized) return null;
+
   return (
     <div
       style={{
+        display: "flex",
         height: "100vh",
         width: "100vw",
         overflow: "hidden",
@@ -77,45 +80,36 @@ export default function ToolbarBagView({
     >
       <Toolbar />
 
-      {bagInitialized && (
-        <div
-          style={{
-            display: "flex",
-            position: "fixed",
-            padding: 8,
-            paddingLeft: 0,
-            paddingBottom: 8,
-            top: 0,
-            bottom: 0,
-            gap: 8,
-            left: TOOLBAR_WIDTH,
-            right: 0,
-            transition: "right 0.1s ease-in, left 0.1s ease-in",
-            overflow: "hidden",
-          }}
-        >
-          {sections.map(
-            ({ header, content, contentStyle, sectionStyle }, i) => (
-              <HeaderFrame
-                key={i}
-                header={header}
-                contentStyle={contentStyle}
-                sectionStyle={sectionStyle}
-              >
-                {content}
-              </HeaderFrame>
-            )
-          )}
+      <div
+        style={{
+          display: "flex",
+          flex: 1,
+          padding: 8,
+          paddingLeft: 0,
+          paddingBottom: 8,
+          gap: 8,
+          overflow: "hidden",
+        }}
+      >
+        {sections.map(({ header, content, contentStyle, sectionStyle }, i) => (
+          <HeaderFrame
+            key={header.toString()}
+            header={header}
+            contentStyle={contentStyle}
+            sectionStyle={sectionStyle}
+          >
+            {content}
+          </HeaderFrame>
+        ))}
 
-          {bag.length > 0 && bagInitialized && (
-            <Drawer
-              open={bagIsOpen}
-              onClick={bagIsOpen ? undefined : () => setBagIsOpen(true)}
-              onClose={() => setBagIsOpen(false)}
-            />
-          )}
-        </div>
-      )}
+        {bag.length > 0 && bagInitialized && (
+          <Drawer
+            open={bagIsOpen}
+            onClick={bagIsOpen ? undefined : () => setBagIsOpen(true)}
+            onClose={() => setBagIsOpen(false)}
+          />
+        )}
+      </div>
     </div>
   );
 }

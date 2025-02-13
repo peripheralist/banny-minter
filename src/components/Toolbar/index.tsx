@@ -20,7 +20,6 @@ export default function Index() {
   return (
     <div
       style={{
-        position: "fixed",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",

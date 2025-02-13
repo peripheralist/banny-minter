@@ -280,7 +280,6 @@ function LockerButton() {
           height: 56,
           fontSize: FONT_SIZE.lg,
           margin: "0 auto",
-          fontWeight: "bold",
         }}
       >
         Locker
