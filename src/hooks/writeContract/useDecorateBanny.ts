@@ -4,6 +4,7 @@ import {
   WriteContractHandlerOptions,
   useWriteContractHandler,
 } from "./useWriteContractHandler";
+import { CATEGORY_IDS } from "@/constants/category";
 
 const decorateBannyWithAbi = [
   {
@@ -53,9 +54,18 @@ export function useDecorateBanny(options?: WriteContractHandlerOptions) {
       }) => {
         const nakedBannyId = BigInt(nakedBanny?.tokenId ?? 0);
         const worldId = BigInt(world?.tokenId ?? 0);
-        const outfitIds = outfits.map((o) => BigInt(o.tokenId!));
+        const sortedOutfitIds = outfits
+          .sort((o1, o2) =>
+            CATEGORY_IDS[o1.category] < CATEGORY_IDS[o2.category] ? -1 : 1
+          )
+          .map((o) => BigInt(o.tokenId!));
 
-        const args = [LOOKS_COLLECTION_ID, nakedBannyId, worldId, outfitIds];
+        const args = [
+          LOOKS_COLLECTION_ID,
+          nakedBannyId,
+          worldId,
+          sortedOutfitIds,
+        ];
 
         console.info("Creating transaction with args:", args);
 

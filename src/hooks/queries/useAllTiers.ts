@@ -22,9 +22,10 @@ export function useAllTiers() {
         collection: LOOKS_COLLECTION_ID,
       },
     },
+    fetchPolicy: "cache-and-network",
   });
 
-  const { data: multichainTiers } = useMultiChainTiers();
+  const { data: multichainTierSupplies } = useMultiChainTierSupplies();
 
   const formattedTiers: Tier[] | undefined = useMemo(() => {
     return allTiers?.nfttiers.map((t) => {
@@ -46,10 +47,10 @@ export function useAllTiers() {
       return {
         ...parseTier(t),
         embeddedSvgUrl,
-        multiChainSupply: multichainTiers?.[t.tierId],
+        multiChainSupply: multichainTierSupplies?.[t.tierId],
       } as Tier;
     });
-  }, [allTiers, multichainTiers]);
+  }, [allTiers, multichainTierSupplies]);
 
   return {
     ...props,
@@ -57,7 +58,7 @@ export function useAllTiers() {
   };
 }
 
-function useMultiChainTiers() {
+function useMultiChainTierSupplies() {
   const chains = useSupportedChains();
 
   return useQuery({

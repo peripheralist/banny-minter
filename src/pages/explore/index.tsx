@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import ActivityEventElem from "./ActivityEventElem";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 export default function Activity() {
   const { data: bannys } = useNfTsQuery({

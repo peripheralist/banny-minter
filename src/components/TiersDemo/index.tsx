@@ -2,7 +2,7 @@ import { CATEGORIES, Category } from "@/constants/category";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 
 const excludedCategories: Category[] = ["world", "specialSuit"];
