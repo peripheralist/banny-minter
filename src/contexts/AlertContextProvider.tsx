@@ -44,8 +44,11 @@ export default function AlertContextProvider({ children }: PropsWithChildren) {
         {body && <div style={{ fontSize: FONT_SIZE.sm }}>{body}</div>}
 
         {action && (
-          <div style={{ fontSize: FONT_SIZE.lg }} onClick={reset}>
-            <Link href={action.href}>
+          <div onClick={reset}>
+            <Link
+              href={action.href}
+              target={action.blank ? "_blank" : undefined}
+            >
               {">"} {action.label}
             </Link>
           </div>

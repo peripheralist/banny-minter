@@ -118,7 +118,15 @@ export function useWriteContractHandler<
           // TODO seems silly...
           tx.error.name !== "TransactionReceiptNotFoundError"
         ) {
-          setAlert?.({ body: "Something may have gone wrong..." });
+          setAlert?.({
+            title: "Error :(",
+            body: "Transaction may have failed...",
+            action: {
+              label: "View transaction",
+              href: chain?.blockExplorers?.default.url + `/tx/${hash}`,
+              blank: true,
+            },
+          });
           setIsComplete(true);
         }
 
@@ -137,8 +145,9 @@ export function useWriteContractHandler<
 
   return {
     write,
-    isPending: isPending || tx.isLoading,
+    isPending: tx.isLoading,
     isSuccess: tx.isSuccess,
+    tx,
     data,
     usedArgs,
     hash,

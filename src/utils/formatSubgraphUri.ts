@@ -11,7 +11,7 @@ export function formatSubgraphUri(chain: Chain) {
     return process.env.SUBGRAPH_URL;
   }
 
-  return `https://subgraph.satsuma-prod.com/${PUBLIC_SUBGRAPH_KEY}/juicebox/nana-${formatSubgraphPrefix(
+  return `https://subgraph.satsuma-prod.com/${PUBLIC_SUBGRAPH_KEY}/juicebox/${formatSubgraphPrefix(
     chain
   )}/api`;
 }

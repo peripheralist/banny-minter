@@ -134,7 +134,15 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
       case "error":
         if (tx.error.name !== "TransactionReceiptNotFoundError") {
           // TODO seems silly...
-          setAlert?.({ body: "Something may have gone wrong..." });
+          setAlert?.({
+            title: "Error :(",
+            body: "Transaction may have failed...",
+            action: {
+              label: "View transaction",
+              href: chain?.blockExplorers?.default.url + `/tx/${hash}`,
+              blank: true,
+            },
+          });
           setIsComplete(true);
         }
         break;

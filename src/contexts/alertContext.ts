@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-export type Href = { label: string; href: string };
+export type Href = { label: string; href: string; blank?: boolean };
 
 export type Alert = {
   title?: string;

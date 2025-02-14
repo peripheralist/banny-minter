@@ -32,15 +32,20 @@ export function useAllTiers() {
       const svg = t?.svg;
       const imgHref = '<image href="';
 
+      let embeddedSvgUrl: string | undefined = undefined;
+
       if (svg?.includes(imgHref)) {
         let embeddedImageUrl = svg.split(imgHref)[1];
         embeddedImageUrl = embeddedImageUrl.split('"')[0];
         const img = new Image();
         img.src = embeddedImageUrl;
+
+        embeddedSvgUrl = embeddedImageUrl;
       }
 
       return {
         ...parseTier(t),
+        embeddedSvgUrl,
         multiChainSupply: multichainTiers?.[t.tierId],
       } as Tier;
     });

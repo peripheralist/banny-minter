@@ -15,6 +15,7 @@ export type Tier = {
     total: bigint;
   };
   info?: NFTInfo;
+  embeddedSvgUrl?: string;
 
   // Below only if NFT
   ownedSupply?: number;
