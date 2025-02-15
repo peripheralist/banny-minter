@@ -1,9 +1,15 @@
 import { Tier } from "@/model/tier";
-import React, { useCallback } from "react";
+import { useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
+import AssetSvg from "./AssetSvg";
+import DefaultAsset from "./DefaultAsset";
+
+function formatTierNameForSvg(name?: string) {
+  return name?.toLowerCase().replaceAll(" ", "-");
+}
 
 /**
- * Renders tier image with custom position within frame.
+ * Renders tier image with custom placement and size within frame. Should not be used in an image stack.
  */
 export default function TierImage({
   tier,
@@ -12,59 +18,19 @@ export default function TierImage({
   tier: Tier | undefined;
   size: number;
 }) {
-  const _Image = useCallback(() => {
-    if (!tier?.image) return <Fuzz width={size} height={size} />;
-
-    switch (tier.category) {
+  const { _size, style } = useMemo(() => {
+    switch (tier?.category) {
       case "glasses":
       case "headTop":
       case "mouth":
       case "head":
-        return (
-          <object
-            style={{
-              position: "absolute",
-              top: "-18%",
-              left: "-35%",
-            }}
-            width={size * 2}
-            height={size * 2}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
+        return { _size: size * 2, style: { top: "-18%", left: "-35%" } };
       case "legs":
       case "suitBottom":
-        return (
-          <object
-            style={{
-              position: "absolute",
-              top: "-132%",
-              left: "-69%",
-              bottom: 0,
-            }}
-            width={size * 2.5}
-            height={size * 2.5}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
+        return { _size: size * 2.5, style: { top: "-132%", left: "-69%" } };
       case "suitTop":
       case "necklace":
-        return (
-          <object
-            style={{
-              position: "absolute",
-              top: "-77%",
-              left: "-49%",
-              bottom: 0,
-            }}
-            width={size * 2}
-            height={size * 2}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
+        return { _size: size * 2, style: { top: "-77%", left: "-49%" } };
       case "naked":
       case "backside":
       case "hand":
@@ -73,25 +39,9 @@ export default function TierImage({
       case "specialHead":
       case "specialLegs":
       case "specialSuit":
-        return (
-          <object
-            style={{ position: "absolute", top: "-15%", left: "-10%" }}
-            width={size * 1.3}
-            height={size * 1.3}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
+        return { _size: size * 1.3, style: { top: "-15%", left: "-10%" } };
       default:
-        return (
-          <object
-            style={{ position: "absolute", top: 0, left: 0 }}
-            width={size * 1}
-            height={size * 1}
-            data={tier.image}
-            type="image/svg+xml"
-          />
-        );
+        return { _size: size, style: { top: 0, left: 0 } };
     }
   }, [tier?.image, tier?.category, size]);
 
@@ -104,7 +54,26 @@ export default function TierImage({
         overflow: "hidden",
       }}
     >
-      <_Image />
+      {tier?.category !== "naked" && (
+        <DefaultAsset size={_size} type="mannequin" style={style} />
+      )}
+
+      {tier?.name ? (
+        <AssetSvg
+          name={tier?.name}
+          size={_size}
+          style={{ position: "absolute", ...style }}
+        />
+      ) : (
+        <Fuzz width={size} height={size} />
+      )}
+
+      {tier?.category === "naked" && (
+        <>
+          <DefaultAsset size={_size} type="mouth" style={style} />
+          <DefaultAsset size={_size} type="necklace" style={style} />
+        </>
+      )}
     </div>
   );
 }

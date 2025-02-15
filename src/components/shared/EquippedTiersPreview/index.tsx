@@ -2,6 +2,9 @@ import { CATEGORIES, Category } from "@/constants/category";
 import { EquippedTiers } from "@/model/tier";
 import { TierPreview } from "./TierPreview";
 
+/**
+ * Layers multiple tiers into a single image, with animation for equipping/unequipping tiers.
+ */
 export default function EquippedTiersPreview({
   ...props
 }: {

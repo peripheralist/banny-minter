@@ -1,13 +1,15 @@
 {
-  "name": "banny-factory",
+  "name": "banny-retail",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "yarn codegen && next build",
     "start": "next start",
     "lint": "next lint",
-    "codegen": "graphql-code-generator --config codegen.yml -r dotenv/config"
+    "codegen": "graphql-code-generator --config codegen.yml -r dotenv/config",
+    "download-svgs": "node scripts/download-svgs.js"
   },
   "dependencies": {
     "@apollo/client": "^3.11.9",
@@ -38,6 +40,7 @@
     "eslint-config-next": "14.1.0",
     "fs": "^0.0.1-security",
     "graphql-tag": "^2.12.6",
+    "octokit": "^4.1.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.7.0",
     "typescript": "^5"

@@ -1,10 +1,11 @@
-import { mannequinSvg } from "@/constants/mannequinSvg";
 import { Category } from "@/constants/category";
-import { DEFAULT_SVG } from "@/constants/svgDefaults";
+import { getInheritedStyle } from "@/constants/inheritedColors";
 import { EQUIP_DURATION_MILLIS } from "@/contexts/EquipmentContextProvider";
 import { useFuzz } from "@/hooks/useFuzz";
 import { EquippedTiers } from "@/model/tier";
-import { CSSProperties, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import AssetSvg from "../AssetSvg";
+import DefaultAsset from "../DefaultAsset";
 
 const fuzzStepCount = 4;
 
@@ -77,66 +78,34 @@ export function TierPreview({
     [size]
   );
 
-  const SvgObject = useCallback(
-    ({ svg, style }: { svg: string | undefined; style?: CSSProperties }) =>
-      svg ? (
-        <object
+  const tier = useMemo(() => equipped[category], [equipped, category]);
+
+  const Svg = useCallback(() => {
+    if (!tier?.name) return null;
+
+    const inheritedStyle = getInheritedStyle(equipped.naked?.tierId);
+
+    return (
+      <>
+        <AssetSvg
           style={{
             position: "absolute",
-            ...style,
-            width: size,
-            height: size,
+            ...fuzzMask(equipFuzz),
+            ...fuzzMask(unequipFuzz),
           }}
-          data={`data:image/svg+xml;base64,${btoa(svg)}`}
+          svgStyle={inheritedStyle}
+          name={tier.name}
+          size={size}
         />
-      ) : null,
-    [size]
-  );
+        {category === "naked" && (
+          <>
+            {!equipped.mouth && <DefaultAsset size={size} type="mouth" />})
+            {!equipped.necklace && <DefaultAsset size={size} type="necklace" />}
+          </>
+        )}
+      </>
+    );
+  }, [tier, size, equipFuzz, unequipFuzz, equipped.naked]);
 
-  const NakedDefaultSvgs = useCallback(() => {
-    if (category !== "naked") return null;
-
-    let children: JSX.Element[] = [];
-
-    if (!equipped.naked) {
-      children.push(<SvgObject key="mannequin" svg={mannequinSvg} />);
-    } else {
-      // always add eyes
-      children.push(
-        <SvgObject
-          key="eyes"
-          svg={
-            equipped.naked?.tierId === 1
-              ? DEFAULT_SVG.eyesAlien
-              : DEFAULT_SVG.eyes
-          }
-        />
-      );
-
-      if (!equipped.necklace) {
-        children.push(<SvgObject key="necklace" svg={DEFAULT_SVG.necklace} />);
-      }
-
-      if (!equipped.mouth) {
-        children.push(<SvgObject key="mouth" svg={DEFAULT_SVG.mouth} />);
-      }
-    }
-
-    return children;
-  }, [category, equipped.naked, equipped.necklace, equipped.mouth, SvgObject]);
-
-  const svg = useMemo(() => equipped[category]?.svg, [equipped, category]);
-
-  return (
-    <>
-      {svg && (
-        <SvgObject
-          style={{ ...fuzzMask(equipFuzz), ...fuzzMask(unequipFuzz) }}
-          svg={svg}
-        />
-      )}
-
-      <NakedDefaultSvgs />
-    </>
-  );
+  return <Svg />;
 }

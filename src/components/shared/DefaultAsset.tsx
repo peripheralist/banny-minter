@@ -1,7 +1,14 @@
-export const mannequinSvg = `<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-<style>.o{fill:#050505;}.w{fill:#f9f9f9;}</style>
+import Image from "next/image";
+import { CSSProperties } from "react";
+
+const wrapSvg = (contents: string) => (size: number) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 400 400" fill="none">${contents}</svg>`;
+
+const DEFAULT_SVG = {
+  mannequin: wrapSvg(
+    `
 <style>
-  .o{fill:#808080;}.b2{fill:none;}.b3{fill:none;}.b4{fill:none;}.a1{fill:none;}.a2{fill:none;}.a3{fill:none;}</style>
+  .o{fill:#808080;}.b1{fill:none;}.b2{fill:none;}.b3{fill:none;}.b4{fill:none;}.a1{fill:none;}.a2{fill:none;}.a3{fill:none;}.w{fill:#f9f9f9;}</style>
 <g class="a1">
   <path d="M173 53h4v17h-4z" />
 </g>
@@ -118,5 +125,32 @@ export const mannequinSvg = `<svg width="400" height="400" viewBox="0 0 400 400"
 <g class="o">
   <path
     d="M187 307v-4h3v-6h-3v-4h-4v-3h-3v-3h-7v-4h-6v4h-4v3h4v27h-4v13h-3v10h-4v7h4v3h3 10 14v-3h-4v-4h-3v-3h-3v-3h-4v-7h4v-10h3v-7h3v-3h7v-3h-3zm16 10v-4h-6v17h-4v10h-3v7h3v3h4 6 4 3 14v-3h-4v-4h-7v-3h-3v-3h-3v-10h3v-7h3v-3h-10z" />
-</g>
-</svg>`;
+</g>`
+  ),
+  necklace: wrapSvg(
+    `<style>.o{fill:#050505;}.w{fill:#f9f9f9;}</style><g class="o"><path d="M190 173h-37v-3h-10v-4h-6v4h3v3h-3v4h6v3h10v4h37v-4h3v-3h-3v-4zm-40 4h-3v-4h3v4zm7 3v-3h3v3h-3zm6 0v-3h4v3h-4zm7 0v-3h3v3h-3zm7 0v-3h3v3h-3zm10 0h-4v-3h4v3z"/><path d="M190 170h3v3h-3z"/><path d="M193 166h4v4h-4zm0 7h4v4h-4z"/></g><g class="w"><path d="M137 170h3v3h-3zm10 3h3v4h-3zm10 4h3v3h-3zm6 0h4v3h-4zm7 0h3v3h-3zm7 0h3v3h-3zm6 0h4v3h-4zm7-4h3v4h-3z"/><path d="M193 170h4v3h-4z"/></g>`
+  ),
+  mouth: wrapSvg(
+    `<style>.o{fill:#050505;}</style><g class="o"><path d="M183 160v-4h-20v4h-3v3h3v4h24v-7h-4zm-13 3v-3h10v3h-10z" fill="#ad71c8"/><path d="M170 160h10v3h-10z"/></g>`
+  ),
+};
+
+export default function DefaultAsset({
+  size,
+  type,
+  style,
+}: {
+  size: number;
+  type: keyof typeof DEFAULT_SVG;
+  style?: CSSProperties;
+}) {
+  return (
+    <Image
+      src={`data:image/svg+xml;base64,${btoa(DEFAULT_SVG[type](size))}`}
+      width={size}
+      height={size}
+      style={{ position: "absolute", ...style }}
+      alt={type}
+    />
+  );
+}
