@@ -89,11 +89,11 @@ export default function Index() {
               <p>
                 The SVG for each Banny accessory must be stored on-chain
                 manually. Until then, the accessory image may not render
-                correctly in marketplaces or other apps. Each SVG must only be
-                stored once.
+                correctly in marketplaces or other apps. Each SVG only needs to
+                be stored once.
               </p>
 
-              <p>Storing only costs the gas required for the transaction.</p>
+              <p>Storing only costs gas!</p>
 
               <ButtonPad
                 style={{ padding: 12, color: "white" }}

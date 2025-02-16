@@ -173,6 +173,16 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
           />
         ) : null}
         {nft && <NftInfoRow label="Token Id" value={nft.tokenId.toString()} />}
+        {tier.embeddedSvgUrl && (
+          <NftInfoRow
+            label="SVG"
+            value={
+              <span>
+                Not stored <Link href={`/svg/${tier.tierId}`}>Store</Link>
+              </span>
+            }
+          />
+        )}
       </div>
     );
   }, [NftInfoRow, nft, equippedTiers, isOwned, tier]);
