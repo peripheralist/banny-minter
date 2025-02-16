@@ -2,6 +2,7 @@ import axios from "axios";
 import { writeFileSync } from "fs";
 import { Octokit } from "octokit";
 
+// We need all image names to match tier names
 function formatName(n) {
   const _n = n.replace(".svg", "");
 
@@ -24,6 +25,8 @@ function formatName(n) {
       return "gap-teeth";
     case "dj-booth":
       return "dj-deck";
+    case "beer":
+      return "cheap-beer";
   }
 
   return _n;

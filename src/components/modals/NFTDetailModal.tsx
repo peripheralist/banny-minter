@@ -3,7 +3,7 @@ import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import { CATEGORY_IDS } from "@/constants/category";
-import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
@@ -34,7 +34,7 @@ export default function NFTDetailModal() {
     variables: {
       where: {
         tokenId: tokenId as unknown as bigint,
-        collection: LOOKS_COLLECTION_ID,
+        collection: BAN_HOOK,
       },
     },
   });

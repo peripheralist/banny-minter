@@ -1,4 +1,4 @@
-import { LOOKS_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
+import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/nfts";
 import {
   WriteContractHandlerOptions,
   useWriteContractHandler,
@@ -7,7 +7,7 @@ import {
 export function useSetApprovalForAll(options?: WriteContractHandlerOptions) {
   const { write: setApprovalForAll, ...data } = useWriteContractHandler(
     {
-      address: LOOKS_COLLECTION_ID,
+      address: BAN_HOOK,
       abi: [
         {
           type: "function",

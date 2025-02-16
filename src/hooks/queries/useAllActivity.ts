@@ -1,4 +1,4 @@
-import { LOOKS_COLLECTION_ID, LOOKS_REVNET_ID } from "@/constants/nfts";
+import { BAN_HOOK, BAN_REVNET_ID } from "@/constants/nfts";
 import {
   DecorateBannyEventsDocument,
   DecorateBannyEventsQuery,
@@ -17,7 +17,7 @@ export function useAllActivity() {
   const { data: allTiers, ...props } = useNftTiersQuery({
     variables: {
       where: {
-        collection: LOOKS_COLLECTION_ID,
+        collection: BAN_HOOK,
       },
     },
   });
@@ -49,7 +49,7 @@ function useMultiChainMints() {
     document: PayEventsDocument,
     variables: {
       where: {
-        projectId: LOOKS_REVNET_ID,
+        projectId: BAN_REVNET_ID,
       },
     },
     parse: (r, chain) =>

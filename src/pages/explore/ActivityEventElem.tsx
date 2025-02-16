@@ -2,7 +2,7 @@ import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { ActivityEvent } from "@/model/activity";
@@ -18,7 +18,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   const { data: nfts } = useNfTsQuery({
     variables: {
       where: {
-        collection: LOOKS_COLLECTION_ID,
+        collection: BAN_HOOK,
       },
     },
   });

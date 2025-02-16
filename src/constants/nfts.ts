@@ -1,17 +1,15 @@
 import { Address } from "viem";
 
-export const LOOKS_COLLECTION_ID = process.env
-  .NEXT_PUBLIC_LOOKS_COLLECTION_ID as Address;
+export const BAN_HOOK = process.env.NEXT_PUBLIC_BAN_HOOK as Address;
 
-if (!LOOKS_COLLECTION_ID) {
-  throw new Error("Missing Looks collection ID");
+if (!BAN_HOOK) {
+  throw new Error("Missing BAN hook");
 }
 
-export const LOOKS_REVNET_ID =
-  process.env.NEXT_PUBLIC_LOOKS_REVNET_ID!;
+export const BAN_REVNET_ID = process.env.NEXT_PUBLIC_BAN_REVNET_ID!;
 
-if (!LOOKS_REVNET_ID) {
-  throw new Error("Missing Looks revnet id");
+if (!BAN_REVNET_ID) {
+  throw new Error("Missing BAN Revnet ID");
 }
 
 export const RESOLVER_ADDRESS = process.env

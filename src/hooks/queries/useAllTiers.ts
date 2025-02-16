@@ -1,4 +1,4 @@
-import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/nfts";
 import {
   NftTiersDocument,
   NftTiersQuery,
@@ -19,7 +19,7 @@ export function useAllTiers() {
   const { data: allTiers, ...props } = useNftTiersQuery({
     variables: {
       where: {
-        collection: LOOKS_COLLECTION_ID,
+        collection: BAN_HOOK,
       },
     },
     fetchPolicy: "cache-and-network",
@@ -72,7 +72,7 @@ function useMultiChainTierSupplies() {
             query: NftTiersDocument,
             variables: {
               where: {
-                collection: LOOKS_COLLECTION_ID,
+                collection: BAN_HOOK,
               },
             },
           });

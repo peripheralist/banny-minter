@@ -1,4 +1,4 @@
-import { LOOKS_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
+import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/nfts";
 import { Tier } from "@/model/tier";
 import {
   WriteContractHandlerOptions,
@@ -61,7 +61,7 @@ export function useDecorateBanny(options?: WriteContractHandlerOptions) {
           .map((o) => BigInt(o.tokenId!));
 
         const args = [
-          LOOKS_COLLECTION_ID,
+          BAN_HOOK,
           nakedBannyId,
           worldId,
           sortedOutfitIds,

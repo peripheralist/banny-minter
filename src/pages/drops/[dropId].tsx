@@ -9,7 +9,7 @@ import { CATEGORY_IDS } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/nfts";
 import { ShopContext } from "@/contexts/shopContext";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useWindowSize } from "@/hooks/useWindowSize";
@@ -27,7 +27,7 @@ export default function Drop() {
   const bannyNfts = useNfTsQuery({
     variables: {
       where: {
-        collection: LOOKS_COLLECTION_ID,
+        collection: BAN_HOOK,
         category: CATEGORY_IDS.naked,
         owner_: {
           wallet: address?.toLowerCase() ?? null,

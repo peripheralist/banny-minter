@@ -3,7 +3,7 @@ import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_IDS } from "@/constants/category";
-import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/nfts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useAllActivity } from "@/hooks/queries/useAllActivity";
 import { useWindowSize } from "@/hooks/useWindowSize";
@@ -17,7 +17,7 @@ export default function Activity() {
   const { data: bannys } = useNfTsQuery({
     variables: {
       where: {
-        collection: LOOKS_COLLECTION_ID,
+        collection: BAN_HOOK,
         category: CATEGORY_IDS["naked"],
       },
     },

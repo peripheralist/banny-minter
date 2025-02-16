@@ -1,6 +1,6 @@
-# Looks App
+# Banny Retail App
 
-Obnoxiously fun. Full of itself. Might crash your browser.
+Interface for Banny Retail ($BAN Revnet). Supports NFT minting, dressing Bannys, and exploring NFTs + activity in the BAN ecosystem across all supported blockchains.
 
 ## Dev
 
@@ -8,14 +8,7 @@ Obnoxiously fun. Full of itself. Might crash your browser.
 
 2. Generate graphql types: `yarn codegen`
 
-3. Define .env variables:
-
-```
-NEXT_PUBLIC_CHAIN_ID= # 1, 1155511
-SUBGRAPH_URL= # url used for requests from server
-NEXT_PUBLIC_SUBGRAPH_URL= # url used for requests from client
-NEXT_PUBLIC_INFURA_API_KEY= # Infura api key. If not provided, a public provider url will be used
-```
+3. Define .env variables: (see .example.env)
 
 4. Serve app: `yarn dev`
 
@@ -31,6 +24,10 @@ NEXT_PUBLIC_INFURA_API_KEY= # Infura api key. If not provided, a public provider
 >   * e.g. `body` includes categories `suitTop`, `suitBottom`
 >   * `categoryGroup:category == 1:N`
 >   * An abstraction used by the UI that is *not* recognized by any on-chain smart contract.
+
+## Scripts
+
+`yarn download-svgs` downloads tier SVGs from Github and stores them in `src/constants/assetSvgs.ts` for use in displaying tier images. `assetSvgs.ts` is git tracked. You should only need this script if assets have changed.
 
 ## Infrastructure
 

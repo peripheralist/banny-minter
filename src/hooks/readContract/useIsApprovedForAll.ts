@@ -1,4 +1,4 @@
-import { LOOKS_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
+import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/nfts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { Address } from "viem";
@@ -42,7 +42,7 @@ export function useIsApprovedForAll(wallet: Address | undefined) {
             stateMutability: "view",
           },
         ],
-        address: LOOKS_COLLECTION_ID,
+        address: BAN_HOOK,
         functionName: "isApprovedForAll",
         args: [wallet, RESOLVER_ADDRESS],
       });

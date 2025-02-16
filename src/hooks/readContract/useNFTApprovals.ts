@@ -1,4 +1,4 @@
-import { LOOKS_COLLECTION_ID, RESOLVER_ADDRESS } from "@/constants/nfts";
+import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/nfts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { isAddressEqual } from "viem";
@@ -45,7 +45,7 @@ export function useNFTApprovals(tokenIds: bigint[]) {
                 stateMutability: "view",
               },
             ],
-            address: LOOKS_COLLECTION_ID,
+            address: BAN_HOOK,
             functionName: "getApproved",
             args: [id],
           })

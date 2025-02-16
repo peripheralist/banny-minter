@@ -1,6 +1,6 @@
 import {
-  LOOKS_COLLECTION_ID,
-  LOOKS_REVNET_ID,
+  BAN_HOOK,
+  BAN_REVNET_ID,
   TERMINAL_ADDRESS,
 } from "@/constants/nfts";
 import { AlertContext } from "@/contexts/alertContext";
@@ -33,7 +33,7 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
 
   const metadata = usePreparePayMetadata({
     jb721Hook: {
-      dataHookAddress: LOOKS_COLLECTION_ID,
+      dataHookAddress: BAN_HOOK,
       tierIdsToMint: tierIds,
     },
   });
@@ -51,10 +51,10 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
 
   console.log("Mint using params:", {
     chain,
-    revnetId: LOOKS_REVNET_ID,
+    revnetId: BAN_REVNET_ID,
     value: totalEquippedPrice,
     wallet: connectedWalletAddress,
-    hook: LOOKS_COLLECTION_ID,
+    hook: BAN_HOOK,
     tierIds,
     memo,
     metadata,
@@ -77,7 +77,7 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     writeContract({
       address: TERMINAL_ADDRESS,
       args: [
-        BigInt(LOOKS_REVNET_ID),
+        BigInt(BAN_REVNET_ID),
         NATIVE_TOKEN,
         totalEquippedPrice,
         connectedWalletAddress, // mint to connected wallet

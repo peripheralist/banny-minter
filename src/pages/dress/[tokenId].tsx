@@ -2,7 +2,7 @@ import DressingRoom from "@/components/DressingRoom";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { Category } from "@/constants/category";
-import { LOOKS_COLLECTION_ID } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/nfts";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
@@ -30,7 +30,7 @@ export default function Index() {
     variables: {
       where: {
         tokenId,
-        collection: LOOKS_COLLECTION_ID,
+        collection: BAN_HOOK,
       },
     },
   });

@@ -1,9 +1,9 @@
-import { LOOKS_REVNET_ID } from "@/constants/nfts";
+import { BAN_REVNET_ID } from "@/constants/nfts";
 import { useAppChain } from "@/hooks/useAppChain";
 import { JBChainId, JBProjectProvider } from "juice-sdk-react";
 import { PropsWithChildren } from "react";
 
-const projectId = BigInt(LOOKS_REVNET_ID);
+const projectId = BigInt(BAN_REVNET_ID);
 
 export function LooksJBProvider({ children }: PropsWithChildren) {
   const appChain = useAppChain();

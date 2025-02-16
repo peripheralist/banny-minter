@@ -65,7 +65,7 @@ export default function TierImage({
           style={{ position: "absolute", ...style }}
         />
       ) : (
-        <Fuzz width={size} height={size} />
+        <DefaultAsset size={_size} type="mannequin" style={style} />
       )}
 
       {tier?.category === "naked" && (
