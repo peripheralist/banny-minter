@@ -19,8 +19,8 @@ query DecorateBannyEvents($where: DecorateBannyEvent_filter) {
     txHash
     caller
 
-    nakedBannyId
+    bannyBodyId
     outfitIds
-    worldId
+    backgroundId
   }
 }

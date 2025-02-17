@@ -37,16 +37,16 @@ const INHERITED_FILLS: Record<number, string[]> = {
   ],
 };
 
-const getFillsForNaked = (nakedTier: number) => {
-  const [b1, b2, b3, b4, a1, a2, a3] = INHERITED_FILLS[nakedTier];
+const getFillsForBody = (bodyTierId: number) => {
+  const [b1, b2, b3, b4, a1, a2, a3] = INHERITED_FILLS[bodyTierId];
 
   return { b1, b2, b3, b4, a1, a2, a3 };
 };
 
-export function getInheritedStyle(nakedTierId?: number) {
-  if (!nakedTierId) return "";
+export function getInheritedStyle(bodyTierId?: number) {
+  if (!bodyTierId) return "";
 
-  const colors = getFillsForNaked(nakedTierId);
+  const colors = getFillsForBody(bodyTierId);
 
   return `<style>${Object.entries(colors)
     .map(([className, color]) => `.${className}{fill:${color};}`)

@@ -19,7 +19,7 @@ export default function AssetSvg({
     return `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}' viewBox='0 0 400 400' fill='none'>${
       svgStyle ?? ""
     }${ASSET_SVGS[_name]}</svg>`;
-  }, [size, _name]);
+  }, [size, _name, svgStyle]);
 
   return (
     <Image

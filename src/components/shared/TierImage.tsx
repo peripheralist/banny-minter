@@ -31,7 +31,7 @@ export default function TierImage({
       case "suitTop":
       case "necklace":
         return { _size: size * 2, style: { top: "-77%", left: "-49%" } };
-      case "naked":
+      case "body":
       case "backside":
       case "hand":
       case "suit":
@@ -43,7 +43,7 @@ export default function TierImage({
       default:
         return { _size: size, style: { top: 0, left: 0 } };
     }
-  }, [tier?.image, tier?.category, size]);
+  }, [tier?.category, size]);
 
   return (
     <div
@@ -54,7 +54,7 @@ export default function TierImage({
         overflow: "hidden",
       }}
     >
-      {tier?.category !== "naked" && (
+      {tier?.category !== "body" && (
         <DefaultAsset size={_size} type="mannequin" style={style} />
       )}
 
@@ -68,7 +68,7 @@ export default function TierImage({
         <DefaultAsset size={_size} type="mannequin" style={style} />
       )}
 
-      {tier?.category === "naked" && (
+      {tier?.category === "body" && (
         <>
           <DefaultAsset size={_size} type="mouth" style={style} />
           <DefaultAsset size={_size} type="necklace" style={style} />

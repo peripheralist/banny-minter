@@ -2,14 +2,14 @@ import { CATEGORY_IDS } from "@/constants/category";
 
 type NumString = `${number}`;
 
-type NakedInfo = {
+type BodyInfo = {
   category: 0;
-  wornByNakedBannyId?: NumString;
+  wornByBannyBodyId?: NumString;
 };
 
 type AllOtherInfo = {
   category: Exclude<(typeof CATEGORY_IDS)[keyof typeof CATEGORY_IDS], 0>;
-  wornByNakedBannyId: NumString;
+  wornByBannyBodyId: NumString;
 };
 
 export type NFTInfo = {
@@ -26,5 +26,5 @@ export type NFTInfo = {
   currency: NumString;
   description: string;
   outfitIds?: number[];
-  worldId?: number;
-} & (NakedInfo | AllOtherInfo);
+  backgroundId?: number;
+} & (BodyInfo | AllOtherInfo);

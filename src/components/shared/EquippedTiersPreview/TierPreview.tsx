@@ -81,7 +81,7 @@ export function TierPreview({
   const tier = useMemo(() => equipped[category], [equipped, category]);
 
   const Svg = useCallback(() => {
-    const inheritedStyle = getInheritedStyle(equipped.naked?.tierId);
+    const inheritedStyle = getInheritedStyle(equipped.body?.tierId);
 
     return (
       <>
@@ -98,10 +98,10 @@ export function TierPreview({
           />
         )}
 
-        {category === "naked" &&
+        {category === "body" &&
           (tier?.name ? (
             <>
-              {!equipped.mouth && <DefaultAsset size={size} type="mouth" />})
+              {!equipped.mouth && <DefaultAsset size={size} type="mouth" />}
               {!equipped.necklace && (
                 <DefaultAsset size={size} type="necklace" />
               )}
@@ -111,7 +111,7 @@ export function TierPreview({
           ))}
       </>
     );
-  }, [tier, size, equipFuzz, unequipFuzz, equipped, category]);
+  }, [tier, size, equipFuzz, unequipFuzz, equipped, category, fuzzMask]);
 
   return <Svg />;
 }

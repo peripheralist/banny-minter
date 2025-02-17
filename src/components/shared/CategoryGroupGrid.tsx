@@ -66,7 +66,7 @@ export function CategoryGroupGrid<I extends { category: Category }>({
                         top: 0,
                       }
                     : {
-                        left: -128,
+                        left: -144,
                       }),
                 }}
               >

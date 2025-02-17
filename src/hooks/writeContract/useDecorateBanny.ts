@@ -17,12 +17,12 @@ const decorateBannyWithAbi = [
         internalType: "address",
       },
       {
-        name: "nakedBannyId",
+        name: "bannyBodyId",
         type: "uint256",
         internalType: "uint256",
       },
       {
-        name: "worldId",
+        name: "backgroundId",
         type: "uint256",
         internalType: "uint256",
       },
@@ -44,28 +44,23 @@ export function useDecorateBanny(options?: WriteContractHandlerOptions) {
       address: RESOLVER_ADDRESS,
       functionName: "decorateBannyWith",
       args: ({
-        nakedBanny,
-        world,
+        body,
+        background,
         outfits,
       }: {
-        nakedBanny: Tier | undefined;
-        world: Tier | undefined;
+        body: Tier | undefined;
+        background: Tier | undefined;
         outfits: Tier[];
       }) => {
-        const nakedBannyId = BigInt(nakedBanny?.tokenId ?? 0);
-        const worldId = BigInt(world?.tokenId ?? 0);
+        const bannyBodyId = BigInt(body?.tokenId ?? 0);
+        const backgroundId = BigInt(background?.tokenId ?? 0);
         const sortedOutfitIds = outfits
           .sort((o1, o2) =>
             CATEGORY_IDS[o1.category] < CATEGORY_IDS[o2.category] ? -1 : 1
           )
           .map((o) => BigInt(o.tokenId!));
 
-        const args = [
-          BAN_HOOK,
-          nakedBannyId,
-          worldId,
-          sortedOutfitIds,
-        ];
+        const args = [BAN_HOOK, bannyBodyId, backgroundId, sortedOutfitIds];
 
         console.info("Creating transaction with args:", args);
 

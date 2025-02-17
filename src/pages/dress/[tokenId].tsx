@@ -74,7 +74,7 @@ function DressOwnedBanny({ bannyNft }: { bannyNft: NFT | undefined }) {
     const formattedOwnedTiers = ownedTiers
       .filter(
         ({ tier }) =>
-          tier.category !== "naked" &&
+          tier.category !== "body" &&
           equippedTiers[tier.category]?.tierId !== tier.tierId // only add tier if not equipped
       )
       .map(({ tier, nfts }) => {

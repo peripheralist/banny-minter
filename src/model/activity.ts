@@ -9,9 +9,9 @@ export type ActivityEvent = {
 } & (
   | {
       type: "decorate";
-      nakedBannyId: bigint;
+      bannyBodyId: bigint;
       outfitIds: bigint[];
-      worldId: bigint;
+      backgroundId: bigint;
     }
   | {
       type: "mint";

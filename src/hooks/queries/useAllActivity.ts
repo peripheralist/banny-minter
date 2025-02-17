@@ -29,7 +29,7 @@ export function useAllActivity() {
     .sort((a, b) => (a.timestamp > b.timestamp ? -1 : 1))
     .map((e) => ({
       ...e,
-      type: (e as { nakedBannyId: bigint }).nakedBannyId ? "decorate" : "mint",
+      type: (e as { bannyBodyId: bigint }).bannyBodyId ? "decorate" : "mint",
     })) as unknown as ActivityEvent[];
 
   return {
@@ -57,8 +57,8 @@ function useMultiChainMints() {
         .map((e) => ({
           ...e,
           chain,
-          nakedBannyId: undefined,
-          worldId: undefined,
+          bannyBodyId: undefined,
+          backgroundId: undefined,
           outfitIds: [],
         }))
         .filter((e) => e.note.startsWith("Minted tiers")), // get only mints

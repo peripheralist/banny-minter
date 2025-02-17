@@ -24,12 +24,12 @@ export function useBannyEquippedTiers(
       tokenId: parseInt(bannyNft.tokenId.toString()),
     } as Tier;
 
-    equipped["naked"] = bannyNftTier;
+    equipped.body = bannyNftTier;
 
     const decoded = decodeNFTInfo(bannyNft.tokenUri);
 
     const allAssetIds = [...(decoded?.outfitIds ?? [])];
-    if (decoded?.worldId) allAssetIds.push(decoded.worldId);
+    if (decoded?.backgroundId) allAssetIds.push(decoded.backgroundId);
 
     allAssetIds.forEach((tokenId) => {
       const assetTier = nfts.find(

@@ -50,7 +50,7 @@ export default function Index() {
               contentStyle: {
                 position: "relative",
                 padding: 48,
-                paddingLeft: 120,
+                paddingLeft: 136,
                 paddingTop: 16,
               },
               content: loading ? (
@@ -105,7 +105,7 @@ export default function Index() {
                           shadow="sm"
                         >
                           <div style={{ pointerEvents: "none" }}>
-                            {nft.category === "naked" ? (
+                            {nft.category === "body" ? (
                               <DressedBannyNftImage
                                 size={imgSize - 16}
                                 nft={{
@@ -138,7 +138,7 @@ export default function Index() {
                             </div>
                           </div>
 
-                          {nft.category === "naked" && (
+                          {nft.category === "body" && (
                             <Link
                               href={`/dress/${nft.tokenId.toString()}`}
                               style={{ width: "100%" }}

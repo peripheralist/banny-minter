@@ -26,7 +26,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   const Title = useCallback(() => {
     switch (event.type) {
       case "decorate":
-        return `Dressed Banny #${event.nakedBannyId.toString()}`;
+        return `Dressed Banny #${event.bannyBodyId.toString()}`;
       case "mint":
         return `Minted items`;
     }
@@ -77,9 +77,9 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
         return (
           <div style={{ display: "flex" }}>
             {[
-              event.nakedBannyId,
+              event.bannyBodyId,
               ...(event.outfitIds ?? []),
-              ...(event.worldId ? [event.worldId] : []),
+              ...(event.backgroundId ? [event.backgroundId] : []),
             ].map((nftId) => {
               const tierId = nftId / BigInt(1000000000);
               const tier = tiers.find((t) => BigInt(t.tierId) === tierId);

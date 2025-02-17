@@ -5,7 +5,7 @@ import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useContext, useEffect } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 
-const excludedCategories: Category[] = ["world", "specialSuit"];
+const excludedCategories: Category[] = ["background", "specialSuit"];
 
 export default function TiersDemo({
   size,
@@ -46,7 +46,7 @@ function _Demo({
 
   useEffect(() => {
     // default equip body
-    equip?.naked(Math.ceil(Math.random() * 4));
+    equip?.body(Math.ceil(Math.random() * 4));
   }, [equip]);
 
   // periodically equip/unequip random tiers of a random available category

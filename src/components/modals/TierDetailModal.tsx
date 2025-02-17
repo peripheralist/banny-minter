@@ -46,8 +46,8 @@ export default function TierDetailModal() {
             _tiers.every((_t) => t.tierId !== _t.tierId) &&
             !categoryIncompatibles[tier.category]?.includes(t.category) &&
             t.category !== tier.category &&
-            t.category !== "world" && // no worlds
-            (i === 0 ? t.category === "naked" : t.category !== "naked") // ensure 1 naked
+            t.category !== "background" && // no backgrounds
+            (i === 0 ? t.category === "body" : t.category !== "body") // ensure 1 body
         );
 
         if (options?.length) {
@@ -65,10 +65,7 @@ export default function TierDetailModal() {
     return sets;
   }, [tier, allTiers]);
 
-  const imgSize = useMemo(
-    () => Math.min(Math.max(width ? width - 96 : 0, 240), 420),
-    [width]
-  );
+  const imgSize = useMemo(() => Math.min(width - 96, 400), [width]);
 
   const images = useCallback(
     (size: number) => {
@@ -211,11 +208,10 @@ function Look({ tiers, size }: { tiers: Tier[]; size: number }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        paddingLeft: "7%",
         overflow: "hidden",
       }}
     >
-      <EquippedTiersPreview size={size * 1.2} equipped={equipped} />
+      <EquippedTiersPreview size={size} equipped={equipped} />
     </div>
   );
 }

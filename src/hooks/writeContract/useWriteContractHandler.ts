@@ -141,6 +141,7 @@ export function useWriteContractHandler<
     usedArgs,
     hash,
     isComplete,
+    chain?.blockExplorers?.default.url,
   ]);
 
   return {

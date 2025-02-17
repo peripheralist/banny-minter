@@ -18,6 +18,9 @@ import Modal from "../shared/Modal";
 import RoundedFrame from "../shared/RoundedFrame";
 import TierImage from "../shared/TierImage";
 import TransactionPending from "../shared/TransactionPending";
+import { useAppChain } from "@/hooks/useAppChain";
+import Link from "next/link";
+import { RESOLVER_ADDRESS } from "@/constants/nfts";
 
 export default function DecorateButton() {
   const [initialEquipped, setInitialEquipped] =
@@ -78,7 +81,7 @@ function ConfirmDressModal({
   const maybeUnapprovedTokenIds = useMemo(
     () =>
       CATEGORIES.filter(
-        (c) => c !== "naked" && !!equipped[c]?.tokenId && !equipped[c]?.equipped
+        (c) => c !== "body" && !!equipped[c]?.tokenId && !equipped[c]?.equipped
       ).map((c) => BigInt(equipped[c]!.tokenId!)),
 
     [equipped]
@@ -154,10 +157,7 @@ function ApproveNFTsModal({
       >
         <h1>Some tokens need to be approved</h1>
 
-        <p style={{ marginTop: 12, marginBottom: 24, fontSize: FONT_SIZE.sm }}>
-          When dressing a Banny, wearable NFTs are transferred to the Resolver
-          contract. Approve those NFTs for transfer below.
-        </p>
+        <DressInfoBlurb />
 
         {nftTiers.map((t) => (
           <div
@@ -225,12 +225,12 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
 
   const decorate = useCallback(() => {
     const outfits = CATEGORIES.filter(
-      (c) => c !== "world" && c !== "naked" && !!equipped[c]
+      (c) => c !== "background" && c !== "body" && !!equipped[c]
     ).map((c) => equipped[c]!);
 
     decorateBanny({
-      nakedBanny: equipped.naked,
-      world: equipped.world,
+      body: equipped.body,
+      background: equipped.background,
       outfits,
     });
   }, [equipped, decorateBanny]);
@@ -279,13 +279,7 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
         <>
           <h1 style={{ fontSize: FONT_SIZE["3xl"] }}>New fit?</h1>
 
-          <p
-            style={{ marginTop: 12, marginBottom: 24, fontSize: FONT_SIZE.sm }}
-          >
-            When dressing a Banny, wearable NFTs are transferred to
-            the Resolver contract. When removed, they{"'"}ll be returned to
-            whichever wallet owns the Banny.
-          </p>
+          <DressInfoBlurb />
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
             <div>
@@ -295,14 +289,19 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {CATEGORIES.filter((c) => c !== "naked" && !!equipped[c]).map(
+              {CATEGORIES.filter((c) => c !== "body" && !!equipped[c]).map(
                 (c) => {
                   const tier = equipped[c];
 
                   return (
                     <div
                       key={c}
-                      style={{ display: "flex", gap: 12, alignItems: "center" }}
+                      style={{
+                        display: "flex",
+                        gap: 12,
+                        alignItems: "center",
+                        overflow: "hidden",
+                      }}
                     >
                       <div>
                         <RoundedFrame
@@ -313,7 +312,7 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
                         </RoundedFrame>
                       </div>
 
-                      <div>{tier?.name}</div>
+                      <div style={{ textWrap: "wrap" }}>{tier?.name}</div>
                     </div>
                   );
                 }
@@ -329,5 +328,23 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
     <Modal open onClose={_onClose} action={action} size="sm">
       {content}
     </Modal>
+  );
+}
+
+function DressInfoBlurb() {
+  const appChain = useAppChain();
+
+  return (
+    <p style={{ marginTop: 12, marginBottom: 24, fontSize: FONT_SIZE.sm }}>
+      When dressing a Banny, the accessory NFTs are transferred to the{" "}
+      <Link
+        href={`${appChain.blockExplorers.default.url}/address/${RESOLVER_ADDRESS}`}
+        target="_blank"
+      >
+        Resolver contract
+      </Link>
+      . When undressed, the NFTs will be returned to whichever wallet owns the
+      Banny.
+    </p>
   );
 }

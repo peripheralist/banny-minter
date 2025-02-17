@@ -49,7 +49,7 @@ export default function NFTDetailModal() {
   );
 
   const NftImage = useCallback(() => {
-    if (nft?.category === CATEGORY_IDS["naked"]) {
+    if (nft?.category === CATEGORY_IDS.body) {
       return <DressedBannyNftImage nft={nft} size={imgSize - 8} />;
     }
 

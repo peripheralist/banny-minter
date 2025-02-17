@@ -195,6 +195,83 @@ export enum Aggregation_Interval {
   hour = 'hour'
 }
 
+export type AutoIssueEvent = {
+  beneficiary: Scalars['Bytes']['output'];
+  caller: Scalars['Bytes']['output'];
+  count: Scalars['BigInt']['output'];
+  id: Scalars['ID']['output'];
+  revnetId: Scalars['BigInt']['output'];
+  stageId: Scalars['BigInt']['output'];
+};
+
+export type AutoIssueEvent_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<AutoIssueEvent_Filter>>>;
+  beneficiary?: InputMaybe<Scalars['Bytes']['input']>;
+  beneficiary_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  beneficiary_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  beneficiary_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  beneficiary_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  beneficiary_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  beneficiary_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  beneficiary_not?: InputMaybe<Scalars['Bytes']['input']>;
+  beneficiary_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  beneficiary_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  caller?: InputMaybe<Scalars['Bytes']['input']>;
+  caller_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  caller_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  caller_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  caller_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  caller_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  caller_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  caller_not?: InputMaybe<Scalars['Bytes']['input']>;
+  caller_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  caller_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  count?: InputMaybe<Scalars['BigInt']['input']>;
+  count_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  count_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  count_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  count_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  count_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  count_not?: InputMaybe<Scalars['BigInt']['input']>;
+  count_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<AutoIssueEvent_Filter>>>;
+  revnetId?: InputMaybe<Scalars['BigInt']['input']>;
+  revnetId_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  revnetId_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  revnetId_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  revnetId_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  revnetId_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  revnetId_not?: InputMaybe<Scalars['BigInt']['input']>;
+  revnetId_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  stageId?: InputMaybe<Scalars['BigInt']['input']>;
+  stageId_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  stageId_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  stageId_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  stageId_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  stageId_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  stageId_not?: InputMaybe<Scalars['BigInt']['input']>;
+  stageId_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+};
+
+export enum AutoIssueEvent_OrderBy {
+  beneficiary = 'beneficiary',
+  caller = 'caller',
+  count = 'count',
+  id = 'id',
+  revnetId = 'revnetId',
+  stageId = 'stageId'
+}
+
 export type BlockChangedFilter = {
   number_gte: Scalars['Int']['input'];
 };
@@ -562,19 +639,35 @@ export enum CashOutEvent_OrderBy {
 }
 
 export type DecorateBannyEvent = {
+  backgroundId: Scalars['BigInt']['output'];
+  bannyBodyId: Scalars['BigInt']['output'];
   caller: Scalars['Bytes']['output'];
   id: Scalars['ID']['output'];
-  nakedBannyId: Scalars['BigInt']['output'];
   outfitIds: Array<Scalars['BigInt']['output']>;
   timestamp: Scalars['Int']['output'];
   txHash: Scalars['Bytes']['output'];
-  worldId: Scalars['BigInt']['output'];
 };
 
 export type DecorateBannyEvent_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<DecorateBannyEvent_Filter>>>;
+  backgroundId?: InputMaybe<Scalars['BigInt']['input']>;
+  backgroundId_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  backgroundId_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  backgroundId_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  backgroundId_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  backgroundId_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  backgroundId_not?: InputMaybe<Scalars['BigInt']['input']>;
+  backgroundId_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  bannyBodyId?: InputMaybe<Scalars['BigInt']['input']>;
+  bannyBodyId_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  bannyBodyId_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  bannyBodyId_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  bannyBodyId_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  bannyBodyId_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  bannyBodyId_not?: InputMaybe<Scalars['BigInt']['input']>;
+  bannyBodyId_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   caller?: InputMaybe<Scalars['Bytes']['input']>;
   caller_contains?: InputMaybe<Scalars['Bytes']['input']>;
   caller_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -593,14 +686,6 @@ export type DecorateBannyEvent_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  nakedBannyId?: InputMaybe<Scalars['BigInt']['input']>;
-  nakedBannyId_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  nakedBannyId_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  nakedBannyId_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  nakedBannyId_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  nakedBannyId_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  nakedBannyId_not?: InputMaybe<Scalars['BigInt']['input']>;
-  nakedBannyId_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   or?: InputMaybe<Array<InputMaybe<DecorateBannyEvent_Filter>>>;
   outfitIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   outfitIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
@@ -626,24 +711,16 @@ export type DecorateBannyEvent_Filter = {
   txHash_not?: InputMaybe<Scalars['Bytes']['input']>;
   txHash_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   txHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-  worldId?: InputMaybe<Scalars['BigInt']['input']>;
-  worldId_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  worldId_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  worldId_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  worldId_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  worldId_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  worldId_not?: InputMaybe<Scalars['BigInt']['input']>;
-  worldId_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
 };
 
 export enum DecorateBannyEvent_OrderBy {
+  backgroundId = 'backgroundId',
+  bannyBodyId = 'bannyBodyId',
   caller = 'caller',
   id = 'id',
-  nakedBannyId = 'nakedBannyId',
   outfitIds = 'outfitIds',
   timestamp = 'timestamp',
-  txHash = 'txHash',
-  worldId = 'worldId'
+  txHash = 'txHash'
 }
 
 export type DeployedErc20Event = {
@@ -4208,6 +4285,8 @@ export type Query = {
   _meta: Maybe<_Meta_>;
   addToBalanceEvent: Maybe<AddToBalanceEvent>;
   addToBalanceEvents: Array<AddToBalanceEvent>;
+  autoIssueEvent: Maybe<AutoIssueEvent>;
+  autoIssueEvents: Array<AutoIssueEvent>;
   burnEvent: Maybe<BurnEvent>;
   burnEvents: Array<BurnEvent>;
   cashOutEvent: Maybe<CashOutEvent>;
@@ -4278,6 +4357,24 @@ export type QueryAddToBalanceEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<AddToBalanceEvent_Filter>;
+};
+
+
+export type QueryAutoIssueEventArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryAutoIssueEventsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<AutoIssueEvent_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<AutoIssueEvent_Filter>;
 };
 
 
@@ -4786,6 +4883,8 @@ export type Subscription = {
   _meta: Maybe<_Meta_>;
   addToBalanceEvent: Maybe<AddToBalanceEvent>;
   addToBalanceEvents: Array<AddToBalanceEvent>;
+  autoIssueEvent: Maybe<AutoIssueEvent>;
+  autoIssueEvents: Array<AutoIssueEvent>;
   burnEvent: Maybe<BurnEvent>;
   burnEvents: Array<BurnEvent>;
   cashOutEvent: Maybe<CashOutEvent>;
@@ -4855,6 +4954,24 @@ export type SubscriptionAddToBalanceEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<AddToBalanceEvent_Filter>;
+};
+
+
+export type SubscriptionAutoIssueEventArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionAutoIssueEventsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<AutoIssueEvent_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<AutoIssueEvent_Filter>;
 };
 
 
@@ -5620,7 +5737,7 @@ export type DecorateBannyEventsQueryVariables = Exact<{
 }>;
 
 
-export type DecorateBannyEventsQuery = { decorateBannyEvents: Array<{ id: string, timestamp: number, txHash: any, caller: any, nakedBannyId: bigint, outfitIds: Array<bigint>, worldId: bigint }> };
+export type DecorateBannyEventsQuery = { decorateBannyEvents: Array<{ id: string, timestamp: number, txHash: any, caller: any, bannyBodyId: bigint, outfitIds: Array<bigint>, backgroundId: bigint }> };
 
 export type TierDataFragment = { id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } };
 
@@ -5645,7 +5762,7 @@ export type AllNftTiersQueryVariables = Exact<{
 }>;
 
 
-export type AllNftTiersQuery = { naked: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, world: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, glasses: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, legs: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, headTop: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, hand: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, specialSuit: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, specialLegs: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, specialHead: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, specialBody: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }> };
+export type AllNftTiersQuery = { body: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, background: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, backside: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, necklace: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, head: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, glasses: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, mouth: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, legs: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, suit: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, suitBottom: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, suitTop: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, headTop: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, hand: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, specialSuit: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, specialLegs: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, specialHead: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }>, specialBody: Array<{ id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } }> };
 
 
 
@@ -5722,6 +5839,9 @@ export type ResolversTypes = {
   AddToBalanceEvent_filter: AddToBalanceEvent_Filter;
   AddToBalanceEvent_orderBy: AddToBalanceEvent_OrderBy;
   Aggregation_interval: Aggregation_Interval;
+  AutoIssueEvent: ResolverTypeWrapper<AutoIssueEvent>;
+  AutoIssueEvent_filter: AutoIssueEvent_Filter;
+  AutoIssueEvent_orderBy: AutoIssueEvent_OrderBy;
   BigDecimal: ResolverTypeWrapper<Scalars['BigDecimal']['output']>;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>;
   BlockChangedFilter: BlockChangedFilter;
@@ -5815,6 +5935,8 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AddToBalanceEvent: AddToBalanceEvent;
   AddToBalanceEvent_filter: AddToBalanceEvent_Filter;
+  AutoIssueEvent: AutoIssueEvent;
+  AutoIssueEvent_filter: AutoIssueEvent_Filter;
   BigDecimal: Scalars['BigDecimal']['output'];
   BigInt: Scalars['BigInt']['output'];
   BlockChangedFilter: BlockChangedFilter;
@@ -5909,6 +6031,16 @@ export type AddToBalanceEventResolvers<ContextType = any, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AutoIssueEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['AutoIssueEvent'] = ResolversParentTypes['AutoIssueEvent']> = {
+  beneficiary?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  caller?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  count?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  revnetId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  stageId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface BigDecimalScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigDecimal'], any> {
   name: 'BigDecimal';
 }
@@ -5954,13 +6086,13 @@ export type CashOutEventResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type DecorateBannyEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['DecorateBannyEvent'] = ResolversParentTypes['DecorateBannyEvent']> = {
+  backgroundId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  bannyBodyId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   caller?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  nakedBannyId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   outfitIds?: Resolver<Array<ResolversTypes['BigInt']>, ParentType, ContextType>;
   timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   txHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  worldId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6259,6 +6391,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   _meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Query_MetaArgs>>;
   addToBalanceEvent?: Resolver<Maybe<ResolversTypes['AddToBalanceEvent']>, ParentType, ContextType, RequireFields<QueryAddToBalanceEventArgs, 'id' | 'subgraphError'>>;
   addToBalanceEvents?: Resolver<Array<ResolversTypes['AddToBalanceEvent']>, ParentType, ContextType, RequireFields<QueryAddToBalanceEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  autoIssueEvent?: Resolver<Maybe<ResolversTypes['AutoIssueEvent']>, ParentType, ContextType, RequireFields<QueryAutoIssueEventArgs, 'id' | 'subgraphError'>>;
+  autoIssueEvents?: Resolver<Array<ResolversTypes['AutoIssueEvent']>, ParentType, ContextType, RequireFields<QueryAutoIssueEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   burnEvent?: Resolver<Maybe<ResolversTypes['BurnEvent']>, ParentType, ContextType, RequireFields<QueryBurnEventArgs, 'id' | 'subgraphError'>>;
   burnEvents?: Resolver<Array<ResolversTypes['BurnEvent']>, ParentType, ContextType, RequireFields<QueryBurnEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   cashOutEvent?: Resolver<Maybe<ResolversTypes['CashOutEvent']>, ParentType, ContextType, RequireFields<QueryCashOutEventArgs, 'id' | 'subgraphError'>>;
@@ -6322,6 +6456,8 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   _meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "_meta", ParentType, ContextType, Partial<Subscription_MetaArgs>>;
   addToBalanceEvent?: SubscriptionResolver<Maybe<ResolversTypes['AddToBalanceEvent']>, "addToBalanceEvent", ParentType, ContextType, RequireFields<SubscriptionAddToBalanceEventArgs, 'id' | 'subgraphError'>>;
   addToBalanceEvents?: SubscriptionResolver<Array<ResolversTypes['AddToBalanceEvent']>, "addToBalanceEvents", ParentType, ContextType, RequireFields<SubscriptionAddToBalanceEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
+  autoIssueEvent?: SubscriptionResolver<Maybe<ResolversTypes['AutoIssueEvent']>, "autoIssueEvent", ParentType, ContextType, RequireFields<SubscriptionAutoIssueEventArgs, 'id' | 'subgraphError'>>;
+  autoIssueEvents?: SubscriptionResolver<Array<ResolversTypes['AutoIssueEvent']>, "autoIssueEvents", ParentType, ContextType, RequireFields<SubscriptionAutoIssueEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   burnEvent?: SubscriptionResolver<Maybe<ResolversTypes['BurnEvent']>, "burnEvent", ParentType, ContextType, RequireFields<SubscriptionBurnEventArgs, 'id' | 'subgraphError'>>;
   burnEvents?: SubscriptionResolver<Array<ResolversTypes['BurnEvent']>, "burnEvents", ParentType, ContextType, RequireFields<SubscriptionBurnEventsArgs, 'first' | 'skip' | 'subgraphError'>>;
   cashOutEvent?: SubscriptionResolver<Maybe<ResolversTypes['CashOutEvent']>, "cashOutEvent", ParentType, ContextType, RequireFields<SubscriptionCashOutEventArgs, 'id' | 'subgraphError'>>;
@@ -6421,6 +6557,7 @@ export type _Meta_Resolvers<ContextType = any, ParentType extends ResolversParen
 
 export type Resolvers<ContextType = any> = {
   AddToBalanceEvent?: AddToBalanceEventResolvers<ContextType>;
+  AutoIssueEvent?: AutoIssueEventResolvers<ContextType>;
   BigDecimal?: GraphQLScalarType;
   BigInt?: GraphQLScalarType;
   BurnEvent?: BurnEventResolvers<ContextType>;
@@ -6531,9 +6668,9 @@ export const DecorateBannyEventsDocument = gql`
     timestamp
     txHash
     caller
-    nakedBannyId
+    bannyBodyId
     outfitIds
-    worldId
+    backgroundId
   }
 }
     `;
@@ -6664,13 +6801,10 @@ export type NftTiersSuspenseQueryHookResult = ReturnType<typeof useNftTiersSuspe
 export type NftTiersQueryResult = Apollo.QueryResult<NftTiersQuery, NftTiersQueryVariables>;
 export const AllNftTiersDocument = gql`
     query AllNFTTiers($orderBy: NFTTier_orderBy, $collection: String) {
-  naked: nfttiers(
-    where: {category: 0, collection: $collection}
-    orderBy: $orderBy
-  ) {
+  body: nfttiers(where: {category: 0, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  world: nfttiers(
+  background: nfttiers(
     where: {category: 1, collection: $collection}
     orderBy: $orderBy
   ) {

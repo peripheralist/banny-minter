@@ -1,6 +1,6 @@
 export const CATEGORY_IDS = {
-  naked: 0,
-  world: 1,
+  body: 0,
+  background: 1,
   backside: 2,
   necklace: 3,
   head: 4,
@@ -30,9 +30,9 @@ export const categoryOfId = Object.entries(CATEGORY_IDS).reduce(
 
 // All categories in SVG layering order, from background to foreground
 export const CATEGORIES: Category[] = [
-  "world",
+  "background",
   "backside",
-  "naked",
+  "body",
   "head",
   "glasses",
   "mouth",
@@ -54,14 +54,14 @@ export const CATEGORY_GROUP_NAMES = [
   "outfit",
   "head",
   "special",
-  "world",
+  "background",
 ] as const;
 
 export type CategoryGroup = (typeof CATEGORY_GROUP_NAMES)[number];
 
 // Groups of similar asset categories, not including body
 export const CATEGORY_GROUPS: Record<CategoryGroup, Category[]> = {
-  banny: ["naked"],
+  banny: ["body"],
   head: ["glasses", "head", "headTop", "specialHead", "mouth"],
   outfit: [
     "suit",
@@ -74,7 +74,7 @@ export const CATEGORY_GROUPS: Record<CategoryGroup, Category[]> = {
     "specialLegs",
   ],
   special: ["hand", "backside"],
-  world: ["world"],
+  background: ["background"],
 };
 
 // export const groupOfCategory = Object.entries(CATEGORY_GROUPS).reduce(

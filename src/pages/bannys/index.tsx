@@ -67,8 +67,8 @@ export default function Index() {
 
                   <div style={{ width: "100%" }}>
                     <CategoryGroupGrid
-                      items={tiers?.filter((t) => t.category === "naked")}
-                      excludeGroups={["head", "outfit", "special", "world"]}
+                      items={tiers?.filter((t) => t.category === "body")}
+                      excludeGroups={["head", "outfit", "special", "background"]}
                       render={(t) => (
                         <TierShopButton
                           key={t.tierId}

@@ -47,7 +47,7 @@ export default function Index() {
   const tier = useMemo(() => (nft ? parseTier(nft?.tier) : undefined), [nft]);
 
   const NftImage = useCallback(() => {
-    if (nft?.category === CATEGORY_IDS["naked"]) {
+    if (nft?.category === CATEGORY_IDS.body) {
       return <DressedBannyNftImage nft={nft} size={size - 8} />;
     }
 

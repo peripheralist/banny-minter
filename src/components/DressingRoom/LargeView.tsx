@@ -10,6 +10,7 @@ import ToolbarBagView from "../shared/ToolbarBagView";
 import DecorateButton from "./DecorateButton";
 import TierEquipButton from "./TierEquipButton";
 
+// TODO make two columns separate sections
 export default function LargeView({ tokenId }: { tokenId: bigint }) {
   const { availableTiers, equipped, equippingCategory, unequippingCategory } =
     useContext(EquipmentContext);
@@ -32,71 +33,73 @@ export default function LargeView({ tokenId }: { tokenId: bigint }) {
         {
           contentStyle: {
             display: "flex",
-            gap: 24,
+            flexDirection: "column",
+            gap: 48,
             padding: 8,
-            paddingLeft: 120,
+            paddingLeft: 136,
+            paddingBottom: 80,
+            paddingTop: 12,
           },
-          header: `Dress Banny #${tokenId.toString()}`,
+          sectionStyle: {
+            flex: 1,
+          },
+          header: `Locker items`,
           content: (
-            <>
-              <div
-                style={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  paddingTop: 8,
-                  paddingBottom: 80,
-                  gap: 48,
-                }}
-              >
-                <CategoryGroupGrid
-                  label
-                  emptyText="None owned"
-                  items={availableTiers}
-                  render={(t) => (
-                    <TierEquipButton key={t.tierId} tier={t} size={imgSize} />
-                  )}
-                  gridStyle={{
-                    gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
-                    gap: 4,
+            <CategoryGroupGrid
+              label
+              emptyText="None owned"
+              items={availableTiers}
+              render={(t) => (
+                <TierEquipButton key={t.tierId} tier={t} size={imgSize} />
+              )}
+              gridStyle={{
+                gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
+                gap: 4,
+              }}
+              excludeGroups={["banny"]}
+            />
+          ),
+        },
+        {
+          sectionStyle: {
+            flex: 0,
+          },
+          header: `Banny #${tokenId.toString()}`,
+          content: (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-end",
+                margin: -4,
+                height: "100%",
+                minWidth: 400,
+                maxWidth: "30vw",
+              }}
+            >
+              <div style={{ display: "flex", flex: 1 }} ref={previewRef}>
+                <RoundedFrame
+                  shadow
+                  background={"white"}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                  excludeGroups={["banny"]}
-                />
+                >
+                  <EquippedTiersPreview
+                    size={previewWidth - 24}
+                    equipped={equipped}
+                    equippingCategory={equippingCategory}
+                    unequippingCategory={unequippingCategory}
+                  />
+                </RoundedFrame>
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  gap: 4,
-                  padding: 4,
-                  maxWidth: 480,
-                  width: "50vw",
-                }}
-              >
-                <div style={{ display: "flex", flex: 1 }} ref={previewRef}>
-                  <RoundedFrame
-                    shadow
-                    background={"white"}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <EquippedTiersPreview
-                      size={previewWidth - 24}
-                      equipped={equipped}
-                      equippingCategory={equippingCategory}
-                      unequippingCategory={unequippingCategory}
-                    />
-                  </RoundedFrame>
-                </div>
-
+              <div style={{ margin: 8 }}>
                 <DecorateButton />
               </div>
-            </>
+            </div>
           ),
         },
       ]}

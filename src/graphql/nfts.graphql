@@ -37,10 +37,10 @@ query NFTTiers($where: NFTTier_filter, $orderBy: NFTTier_orderBy) {
 }
 
 query AllNFTTiers($orderBy: NFTTier_orderBy, $collection: String) {
-  naked: nfttiers(where: {category: 0, collection: $collection}, orderBy: $orderBy) {
+  body: nfttiers(where: {category: 0, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
-  world: nfttiers(where: {category: 1, collection: $collection}, orderBy: $orderBy) {
+  background: nfttiers(where: {category: 1, collection: $collection}, orderBy: $orderBy) {
     ...TierData
   }
   backside: nfttiers(where: {category: 2, collection: $collection}, orderBy: $orderBy) {

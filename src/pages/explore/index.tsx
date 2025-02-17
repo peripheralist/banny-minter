@@ -8,17 +8,16 @@ import { useNfTsQuery } from "@/generated/graphql";
 import { useAllActivity } from "@/hooks/queries/useAllActivity";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useMemo } from "react";
 import ActivityEventElem from "./ActivityEventElem";
-import { useRouter } from "next/router";
-import Image from "next/image";
 
 export default function Activity() {
   const { data: bannys } = useNfTsQuery({
     variables: {
       where: {
         collection: BAN_HOOK,
-        category: CATEGORY_IDS["naked"],
+        category: CATEGORY_IDS.body,
       },
     },
   });

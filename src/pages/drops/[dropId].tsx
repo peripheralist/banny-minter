@@ -13,7 +13,6 @@ import { BAN_HOOK } from "@/constants/nfts";
 import { ShopContext } from "@/contexts/shopContext";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
@@ -28,7 +27,7 @@ export default function Drop() {
     variables: {
       where: {
         collection: BAN_HOOK,
-        category: CATEGORY_IDS.naked,
+        category: CATEGORY_IDS.body,
         owner_: {
           wallet: address?.toLowerCase() ?? null,
         },
@@ -38,7 +37,7 @@ export default function Drop() {
 
   const needsBanny = useMemo(
     () =>
-      (!bag.length || bag.every((b) => b.tier.category !== "naked")) &&
+      (!bag.length || bag.every((b) => b.tier.category !== "body")) &&
       !bannyNfts.data?.nfts.length &&
       !bannyNfts.loading,
     [bannyNfts, bag]
@@ -85,7 +84,7 @@ export default function Drop() {
               contentStyle: {
                 position: "relative",
                 padding: 48,
-                paddingLeft: 120,
+                paddingLeft: 136,
                 paddingTop: 24,
               },
               content: (
@@ -118,8 +117,13 @@ export default function Drop() {
                         </div>
 
                         <CategoryGroupGrid
-                          items={allTiers.filter((t) => t.category === "naked")}
-                          excludeGroups={["head", "outfit", "special", "world"]}
+                          items={allTiers.filter((t) => t.category === "body")}
+                          excludeGroups={[
+                            "head",
+                            "outfit",
+                            "special",
+                            "background",
+                          ]}
                           render={(t) => (
                             <TierShopButton
                               key={t.tierId}
@@ -222,7 +226,7 @@ export default function Drop() {
                     }}
                   >
                     <CategoryGroupGrid
-                      items={allTiers.filter((t) => t.category !== "naked")}
+                      items={allTiers.filter((t) => t.category !== "body")}
                       label
                       excludeGroups={["banny"]}
                       render={(t) => (

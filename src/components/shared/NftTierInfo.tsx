@@ -151,23 +151,18 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
           />
         )}
         {drop && <NftInfoRow label="Drop" value={`#${drop.id} ${drop.name}`} />}
-        <NftInfoRow
-          label="Type"
-          value={CATEGORY_GROUP_NAMES.find((n) =>
-            CATEGORY_GROUPS[n].includes(tier.category)
-          )}
-        />
-        {decoded?.wornByNakedBannyId ? (
+        <NftInfoRow label="Type" value={tier.category} />
+        {decoded?.wornByBannyBodyId ? (
           <NftInfoRow
             label="Equipped"
-            value={decoded.wornByNakedBannyId === "0" ? "NO" : "YES"}
+            value={decoded.wornByBannyBodyId === "0" ? "NO" : "YES"}
           />
         ) : null}
         {decoded?.outfitIds?.length && equippedTiers ? (
           <NftInfoRow
             label="Wearing"
             value={Object.values(equippedTiers)
-              .filter((t) => t?.category !== "naked")
+              .filter((t) => t?.category !== "body")
               .map((t) => t?.name)
               .join(", ")}
           />

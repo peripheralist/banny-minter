@@ -1,8 +1,4 @@
-import {
-  BAN_HOOK,
-  BAN_REVNET_ID,
-  TERMINAL_ADDRESS,
-} from "@/constants/nfts";
+import { BAN_HOOK, BAN_REVNET_ID, TERMINAL_ADDRESS } from "@/constants/nfts";
 import { AlertContext } from "@/contexts/alertContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { NATIVE_TOKEN } from "juice-sdk-core";
@@ -155,6 +151,8 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     error,
     props,
     isComplete,
+    chain?.blockExplorers?.default.url,
+    hash,
   ]);
 
   return {
