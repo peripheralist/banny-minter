@@ -14,10 +14,10 @@ export const BAN_REVNET_IDS = (chainId: number) => {
   return 6;
 };
 
-export const BAN_HOOK = "0x0ecd60cd86662fe95c5897b839d012c518ef55cd" as Address;
+export const BAN_HOOK = "0x2da41cdc79ae49f2725ab549717b2dbcfc42b958" as Address;
 
 export const RESOLVER_ADDRESS =
-  "0x5d0f47befe669cc0df4e89a6b0d841a99749b243" as Address;
+  "0xff80c37a57016eff3d19fb286e9c740ec4537dd3" as Address;
 
 export const TERMINAL_ADDRESS = process.env
   .NEXT_PUBLIC_TERMINAL_ADDRESS! as Address;
