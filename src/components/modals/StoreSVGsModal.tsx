@@ -15,6 +15,8 @@ export default function StoreSVGsModal() {
   const { tiers: allTiers } = useAllTiers();
 
   const tierIds = useMemo(() => {
+    if (!router.query[routerKey]) return;
+
     try {
       return (router.query[routerKey] as string)
         .split(",")
