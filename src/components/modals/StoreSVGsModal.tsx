@@ -31,7 +31,7 @@ export default function StoreSVGsModal() {
     [allTiers, tierIds]
   );
 
-  const { setSvgContentsOf, isPending, hash, isSuccess } =
+  const { setSvgContentsOf, isPending, hash, isSuccess, ready } =
     useSetSvgContentsOf(tiers);
 
   const onClose = useCallback(() => {
@@ -91,10 +91,17 @@ export default function StoreSVGsModal() {
       open={tiers.length > 0}
       onClose={onClose}
       size="sm"
-      action={{
-        text: `Store ${tiers.length} SVG${tiers.length > 1 ? "s" : ""}`,
-        onClick: () => setSvgContentsOf(undefined),
-      }}
+      action={
+        ready
+          ? {
+              text: `Store ${tiers.length} SVG${tiers.length > 1 ? "s" : ""}`,
+              onClick: () => setSvgContentsOf(undefined),
+            }
+          : {
+              text: "Loading...",
+              onClick: () => undefined,
+            }
+      }
     >
       {isPending ? (
         <TransactionPending hash={hash} text="Storing SVGs..." />

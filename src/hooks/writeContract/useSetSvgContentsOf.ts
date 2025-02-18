@@ -72,5 +72,5 @@ export function useSetSvgContentsOf(
     }
   );
 
-  return { setSvgContentsOf, ...data };
+  return { setSvgContentsOf, ready: !!args, ...data };
 }
