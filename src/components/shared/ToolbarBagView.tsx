@@ -38,9 +38,11 @@ const BAG_CLOSED_WIDTH = 80;
 export default function ToolbarBagView({
   sections,
   dynamicToolbar,
+  disableDrawer,
 }: {
   sections: Section[];
   dynamicToolbar?: boolean;
+  disableDrawer?: boolean;
 }) {
   const {
     value: bagIsOpen,
@@ -102,7 +104,7 @@ export default function ToolbarBagView({
           </HeaderFrame>
         ))}
 
-        {bag.length > 0 && bagInitialized && (
+        {bag.length > 0 && bagInitialized && !disableDrawer && (
           <Drawer
             open={bagIsOpen}
             onClick={bagIsOpen ? undefined : () => setBagIsOpen(true)}

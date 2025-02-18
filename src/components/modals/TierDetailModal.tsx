@@ -11,13 +11,16 @@ import { formatEther } from "juice-sdk-core";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
+import { useAllTiers } from "@/hooks/queries/useAllTiers";
 
 const IMG_COUNT = 5;
 
 export default function TierDetailModal() {
   const [imgIdx, setImgIdx] = useState(0);
 
-  const { addItem, allTiers } = useContext(ShopContext);
+  const { tiers: allTiers } = useAllTiers();
+
+  const { addItem } = useContext(ShopContext);
 
   const { width } = useWindowSize();
 

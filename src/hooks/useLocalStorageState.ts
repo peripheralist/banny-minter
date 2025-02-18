@@ -17,7 +17,7 @@ export function useLocalStorageState<V>(
   const [initialized, setInitialized] = useState(false);
   const [value, setValue] = useState<V>(defaultValue);
 
-  const _key = useMemo(() => (key ? `looks_${key}` : undefined), [key]);
+  const _key = useMemo(() => (key ? `banny_retail_${key}` : undefined), [key]);
 
   // read from cache
   useEffect(() => {

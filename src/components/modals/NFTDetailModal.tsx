@@ -18,7 +18,7 @@ import Loading from "../shared/Loading";
 const routerKey = "nft";
 
 export default function NFTDetailModal() {
-  const { width, isSmallScreen } = useWindowSize();
+  const { width } = useWindowSize();
 
   const router = useRouter();
 
@@ -65,7 +65,7 @@ export default function NFTDetailModal() {
   const onClose = useCallback(() => {
     if (!router.query[routerKey]) return;
 
-    const newPath = router.asPath.split("?nft=")[0];
+    const newPath = router.asPath.split(`?${routerKey}=`)[0];
     router.replace(newPath, undefined, { shallow: true });
   }, [router]);
 

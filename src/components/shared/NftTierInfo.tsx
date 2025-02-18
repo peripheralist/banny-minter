@@ -1,4 +1,5 @@
-import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
+import { CATEGORIES } from "@/constants/category";
+import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ITEM_DESCRIPTIONS } from "@/constants/itemDescriptions";
@@ -10,12 +11,13 @@ import { Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { formatEther } from "juice-sdk-core";
 import Link from "next/link";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { isAddressEqual } from "viem";
 import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
 import FormattedAddress from "./FormattedAddress";
 import RoundedFrame from "./RoundedFrame";
+import { useRouter } from "next/router";
 
 export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
   const { address } = useAccount();
@@ -23,6 +25,8 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
   const chains = useSupportedChains();
 
   const { data: equippedTiers } = useBannyEquippedTiers(nft);
+
+  const router = useRouter();
 
   const isOwned = useMemo(
     () =>
@@ -130,6 +134,15 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
 
     const drop = DROPS.find((d) => d.tierIds.includes(tier.tierId));
 
+    const unstoredTiers =
+      equippedTiers &&
+      CATEGORIES.reduce((acc, category) => {
+        const tier = equippedTiers[category];
+
+        if (!tier?.embeddedSvgUrl) return acc;
+        return [...acc, tier];
+      }, [] as Tier[]);
+
     return (
       <div
         style={{
@@ -168,16 +181,45 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
           />
         ) : null}
         {nft && <NftInfoRow label="Token Id" value={nft.tokenId.toString()} />}
-        {tier.embeddedSvgUrl && (
+        {nft ? (
+          <NftInfoRow
+            label="SVGs"
+            value={
+              unstoredTiers?.length ? (
+                <div>
+                  {unstoredTiers.length} off-chain{" "}
+                  <Link
+                    href={`${
+                      router.asPath.split("?")[0]
+                    }?store-svgs=${unstoredTiers
+                      .map((t) => t.tierId)
+                      .join(",")}`}
+                  >
+                    Store on-chain
+                  </Link>
+                </div>
+              ) : (
+                "On-chain"
+              )
+            }
+          />
+        ) : tier.embeddedSvgUrl ? (
           <NftInfoRow
             label="SVG"
             value={
               <span>
-                Not stored <Link href={`/svg/${tier.tierId}`}>Store</Link>
+                Not on-chain{" "}
+                <Link
+                  href={`${router.asPath.split("?")[0]}?store-svgs=${
+                    tier.tierId
+                  }`}
+                >
+                  Store
+                </Link>
               </span>
             }
           />
-        )}
+        ) : null}
       </div>
     );
   }, [NftInfoRow, nft, equippedTiers, isOwned, tier]);

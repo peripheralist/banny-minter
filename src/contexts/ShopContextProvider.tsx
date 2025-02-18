@@ -25,7 +25,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
     "bag_content",
     {
       defaultValue: [],
-      disabled: !tiers || !tiers.length,
+      disabled: !tiers?.length,
       parse: (str) =>
         str
           ? JSON.parse(str).map(
@@ -111,7 +111,6 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
         totalEquippedPrice,
         selectedGroup,
         setSelectedGroup,
-        allTiers: tiers,
       }}
     >
       {children}

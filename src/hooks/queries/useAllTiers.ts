@@ -27,30 +27,17 @@ export function useAllTiers() {
 
   const { data: multichainTierSupplies } = useMultiChainTierSupplies();
 
-  const formattedTiers: Tier[] | undefined = useMemo(() => {
-    return allTiers?.nfttiers.map((t) => {
-      // Hack for pre-loading embedded images to ensure they render correctly
-      const svg = t?.svg;
-      const imgHref = '<image href="';
-
-      let embeddedSvgUrl: string | undefined = undefined;
-
-      if (svg?.includes(imgHref)) {
-        let embeddedImageUrl = svg.split(imgHref)[1];
-        embeddedImageUrl = embeddedImageUrl.split('"')[0];
-        const img = new Image();
-        img.src = embeddedImageUrl;
-
-        embeddedSvgUrl = embeddedImageUrl;
-      }
-
-      return {
-        ...parseTier(t),
-        embeddedSvgUrl,
-        multiChainSupply: multichainTierSupplies?.[t.tierId],
-      } as Tier;
-    });
-  }, [allTiers, multichainTierSupplies]);
+  const formattedTiers: Tier[] | undefined = useMemo(
+    () =>
+      allTiers?.nfttiers.map(
+        (t) =>
+          ({
+            ...parseTier(t),
+            multiChainSupply: multichainTierSupplies?.[t.tierId],
+          } as Tier)
+      ),
+    [allTiers?.nfttiers, multichainTierSupplies]
+  );
 
   return {
     ...props,

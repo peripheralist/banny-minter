@@ -138,6 +138,7 @@ export default function Modal({
             gap: 8,
             marginTop: 8,
             zIndex: 999,
+            pointerEvents: 'visiblePainted'
           }}
         >
           <CloseButton />

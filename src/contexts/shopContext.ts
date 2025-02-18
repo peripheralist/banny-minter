@@ -5,7 +5,6 @@ import { createContext } from "react";
 export type ShoppingBag = { quantity: number; tier: Tier }[];
 
 type Context = {
-  allTiers?: Tier[];
   bag: ShoppingBag;
   addItem?: (t: Tier) => void;
   removeItem?: (t: Tier["tierId"]) => void;

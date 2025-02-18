@@ -198,21 +198,19 @@ function ApproveNFTsModal({
           </div>
         ))}
 
-        {nftTiers.length > 1 && (
-          <ButtonPad
-            containerStyle={{ marginTop: 24 }}
-            style={{ padding: "8px 12px" }}
-            onClick={() => setApprovalForAll(undefined)}
-            shadow="none"
-            loading={
-              approveAllPending
-                ? { fill: "black", width: 160, height: 24 }
-                : undefined
-            }
-          >
-            Approve all
-          </ButtonPad>
-        )}
+        <ButtonPad
+          containerStyle={{ marginTop: 24 }}
+          style={{ padding: "8px 12px" }}
+          onClick={() => setApprovalForAll(undefined)}
+          shadow="none"
+          loading={
+            approveAllPending
+              ? { fill: "black", width: 160, height: 24 }
+              : undefined
+          }
+        >
+          Approve all NFTs
+        </ButtonPad>
       </div>
     </Modal>
   );

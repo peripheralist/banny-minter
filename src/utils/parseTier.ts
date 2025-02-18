@@ -8,6 +8,20 @@ export const parseTier = (
 ): Tier | undefined => {
   const info = decodeNFTInfo(tier.resolvedUri);
 
+  const imgHref = '<image href="';
+
+  let embeddedSvgUrl: string | undefined = undefined;
+
+  if (tier.svg?.includes(imgHref)) {
+    // Pre-load images embedded in SVG to ensure they load in browser. May not be necessary.
+    let embeddedImageUrl = tier.svg.split(imgHref)[1];
+    embeddedImageUrl = embeddedImageUrl.split('"')[0];
+    const img = new Image();
+    img.src = embeddedImageUrl;
+
+    embeddedSvgUrl = embeddedImageUrl;
+  }
+
   return {
     info,
     image: info?.image,
@@ -18,6 +32,7 @@ export const parseTier = (
     price: tier.price,
     initialSupply: tier.initialSupply,
     remainingSupply: tier.remainingSupply,
+    embeddedSvgUrl,
     svg: tier.svg?.toLowerCase().includes("<script") ? null : tier.svg, // crude injected script protection
   };
 };

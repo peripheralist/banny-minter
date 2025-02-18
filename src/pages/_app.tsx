@@ -14,6 +14,7 @@ import { WagmiProvider } from "wagmi";
 import { config } from "../../config.wagmi";
 import TierDetailModal from "@/components/modals/TierDetailModal";
 import NFTDetailModal from "@/components/modals/NFTDetailModal";
+import StoreSVGsModal from "@/components/modals/StoreSVGsModal";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
                     <TierDetailModal />
                     <NFTDetailModal />
+                    <StoreSVGsModal />
                   </ShopContextProvider>
                 </_EquipmentContextProvider>
               </WalletContextProvider>

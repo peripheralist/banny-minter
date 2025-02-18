@@ -1,12 +1,7 @@
 import { Tier } from "@/model/tier";
 import { useMemo } from "react";
-import Fuzz from "../pixelRenderers/Fuzz";
 import AssetSvg from "./AssetSvg";
 import DefaultAsset from "./DefaultAsset";
-
-function formatTierNameForSvg(name?: string) {
-  return name?.toLowerCase().replaceAll(" ", "-");
-}
 
 /**
  * Renders tier image with custom placement and size within frame. Should not be used in an image stack.

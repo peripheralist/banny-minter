@@ -7,7 +7,6 @@ import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
@@ -108,6 +107,7 @@ export default function Home() {
             top: heroHeight * 0.83,
             bottom: heroHeight * 0.08,
             margin: "0 auto",
+            marginRight: heroHeight * 0.05,
           }}
         >
           <Image src="/assets/banny_shadow.svg" alt="shadow" fill />
@@ -153,7 +153,6 @@ export default function Home() {
             style={{
               position: "relative",
               minHeight: 120,
-              background: SAND_COLOR,
             }}
           >
             <Image

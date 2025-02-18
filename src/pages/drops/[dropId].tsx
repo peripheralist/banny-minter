@@ -12,6 +12,7 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { BAN_HOOK } from "@/constants/nfts";
 import { ShopContext } from "@/contexts/shopContext";
 import { useNfTsQuery } from "@/generated/graphql";
+import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -62,7 +63,7 @@ export default function Drop() {
     [isSmallScreen, width]
   );
 
-  const { allTiers } = useContext(ShopContext);
+  const { tiers: allTiers } = useAllTiers();
 
   if (!allTiers) return <FullscreenLoading />;
 

@@ -29,6 +29,7 @@ export default function LargeView({ tokenId }: { tokenId: bigint }) {
   return (
     <ToolbarBagView
       dynamicToolbar
+      disableDrawer
       sections={[
         {
           contentStyle: {
