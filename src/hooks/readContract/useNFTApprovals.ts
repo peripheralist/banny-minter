@@ -1,4 +1,4 @@
-import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/nfts";
+import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/contracts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { isAddressEqual } from "viem";

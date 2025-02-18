@@ -1,3 +1,4 @@
+import { isTestnet } from "@/hooks/useAppChain";
 import { createConfig, http } from "wagmi";
 import {
   arbitrum,
@@ -21,6 +22,10 @@ function transportUrl(prefix: string) {
 export const config = createConfig({
   connectors: [
     // metamask is loaded by default (if metamask is in browser at least). idk why
+    coinbaseWallet({
+      appName: "Banny Retail",
+      appLogoUrl: `https://retail.banny.eth.sucks/assets/banny_eyes.svg`,
+    }),
     ...(walletConnectProjectId
       ? [
           walletConnect({
@@ -28,19 +33,13 @@ export const config = createConfig({
           }),
         ]
       : []),
-    coinbaseWallet({
-      appName: "Banny Retail",
-    }),
   ],
   chains: [
     sepolia,
     arbitrumSepolia,
     baseSepolia,
     optimismSepolia,
-    // mainnet,
-    arbitrum,
-    base,
-    optimism,
+    ...(isTestnet ? [] : [mainnet, arbitrum, base, optimism]),
   ],
   transports: {
     [mainnet.id]: http(transportUrl("mainnet")),

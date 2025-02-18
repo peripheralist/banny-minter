@@ -3,7 +3,7 @@ import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import { CATEGORY_IDS } from "@/constants/category";
-import { BAN_HOOK } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/contracts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
@@ -44,13 +44,13 @@ export default function NFTDetailModal() {
   const tier = useMemo(() => (nft ? parseTier(nft?.tier) : undefined), [nft]);
 
   const imgSize = useMemo(
-    () => Math.min(Math.max(width ? width - 96 : 0, 240), 420),
+    () => Math.min(Math.max(width ? width - 96 : 0, 240), 400),
     [width]
   );
 
   const NftImage = useCallback(() => {
     if (nft?.category === CATEGORY_IDS.body) {
-      return <DressedBannyNftImage nft={nft} size={imgSize - 8} />;
+      return <DressedBannyNftImage nft={nft} size={imgSize} />;
     }
 
     if (!nft?.tier) {

@@ -4,9 +4,10 @@ import { mainnet, sepolia } from "viem/chains";
 import { useAccount } from "wagmi";
 import { config } from "../../config.wagmi";
 
-const defaultChain = (
-  process.env.NEXT_PUBLIC_IS_TESTNET === "true" ? sepolia : mainnet
-) as Chain;
+export const isTestnet =
+  process.env.NEXT_PUBLIC_IS_TESTNET === "true" ? true : false;
+
+const defaultChain = (isTestnet ? sepolia : mainnet) as Chain;
 
 /**
  * Get the chain currently being preferred by the UI.

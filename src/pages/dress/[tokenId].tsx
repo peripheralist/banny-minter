@@ -2,7 +2,7 @@ import DressingRoom from "@/components/DressingRoom";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { Category } from "@/constants/category";
-import { BAN_HOOK } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/contracts";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";

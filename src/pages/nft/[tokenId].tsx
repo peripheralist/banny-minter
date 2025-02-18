@@ -6,7 +6,7 @@ import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_IDS } from "@/constants/category";
-import { BAN_HOOK } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/contracts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";

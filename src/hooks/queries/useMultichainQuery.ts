@@ -1,9 +1,8 @@
 import { Chain } from "@/model/chain";
 import { createApolloClient } from "@/utils/createApolloClient";
-import { QueryOptions, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { DocumentNode } from "graphql";
 import { useSupportedChains } from "../useSupportedChains";
-import { OperationVariables } from "@apollo/client";
 
 export function useMultichainQuery<T, R>({
   key,
@@ -14,7 +13,7 @@ export function useMultichainQuery<T, R>({
   key: string;
   document: DocumentNode;
   parse: (r: T, chain: Chain) => R[];
-  variables?: object;
+  variables?: (chainId: number) => object;
 }) {
   const chains = useSupportedChains();
 
@@ -27,7 +26,7 @@ export function useMultichainQuery<T, R>({
 
           return client.query<T>({
             query: document,
-            variables,
+            variables: variables?.(chain.id),
             fetchPolicy: "no-cache",
           });
         })

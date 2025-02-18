@@ -1,4 +1,4 @@
-import { BAN_HOOK } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/contracts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { Address } from "viem";
 

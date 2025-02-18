@@ -68,7 +68,10 @@ export default function TierDetailModal() {
     return sets;
   }, [tier, allTiers]);
 
-  const imgSize = useMemo(() => Math.min(width - 96, 400), [width]);
+  const imgSize = useMemo(
+    () => Math.min(Math.max(width ? width - 96 : 0, 240), 400),
+    [width]
+  );
 
   const images = useCallback(
     (size: number) => {

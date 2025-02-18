@@ -3,7 +3,7 @@ import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_IDS } from "@/constants/category";
-import { BAN_HOOK } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/contracts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useAllActivity } from "@/hooks/queries/useAllActivity";
 import { useWindowSize } from "@/hooks/useWindowSize";

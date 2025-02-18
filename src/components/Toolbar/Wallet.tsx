@@ -17,7 +17,7 @@ export default function Wallet() {
 
   const { connect, wrongNetwork } = useContext(WalletContext);
 
-  const { address, chain: walletChain } = useAccount();
+  const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const { data: ensName } = useEnsName({ address });
   const appChain = useAppChain();

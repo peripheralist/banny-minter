@@ -2,7 +2,7 @@ import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { BAN_HOOK } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/contracts";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { ActivityEvent } from "@/model/activity";

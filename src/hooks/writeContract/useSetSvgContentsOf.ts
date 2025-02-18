@@ -1,4 +1,4 @@
-import { RESOLVER_ADDRESS } from "@/constants/nfts";
+import { RESOLVER_ADDRESS } from "@/constants/contracts";
 import {
   WriteContractHandlerOptions,
   useWriteContractHandler,

@@ -1,4 +1,4 @@
-import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/nfts";
+import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/contracts";
 import { Tier } from "@/model/tier";
 import {
   WriteContractHandlerOptions,

@@ -1,5 +1,5 @@
 import { categoryOfId } from "@/constants/category";
-import { RESOLVER_ADDRESS } from "@/constants/nfts";
+import { RESOLVER_ADDRESS } from "@/constants/contracts";
 import { NfTsQuery } from "@/generated/graphql";
 import { EquippedTiers, Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";

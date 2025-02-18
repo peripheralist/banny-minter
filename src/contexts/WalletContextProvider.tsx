@@ -76,7 +76,7 @@ function ConnectModal({
           gap: 8,
         }}
       >
-        {connectors.map((connector) => (
+        {connectors.toReversed().map((connector) => (
           <ButtonPad
             key={connector.id}
             style={{ padding: "8px 12px" }}

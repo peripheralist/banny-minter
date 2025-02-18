@@ -9,7 +9,7 @@ import { CATEGORY_IDS } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { BAN_HOOK } from "@/constants/nfts";
+import { BAN_HOOK } from "@/constants/contracts";
 import { ShopContext } from "@/contexts/shopContext";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";

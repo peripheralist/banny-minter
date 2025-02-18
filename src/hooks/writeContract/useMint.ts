@@ -1,4 +1,8 @@
-import { BAN_HOOK, BAN_REVNET_ID, TERMINAL_ADDRESS } from "@/constants/nfts";
+import {
+  BAN_HOOK,
+  BAN_REVNET_IDS,
+  TERMINAL_ADDRESS,
+} from "@/constants/contracts";
 import { AlertContext } from "@/contexts/alertContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { NATIVE_TOKEN } from "juice-sdk-core";
@@ -45,9 +49,14 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
 
   const { chain } = useAccount();
 
+  const revnetId = useMemo(
+    () => (chain ? BAN_REVNET_IDS(chain?.id) : undefined),
+    [chain]
+  );
+
   console.log("Mint using params:", {
     chain,
-    revnetId: BAN_REVNET_ID,
+    revnetId,
     value: totalEquippedPrice,
     wallet: connectedWalletAddress,
     hook: BAN_HOOK,
@@ -57,9 +66,14 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
   });
 
   const mint = useCallback(() => {
-    if (!chain || !connectedWalletAddress || !totalEquippedPrice || !metadata) {
+    if (
+      !connectedWalletAddress ||
+      !totalEquippedPrice ||
+      !metadata ||
+      !revnetId
+    ) {
       console.error("Missing something smh", {
-        chain,
+        revnetId,
         connectedWalletAddress,
         totalEquippedPrice,
         metadata,
@@ -73,7 +87,7 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     writeContract({
       address: TERMINAL_ADDRESS,
       args: [
-        BigInt(BAN_REVNET_ID),
+        BigInt(revnetId),
         NATIVE_TOKEN,
         totalEquippedPrice,
         connectedWalletAddress, // mint to connected wallet
@@ -84,7 +98,7 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
       value: totalEquippedPrice ?? undefined,
     });
   }, [
-    chain,
+    revnetId,
     connectedWalletAddress,
     totalEquippedPrice,
     metadata,

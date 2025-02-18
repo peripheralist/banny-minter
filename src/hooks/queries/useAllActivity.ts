@@ -1,4 +1,4 @@
-import { BAN_HOOK, BAN_REVNET_ID } from "@/constants/nfts";
+import { BAN_HOOK, BAN_REVNET_IDS } from "@/constants/contracts";
 import {
   DecorateBannyEventsDocument,
   DecorateBannyEventsQuery,
@@ -47,11 +47,11 @@ function useMultiChainMints() {
   >({
     key: "multichain-pays",
     document: PayEventsDocument,
-    variables: {
+    variables: (chainId) => ({
       where: {
-        projectId: BAN_REVNET_ID,
+        projectId: BAN_REVNET_IDS(chainId),
       },
-    },
+    }),
     parse: (r, chain) =>
       r.payEvents
         .map((e) => ({

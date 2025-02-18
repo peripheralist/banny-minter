@@ -20,7 +20,7 @@ import TierImage from "../shared/TierImage";
 import TransactionPending from "../shared/TransactionPending";
 import { useAppChain } from "@/hooks/useAppChain";
 import Link from "next/link";
-import { RESOLVER_ADDRESS } from "@/constants/nfts";
+import { RESOLVER_ADDRESS } from "@/constants/contracts";
 
 export default function DecorateButton() {
   const [initialEquipped, setInitialEquipped] =
