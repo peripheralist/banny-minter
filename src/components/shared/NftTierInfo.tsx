@@ -222,7 +222,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
         ) : null}
       </div>
     );
-  }, [NftInfoRow, nft, equippedTiers, isOwned, tier]);
+  }, [NftInfoRow, nft, equippedTiers, isOwned, tier, router.asPath]);
 
   const Details = useCallback(() => {
     if (tier.multiChainSupply) {

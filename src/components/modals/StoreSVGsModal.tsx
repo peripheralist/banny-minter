@@ -104,10 +104,10 @@ export default function StoreSVGsModal() {
             The SVG for each Banny accessory must be stored on-chain manually.
             Until then, the accessory image is loaded from IPFS and may not
             render correctly on marketplaces or other apps. Each SVG only needs
-            to be stored once, then they'll be available for everyone.
+            to be stored once, then they{"'"}ll be available for everyone.
           </p>
 
-          <p>Storing is free! You'll only pay gas.</p>
+          <p>Storing is free! You{"'"}ll only pay gas.</p>
 
           <TiersDisplay />
         </div>
