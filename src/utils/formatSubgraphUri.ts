@@ -18,8 +18,8 @@ export function formatSubgraphUri(chain: Chain) {
 
 function formatSubgraphPrefix(chain: Chain) {
   switch (chain.name) {
-    // case "Ethereum":
-    //   return "mainnet";
+    case "Ethereum":
+      return "ethereum";
     case "Sepolia":
       return "sepolia";
     case "Arbitrum One":
