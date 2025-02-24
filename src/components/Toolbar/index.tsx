@@ -55,6 +55,10 @@ export default function Index() {
           Drop #01
         </_Link>
 
+        <_Link frame href={"/manifesto"}>
+          Manifesto
+        </_Link>
+
         {connectedAddress && (
           <_Link frame href={"/locker/" + connectedAddress}>
             Locker

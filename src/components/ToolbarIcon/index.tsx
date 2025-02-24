@@ -47,7 +47,7 @@ export default function ToolbarIcon() {
             display: "flex",
             flexDirection: "column",
             boxSizing: "border-box",
-            padding: '8px 12px',
+            padding: "8px 12px",
             gap: 12,
             maxWidth: 320,
             transition: "width 0.1s ease-in",
@@ -67,6 +67,7 @@ export default function ToolbarIcon() {
           <_Link href="/">Home</_Link>
           <_Link href="/drops/1">Drop #01</_Link>
           <_Link href={"/explore"}>Explore</_Link>
+          <_Link href={"/manifesto"}>Manifesto</_Link>
 
           {connectedAddress && (
             <_Link href={"/locker/" + connectedAddress}>Locker</_Link>
