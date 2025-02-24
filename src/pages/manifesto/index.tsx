@@ -54,7 +54,7 @@ export default function Manifesto() {
                 Of the outcomes we manifest.
                 <br />
                 <br />
-                And if you look closely, you'll see—
+                And if you look closely, you{"'"}ll see—
                 <br />
                 there are Bannys among us.
               </p>
