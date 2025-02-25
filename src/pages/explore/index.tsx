@@ -4,23 +4,32 @@ import RoundedFrame from "@/components/shared/RoundedFrame";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_IDS } from "@/constants/category";
 import { BAN_HOOK } from "@/constants/contracts";
-import { Nft_OrderBy, useNfTsQuery } from "@/generated/graphql";
+import { Nft_OrderBy, OrderDirection, useNfTsQuery } from "@/generated/graphql";
 import { useAllActivity } from "@/hooks/queries/useAllActivity";
+import { useAppChain } from "@/hooks/useAppChain";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import ActivityEventElem from "./ActivityEventElem";
 
 export default function Activity() {
-  const { data: bannys } = useNfTsQuery({
+  const appChain = useAppChain();
+
+  const { data: bannys, refetch } = useNfTsQuery({
     variables: {
       where: {
         collection: BAN_HOOK,
         category: CATEGORY_IDS.body,
       },
+      orderBy: Nft_OrderBy.createdAt,
+      orderDirection: OrderDirection.desc,
     },
   });
+
+  useEffect(() => {
+    refetch();
+  }, [appChain]);
 
   const router = useRouter();
 

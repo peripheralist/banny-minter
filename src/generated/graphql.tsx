@@ -1921,6 +1921,7 @@ export enum MintTokensEvent_OrderBy {
 export type Nft = {
   category: Scalars['Int']['output'];
   collection: NftCollection;
+  createdAt: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   owner: Participant;
   project: Project;
@@ -2361,6 +2362,14 @@ export type Nft_Filter = {
   collection_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
   collection_starts_with?: InputMaybe<Scalars['String']['input']>;
   collection_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_not?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -2480,6 +2489,7 @@ export enum Nft_OrderBy {
   collection__name = 'collection__name',
   collection__projectId = 'collection__projectId',
   collection__symbol = 'collection__symbol',
+  createdAt = 'createdAt',
   id = 'id',
   owner = 'owner',
   owner__address = 'owner__address',
@@ -5766,10 +5776,11 @@ export type TierDataFragment = { id: string, tierId: number, price: bigint, enco
 export type NfTsQueryVariables = Exact<{
   where?: InputMaybe<Nft_Filter>;
   orderBy?: InputMaybe<Nft_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
 }>;
 
 
-export type NfTsQuery = { nfts: Array<{ tokenId: bigint, tokenUri: string, category: number, owner: { address: any }, collection: { address: any }, tier: { id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } } }> };
+export type NfTsQuery = { nfts: Array<{ tokenId: bigint, createdAt: number, tokenUri: string, category: number, owner: { address: any }, collection: { address: any }, tier: { id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } } }> };
 
 export type NftTiersQueryVariables = Exact<{
   where?: InputMaybe<NftTier_Filter>;
@@ -6231,6 +6242,7 @@ export type MintTokensEventResolvers<ContextType = any, ParentType extends Resol
 export type NftResolvers<ContextType = any, ParentType extends ResolversParentTypes['NFT'] = ResolversParentTypes['NFT']> = {
   category?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   collection?: Resolver<ResolversTypes['NFTCollection'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['Participant'], ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
@@ -6733,9 +6745,10 @@ export type DecorateBannyEventsLazyQueryHookResult = ReturnType<typeof useDecora
 export type DecorateBannyEventsSuspenseQueryHookResult = ReturnType<typeof useDecorateBannyEventsSuspenseQuery>;
 export type DecorateBannyEventsQueryResult = Apollo.QueryResult<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>;
 export const NfTsDocument = gql`
-    query NFTs($where: NFT_filter, $orderBy: NFT_orderBy) {
-  nfts(where: $where, orderBy: $orderBy) {
+    query NFTs($where: NFT_filter, $orderBy: NFT_orderBy, $orderDirection: OrderDirection) {
+  nfts(where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
     tokenId
+    createdAt
     owner {
       address
     }
@@ -6765,6 +6778,7 @@ export const NfTsDocument = gql`
  *   variables: {
  *      where: // value for 'where'
  *      orderBy: // value for 'orderBy'
+ *      orderDirection: // value for 'orderDirection'
  *   },
  * });
  */

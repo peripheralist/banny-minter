@@ -13,9 +13,10 @@ fragment TierData on NFTTier {
   category
 }
 
-query NFTs($where: NFT_filter, $orderBy: NFT_orderBy) {
-  nfts(where: $where, orderBy: $orderBy) {
+query NFTs($where: NFT_filter, $orderBy: NFT_orderBy, $orderDirection: OrderDirection) {
+  nfts(where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
     tokenId
+    createdAt
     owner {
       address
     }
