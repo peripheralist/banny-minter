@@ -1,16 +1,16 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { WalletContext } from "@/contexts/walletContext";
+import { useAppChain } from "@/hooks/useAppChain";
+import { Chain } from "@/model/chain";
 import { useCallback, useContext, useState } from "react";
-import { useAccount, useDisconnect, useEnsName, useSwitchChain } from "wagmi";
+import { useAccount, useDisconnect, useSwitchChain } from "wagmi";
+import { config } from "../../../config.wagmi";
+import Blinker from "../shared/Blinker";
 import ButtonPad from "../shared/ButtonPad";
 import FormattedAddress from "../shared/FormattedAddress";
-import RoundedFrame from "../shared/RoundedFrame";
-import { config } from "../../../config.wagmi";
-import { Chain } from "@/model/chain";
-import { useAppChain } from "@/hooks/useAppChain";
-import Blinker from "../shared/Blinker";
 import Modal from "../shared/Modal";
+import RoundedFrame from "../shared/RoundedFrame";
 
 export default function Wallet() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -19,7 +19,6 @@ export default function Wallet() {
 
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
-  const { data: ensName } = useEnsName({ address });
   const appChain = useAppChain();
   const { switchChain } = useSwitchChain();
 
@@ -115,7 +114,7 @@ export default function Wallet() {
                   marginBottom: 12,
                 }}
               >
-                {ensName ?? <FormattedAddress address={address} />}
+                <FormattedAddress address={address} />
               </div>
 
               <ButtonPad
