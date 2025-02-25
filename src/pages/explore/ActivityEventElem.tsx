@@ -1,10 +1,12 @@
 import ButtonPad from "@/components/shared/ButtonPad";
 import FormattedAddress from "@/components/shared/FormattedAddress";
+import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { ActivityEvent } from "@/model/activity";
+import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import moment from "moment";
 import Link from "next/link";
 import { useCallback, useMemo } from "react";
@@ -61,26 +63,25 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
           </div>
         );
       case "decorate":
-        if (!tiers) return "...";
+        const info = decodeNFTInfo(event.tokenUri);
 
+        if (!tiers || !info) return "...";
+
+        const displayLarge = info.outfitIds?.every((tokenId) => {
+          // TODO sloppy way of returning true if banny is NOT wearing a background
+          const tierId = Math.floor(tokenId / 1000000000);
+
+          return tiers
+            .filter((t) => t.category === "background")
+            .every((t) => t.tierId !== tierId);
+        });
+
+        const size = imgSize * (displayLarge ? 1.3 : 1);
+
+        // TODO make link to view NFT
         return (
-          <div style={{ display: "flex" }}>
-            {[
-              event.bannyBodyId,
-              ...(event.outfitIds ?? []),
-              ...(event.backgroundId ? [event.backgroundId] : []),
-            ].map((nftId) => {
-              const tierId = nftId / BigInt(1000000000);
-              const tier = tiers.find((t) => BigInt(t.tierId) === tierId);
-
-              if (!tier) return null;
-
-              return (
-                <div key={nftId}>
-                  <TierImage tier={tier} size={imgSize} />
-                </div>
-              );
-            })}
+          <div style={{ margin: displayLarge ? -(size * 0.125) : 0 }}>
+            <object data={info.image} width={size} height={size} />
           </div>
         );
     }

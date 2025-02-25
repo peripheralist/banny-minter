@@ -22,5 +22,6 @@ query DecorateBannyEvents($where: DecorateBannyEvent_filter) {
     bannyBodyId
     outfitIds
     backgroundId
+    tokenUri
   }
 }

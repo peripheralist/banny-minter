@@ -645,6 +645,7 @@ export type DecorateBannyEvent = {
   id: Scalars['ID']['output'];
   outfitIds: Array<Scalars['BigInt']['output']>;
   timestamp: Scalars['Int']['output'];
+  tokenUri: Scalars['String']['output'];
   txHash: Scalars['Bytes']['output'];
 };
 
@@ -701,6 +702,26 @@ export type DecorateBannyEvent_Filter = {
   timestamp_lte?: InputMaybe<Scalars['Int']['input']>;
   timestamp_not?: InputMaybe<Scalars['Int']['input']>;
   timestamp_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  tokenUri?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_contains?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_ends_with?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_gt?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_gte?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  tokenUri_lt?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_lte?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_not?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_not_contains?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  tokenUri_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_starts_with?: InputMaybe<Scalars['String']['input']>;
+  tokenUri_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
   txHash?: InputMaybe<Scalars['Bytes']['input']>;
   txHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
   txHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -720,6 +741,7 @@ export enum DecorateBannyEvent_OrderBy {
   id = 'id',
   outfitIds = 'outfitIds',
   timestamp = 'timestamp',
+  tokenUri = 'tokenUri',
   txHash = 'txHash'
 }
 
@@ -5737,7 +5759,7 @@ export type DecorateBannyEventsQueryVariables = Exact<{
 }>;
 
 
-export type DecorateBannyEventsQuery = { decorateBannyEvents: Array<{ id: string, timestamp: number, txHash: any, caller: any, bannyBodyId: bigint, outfitIds: Array<bigint>, backgroundId: bigint }> };
+export type DecorateBannyEventsQuery = { decorateBannyEvents: Array<{ id: string, timestamp: number, txHash: any, caller: any, bannyBodyId: bigint, outfitIds: Array<bigint>, backgroundId: bigint, tokenUri: string }> };
 
 export type TierDataFragment = { id: string, tierId: number, price: bigint, encodedIpfsUri: any | null, resolvedUri: string | null, svg: string | null, initialSupply: bigint, remainingSupply: bigint, category: number, collection: { address: any } };
 
@@ -6092,6 +6114,7 @@ export type DecorateBannyEventResolvers<ContextType = any, ParentType extends Re
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   outfitIds?: Resolver<Array<ResolversTypes['BigInt']>, ParentType, ContextType>;
   timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tokenUri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   txHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -6671,6 +6694,7 @@ export const DecorateBannyEventsDocument = gql`
     bannyBodyId
     outfitIds
     backgroundId
+    tokenUri
   }
 }
     `;

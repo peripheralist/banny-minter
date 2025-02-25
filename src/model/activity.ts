@@ -12,6 +12,7 @@ export type ActivityEvent = {
       bannyBodyId: bigint;
       outfitIds: bigint[];
       backgroundId: bigint;
+      tokenUri: string
     }
   | {
       type: "mint";
