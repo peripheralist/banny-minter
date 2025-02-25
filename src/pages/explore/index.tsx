@@ -11,13 +11,20 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import ActivityEventElem from "./ActivityEventElem";
+import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 
 export default function Activity() {
   const { data: multichainBannys } = useMultichainBannyNFTs();
 
   const sortedBannys = useMemo(
     () =>
-      multichainBannys?.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
+      multichainBannys
+        ?.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+        .filter((nft) => {
+          const info = decodeNFTInfo(nft.tokenUri);
+
+          return !!info?.outfitIds?.length;
+        }),
     [multichainBannys]
   );
 
@@ -72,7 +79,7 @@ export default function Activity() {
               ),
             },
             {
-              header: `Minted Bannys (${sortedBannys?.length ?? "--"})`,
+              header: `Bannys (${sortedBannys?.length ?? "--"})`,
               sectionStyle: {
                 flex: 1,
               },

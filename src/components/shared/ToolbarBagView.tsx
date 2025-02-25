@@ -1,4 +1,3 @@
-import { TOOLBAR_WIDTH } from "@/components/Toolbar";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { EquipmentContext } from "@/contexts/equipmentContext";
