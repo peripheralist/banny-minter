@@ -7,6 +7,7 @@ import { COLORS } from "@/constants/colors";
 import { useIsHover } from "@/hooks/useIsHover";
 import { useRouter } from "next/router";
 import ButtonPad from "../shared/ButtonPad";
+import { TOOLBAR_LINKS } from "../Toolbar";
 
 export const TOOLBAR_ICON_SIZE = 40;
 
@@ -65,10 +66,12 @@ export default function ToolbarIcon() {
           />
 
           <_Link href="/">Home</_Link>
-          <_Link href={"/explore"}>Explore</_Link>
-          <_Link href={"/bannys"}>Banny shop</_Link>
-          <_Link href="/drops/1">Drop #01</_Link>
-          <_Link href={"/manifesto"}>Manifesto</_Link>
+
+          {TOOLBAR_LINKS.map(({ href, label }) => (
+            <_Link key={href} href={href}>
+              {label}
+            </_Link>
+          ))}
 
           {connectedAddress && (
             <_Link href={"/locker/" + connectedAddress}>Locker</_Link>

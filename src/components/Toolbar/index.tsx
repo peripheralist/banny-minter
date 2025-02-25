@@ -12,6 +12,25 @@ import Wallet from "./Wallet";
 
 export const TOOLBAR_WIDTH = 164;
 
+export const TOOLBAR_LINKS = [
+  {
+    href: `/explore`,
+    label: "Explore",
+  },
+  {
+    href: `/bannys`,
+    label: "Banny Shop",
+  },
+  {
+    href: `/drops/1`,
+    label: "Drop #01",
+  },
+  {
+    href: `/manifesto`,
+    label: "Manifesto",
+  },
+] as const;
+
 export default function Index() {
   const { address: connectedAddress } = useAccount();
 
@@ -43,21 +62,11 @@ export default function Index() {
           gap: 8,
         }}
       >
-        <_Link frame href={"/explore"}>
-          Explore
-        </_Link>
-
-        <_Link frame href={"/bannys"}>
-          Banny shop
-        </_Link>
-
-        <_Link frame href={"/drops/1"}>
-          Drop #01
-        </_Link>
-
-        <_Link frame href={"/manifesto"}>
-          Manifesto
-        </_Link>
+        {TOOLBAR_LINKS.map(({ href, label }) => (
+          <_Link key={href} frame href={href}>
+            {label}
+          </_Link>
+        ))}
 
         {connectedAddress && (
           <_Link frame href={"/locker/" + connectedAddress}>
