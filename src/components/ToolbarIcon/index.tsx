@@ -65,8 +65,9 @@ export default function ToolbarIcon() {
           />
 
           <_Link href="/">Home</_Link>
-          <_Link href="/drops/1">Drop #01</_Link>
           <_Link href={"/explore"}>Explore</_Link>
+          <_Link href={"/bannys"}>Banny shop</_Link>
+          <_Link href="/drops/1">Drop #01</_Link>
           <_Link href={"/manifesto"}>Manifesto</_Link>
 
           {connectedAddress && (
