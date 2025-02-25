@@ -25,6 +25,12 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   }, [event]);
 
   const Timestamp = useCallback(() => {
+    // moment.updateLocale('en', {
+    //   relativeTime: {
+    //     mm: `%dmin`,
+    //     hh: `%dhrs`
+    //   }
+    // })
     return (
       <div style={{ opacity: 0.5 }}>
         {moment(event.timestamp * 1000).fromNow()}
@@ -34,11 +40,13 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
 
   const Caller = useCallback(() => {
     return (
-      <FormattedAddress
-        position="left"
-        style={{ opacity: 0.5 }}
-        address={event.caller as `0x${string}`}
-      />
+      <Link href={`/locker/${event.caller}`} target="blank">
+        <FormattedAddress
+          position="left"
+          style={{ cursor: "pointer" }}
+          address={event.caller as `0x${string}`}
+        />
+      </Link>
     );
   }, [event.caller]);
 
@@ -81,9 +89,16 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
 
         // TODO make link to view NFT
         return (
-          <div style={{ margin: displayLarge ? -(size * 0.125) : 0 }}>
-            <object data={info.image} width={size} height={size} />
-          </div>
+          <Link href={`?nft=${event.chain.id}:${info.tokenId}`}>
+            <div
+              style={{
+                margin: displayLarge ? -(size * 0.125) : 0,
+                pointerEvents: "none",
+              }}
+            >
+              <object data={info.image} width={size} height={size} />
+            </div>
+          </Link>
         );
     }
   }, [event, tiers]);
@@ -103,43 +118,45 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   );
 
   return (
-    <Link href={txUrl} target="blank">
-      <ButtonPad
-        fillFg={"white"}
-        fillBorder={"white"}
+    <ButtonPad
+      fillFg={"white"}
+      fillBorder={"white"}
+      style={{
+        display: "flex",
+        alignItems: "flex-start",
+        flexDirection: "column",
+        gap: 8,
+        padding: 12,
+        color: "black",
+        width: "100%",
+        cursor: "default",
+      }}
+      shadow="none"
+    >
+      <div
         style={{
           display: "flex",
-          alignItems: "flex-start",
-          flexDirection: "column",
+          justifyContent: "space-between",
+          fontSize: FONT_SIZE.xs,
           gap: 8,
-          padding: 12,
-          color: "black",
+          fontWeight: "normal",
           width: "100%",
         }}
-        shadow="none"
       >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: FONT_SIZE.xs,
-            gap: 8,
-            fontWeight: "normal",
-            width: "100%",
-          }}
-        >
-          <Timestamp />
-          <Chain />
+        <Timestamp />
+        <Chain />
 
-          <div style={{ flex: 1 }} />
+        <div style={{ flex: 1 }} />
 
-          <Caller />
-        </div>
+        <Caller />
+        <Link href={txUrl} target="blank">
+          {"TX>"}
+        </Link>
+      </div>
 
-        <Title />
+      <Title />
 
-        <Body />
-      </ButtonPad>
-    </Link>
+      <Body />
+    </ButtonPad>
   );
 }

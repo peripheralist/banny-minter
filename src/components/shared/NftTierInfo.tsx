@@ -165,7 +165,13 @@ export default function NftTierInfo({
             label="Owner"
             value={
               <div style={{ display: "flex", gap: 8, alignItems: "baseline" }}>
-                <FormattedAddress address={nft?.owner.address} />{" "}
+                <Link href={`/locker/${nft.owner.address}`}>
+                  <FormattedAddress
+                    position="left"
+                    address={nft.owner.address}
+                    style={{ cursor: "pointer" }}
+                  />
+                </Link>{" "}
                 {isOwned ? "(You) " : ""}
               </div>
             }
