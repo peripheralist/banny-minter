@@ -4,7 +4,7 @@ export const DROPS: Drop[] = [
   {
     id: 1,
     name: "Genesis",
-    summary: `Genesis" proposes a new chapter in digital fashion, where timeless elegance meets cutting-edge. With 50 exquisitely crafted pieces—from cultural treasures to indy designs, this debut collection dresses as a living art, forever etched all over Ethereum.`,
+    summary: `"Genesis" proposes a new chapter in digital fashion, where timeless elegance meets cutting-edge. With 51 exquisitely crafted pieces—from cultural treasures to indy designs, this debut collection dresses as a living art, forever etched on Ethereum.`,
     dateCreated: "February 2025",
     tierIds: [
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
