@@ -1,27 +1,16 @@
-import RoundedFrame from "@/components/shared/RoundedFrame";
+import ButtonPad from "@/components/shared/ButtonPad";
+import FormattedAddress from "@/components/shared/FormattedAddress";
 import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { BAN_HOOK } from "@/constants/contracts";
-import { useNfTsQuery } from "@/generated/graphql";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { ActivityEvent } from "@/model/activity";
-import { useCallback, useMemo } from "react";
 import moment from "moment";
-import FormattedAddress from "@/components/shared/FormattedAddress";
 import Link from "next/link";
-import ButtonPad from "@/components/shared/ButtonPad";
+import { useCallback, useMemo } from "react";
 
 export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   const { tiers } = useAllTiers();
-
-  const { data: nfts } = useNfTsQuery({
-    variables: {
-      where: {
-        collection: BAN_HOOK,
-      },
-    },
-  });
 
   const Title = useCallback(() => {
     switch (event.type) {

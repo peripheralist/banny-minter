@@ -2,6 +2,7 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { useIsHover } from "@/hooks/useIsHover";
 import { CSSProperties } from "react";
 import { Address } from "viem";
+import { useEnsName } from "wagmi";
 
 export default function FormattedAddress({
   address,
@@ -12,6 +13,8 @@ export default function FormattedAddress({
   position?: "left" | "right";
   style?: CSSProperties;
 }) {
+  const { data: ensName } = useEnsName({ address });
+
   const { isHover, ...hoverProps } = useIsHover();
 
   if (!address) return null;
@@ -19,7 +22,7 @@ export default function FormattedAddress({
   return (
     <div style={{ position: "relative", cursor: "default" }} {...hoverProps}>
       <span style={style}>
-        {address.substring(0, 6)}…{address.substring(38)}
+        {ensName ?? `${address.substring(0, 6)}…${address.substring(38)}`}
       </span>
       {isHover && (
         <div
