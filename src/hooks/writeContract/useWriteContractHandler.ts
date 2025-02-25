@@ -146,7 +146,7 @@ export function useWriteContractHandler<
 
   return {
     write,
-    isPending: tx.isLoading,
+    isPending: isPending || tx.isLoading,
     isSuccess: tx.isSuccess,
     tx,
     data,

@@ -26,6 +26,10 @@ export default function FormattedAddress({
       </span>
       {isHover && (
         <div
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
           style={{
             position: "absolute",
             right: position === "left" ? 0 : undefined,
@@ -34,6 +38,7 @@ export default function FormattedAddress({
             padding: "4px 8px",
             zIndex: 999,
             fontSize: FONT_SIZE.sm,
+            userSelect: "all",
           }}
         >
           {address}

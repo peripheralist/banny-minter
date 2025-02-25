@@ -44,7 +44,7 @@ export default function LargeView({ tokenId }: { tokenId: bigint }) {
           sectionStyle: {
             flex: 1,
           },
-          header: `Locker items`,
+          header: `Outfit options`,
           content: (
             <CategoryGroupGrid
               label

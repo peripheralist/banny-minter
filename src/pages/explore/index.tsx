@@ -96,16 +96,19 @@ export default function Activity() {
                           }}
                           containerStyle={{ height: imgSize, width: imgSize }}
                         >
-                          <DressedBannyNftImage nft={nft} size={imgSize - 16} />
+                          <DressedBannyNftImage nft={nft} size={imgSize - 8} />
                           <div
                             style={{
                               position: "absolute",
-                              bottom: 8,
-                              left: 8,
+                              bottom: 4,
+                              left: 4,
                               fontSize: FONT_SIZE.xs,
                               color: COLORS.blue200,
                               textTransform: "uppercase",
                               background: "white",
+                              padding: 4,
+                              paddingTop: 4,
+                              paddingRight: 4,
                             }}
                           >
                             {nft.chain.name}
