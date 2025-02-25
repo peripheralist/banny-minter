@@ -25,12 +25,10 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   }, [event]);
 
   const Timestamp = useCallback(() => {
-    // moment.updateLocale('en', {
-    //   relativeTime: {
-    //     mm: `%dmin`,
-    //     hh: `%dhrs`
-    //   }
-    // })
+    // https://momentjs.com/docs/#/customization/relative-time/
+    moment.relativeTimeThreshold("h", 24);
+    moment.relativeTimeThreshold("m", 60);
+    moment.relativeTimeThreshold("d", 365);
     return (
       <div style={{ opacity: 0.5 }}>
         {moment(event.timestamp * 1000).fromNow()}
