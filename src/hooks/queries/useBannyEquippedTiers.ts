@@ -1,21 +1,18 @@
-import { categoryOfId } from "@/constants/category";
-import { RESOLVER_ADDRESS } from "@/constants/contracts";
 import { NfTsQuery } from "@/generated/graphql";
 import { EquippedTiers, Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { parseTier } from "@/utils/parseTier";
 import { useMemo } from "react";
-import { useNftsOf } from "./useNftsOf";
+import { useAllTiers } from "./useAllTiers";
+import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 
 export function useBannyEquippedTiers(
   bannyNft: NfTsQuery["nfts"][number] | undefined
 ) {
-  const allWornNfts = useNftsOf(RESOLVER_ADDRESS);
+  const { tiers, loading } = useAllTiers();
 
   const data = useMemo(() => {
-    if (!allWornNfts.data || !bannyNft) return;
-
-    const { nfts } = allWornNfts.data;
+    if (!tiers || !bannyNft) return;
 
     const equipped: EquippedTiers = {};
 
@@ -32,13 +29,12 @@ export function useBannyEquippedTiers(
     if (decoded?.backgroundId) allAssetIds.push(decoded.backgroundId);
 
     allAssetIds.forEach((tokenId) => {
-      const assetTier = nfts.find(
-        (nft) => nft.tokenId === BigInt(tokenId)
-      )?.tier;
+      const tierId = tierIdOfTokenId(tokenId);
+      const assetTier = tiers.find((t) => t.tierId === tierId);
 
       if (assetTier) {
-        equipped[categoryOfId[assetTier.category]] = {
-          ...parseTier(assetTier),
+        equipped[assetTier.category] = {
+          ...assetTier,
           tokenId: parseInt(tokenId.toString()),
         } as Tier;
       } else {
@@ -47,7 +43,7 @@ export function useBannyEquippedTiers(
     });
 
     return equipped;
-  }, [bannyNft, allWornNfts]);
+  }, [bannyNft, tiers]);
 
-  return { data, loading: allWornNfts.loading };
+  return { data, loading };
 }

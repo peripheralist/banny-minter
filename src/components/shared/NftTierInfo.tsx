@@ -1,5 +1,4 @@
 import { CATEGORIES } from "@/constants/category";
-import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ITEM_DESCRIPTIONS } from "@/constants/itemDescriptions";
@@ -11,15 +10,24 @@ import { Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { formatEther } from "juice-sdk-core";
 import Link from "next/link";
-import { useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useMemo } from "react";
 import { isAddressEqual } from "viem";
 import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
 import FormattedAddress from "./FormattedAddress";
 import RoundedFrame from "./RoundedFrame";
-import { useRouter } from "next/router";
+import { Chain } from "@/model/chain";
 
-export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
+export default function NftTierInfo({
+  tier,
+  nft,
+  chain,
+}: {
+  tier: Tier;
+  nft?: NFT;
+  chain?: Chain;
+}) {
   const { address } = useAccount();
 
   const chains = useSupportedChains();
@@ -181,6 +189,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
           />
         ) : null}
         {nft && <NftInfoRow label="Token Id" value={nft.tokenId.toString()} />}
+        {chain && <NftInfoRow label="Chain" value={chain.name} />}
         {nft ? (
           <NftInfoRow
             label="SVGs"
@@ -222,7 +231,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
         ) : null}
       </div>
     );
-  }, [NftInfoRow, nft, equippedTiers, isOwned, tier, router.asPath]);
+  }, [NftInfoRow, nft, equippedTiers, isOwned, tier, router.asPath, chain]);
 
   const Details = useCallback(() => {
     if (tier.multiChainSupply) {
@@ -243,7 +252,11 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
               style={{ padding: 12 }}
               containerStyle={{ marginTop: 4 }}
             >
-              <Stock />
+              {tier.initialSupply < BigInt(999999999) ? (
+                <Stock />
+              ) : (
+                <div style={{ fontSize: FONT_SIZE.sm }}>Unlimited</div>
+              )}
             </RoundedFrame>
           </div>
 
@@ -270,7 +283,7 @@ export default function NftTierInfo({ tier, nft }: { tier: Tier; nft?: NFT }) {
     }
 
     return <Specs />;
-  }, [tier.multiChainSupply, Stock, Specs]);
+  }, [tier.multiChainSupply, tier.initialSupply, Stock, Specs]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>

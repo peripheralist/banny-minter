@@ -2,34 +2,24 @@ import CustomHead from "@/components/shared/CustomHead";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import { CATEGORY_IDS } from "@/constants/category";
-import { BAN_HOOK } from "@/constants/contracts";
-import { Nft_OrderBy, OrderDirection, useNfTsQuery } from "@/generated/graphql";
+import { COLORS } from "@/constants/colors";
+import { FONT_SIZE } from "@/constants/fontSize";
 import { useAllActivity } from "@/hooks/queries/useAllActivity";
-import { useAppChain } from "@/hooks/useAppChain";
+import { useMultichainBannyNFTs } from "@/hooks/queries/useMultichainBannyNFTs";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import ActivityEventElem from "./ActivityEventElem";
 
 export default function Activity() {
-  const appChain = useAppChain();
+  const { data: multichainBannys } = useMultichainBannyNFTs();
 
-  const { data: bannys, refetch } = useNfTsQuery({
-    variables: {
-      where: {
-        collection: BAN_HOOK,
-        category: CATEGORY_IDS.body,
-      },
-      orderBy: Nft_OrderBy.createdAt,
-      orderDirection: OrderDirection.desc,
-    },
-  });
-
-  useEffect(() => {
-    refetch();
-  }, [appChain]);
+  const sortedBannys = useMemo(
+    () =>
+      multichainBannys?.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
+    [multichainBannys]
+  );
 
   const router = useRouter();
 
@@ -74,7 +64,7 @@ export default function Activity() {
               ),
             },
             {
-              header: `Minted Bannys (${bannys?.nfts.length ?? "--"})`,
+              header: `Minted Bannys (${sortedBannys?.length ?? "--"})`,
               sectionStyle: {
                 flex: 1,
               },
@@ -87,11 +77,13 @@ export default function Activity() {
                       gap: 4,
                     }}
                   >
-                    {bannys?.nfts.map((nft) => (
+                    {sortedBannys?.map((nft) => (
                       <Link
                         key={nft.tokenId.toString()}
                         style={{ display: "block" }}
-                        href={`${router.asPath}?nft=${nft.tokenId.toString()}`}
+                        href={`${router.asPath}?nft=${
+                          nft.chain.id
+                        }:${nft.tokenId.toString()}`}
                       >
                         <RoundedFrame
                           borderColor="white"
@@ -105,6 +97,19 @@ export default function Activity() {
                           containerStyle={{ height: imgSize, width: imgSize }}
                         >
                           <DressedBannyNftImage nft={nft} size={imgSize - 16} />
+                          <div
+                            style={{
+                              position: "absolute",
+                              bottom: 8,
+                              left: 8,
+                              fontSize: FONT_SIZE.xs,
+                              color: COLORS.blue200,
+                              textTransform: "uppercase",
+                              background: "white",
+                            }}
+                          >
+                            {nft.chain.name}
+                          </div>
                         </RoundedFrame>
                       </Link>
                     ))}

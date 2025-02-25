@@ -8,16 +8,14 @@ import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_IDS } from "@/constants/category";
 import { BAN_HOOK } from "@/constants/contracts";
 import { useNfTsQuery } from "@/generated/graphql";
+import { useRouterNftParams } from "@/hooks/useRouterNftParams";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
+import { createApolloClient } from "@/utils/createApolloClient";
 import { parseTier } from "@/utils/parseTier";
-import { isArray } from "@apollo/client/utilities";
-import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
 
 export default function Index() {
-  const router = useRouter();
-
   const { isSmallScreen, width } = useWindowSize();
 
   const size = useMemo(
@@ -25,15 +23,15 @@ export default function Index() {
     [width]
   );
 
-  const tokenId = useMemo(() => {
-    const _tokenId = router.query.tokenId;
+  const { chain, tokenId } = useRouterNftParams("chainTokenId");
 
-    return _tokenId && !isArray(_tokenId) && !isNaN(parseInt(_tokenId))
-      ? parseInt(_tokenId)
-      : 0;
-  }, [router.query]);
+  const apolloClient = useMemo(
+    () => (chain ? createApolloClient(chain) : undefined),
+    [chain]
+  );
 
   const { data } = useNfTsQuery({
+    client: apolloClient,
     variables: {
       where: {
         tokenId: tokenId as unknown as bigint,

@@ -13,7 +13,7 @@ export default function FormattedAddress({
   position?: "left" | "right";
   style?: CSSProperties;
 }) {
-  const { data: ensName } = useEnsName({ address });
+  const { data: ensName } = useEnsName({ address, chainId: 1 });
 
   const { isHover, ...hoverProps } = useIsHover();
 

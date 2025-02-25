@@ -6,25 +6,36 @@ import Loading from "@/components/shared/Loading";
 import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_IDS, categoryOfId } from "@/constants/category";
+import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
+import { WalletContext } from "@/contexts/walletContext";
 import { useNftsOf } from "@/hooks/queries/useNftsOf";
+import { useAppChain } from "@/hooks/useAppChain";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { parseTier } from "@/utils/parseTier";
 import { formatEthAddress } from "juice-sdk-core";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { Address, isAddress } from "viem";
 import { useEnsName } from "wagmi";
 
 export default function Index() {
   const router = useRouter();
 
+  const { switchChain } = useContext(WalletContext);
+
   const address = router.query.address as Address | undefined;
 
-  const { data: ensName } = useEnsName({ address });
+  const { data: ensName } = useEnsName({ address, chainId: 1 });
 
-  const { data: nfts, loading } = useNftsOf(address);
+  const appChain = useAppChain();
+
+  const { data: nfts, loading, refetch } = useNftsOf(address);
+
+  useEffect(() => {
+    refetch();
+  }, [appChain, refetch]);
 
   const { isSmallScreen, width } = useWindowSize();
 
@@ -46,7 +57,9 @@ export default function Index() {
           dynamicToolbar
           sections={[
             {
-              header: `${ensName ?? formatEthAddress(address)}'s locker`,
+              header: `${
+                ensName ? ensName.split(".eth")[0] : formatEthAddress(address)
+              }'s locker`,
               contentStyle: {
                 position: "relative",
                 padding: 48,
@@ -76,6 +89,23 @@ export default function Index() {
                     paddingBottom: 64,
                   }}
                 >
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 8,
+                    }}
+                  >
+                    <h1>Network:</h1>
+                    <ButtonPad
+                      shadow="none"
+                      fillFg={COLORS.pink}
+                      onClick={switchChain}
+                      style={{ padding: 8, color: "white" }}
+                    >
+                      {appChain.name}
+                    </ButtonPad>
+                  </div>
+
                   <CategoryGroupGrid
                     label
                     items={nfts?.nfts.map((nft) => ({

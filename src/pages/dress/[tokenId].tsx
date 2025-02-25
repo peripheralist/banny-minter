@@ -1,6 +1,5 @@
 import DressingRoom from "@/components/DressingRoom";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
-import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { Category } from "@/constants/category";
 import { BAN_HOOK } from "@/constants/contracts";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
@@ -19,11 +18,12 @@ export default function Index() {
   const router = useRouter();
 
   const tokenId = useMemo(() => {
-    const _tokenId = router.query.tokenId as string | undefined;
-
-    return BigInt(
-      !_tokenId || isNaN(parseInt(_tokenId)) ? 0 : parseInt(_tokenId)
-    );
+    try {
+      return BigInt(parseInt(router.query.tokenId as string));
+    } catch (e) {
+      console.error("Error parsing tokenId");
+      return BigInt(0);
+    }
   }, [router.query.tokenId]);
 
   const { data: nfts, loading: nftsLoading } = useNfTsQuery({

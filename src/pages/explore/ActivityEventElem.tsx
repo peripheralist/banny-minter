@@ -7,6 +7,7 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { ActivityEvent } from "@/model/activity";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
+import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import moment from "moment";
 import Link from "next/link";
 import { useCallback, useMemo } from "react";
@@ -69,7 +70,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
 
         const displayLarge = info.outfitIds?.every((tokenId) => {
           // TODO sloppy way of returning true if banny is NOT wearing a background
-          const tierId = Math.floor(tokenId / 1000000000);
+          const tierId = tierIdOfTokenId(tokenId);
 
           return tiers
             .filter((t) => t.category === "background")

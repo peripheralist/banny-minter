@@ -62,6 +62,7 @@ function useMultiChainTierSupplies() {
                 collection: BAN_HOOK,
               },
             },
+            fetchPolicy: 'no-cache',
           });
         })
       ).then((promises) => {
@@ -69,7 +70,7 @@ function useMultiChainTierSupplies() {
 
         promises.forEach((p, i) => {
           if (p.status === "rejected") {
-            console.log("Cross-chain query failed", p);
+            console.error("Cross-chain query failed", p);
 
             return;
           }
