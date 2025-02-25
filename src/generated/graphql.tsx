@@ -5765,6 +5765,7 @@ export type TierDataFragment = { id: string, tierId: number, price: bigint, enco
 
 export type NfTsQueryVariables = Exact<{
   where?: InputMaybe<Nft_Filter>;
+  orderBy?: InputMaybe<Nft_OrderBy>;
 }>;
 
 
@@ -6732,8 +6733,8 @@ export type DecorateBannyEventsLazyQueryHookResult = ReturnType<typeof useDecora
 export type DecorateBannyEventsSuspenseQueryHookResult = ReturnType<typeof useDecorateBannyEventsSuspenseQuery>;
 export type DecorateBannyEventsQueryResult = Apollo.QueryResult<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>;
 export const NfTsDocument = gql`
-    query NFTs($where: NFT_filter) {
-  nfts(where: $where) {
+    query NFTs($where: NFT_filter, $orderBy: NFT_orderBy) {
+  nfts(where: $where, orderBy: $orderBy) {
     tokenId
     owner {
       address
@@ -6763,6 +6764,7 @@ export const NfTsDocument = gql`
  * const { data, loading, error } = useNfTsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */

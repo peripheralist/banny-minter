@@ -44,11 +44,11 @@ export const config = createConfig({
   transports: {
     [mainnet.id]: http(transportUrl("mainnet")),
     [sepolia.id]: http(transportUrl("sepolia")),
-    [optimism.id]: http(transportUrl("optimism")),
+    [optimism.id]: http(transportUrl("optimism-mainnet")),
     [optimismSepolia.id]: http(transportUrl("optimism-sepolia")),
-    [base.id]: http(transportUrl("base")),
+    [base.id]: http(transportUrl("base-mainnet")),
     [baseSepolia.id]: http(transportUrl("base-sepolia")),
-    [arbitrum.id]: http(transportUrl("arbitrum")),
+    [arbitrum.id]: http(transportUrl("arbitrum-mainnet")),
     [arbitrumSepolia.id]: http(transportUrl("arbitrum-sepolia")),
   },
 });
