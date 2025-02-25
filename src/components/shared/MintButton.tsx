@@ -93,7 +93,7 @@ export default function MintButton() {
 
             <p style={{ fontSize: FONT_SIZE.sm }}>
               Payments go to the{" "}
-              <Link href={`https://www.revnet.app/eth:4`} target="blank">
+              <Link href={`https://app.revnet.eth.sucks/eth:4`} target="blank">
                 $BAN Revnet
               </Link>{" "}
               earning $BAN in return.
@@ -127,7 +127,10 @@ export default function MintButton() {
                 }}
               >
                 Earn:
-                <Link href={`https://www.revnet.app/eth:4`} target="blank">
+                <Link
+                  href={`https://app.revnet.eth.sucks/eth:4`}
+                  target="blank"
+                >
                   {(formattedPayerTokens ?? "--").toString()} $BAN
                 </Link>
               </div>

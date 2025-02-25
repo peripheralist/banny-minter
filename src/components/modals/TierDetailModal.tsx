@@ -34,6 +34,11 @@ export default function TierDetailModal() {
     return allTiers?.find((t) => t.tierId === tierId);
   }, [allTiers, router]);
 
+  useEffect(() => {
+    // reset image idx
+    setImgIdx(0);
+  }, [tier]);
+
   // Sets of tiers to equip in preview images
   const previewTierSets = useMemo(() => {
     function generateTiers() {
