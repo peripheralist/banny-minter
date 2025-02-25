@@ -51,7 +51,15 @@ export default function Activity() {
                     flexDirection: "column",
                     padding: 4,
                     gap: 4,
-                    minWidth: isSmallScreen ? undefined : 420,
+                    ...(isSmallScreen
+                      ? {
+                          width: "100%",
+                        }
+                      : {
+                          maxWidth: 540,
+                          minWidth: 400,
+                          width: "30vw",
+                        }),
                   }}
                 >
                   {events.map((e) => (

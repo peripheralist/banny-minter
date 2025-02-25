@@ -6,6 +6,7 @@ import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { ActivityEvent } from "@/model/activity";
+import { Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import moment from "moment";
@@ -20,7 +21,8 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
       case "decorate":
         return `Dressed Banny #${event.bannyBodyId.toString()}`;
       case "mint":
-        return `Minted items`;
+        const items = event.note.split("Minted tiers ")[1].split(", ");
+        return `Minted ${items.length} item${items.length > 1 ? "s" : ""}`;
     }
   }, [event]);
 
@@ -58,14 +60,46 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
           .split(", ")
           .map((str) => parseInt(str));
 
-        const _tiers = tiers?.filter((t) => tierIds.includes(t.tierId));
+        const _tiers = tierIds.reduce((acc, tierId) => {
+          if (acc.some((t) => t.tier.tierId === tierId)) {
+            return acc.map((t) =>
+              t.tier.tierId === tierId
+                ? { tier: t.tier, quantity: t.quantity + 1 }
+                : t
+            );
+          }
+
+          const tier = tiers?.find((t) => t.tierId === tierId);
+
+          if (tier) {
+            return [...acc, { tier, quantity: 1 }];
+          }
+
+          return acc;
+        }, [] as { tier: Tier; quantity: number }[]);
 
         if (!_tiers) return "...";
 
         return (
-          <div style={{ display: "flex", gap: 4 }}>
-            {_tiers.map((t) => (
-              <TierImage key={t.tierId} tier={t} size={imgSize} />
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+            {_tiers.map(({ tier, quantity }) => (
+              <div key={tier.tierId} style={{ position: "relative" }}>
+                <TierImage tier={tier} size={imgSize} />
+
+                {quantity > 1 && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      fontSize: FONT_SIZE.xs,
+                      background: "white",
+                    }}
+                  >
+                    x{quantity}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         );
@@ -154,7 +188,9 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
 
       <Title />
 
-      <Body />
+      <div style={{ maxWidth: "100%", overflow: "auto" }}>
+        <Body />
+      </div>
     </ButtonPad>
   );
 }

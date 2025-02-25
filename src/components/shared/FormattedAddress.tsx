@@ -37,7 +37,7 @@ export default function FormattedAddress({
             color: "white",
             padding: "4px 8px",
             zIndex: 999,
-            fontSize: FONT_SIZE.sm,
+            fontSize: FONT_SIZE.xs,
             userSelect: "all",
           }}
         >
