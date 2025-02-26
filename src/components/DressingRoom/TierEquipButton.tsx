@@ -30,6 +30,7 @@ export default function TierEquipButton({
           display: "flex",
           flexDirection: "column",
           gap: 4,
+          padding: 12,
           fontSize: FONT_SIZE.md,
           ...labelStyle,
         }}
@@ -58,14 +59,14 @@ export default function TierEquipButton({
       }
     >
       <div>
-        <div style={{ marginBottom: 12, pointerEvents: "none" }}>
+        <div style={{ pointerEvents: "none" }}>
           <FuzzMoment
             width={size - 16}
             height={size - 16}
             fill={"white"}
             style={{ zIndex: 2, position: "absolute", margin: 8 }}
           />
-          <TierImage tier={tier} size={size - 36} />
+          <TierImage tier={tier} size={size} />
         </div>
 
         <Label />

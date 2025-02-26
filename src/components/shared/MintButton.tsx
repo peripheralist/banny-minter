@@ -3,6 +3,7 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { EquipmentContext } from "@/contexts/equipmentContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { WalletContext } from "@/contexts/walletContext";
+import { useAppChain } from "@/hooks/useAppChain";
 import { useMint } from "@/hooks/writeContract/useMint";
 import { FixedInt } from "fpnum";
 import { formatEther, getTokenAToBQuote } from "juice-sdk-core";
@@ -12,11 +13,10 @@ import { useCallback, useContext, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 import BagItems from "./BagItems";
 import ButtonPad from "./ButtonPad";
-import Modal from "./Modal";
-import TransactionPending from "./TransactionPending";
-import { useAppChain } from "@/hooks/useAppChain";
 import FormattedAddress from "./FormattedAddress";
+import Modal from "./Modal";
 import RoundedFrame from "./RoundedFrame";
+import TransactionPending from "./TransactionPending";
 
 export default function MintButton() {
   const [isConfirming, setIsConfirming] = useState(false);
@@ -127,12 +127,7 @@ export default function MintButton() {
                 }}
               >
                 Earn:
-                <Link
-                  href={`https://app.revnet.eth.sucks/eth:4`}
-                  target="blank"
-                >
-                  {(formattedPayerTokens ?? "--").toString()} $BAN
-                </Link>
+                <span>{(formattedPayerTokens ?? "--").toString()} $BAN</span>
               </div>
 
               <div
@@ -143,11 +138,7 @@ export default function MintButton() {
                 }}
               >
                 Wallet:
-                <FormattedAddress
-                  address={address}
-                  position="left"
-                  style={{ color: COLORS.blue500 }}
-                />
+                <FormattedAddress address={address} position="left" />
               </div>
 
               <div
@@ -158,7 +149,7 @@ export default function MintButton() {
                 }}
               >
                 Network:
-                <div>{appChain.name}</div>
+                <div style={{ color: COLORS.blue500 }}>{appChain.name}</div>
               </div>
             </RoundedFrame>
           </div>

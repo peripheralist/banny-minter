@@ -121,7 +121,7 @@ export default function Modal({
             minWidth: 320,
             width: size === "sm" ? 560 : undefined,
             maxWidth: "calc(100vw - 144px)",
-            maxHeight: `calc(100vh - ${footerHeight + 48}px)`,
+            maxHeight: `calc(100vh - ${footerHeight + 36}px)`,
             padding: 48,
             overflow: "auto",
           }}

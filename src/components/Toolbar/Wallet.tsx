@@ -33,10 +33,10 @@ export default function Wallet() {
 
       return (
         <RoundedFrame
-          background={active ? COLORS.pinkLite : "white"}
-          borderColor={active ? COLORS.pink : undefined}
+          background={active ? COLORS.blue50 : "white"}
+          borderColor={active ? COLORS.blue400 : COLORS.blue100}
           style={{
-            ...(active ? { color: COLORS.pink } : { color: "black" }),
+            color: COLORS.blue600,
             cursor: address ? "pointer" : "default",
             whiteSpace: "pre",
             overflow: "hidden",
@@ -61,8 +61,8 @@ export default function Wallet() {
     <div>
       <div>
         <RoundedFrame
-          background={COLORS.pinkLite}
-          borderColor={COLORS.pink}
+          background={COLORS.blue50}
+          borderColor={COLORS.blue400}
           containerStyle={{ paddingBottom: 12, marginBottom: -20 }}
         >
           {wrongNetwork ? (
@@ -74,7 +74,7 @@ export default function Wallet() {
                 color: "#f42",
                 fontWeight: "bold",
                 fontSize: FONT_SIZE.xs,
-                padding: 8,
+                padding: 12,
                 cursor: "pointer",
               }}
               onClick={() => switchChain({ chainId: appChain.id })}
@@ -84,8 +84,8 @@ export default function Wallet() {
           ) : (
             <div
               style={{
-                color: COLORS.pink,
-                padding: 8,
+                color: COLORS.blue600,
+                padding: 12,
                 textAlign: "center",
                 fontSize: FONT_SIZE.sm,
                 overflow: "hidden",

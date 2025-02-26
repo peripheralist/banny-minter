@@ -7,9 +7,9 @@ import TierShopButton from "@/components/shared/TierShopButton";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORY_IDS } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
+import { BAN_HOOK } from "@/constants/contracts";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { BAN_HOOK } from "@/constants/contracts";
 import { ShopContext } from "@/contexts/shopContext";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
@@ -134,7 +134,7 @@ export default function Drop() {
                               }
                               onClick={() => {
                                 router.push(
-                                  router.asPath + `?tier=${t.tierId}`,
+                                  router.asPath + `?item=${t.tierId}`,
                                   undefined,
                                   {
                                     shallow: true,
@@ -237,7 +237,7 @@ export default function Drop() {
                           buttonSize={imgSize}
                           onClick={() => {
                             router.push(
-                              router.asPath + `?tier=${t.tierId}`,
+                              router.asPath + `?item=${t.tierId}`,
                               undefined,
                               {
                                 shallow: true,

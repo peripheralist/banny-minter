@@ -27,7 +27,7 @@ export default function TierDetailModal() {
   const router = useRouter();
 
   const tier = useMemo(() => {
-    const tierId = parseInt(router.query.tier as string);
+    const tierId = parseInt(router.query.item as string);
 
     if (!tierId || isNaN(tierId)) return;
 
@@ -99,9 +99,9 @@ export default function TierDetailModal() {
   }, [imgIdx]);
 
   const onClose = useCallback(() => {
-    if (!router.query.tier) return;
+    if (!router.query.item) return;
 
-    const newPath = router.asPath.split("?tier=")[0];
+    const newPath = router.asPath.split("?item=")[0];
     router.replace(newPath, undefined, { shallow: true });
   }, [router]);
 
