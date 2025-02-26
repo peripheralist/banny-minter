@@ -111,7 +111,7 @@ export default function TierShopButton({
           flexDirection: "column",
           justifyContent: "space-between",
           height: "100%",
-          gap: 12,
+          gap: 8,
         }}
         onClick={onClick}
       >

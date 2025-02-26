@@ -42,7 +42,7 @@ export default function Activity() {
 
     if (width > 800) return 400;
 
-    return Math.max(width / 2 - 6, 200);
+    return Math.max(width / 2 - 10, 200);
   }, [isSmallScreen, width]);
 
   return (
@@ -82,6 +82,17 @@ export default function Activity() {
                       event={e}
                     />
                   ))}
+
+                  <div
+                    style={{
+                      padding: 24,
+                      textAlign: "center",
+                      opacity: 0.5,
+                      fontSize: FONT_SIZE.sm,
+                    }}
+                  >
+                    That{`'`}s everything
+                  </div>
                 </div>
               ),
             },
@@ -93,7 +104,7 @@ export default function Activity() {
               content: (
                 <div
                   ref={measuredRef}
-                  style={{ flex: 1, padding: 4, overflow: "auto" }}
+                  style={{ flex: 1, padding: 8, overflow: "auto" }}
                 >
                   <div
                     style={{

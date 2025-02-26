@@ -51,7 +51,7 @@ export default function BagItems({ canRemove }: { canRemove?: boolean }) {
                         : "black"
                     }
                     background={"white"}
-                    style={{ pointerEvents: "none" }}
+                    style={{ pointerEvents: "none", padding: 4 }}
                   >
                     <TierImage size={56} tier={tier} />
                   </RoundedFrame>

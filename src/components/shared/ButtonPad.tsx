@@ -82,7 +82,7 @@ export default function ButtonPad({
       role="button"
       onClick={_onClick}
     >
-      {shadowDepth > 0 && !disabled && (
+      {shadowDepth > 0 && (
         <LayerBg
           fill={fillBg ?? (clicked || pressed ? "#000000aa" : "#00000064")}
           style={{
