@@ -1,7 +1,14 @@
 import { COLORS } from "@/constants/colors";
+import { ModalContext } from "@/contexts/modalContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import {
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+} from "react";
 import ButtonPad from "./ButtonPad";
 import RoundedFrame from "./RoundedFrame";
 
@@ -17,29 +24,11 @@ export default function Modal({
   open?: boolean;
   onClose?: VoidFunction;
 }>) {
-  const [isOpen, setIsOpen] = useState<boolean>();
+  const id = useId();
+
+  const { openModal, closeModal } = useContext(ModalContext);
 
   const { isSmallScreen } = useWindowSize();
-
-  useEffect(() => setIsOpen(open), [open]);
-
-  const _onClose = useCallback(() => {
-    setIsOpen(false);
-    onClose?.();
-  }, [onClose]);
-
-  useEffect(() => {
-    const fn = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        _onClose();
-        setIsOpen(false);
-      }
-    };
-
-    window.addEventListener("keyup", fn);
-
-    return () => window.removeEventListener("keyup", fn);
-  }, [_onClose]);
 
   const { measuredRef: footerRef, height: footerHeight } = useMeasuredRef();
 
@@ -66,7 +55,7 @@ export default function Modal({
   const CloseButton = useCallback(
     () => (
       <ButtonPad
-        onClick={_onClose}
+        onClick={() => closeModal?.(id)}
         fillFg={"white"}
         shadow="sm"
         style={{ padding: 12, minWidth: 240 }}
@@ -74,7 +63,7 @@ export default function Modal({
         Close
       </ButtonPad>
     ),
-    [_onClose]
+    [onClose, closeModal, id]
   );
 
   const _Modal = useCallback(() => {
@@ -138,7 +127,7 @@ export default function Modal({
             gap: 8,
             marginTop: 8,
             zIndex: 999,
-            pointerEvents: 'visiblePainted'
+            pointerEvents: "visiblePainted",
           }}
         >
           <CloseButton />
@@ -158,37 +147,15 @@ export default function Modal({
     action,
   ]);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (open) {
+      openModal?.({
+        id,
+        onClose,
+        modal: <_Modal />,
+      });
+    }
+  }, [open, openModal, onClose, id, _Modal]);
 
-  const shadowColor = `#000000aa`;
-
-  return (
-    <div // backdrop
-      style={{
-        position: "fixed",
-        inset: 0,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: isSmallScreen ? "flex-end" : "center",
-        width: "100vw",
-        height: "100vh",
-        zIndex: 999,
-        background: shadowColor,
-        overflow: "auto",
-      }}
-      onClick={_onClose}
-    >
-      <div
-        style={{
-          zIndex: 999,
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <_Modal />
-      </div>
-    </div>
-  );
+  return null;
 }

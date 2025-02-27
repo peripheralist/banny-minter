@@ -15,6 +15,7 @@ import { config } from "../../config.wagmi";
 import TierDetailModal from "@/components/modals/TierDetailModal";
 import NFTDetailModal from "@/components/modals/NFTDetailModal";
 import StoreSVGsModal from "@/components/modals/StoreSVGsModal";
+import ModalContextProvider from "@/contexts/ModalContextProvider";
 
 const queryClient = new QueryClient();
 
@@ -23,21 +24,23 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <WagmiProvider config={config}>
         <LooksApolloProvider>
-          <AlertContextProvider>
-            <LooksJBProvider>
-              <WalletContextProvider>
-                <_EquipmentContextProvider>
-                  <ShopContextProvider>
-                    <Component {...pageProps} />
+          <ModalContextProvider>
+            <AlertContextProvider>
+              <LooksJBProvider>
+                <WalletContextProvider>
+                  <_EquipmentContextProvider>
+                    <ShopContextProvider>
+                      <Component {...pageProps} />
 
-                    <TierDetailModal />
-                    <NFTDetailModal />
-                    <StoreSVGsModal />
-                  </ShopContextProvider>
-                </_EquipmentContextProvider>
-              </WalletContextProvider>
-            </LooksJBProvider>
-          </AlertContextProvider>
+                      <TierDetailModal />
+                      <NFTDetailModal />
+                      <StoreSVGsModal />
+                    </ShopContextProvider>
+                  </_EquipmentContextProvider>
+                </WalletContextProvider>
+              </LooksJBProvider>
+            </AlertContextProvider>
+          </ModalContextProvider>
         </LooksApolloProvider>
       </WagmiProvider>
     </QueryClientProvider>
