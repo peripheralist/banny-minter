@@ -30,7 +30,7 @@ export default function TierEquipButton({
           display: "flex",
           flexDirection: "column",
           gap: 4,
-          padding: 12,
+          padding: 16,
           fontSize: FONT_SIZE.md,
           ...labelStyle,
         }}

@@ -17,6 +17,8 @@ export default function SmallView({ tokenId }: { tokenId: bigint }) {
 
   const { measuredRef: previewRef, width: previewWidth } = useMeasuredRef();
 
+  const buttonWidth = 180;
+
   if (!availableTiers) return <FullscreenLoading />;
 
   return (
@@ -38,7 +40,7 @@ export default function SmallView({ tokenId }: { tokenId: bigint }) {
                   }}
                 >
                   <EquippedTiersPreview
-                    size={previewWidth - 24}
+                    size={previewWidth}
                     equipped={equipped}
                     equippingCategory={equippingCategory}
                     unequippingCategory={unequippingCategory}
@@ -73,7 +75,7 @@ export default function SmallView({ tokenId }: { tokenId: bigint }) {
                       >
                         <RoundedFrame
                           background={"black"}
-                          containerStyle={{ height: 24, width: 120 }}
+                          containerStyle={{ height: 24, width: buttonWidth }}
                           style={{
                             color: COLORS.banana100,
                             textTransform: "uppercase",
@@ -89,7 +91,7 @@ export default function SmallView({ tokenId }: { tokenId: bigint }) {
                           display: "flex",
                           gap: 4,
                           marginTop: 32,
-                          marginRight: 120,
+                          marginRight: "50%",
                         }}
                       >
                         {groupTiers.length
@@ -97,13 +99,11 @@ export default function SmallView({ tokenId }: { tokenId: bigint }) {
                               <TierEquipButton
                                 key={t.tierId}
                                 tier={t}
-                                size={180}
+                                size={buttonWidth}
                                 labelStyle={{
                                   fontSize: FONT_SIZE.xs,
                                   whiteSpace: "pre",
-                                  paddingLeft: 4,
-                                  paddingRight: 4,
-                                  paddingBottom: 4,
+                                  padding: 12,
                                 }}
                               />
                             ))

@@ -5,7 +5,6 @@ import { useContext, useMemo } from "react";
 import { CategoryGroupGrid } from "../shared/CategoryGroupGrid";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import FullscreenLoading from "../shared/FullscreenLoading";
-import RoundedFrame from "../shared/RoundedFrame";
 import ToolbarBagView from "../shared/ToolbarBagView";
 import DecorateButton from "./DecorateButton";
 import TierEquipButton from "./TierEquipButton";
@@ -14,15 +13,6 @@ import TierEquipButton from "./TierEquipButton";
 export default function LargeView({ tokenId }: { tokenId: bigint }) {
   const { availableTiers, equipped, equippingCategory, unequippingCategory } =
     useContext(EquipmentContext);
-
-  const { measuredRef: previewRef, width: previewWidth } = useMeasuredRef();
-
-  const { width, isSmallScreen } = useWindowSize();
-
-  const imgSize = useMemo(
-    () => (isSmallScreen ? (width ? (width - 32) / 2 : 320) : 240),
-    [isSmallScreen, width]
-  );
 
   if (!availableTiers) return <FullscreenLoading />;
 
@@ -51,10 +41,10 @@ export default function LargeView({ tokenId }: { tokenId: bigint }) {
               emptyText="None owned"
               items={availableTiers}
               render={(t) => (
-                <TierEquipButton key={t.tierId} tier={t} size={imgSize} />
+                <TierEquipButton key={t.tierId} tier={t} size={180} />
               )}
               gridStyle={{
-                gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
+                gridTemplateColumns: `repeat(auto-fit, ${180}px)`,
                 gap: 4,
               }}
               excludeGroups={["banny"]}
@@ -74,30 +64,28 @@ export default function LargeView({ tokenId }: { tokenId: bigint }) {
                 justifyContent: "flex-end",
                 margin: -4,
                 height: "100%",
-                minWidth: 400,
+                minWidth: 440,
                 maxWidth: "30vw",
+                background: "white",
               }}
             >
-              <div style={{ display: "flex", flex: 1 }} ref={previewRef}>
-                <RoundedFrame
-                  shadow
-                  background={"white"}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <EquippedTiersPreview
-                    size={previewWidth - 24}
-                    equipped={equipped}
-                    equippingCategory={equippingCategory}
-                    unequippingCategory={unequippingCategory}
-                  />
-                </RoundedFrame>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flex: 1,
+                }}
+              >
+                <EquippedTiersPreview
+                  size={400}
+                  equipped={equipped}
+                  equippingCategory={equippingCategory}
+                  unequippingCategory={unequippingCategory}
+                />
               </div>
 
-              <div style={{ margin: 8 }}>
+              <div style={{ margin: 12 }}>
                 <DecorateButton />
               </div>
             </div>
