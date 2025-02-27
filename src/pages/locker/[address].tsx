@@ -113,7 +113,7 @@ export default function Index() {
                       category: categoryOfId[nft.category],
                     }))}
                     gridStyle={{
-                      gridTemplateColumns: `repeat(auto-fit, ${imgSize + 2}px)`,
+                      gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
                       gap: 4,
                     }}
                     emptyText="None owned"
@@ -130,23 +130,22 @@ export default function Index() {
                             flexDirection: "column",
                             justifyContent: "space-between",
                             gap: 4,
-                            paddingTop: 8,
                           }}
                           shadow="sm"
                         >
                           <div style={{ pointerEvents: "none" }}>
                             {nft.category === "body" ? (
                               <DressedBannyNftImage
-                                size={imgSize - 16}
                                 nft={{
                                   ...nft,
                                   category: CATEGORY_IDS[nft.category],
                                 }}
+                                size={imgSize}
                               />
                             ) : (
                               <TierImage
                                 tier={parseTier(nft.tier)}
-                                size={imgSize - 16}
+                                size={imgSize}
                               />
                             )}
                           </div>
@@ -174,7 +173,7 @@ export default function Index() {
                               style={{ width: "100%" }}
                             >
                               <ButtonPad
-                                containerStyle={{ marginBottom: 4 }}
+                                containerStyle={{ margin: 4, marginBottom: 8 }}
                                 style={{ padding: 8 }}
                                 shadow="sm"
                               >

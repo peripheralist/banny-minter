@@ -94,49 +94,51 @@ export default function TierShopButton({
     <ButtonPad
       fillFg={"white"}
       fillBorder={"white"}
-      style={{ opacity: isSoldOut ? 0.7 : 1, cursor: "default" }}
+      style={{
+        opacity: isSoldOut ? 0.7 : 1,
+        cursor: "default",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        gap: 8,
+      }}
       shadow="sm"
       disabled
     >
-      <div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            height: "100%",
-            paddingBottom: 8,
-            gap: 12,
-          }}
-          onClick={onClick}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
+          gap: 8,
+        }}
+        onClick={onClick}
+      >
+        <div style={{ pointerEvents: "none", marginTop: 12 }}>
+          <FuzzMoment
+            width={buttonSize - 16}
+            height={buttonSize - 16}
+            fill={"white"}
+            style={{ zIndex: 2, position: "absolute", margin: 8 }}
+          />
+          <TierImage tier={tier} size={buttonSize - 16} />
+        </div>
+
+        <Label />
+      </div>
+
+      <div style={{ width: "calc(100% - 16px)" }} {...hoverProps}>
+        <ButtonPad
+          style={{ padding: 8, color: COLORS.pink }}
+          fillFg={added ? COLORS.pinkLite : "white"}
+          fillBorder={added ? COLORS.pink : isHover ? "#000000aa" : "#00000064"}
+          containerStyle={{ marginBottom: 8, width: "100%" }}
+          onClick={onClickAdd}
+          shadow="sm"
         >
-          <div style={{ pointerEvents: "none", marginTop: 8 }}>
-            <FuzzMoment
-              width={buttonSize - 16}
-              height={buttonSize - 16}
-              fill={"white"}
-              style={{ zIndex: 2, position: "absolute", margin: 8 }}
-            />
-            <TierImage tier={tier} size={buttonSize - 16} />
-          </div>
-
-          <Label />
-        </div>
-
-        <div {...hoverProps}>
-          <ButtonPad
-            style={{ padding: 8, color: COLORS.pink }}
-            fillFg={added ? COLORS.pinkLite : "white"}
-            fillBorder={
-              added ? COLORS.pink : isHover ? "#000000aa" : "#00000064"
-            }
-            containerStyle={{ marginBottom: 4, width: "100%" }}
-            onClick={onClickAdd}
-            shadow="sm"
-          >
-            {added ? "Added" : `Add Ξ${formatEther(tier.price)}`}
-          </ButtonPad>
-        </div>
+          {added ? "Added" : `Add Ξ${formatEther(tier.price)}`}
+        </ButtonPad>
       </div>
     </ButtonPad>
   );

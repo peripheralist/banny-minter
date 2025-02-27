@@ -53,38 +53,14 @@ export default function RoundedFrame({
     >
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100%",
+          position: "absolute",
+          left: borderSize * 3,
+          right: borderSize * 3,
+          bottom: borderSize,
+          top: borderSize,
+          background,
         }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            left: borderSize * 3,
-            right: borderSize * 3,
-            bottom: borderSize,
-            top: borderSize,
-            background,
-            zIndex: 1,
-          }}
-        />
-
-        <div
-          style={{
-            zIndex: 1,
-            padding: 4,
-            boxSizing: "border-box",
-            width: "100%",
-            height: "100%",
-            ...style,
-          }}
-          ref={contentRef}
-        >
-          {children}
-        </div>
-      </div>
+      />
 
       {/* top */}
       <div
@@ -95,7 +71,6 @@ export default function RoundedFrame({
           right: 12,
           height: 4,
           background: _borderColor,
-          zIndex: 1,
         }}
       />
 
@@ -108,7 +83,6 @@ export default function RoundedFrame({
           right: 12,
           height: 4,
           background: _borderColor,
-          zIndex: 1,
         }}
       />
 
@@ -132,7 +106,6 @@ export default function RoundedFrame({
               background: _borderColor,
               width: 4,
               float: "left",
-              zIndex: 1,
             }}
           />
           <div
@@ -176,12 +149,50 @@ export default function RoundedFrame({
               background: _borderColor,
               width: 4,
               float: "right",
-              zIndex: 1,
             }}
           />
         </div>
 
         <Corner _style={{ transform: "scale(-1, -1)" }} />
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+        }}
+      >
+        <div
+          style={{
+            boxSizing: "border-box",
+            width: "100%",
+            height: "100%",
+            zIndex: 1,
+            clipPath: `polygon(
+            4px 8px,
+            8px 8px,
+            8px 4px,
+
+            calc(100% - 8px) 4px,
+            calc(100% - 8px) 8px,
+            calc(100% - 4px) 8px,
+
+            calc(100% - 4px) calc(100% - 8px),
+            calc(100% - 8px) calc(100% - 8px),
+            calc(100% - 8px) calc(100% - 4px),
+
+            8px calc(100% - 4px),
+            8px calc(100% - 8px),
+            4px calc(100% - 8px)
+            )`,
+            ...style,
+          }}
+          ref={contentRef}
+        >
+          {children}
+        </div>
       </div>
 
       {shadow && (

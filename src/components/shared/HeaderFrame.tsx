@@ -32,8 +32,9 @@ export default function HeaderFrame({
           <h4
             style={{
               textTransform: "uppercase",
-              padding: "4px 12px",
+              padding: "8px 16px",
               color: COLORS.banana200,
+              width: "100%",
             }}
           >
             {header}

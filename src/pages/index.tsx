@@ -168,7 +168,13 @@ export default function Home() {
               Shop Drops for limited edition Bannys and outfits.
             </NumberedText>
             <NumberedText n={2}>Style Bannys in your locker.</NumberedText>
-            <NumberedText n={3}>$BAN everything.</NumberedText>
+            <NumberedText n={3}>
+              Co-own{" "}
+              <Link href={`https://app.revnet.eth.sucks/eth:4`} target="blank">
+                $BAN
+              </Link>
+              .
+            </NumberedText>
           </div>
         </div>
 

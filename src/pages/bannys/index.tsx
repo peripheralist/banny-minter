@@ -61,7 +61,7 @@ export default function Index() {
                     like.
                     <br />
                     <br />
-                    Transferring a Banny will also transfer the rights to every
+                    Transferring a Banny will also transfer ownership rights to every
                     worn item.
                   </p>
 
@@ -76,7 +76,7 @@ export default function Index() {
                           buttonSize={imgSize}
                           onClick={() => {
                             router.push(
-                              router.asPath + `?tier=${t.tierId}`,
+                              router.asPath + `?item=${t.tierId}`,
                               undefined,
                               {
                                 shallow: true,

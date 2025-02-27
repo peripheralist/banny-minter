@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { useMemo } from "react";
 import ActivityEventElem from "./ActivityEventElem";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 
 export default function Activity() {
   const { data: multichainBannys } = useMultichainBannyNFTs();
@@ -32,10 +33,16 @@ export default function Activity() {
 
   const { events } = useAllActivity();
 
-  const { width, isSmallScreen } = useWindowSize();
+  const { isSmallScreen } = useWindowSize();
+
+  const { measuredRef, width } = useMeasuredRef();
 
   const imgSize = useMemo(() => {
-    return isSmallScreen ? width - 40 : 240;
+    if (isSmallScreen) return width - 40;
+
+    if (width > 800) return 400;
+
+    return Math.max(width / 2 - 10, 200);
   }, [isSmallScreen, width]);
 
   return (
@@ -75,6 +82,17 @@ export default function Activity() {
                       event={e}
                     />
                   ))}
+
+                  <div
+                    style={{
+                      padding: 24,
+                      textAlign: "center",
+                      opacity: 0.5,
+                      fontSize: FONT_SIZE.sm,
+                    }}
+                  >
+                    That{`'`}s everything
+                  </div>
                 </div>
               ),
             },
@@ -84,7 +102,10 @@ export default function Activity() {
                 flex: 1,
               },
               content: (
-                <div style={{ flex: 1, padding: 4, overflow: "auto" }}>
+                <div
+                  ref={measuredRef}
+                  style={{ flex: 1, padding: 8, overflow: "auto" }}
+                >
                   <div
                     style={{
                       display: "grid",
@@ -103,15 +124,10 @@ export default function Activity() {
                         <RoundedFrame
                           borderColor="white"
                           background={"white"}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            pointerEvents: "none",
-                          }}
+                          style={{ pointerEvents: "none" }}
                           containerStyle={{ height: imgSize, width: imgSize }}
                         >
-                          <DressedBannyNftImage nft={nft} size={imgSize - 8} />
+                          <DressedBannyNftImage nft={nft} size={imgSize} />
                           <div
                             style={{
                               position: "absolute",
