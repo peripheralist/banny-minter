@@ -138,7 +138,7 @@ export default function Modal({
             gap: 8,
             marginTop: 8,
             zIndex: 999,
-            pointerEvents: 'visiblePainted'
+            pointerEvents: "visiblePainted",
           }}
         >
           <CloseButton />
@@ -158,7 +158,9 @@ export default function Modal({
     action,
   ]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   const shadowColor = `#000000aa`;
 
