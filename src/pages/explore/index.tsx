@@ -38,7 +38,7 @@ export default function Activity() {
   const { measuredRef, width } = useMeasuredRef();
 
   const imgSize = useMemo(() => {
-    if (isSmallScreen) return width - 40;
+    if (isSmallScreen) return width - 16;
 
     if (width > 800) return 400;
 
@@ -63,12 +63,10 @@ export default function Activity() {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    padding: 4,
+                    padding: 8,
                     gap: 4,
                     ...(isSmallScreen
-                      ? {
-                          width: "100%",
-                        }
+                      ? {}
                       : {
                           maxWidth: 540,
                           minWidth: 400,
