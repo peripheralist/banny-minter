@@ -7,6 +7,8 @@ export const COLORS = {
   // banana100: "#fce7ae",
   // banana50: "#fef6df",
 
+  gray: "#888",
+
   blue600: "#004de7",
   blue500: "#0056f2",
   blue400: "#4471f6",

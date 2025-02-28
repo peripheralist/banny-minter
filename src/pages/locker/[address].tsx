@@ -92,15 +92,17 @@ export default function Index() {
                   <div
                     style={{
                       display: "flex",
+                      alignItems: "baseline",
                       gap: 8,
                     }}
                   >
-                    <h1>Network:</h1>
+                    <h4>Network:</h4>
                     <ButtonPad
                       shadow="none"
-                      fillFg={COLORS.pink}
+                      fillFg={COLORS.blue50}
+                      fillBorder={COLORS.blue300}
                       onClick={switchChain}
-                      style={{ padding: 8, color: "white" }}
+                      style={{ padding: "8px 16px", color: COLORS.blue600 }}
                     >
                       {appChain.name}
                     </ButtonPad>

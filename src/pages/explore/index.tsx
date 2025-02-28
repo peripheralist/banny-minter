@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import ActivityEventElem from "./ActivityEventElem";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
+import FormattedAddress from "@/components/shared/FormattedAddress";
 
 export default function Activity() {
   const { data: multichainBannys } = useMultichainBannyNFTs();
@@ -128,19 +129,37 @@ export default function Activity() {
                           <DressedBannyNftImage nft={nft} size={imgSize} />
                           <div
                             style={{
+                              display: "flex",
+                              justifyContent: "space-between",
                               position: "absolute",
-                              bottom: 4,
+                              bottom: 0,
                               left: 4,
+                              right: 4,
                               fontSize: FONT_SIZE.xs,
-                              color: COLORS.blue200,
                               textTransform: "uppercase",
-                              background: "white",
-                              padding: 4,
-                              paddingTop: 4,
-                              paddingRight: 4,
                             }}
                           >
-                            {nft.chain.name}
+                            <span
+                              style={{
+                                color: COLORS.blue300,
+                                background: "white",
+                                padding: 4,
+                                paddingBottom: 8,
+                              }}
+                            >
+                              {nft.chain.name}
+                            </span>
+
+                            <span
+                              style={{
+                                color: COLORS.gray,
+                                background: "white",
+                                padding: 4,
+                                paddingBottom: 8,
+                              }}
+                            >
+                              <FormattedAddress address={nft.owner.address} />
+                            </span>
                           </div>
                         </RoundedFrame>
                       </Link>

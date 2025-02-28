@@ -32,7 +32,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
     moment.relativeTimeThreshold("m", 60);
     moment.relativeTimeThreshold("d", 365);
     return (
-      <div style={{ opacity: 0.5 }}>
+      <div style={{ color: COLORS.gray }}>
         {moment(event.timestamp * 1000).fromNow()}
       </div>
     );
@@ -90,10 +90,11 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
                   <div
                     style={{
                       position: "absolute",
-                      top: 0,
+                      top: 4,
                       right: 0,
                       fontSize: FONT_SIZE.xs,
                       background: "white",
+                      color: COLORS.gray,
                     }}
                   >
                     x{quantity}
@@ -108,18 +109,15 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
 
         if (!tiers || !info) return "...";
 
-        const displayLarge = info.outfitIds?.every((tokenId) => {
-          // TODO sloppy way of returning true if banny is NOT wearing a background
-          const tierId = tierIdOfTokenId(tokenId);
-
-          return tiers
+        const displayLarge = info.outfitIds?.every((tokenId) =>
+          // Return true if banny is NOT wearing a background
+          tiers
             .filter((t) => t.category === "background")
-            .every((t) => t.tierId !== tierId);
-        });
+            .every((t) => t.tierId !== tierIdOfTokenId(tokenId))
+        );
 
         const size = imgSize * (displayLarge ? 1.3 : 1);
 
-        // TODO make link to view NFT
         return (
           <Link href={`?nft=${event.chain.id}:${info.tokenId}`}>
             <div
@@ -137,7 +135,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
 
   const Chain = useCallback(
     () => (
-      <div style={{ color: COLORS.blue500 }}>
+      <div style={{ color: COLORS.blue300 }}>
         {event.chain.name.toUpperCase()}
       </div>
     ),

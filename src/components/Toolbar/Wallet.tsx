@@ -94,7 +94,7 @@ export default function Wallet() {
               }}
               onClick={() => setModalIsOpen(true)}
             >
-              {appChain.name}
+              {appChain.name.toUpperCase()}
             </div>
           )}
         </RoundedFrame>
