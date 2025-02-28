@@ -34,7 +34,7 @@ export default function Index() {
                 position: "relative",
                 padding: 48,
                 paddingLeft: 120,
-                paddingTop: 80,
+                paddingTop: 64,
               },
               content: (
                 <div

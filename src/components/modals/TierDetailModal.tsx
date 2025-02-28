@@ -13,7 +13,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 
-const IMG_COUNT = 5;
+const IMG_COUNT = 4;
 
 export default function TierDetailModal() {
   const [imgIdx, setImgIdx] = useState(0);
@@ -187,7 +187,7 @@ export default function TierDetailModal() {
 
             <div
               style={{ cursor: "pointer", height: 80 }}
-              onClick={() => setImgIdx((i) => (i + 1) % IMG_COUNT)}
+              onClick={() => setImgIdx((i) => (i + 1) % (IMG_COUNT + 1))}
             >
               {">"}
             </div>

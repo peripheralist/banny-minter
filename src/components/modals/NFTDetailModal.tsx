@@ -93,7 +93,11 @@ export default function NFTDetailModal() {
           }}
         >
           <div>
-            <RoundedFrame background={"white"} style={{ paddingBottom: 0 }}>
+            <RoundedFrame
+              borderColor="white"
+              background={"white"}
+              style={{ paddingBottom: 0 }}
+            >
               <NftImage />
             </RoundedFrame>
           </div>

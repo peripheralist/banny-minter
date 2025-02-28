@@ -11,6 +11,7 @@ import ButtonPad from "../shared/ButtonPad";
 import FormattedAddress from "../shared/FormattedAddress";
 import Modal from "../shared/Modal";
 import RoundedFrame from "../shared/RoundedFrame";
+import Marquee from "../shared/Marquee";
 
 export default function Wallet() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -94,7 +95,7 @@ export default function Wallet() {
               }}
               onClick={() => setModalIsOpen(true)}
             >
-              {appChain.name.toUpperCase()}
+              <Marquee text={appChain.name} maxLength={14} />
             </div>
           )}
         </RoundedFrame>
@@ -114,7 +115,7 @@ export default function Wallet() {
                   marginBottom: 12,
                 }}
               >
-                <FormattedAddress address={address} />
+                <FormattedAddress address={address} ensMarqueeLength={14} />
               </div>
 
               <ButtonPad

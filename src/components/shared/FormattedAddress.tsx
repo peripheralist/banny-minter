@@ -3,15 +3,18 @@ import { useIsHover } from "@/hooks/useIsHover";
 import { CSSProperties } from "react";
 import { Address } from "viem";
 import { useEnsName } from "wagmi";
+import Marquee from "./Marquee";
 
 export default function FormattedAddress({
   address,
   position,
   style,
+  ensMarqueeLength,
 }: {
   address: Address | undefined;
   position?: "left" | "right";
   style?: CSSProperties;
+  ensMarqueeLength?: number;
 }) {
   const { data: ensName } = useEnsName({ address, chainId: 1 });
 
@@ -22,7 +25,15 @@ export default function FormattedAddress({
   return (
     <div style={{ position: "relative", cursor: "default" }} {...hoverProps}>
       <span style={style}>
-        {ensName ?? `${address.substring(0, 6)}…${address.substring(38)}`}
+        {ensName ? (
+          ensMarqueeLength ? (
+            <Marquee text={ensName} maxLength={ensMarqueeLength} />
+          ) : (
+            ensName
+          )
+        ) : (
+          `${address.substring(0, 6)}…${address.substring(38)}`
+        )}
       </span>
       {isHover && (
         <div

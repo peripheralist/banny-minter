@@ -11,6 +11,7 @@ export function useRouterNftParams(key: string) {
   const { chain, tokenId } = useMemo(() => {
     try {
       const param = router.query[key] as string;
+      if (!param) return { chain: undefined, tokenId: undefined };
 
       const [_chainId, _tokenId] = param.includes(":")
         ? param.split(":")
