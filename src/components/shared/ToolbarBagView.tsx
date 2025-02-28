@@ -4,7 +4,6 @@ import { EquipmentContext } from "@/contexts/equipmentContext";
 import { ShopContext } from "@/contexts/shopContext";
 import useDebounce from "@/hooks/useDebounce";
 import { useLocalStorageState } from "@/hooks/useLocalStorageState";
-import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import dynamic from "next/dynamic";
@@ -161,11 +160,6 @@ function SmallScreenView({
     [windowWidth]
   );
 
-  const { measuredRef: toolbarRef, height: toolbarHeight } = useMeasuredRef(
-    scrollPosition
-    // pass as dependency to ensure height is recalculated on scroll
-  );
-
   return (
     <div
       ref={ref}
@@ -179,15 +173,10 @@ function SmallScreenView({
       <style>{`body{background: ${COLORS.banana100}}`}</style>
 
       <div
-        ref={toolbarRef}
         style={{
           position: "sticky",
-          top: 0,
-          ...(_showHeader ? { maxHeight: 68 } : { maxHeight: 0 }),
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          transition: "max-height 0.1s ease-in",
+          top: _showHeader ? 0 : "-100%",
+          transition: "top .2s ease-in",
           boxSizing: "border-box",
           zIndex: 101,
           background: COLORS.banana100,
@@ -195,41 +184,42 @@ function SmallScreenView({
       >
         <div
           style={{
-            padding: "8px 12px",
-            opacity: _showHeader ? 1 : 0,
-            maxHeight: 40,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <ToolbarIcon />
+          <div
+            style={{
+              padding: "8px 12px",
+              opacity: _showHeader ? 1 : 0,
+              maxHeight: 40,
+            }}
+          >
+            <ToolbarIcon />
+          </div>
+
+          <h4
+            style={{ padding: "8px 12px", opacity: _showHeader ? 1 : 0 }}
+            onClick={() => setBagIsOpen(true)}
+          >
+            BAG ({bag.length || 0})
+          </h4>
         </div>
 
-        <h4
-          style={{ padding: "8px 12px", opacity: _showHeader ? 1 : 0 }}
-          onClick={() => setBagIsOpen(true)}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            gap: 24,
+            padding: "10px 12px 8px",
+            background: "black",
+            color: COLORS.banana100,
+            textTransform: "uppercase",
+          }}
         >
-          BAG ({bag.length || 0})
-        </h4>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-          position: "sticky",
-          top: toolbarHeight,
-          padding: "10px 12px 8px",
-          zIndex: 100,
-          background: "black",
-          color: COLORS.banana100,
-          textTransform: "uppercase",
-        }}
-      >
-        <div style={{ display: "flex", gap: 24, overflow: "auto" }}>{Tabs}</div>
-
-        <h4 hidden={_showHeader} onClick={() => setBagIsOpen(true)}>
-          BAG ({bag.length || 0})
-        </h4>
+          {Tabs}
+        </div>
       </div>
 
       <div

@@ -188,7 +188,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
 
       <Title />
 
-      <div style={{ maxWidth: "100%", overflow: "auto" }}>
+      <div style={{ maxWidth: "100%" }}>
         <Body />
       </div>
     </ButtonPad>

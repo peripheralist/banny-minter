@@ -59,6 +59,7 @@ export default function Modal({
         fillFg={"white"}
         shadow="sm"
         style={{ padding: 12, minWidth: 240 }}
+        dimension
       >
         Close
       </ButtonPad>

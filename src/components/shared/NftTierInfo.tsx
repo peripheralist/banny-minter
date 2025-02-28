@@ -73,7 +73,7 @@ export default function NftTierInfo({
         >
           {label}
         </div>
-        <div style={{ flex: 1 }}>{value}</div>
+        <div style={{ flex: 1, maxWidth: 240 }}>{value}</div>
       </div>
     ),
     []

@@ -222,6 +222,7 @@ export default function Home() {
                 height: 56,
                 fontSize: FONT_SIZE.lg,
               }}
+              dimension
             >
               Explore
             </ButtonPad>
@@ -280,6 +281,7 @@ function LockerButton() {
   return (
     <Link href={`/locker/${_address}`}>
       <ButtonPad
+        dimension
         style={{
           padding: "12px 16px",
           height: 56,
