@@ -22,7 +22,7 @@ export default function TierDetailModal() {
 
   const { addItem } = useContext(ShopContext);
 
-  const { width } = useWindowSize();
+  const { width, isSmallScreen } = useWindowSize();
 
   const router = useRouter();
 
@@ -95,8 +95,10 @@ export default function TierDetailModal() {
   const smallImages = useMemo(() => images(80), [images]);
 
   useEffect(() => {
+    if (isSmallScreen) return; // odd behavior on mobile
+
     document.getElementById(`preview-${imgIdx}`)?.scrollIntoView();
-  }, [imgIdx]);
+  }, [imgIdx, isSmallScreen]);
 
   const onClose = useCallback(() => {
     if (!router.query.item) return;

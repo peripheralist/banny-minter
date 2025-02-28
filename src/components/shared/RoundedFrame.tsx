@@ -7,6 +7,24 @@ import {
 } from "react";
 import PixelCorner from "../pixelRenderers/PixelCorner";
 
+const clipPath = `polygon(
+  4px 8px,
+  8px 8px,
+  8px 4px,
+
+  calc(100% - 8px) 4px,
+  calc(100% - 8px) 8px,
+  calc(100% - 4px) 8px,
+
+  calc(100% - 4px) calc(100% - 8px),
+  calc(100% - 8px) calc(100% - 8px),
+  calc(100% - 8px) calc(100% - 4px),
+
+  8px calc(100% - 4px),
+  8px calc(100% - 8px),
+  4px calc(100% - 8px)
+  )`;
+
 export default function RoundedFrame({
   children,
   shadow,
@@ -54,11 +72,9 @@ export default function RoundedFrame({
       <div
         style={{
           position: "absolute",
-          left: borderSize * 3,
-          right: borderSize * 3,
-          bottom: borderSize,
-          top: borderSize,
+          inset: 0,
           background,
+          clipPath,
         }}
       />
 
@@ -108,14 +124,6 @@ export default function RoundedFrame({
               float: "left",
             }}
           />
-          <div
-            style={{
-              height: "100%",
-              background,
-              width: 8,
-              float: "right",
-            }}
-          />
         </div>
 
         <Corner _style={{ transform: "scale(1, -1)" }} />
@@ -135,14 +143,6 @@ export default function RoundedFrame({
         <Corner _style={{ transform: "scale(-1, 1)" }} />
 
         <div style={{ flex: 1 }}>
-          <div
-            style={{
-              float: "left",
-              height: "100%",
-              background,
-              width: 8,
-            }}
-          />
           <div
             style={{
               height: "100%",
@@ -170,23 +170,7 @@ export default function RoundedFrame({
             width: "100%",
             height: "100%",
             zIndex: 1,
-            clipPath: `polygon(
-            4px 8px,
-            8px 8px,
-            8px 4px,
-
-            calc(100% - 8px) 4px,
-            calc(100% - 8px) 8px,
-            calc(100% - 4px) 8px,
-
-            calc(100% - 4px) calc(100% - 8px),
-            calc(100% - 8px) calc(100% - 8px),
-            calc(100% - 8px) calc(100% - 4px),
-
-            8px calc(100% - 4px),
-            8px calc(100% - 8px),
-            4px calc(100% - 8px)
-            )`,
+            clipPath,
             ...style,
           }}
           ref={contentRef}

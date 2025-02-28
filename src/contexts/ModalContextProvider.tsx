@@ -10,9 +10,12 @@ export default function ModalContextProvider({ children }: PropsWithChildren) {
   const { isSmallScreen } = useWindowSize();
 
   const openModal = useCallback((m: ModalConfig) => {
-    setModals((_m) => {
-      if (_m.some(({ id }) => id === m.id)) return _m; // prevent opening twice
-      return [..._m, m];
+    setModals((_modals) => {
+      if (_modals.some(({ id }) => id === m.id)) {
+        // Replace already open modal on re-render
+        return _modals.map((_m) => (_m.id === m.id ? m : _m));
+      }
+      return [..._modals, m];
     });
   }, []);
 
@@ -47,7 +50,7 @@ export default function ModalContextProvider({ children }: PropsWithChildren) {
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
 
-      {modals.length && (
+      {modals.length > 0 ? (
         <div // backdrop
           style={{
             position: "fixed",
@@ -76,7 +79,7 @@ export default function ModalContextProvider({ children }: PropsWithChildren) {
             </div>
           ))}
         </div>
-      )}
+      ) : null}
     </ModalContext.Provider>
   );
 }
