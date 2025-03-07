@@ -114,7 +114,7 @@ export default function Activity() {
                   >
                     {sortedBannys?.map((nft) => (
                       <Link
-                        key={nft.tokenId.toString()}
+                        key={nft.chain.id + "-" + nft.tokenId.toString()}
                         style={{ display: "block" }}
                         href={`${router.asPath}?nft=${
                           nft.chain.id

@@ -155,8 +155,10 @@ export default function Modal({
         onClose,
         modal: <_Modal />,
       });
+    } else {
+      closeModal?.(id);
     }
-  }, [open, openModal, onClose, id, _Modal]);
+  }, [open, openModal, closeModal, onClose, id, _Modal]);
 
   return null;
 }

@@ -70,18 +70,16 @@ export default function NFTDetailModal() {
     router.replace(newPath, undefined, { shallow: true });
   }, [router]);
 
-  if (!nft) return null;
-
   return (
     <Modal
-      open={!!tokenId}
+      open={!!tokenId && !!nft}
       onClose={onClose}
-      action={{
-        onClick: () => {
-          router.push(`/nft/${chain?.id}:${tokenId?.toString()}`);
-        },
-        text: "View page",
-      }}
+      // action={{
+      //   onClick: () => {
+      //     router.push(`/nft/${chain?.id}:${tokenId?.toString()}`);
+      //   },
+      //   text: "View page",
+      // }}
     >
       {nft ? (
         <div
