@@ -59,6 +59,20 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
             )
           : [...b, { tier, quantity: 1 }]
       );
+
+      if (twq) {
+        // twitter tracking
+        twq("event", "tw-p8ahl-p8n57", {
+          contents: [
+            {
+              content_type: tier.category,
+              content_id: tier.tierId,
+              content_name: tier.name,
+              content_price: tier.price.toString(),
+            },
+          ],
+        });
+      }
     },
     [equip, setBag]
   );

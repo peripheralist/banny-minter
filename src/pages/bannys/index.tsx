@@ -61,14 +61,19 @@ export default function Index() {
                     like.
                     <br />
                     <br />
-                    Transferring a Banny will also transfer ownership rights to every
-                    worn item.
+                    Transferring a Banny will also transfer ownership rights to
+                    every worn item.
                   </p>
 
                   <div style={{ width: "100%" }}>
                     <CategoryGroupGrid
                       items={tiers?.filter((t) => t.category === "body")}
-                      excludeGroups={["head", "outfit", "special", "background"]}
+                      excludeGroups={[
+                        "head",
+                        "outfit",
+                        "special",
+                        "background",
+                      ]}
                       render={(t) => (
                         <TierShopButton
                           key={t.tierId}
