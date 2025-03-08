@@ -62,7 +62,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
 
       if (twq) {
         // twitter tracking
-        twq("event", "tw-p8ahl-p8n57", {
+        twq("event", "tw-p8ahl-p8ahp", {
           contents: [
             {
               content_type: tier.category,
