@@ -50,36 +50,35 @@ export default function ModalContextProvider({ children }: PropsWithChildren) {
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
 
-      {modals.length > 0 ? (
-        <div // backdrop
-          style={{
-            position: "fixed",
-            inset: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: isSmallScreen ? "flex-end" : "center",
-            width: "100vw",
-            height: "100vh",
-            zIndex: 999,
-            background: shadowColor,
-            overflow: "auto",
-          }}
-          onClick={closeTopModal}
-        >
-          {modals.map(({ modal }, i) => (
-            <div
-              key={i}
-              style={{ zIndex: 999 }}
-              onClick={(e) => {
-                e.stopPropagation();
+      {modals.length > 0
+        ? modals.map(({ modal }) => (
+            <div // backdrop
+              key={modal.key}
+              style={{
+                position: "fixed",
+                inset: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: isSmallScreen ? "flex-end" : "center",
+                width: "100vw",
+                height: "100vh",
+                zIndex: 999,
+                background: shadowColor,
+                overflow: "auto",
               }}
+              onClick={closeTopModal}
             >
-              {modal}
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                {modal}
+              </div>
             </div>
-          ))}
-        </div>
-      ) : null}
+          ))
+        : null}
     </ModalContext.Provider>
   );
 }

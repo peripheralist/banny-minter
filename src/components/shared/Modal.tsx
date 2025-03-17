@@ -18,13 +18,17 @@ export default function Modal({
   onClose,
   children,
   size,
+  id,
 }: PropsWithChildren<{
   size?: "sm";
   action?: { onClick: VoidFunction; text: string };
   open?: boolean;
   onClose?: VoidFunction;
+  id?: string;
 }>) {
-  const id = useId();
+  const _id = useId();
+
+  const __id = id ?? _id;
 
   const { openModal, closeModal } = useContext(ModalContext);
 
@@ -55,7 +59,7 @@ export default function Modal({
   const CloseButton = useCallback(
     () => (
       <ButtonPad
-        onClick={() => closeModal?.(id)}
+        onClick={() => closeModal?.(__id)}
         fillFg={"white"}
         shadow="sm"
         style={{ padding: 12, minWidth: 240 }}
@@ -64,7 +68,7 @@ export default function Modal({
         Close
       </ButtonPad>
     ),
-    [onClose, closeModal, id]
+    [onClose, closeModal, __id]
   );
 
   const _Modal = useCallback(() => {
@@ -151,14 +155,14 @@ export default function Modal({
   useEffect(() => {
     if (open) {
       openModal?.({
-        id,
+        id: __id,
         onClose,
         modal: <_Modal />,
       });
     } else {
-      closeModal?.(id);
+      closeModal?.(__id);
     }
-  }, [open, openModal, closeModal, onClose, id, _Modal]);
+  }, [open, openModal, closeModal, onClose, __id, _Modal]);
 
   return null;
 }

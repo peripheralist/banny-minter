@@ -66,6 +66,7 @@ export default function MintButton() {
 
     return (
       <Modal
+        id="confirmCheckout"
         open={isConfirming}
         onClose={() => setIsConfirming(false)}
         size="sm"
