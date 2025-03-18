@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 type Context = {
   connect?: VoidFunction;
-  switchChain?: VoidFunction;
+  switchChain?: (chainId?: number) => void;
   wrongNetwork?: boolean;
 };
 

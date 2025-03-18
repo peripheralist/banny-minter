@@ -12,6 +12,7 @@ import FormattedAddress from "../shared/FormattedAddress";
 import Modal from "../shared/Modal";
 import RoundedFrame from "../shared/RoundedFrame";
 import Marquee from "../shared/Marquee";
+import FuzzMoment from "../pixelRenderers/FuzzMoment";
 
 export default function Wallet() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -95,7 +96,13 @@ export default function Wallet() {
               }}
               onClick={() => setModalIsOpen(true)}
             >
-              <Marquee text={appChain.name} maxLength={14} />
+              <FuzzMoment
+                width={124}
+                height={12}
+                fill={COLORS.blue600}
+                dependencies={[appChain]}
+                onFinished={<Marquee text={appChain.name} maxLength={14} />}
+              />
             </div>
           )}
         </RoundedFrame>

@@ -4,6 +4,7 @@ import Fuzz from "./Fuzz";
 export default function FuzzMoment({
   width,
   height,
+  dependencies,
   duration,
   pixelSize,
   fill,
@@ -12,6 +13,7 @@ export default function FuzzMoment({
 }: {
   width: number;
   height: number;
+  dependencies?: unknown[];
   duration?: number;
   pixelSize?: number;
   fill?: CSSProperties["fill"];
@@ -21,10 +23,12 @@ export default function FuzzMoment({
   const [finished, setFinished] = useState<boolean>();
 
   useEffect(() => {
+    setFinished(false);
+
     const id = setTimeout(() => setFinished(true), duration ?? 400);
 
     return () => clearTimeout(id);
-  }, [duration]);
+  }, [duration, ...(dependencies ?? [])]);
 
   if (finished) return onFinished || null;
 

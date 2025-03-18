@@ -5,6 +5,7 @@ import { ITEM_DESCRIPTIONS } from "@/constants/itemDescriptions";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 import { useSupportedChains } from "@/hooks/useSupportedChains";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { Chain } from "@/model/chain";
 import { NFT } from "@/model/nft";
 import { Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
@@ -17,7 +18,6 @@ import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
 import FormattedAddress from "./FormattedAddress";
 import RoundedFrame from "./RoundedFrame";
-import { Chain } from "@/model/chain";
 
 export default function NftTierInfo({
   tier,

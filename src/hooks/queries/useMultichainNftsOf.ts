@@ -1,21 +1,24 @@
 import { BAN_HOOK } from "@/constants/contracts";
 import { NfTsDocument, NfTsQuery } from "@/generated/graphql";
 import { Chain } from "@/model/chain";
+import { Address } from "viem";
 import { useMultichainQuery } from "./useMultichainQuery";
 
-export function useMultichainBannyNFTs() {
+export function useMultichainNftsOf(wallet: Address | undefined) {
   return useMultichainQuery<
     NfTsQuery,
     NfTsQuery["nfts"][number] & {
       chain: Chain;
     }
   >({
-    key: "multichain-bannys",
+    key: `multichain-nfts-${wallet?.toString()}`,
     document: NfTsDocument,
     variables: () => ({
       where: {
         collection: BAN_HOOK.toLowerCase(),
-        category: 0,
+        owner_: {
+          wallet: wallet?.toLowerCase() ?? null,
+        },
       },
     }),
     parse: (r, chain) =>

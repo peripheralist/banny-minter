@@ -14,6 +14,7 @@ export default function WalletContextProvider({ children }: PropsWithChildren) {
   const [connectModalIsOpen, setConnectModalIsOpen] = useState(false);
   const [networksModalIsOpen, setNetworksModalIsOpen] = useState(false);
   const { address, chain: walletChain } = useAccount();
+  const { switchChain } = useSwitchChain();
 
   useEffect(() => {
     // close modal once connected
@@ -26,7 +27,13 @@ export default function WalletContextProvider({ children }: PropsWithChildren) {
     <WalletContext.Provider
       value={{
         connect: () => setConnectModalIsOpen(true),
-        switchChain: () => setNetworksModalIsOpen(true),
+        switchChain: (chainId?: number) => {
+          if (chainId) {
+            switchChain({ chainId });
+          } else {
+            setNetworksModalIsOpen(true);
+          }
+        },
         wrongNetwork: address && !walletChain,
       }}
     >

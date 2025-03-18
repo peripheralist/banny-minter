@@ -2,18 +2,21 @@ import DressingRoom from "@/components/DressingRoom";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import { Category } from "@/constants/category";
 import { BAN_HOOK } from "@/constants/contracts";
+import { AlertContext } from "@/contexts/alertContext";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 import { useOwnedTiers } from "@/hooks/queries/useOwnedTiers";
 import { NFT } from "@/model/nft";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { isAddressEqual } from "viem";
 import { useAccount } from "wagmi";
 
 export default function Index() {
   const { address } = useAccount();
+
+  const { setAlert } = useContext(AlertContext);
 
   const router = useRouter();
 
@@ -45,15 +48,18 @@ export default function Index() {
 
   useEffect(() => {
     if (isOwner === false) {
-      router.push(
-        router.asPath + `?nft=${nft?.tokenId.toString()}`,
-        undefined,
-        {
-          shallow: true,
-        }
-      );
+      if (address) {
+        router.push(`/locker/${address}`);
+      } else {
+        router.push("/explore");
+      }
+
+      setAlert?.({
+        title: "You don't own this Banny!",
+        body: "To dress this Banny, connect the owner's wallet.",
+      });
     }
-  }, [router, nft, isOwner]);
+  }, [router, nft, isOwner, setAlert]);
 
   if (nftsLoading) return <FullscreenLoading />;
 

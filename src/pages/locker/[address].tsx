@@ -9,7 +9,7 @@ import { CATEGORY_IDS, categoryOfId } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { WalletContext } from "@/contexts/walletContext";
-import { useNftsOf } from "@/hooks/queries/useNftsOf";
+import { useMultichainNftsOf } from "@/hooks/queries/useMultichainNftsOf";
 import { useAppChain } from "@/hooks/useAppChain";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { parseTier } from "@/utils/parseTier";
@@ -23,15 +23,15 @@ import { useEnsName } from "wagmi";
 export default function Index() {
   const router = useRouter();
 
-  const { switchChain } = useContext(WalletContext);
-
   const address = router.query.address as Address | undefined;
 
   const { data: ensName } = useEnsName({ address, chainId: 1 });
 
+  const { switchChain } = useContext(WalletContext);
+
   const appChain = useAppChain();
 
-  const { data: nfts, loading, refetch } = useNftsOf(address);
+  const { data: nfts, isLoading, refetch } = useMultichainNftsOf(address);
 
   useEffect(() => {
     refetch();
@@ -66,7 +66,7 @@ export default function Index() {
                 paddingLeft: 136,
                 paddingTop: 16,
               },
-              content: loading ? (
+              content: isLoading ? (
                 <div
                   style={{
                     height: "100%",
@@ -89,28 +89,9 @@ export default function Index() {
                     paddingBottom: 64,
                   }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: 8,
-                    }}
-                  >
-                    <h4>Network:</h4>
-                    <ButtonPad
-                      shadow="none"
-                      fillFg={COLORS.blue50}
-                      fillBorder={COLORS.blue300}
-                      onClick={switchChain}
-                      style={{ padding: "8px 16px", color: COLORS.blue600 }}
-                    >
-                      {appChain.name}
-                    </ButtonPad>
-                  </div>
-
                   <CategoryGroupGrid
                     label
-                    items={nfts?.nfts.map((nft) => ({
+                    items={nfts?.map((nft) => ({
                       ...nft,
                       category: categoryOfId[nft.category],
                     }))}
@@ -120,20 +101,20 @@ export default function Index() {
                     }}
                     emptyText="None owned"
                     render={(nft) => (
-                      <Link
-                        key={nft.tokenId}
-                        href={`${router.asPath}?nft=${nft.tokenId}`}
+                      <ButtonPad
+                        fillBorder="white"
+                        fillFg={"white"}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                          gap: 4,
+                        }}
+                        shadow="sm"
                       >
-                        <ButtonPad
-                          fillBorder="white"
-                          fillFg={"white"}
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
-                            gap: 4,
-                          }}
-                          shadow="sm"
+                        <Link
+                          key={nft.tokenId}
+                          href={`${router.asPath}?nft=${nft.tokenId}`}
                         >
                           <div style={{ pointerEvents: "none" }}>
                             {nft.category === "body" ? (
@@ -163,28 +144,71 @@ export default function Index() {
                           >
                             <div>{parseTier(nft.tier)?.name}</div>
                             <div
-                              style={{ fontSize: FONT_SIZE.xs, opacity: 0.5 }}
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                fontSize: FONT_SIZE.xs,
+                              }}
                             >
-                              #{nft.tokenId.toString()}
+                              <span style={{ opacity: 0.5 }}>
+                                #{nft.tokenId.toString()}
+                              </span>
+                              <span
+                                style={{
+                                  color: COLORS.blue400,
+                                  textTransform: "uppercase",
+                                }}
+                              >
+                                {nft.chain.name}
+                              </span>
                             </div>
                           </div>
+                        </Link>
 
-                          {nft.category === "body" && (
+                        {nft.category === "body" &&
+                          (nft.chain.id === appChain.id ? (
                             <Link
                               href={`/dress/${nft.tokenId.toString()}`}
                               style={{ width: "100%" }}
+                              onClick={(e) => e.stopPropagation()}
                             >
                               <ButtonPad
-                                containerStyle={{ margin: 4, marginBottom: 8 }}
+                                containerStyle={{
+                                  margin: 4,
+                                  marginTop: 0,
+                                  marginBottom: 8,
+                                }}
                                 style={{ padding: 8 }}
                                 shadow="sm"
                               >
                                 Dress
                               </ButtonPad>
                             </Link>
-                          )}
-                        </ButtonPad>
-                      </Link>
+                          ) : (
+                            <div
+                              style={{ width: "100%" }}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <ButtonPad
+                                containerStyle={{
+                                  margin: 4,
+                                  marginTop: 0,
+                                  marginBottom: 8,
+                                }}
+                                style={{
+                                  padding: 8,
+                                  color: COLORS.blue400,
+                                  fontSize: FONT_SIZE.sm,
+                                  lineHeight: 1.4,
+                                }}
+                                shadow="sm"
+                                onClick={() => switchChain?.(nft.chain.id)}
+                              >
+                                Dress on {nft.chain.name}
+                              </ButtonPad>
+                            </div>
+                          ))}
+                      </ButtonPad>
                     )}
                   />
                 </div>
