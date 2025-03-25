@@ -25,7 +25,10 @@ export default function CustomHead({
       />
 
       <meta property="og:type" content="website" />
-      <meta property="og:image" content="/assets/homepage.png" />
+      <meta
+        property="og:image"
+        content="https://retail.banny.eth.sucks/assets/homepage.png"
+      />
 
       <meta
         name="twitter:card"
