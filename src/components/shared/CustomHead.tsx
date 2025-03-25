@@ -7,25 +7,38 @@ export default function CustomHead({
   title?: string;
   description?: string;
 }) {
+  const _title = title ?? "Banny Retail";
+  const _description =
+    description ??
+    "Digital fashion brought to you by Juicebox. Dress your Banny in a curated selection of iconic wearables, with new items available in each Drop.";
+
   return (
     <Head>
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>{_title}</title>
+      <meta name="description" content={_description} key="description" />
 
-      {title && (
-        <>
-          <title>{title}</title>
-          <meta property="og:title" content={title} key="og:title" />
-          <meta property="twitter:title" content={title} key="twitter:title" />
-        </>
-      )}
+      <meta property="og:title" content={_title} key="og:title" />
+      <meta
+        property="og:description"
+        content={_description}
+        key="og:description"
+      />
 
-      {description && (
-        <>
-          <meta name="description" content={description} />
-          <meta property="og:description" content={description} />
-          <meta property="twitter:description" content={description} />
-        </>
-      )}
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="/assets/homepage.png" />
+
+      <meta
+        name="twitter:card"
+        content="summary_large_image"
+        key="twitter:card"
+      />
+      <meta name="twitter:title" content={_title} key="twitter:title" />
+      <meta
+        property="twitter:description"
+        content={_description}
+        key="twitter:description"
+      />
+      <meta property="twitter:image" content="/assets/homepage.png" />
     </Head>
   );
 }
