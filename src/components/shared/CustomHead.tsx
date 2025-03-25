@@ -41,7 +41,10 @@ export default function CustomHead({
         content={_description}
         key="twitter:description"
       />
-      <meta property="twitter:image" content="/assets/homepage.png" />
+      <meta
+        property="twitter:image"
+        content="https://retail.banny.eth.sucks/assets/homepage.png"
+      />
     </Head>
   );
 }
