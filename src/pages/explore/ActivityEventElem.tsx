@@ -1,6 +1,5 @@
 import ButtonPad from "@/components/shared/ButtonPad";
 import FormattedAddress from "@/components/shared/FormattedAddress";
-import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";

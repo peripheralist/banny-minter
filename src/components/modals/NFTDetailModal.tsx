@@ -51,7 +51,7 @@ export default function NFTDetailModal() {
 
   const NftImage = useCallback(() => {
     if (nft?.category === CATEGORY_IDS.body) {
-      return <DressedBannyNftImage nft={nft} size={imgSize} />;
+      return <DressedBannyNftImage nft={nft} size={imgSize} download />;
     }
 
     if (!nft?.tier) {
