@@ -1,12 +1,17 @@
 import { FONT_SIZE } from "@/constants/fontSize";
 import Link from "next/link";
-import { PropsWithChildren } from "react";
+import { CSSProperties, PropsWithChildren } from "react";
 
 export default function Downloadable({
   children,
   downloadHref,
   fileName,
-}: PropsWithChildren<{ downloadHref: string; fileName: string }>) {
+  buttonStyle,
+}: PropsWithChildren<{
+  downloadHref: string;
+  fileName: string;
+  buttonStyle?: CSSProperties;
+}>) {
   return (
     <div style={{ position: "relative" }}>
       {children}
@@ -18,6 +23,7 @@ export default function Downloadable({
           left: 8,
           fontSize: FONT_SIZE.xs,
           background: "white",
+          ...buttonStyle,
         }}
         download={fileName}
         href={downloadHref}

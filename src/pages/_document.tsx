@@ -1,11 +1,14 @@
-import CustomHead from "@/components/shared/CustomHead";
-import { Html, Main, NextScript } from "next/document";
+import { Head, Html, Main, NextScript } from "next/document";
 import Script from "next/script";
+
+const title = "Banny Retail";
+const description =
+  "Digital fashion brought to you by Juicebox. Dress your Banny in a curated selection of iconic wearables, with new items available in each Drop.";
 
 export default function Document() {
   return (
     <Html lang="en">
-      <CustomHead>
+      <Head>
         <link rel="icon" href="/favicon.ico" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,7 +19,39 @@ export default function Document() {
         />
 
         <Script src="/scripts/initTwitterPixel.js" strategy="lazyOnload" />
-      </CustomHead>
+
+        {/* defaults */}
+        <meta name="description" content={description} key="description" />
+
+        <meta property="og:title" content={title} key="og:title" />
+        <meta
+          property="og:description"
+          content={description}
+          key="og:description"
+        />
+
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://retail.banny.eth.sucks/assets/homepage.png"
+        />
+
+        <meta
+          name="twitter:card"
+          content="summary_large_image"
+          key="twitter:card"
+        />
+        <meta name="twitter:title" content={title} key="twitter:title" />
+        <meta
+          property="twitter:description"
+          content={description}
+          key="twitter:description"
+        />
+        <meta
+          property="twitter:image"
+          content="https://retail.banny.eth.sucks/assets/homepage.png"
+        />
+      </Head>
 
       <body>
         <Main />
