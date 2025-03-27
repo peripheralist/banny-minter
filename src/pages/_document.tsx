@@ -1,10 +1,11 @@
-import { Head, Html, Main, NextScript } from "next/document";
+import CustomHead from "@/components/shared/CustomHead";
+import { Html, Main, NextScript } from "next/document";
 import Script from "next/script";
 
 export default function Document() {
   return (
     <Html lang="en">
-      <Head>
+      <CustomHead>
         <link rel="icon" href="/favicon.ico" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,7 +16,7 @@ export default function Document() {
         />
 
         <Script src="/scripts/initTwitterPixel.js" strategy="lazyOnload" />
-      </Head>
+      </CustomHead>
 
       <body>
         <Main />

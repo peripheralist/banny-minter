@@ -1,12 +1,14 @@
 import Head from "next/head";
+import { PropsWithChildren } from "react";
 
 export default function CustomHead({
+  children,
   title,
   description,
-}: {
+}: PropsWithChildren<{
   title?: string;
   description?: string;
-}) {
+}>) {
   const _title = title ?? "Banny Retail";
   const _description =
     description ??
@@ -45,6 +47,8 @@ export default function CustomHead({
         property="twitter:image"
         content="https://retail.banny.eth.sucks/assets/homepage.png"
       />
+
+      {children}
     </Head>
   );
 }
