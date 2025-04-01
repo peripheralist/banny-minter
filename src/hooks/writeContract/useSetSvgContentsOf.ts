@@ -22,16 +22,23 @@ export function useSetSvgContentsOf(
             tiers
               .filter((t) => t.embeddedSvgUrl)
               .map((t) =>
-                axios.get<string>(t.embeddedSvgUrl!).then((res) => ({
-                  tierId: t.tierId,
-                  svg: res.data
-                    // format svg for storing, remove <svg> wrapper
-                    .replace(
-                      `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' fill='none'>`,
-                      ""
+                axios
+                  .get<string>(
+                    t.embeddedSvgUrl!.replace(
+                      "bannyverse.infura-ipfs.io",
+                      "ipfs.io" // bannyverse gateway returning SSL error, issue unclear
                     )
-                    .replace("</svg>", ""),
-                }))
+                  )
+                  .then((res) => ({
+                    tierId: t.tierId,
+                    svg: res.data
+                      // format svg for storing, remove <svg> wrapper
+                      .replace(
+                        `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' fill='none'>`,
+                        ""
+                      )
+                      .replace("</svg>", ""),
+                  }))
               )
           )
         : [],
