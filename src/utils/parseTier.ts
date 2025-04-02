@@ -15,7 +15,10 @@ export const parseTier = (
   if (tier.svg?.includes(imgHref)) {
     // Pre-load images embedded in SVG to ensure they load in browser. May not be necessary.
     let embeddedImageUrl = tier.svg.split(imgHref)[1];
-    embeddedImageUrl = embeddedImageUrl.split('"')[0];
+    embeddedImageUrl = embeddedImageUrl.split('"')[0].replace(
+      "bannyverse.infura-ipfs.io",
+      "ipfs.io" // bannyverse gateway returning SSL error, issue unclear
+    );
     const img = new Image();
     img.src = embeddedImageUrl;
 

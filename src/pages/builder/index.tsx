@@ -40,28 +40,32 @@ export default function Index() {
 
         if (tierSvg?.includes("image href=")) {
           const href = tierSvg.match(/image href="(.*)" w/);
-          console.log("asdf href", href);
+
           if (href?.[1]) {
-            axios
-              .get(href[1])
-              .then((res) => (_svg += res.data))
+            await axios
+              .get(
+                href[1].replace(
+                  "bannyverse.infura-ipfs.io",
+                  "ipfs.io" // bannyverse gateway returning SSL error, issue unclear
+                )
+              )
+              .then((res) => {
+                tierSvg = res.data;
+              })
               .catch((e) => {
                 console.log("Couldn't load svg", href[1], e);
               });
           }
         }
 
-        tierSvg = tierSvg
-          ?.replace(/<svg.*svg">/i, "")
-          .replace("</svg>", "")
-          .replace(/<style>.*<\/style>/, "");
+        tierSvg = tierSvg?.replace(/<svg.*?\>/, "").replace("</svg>", "");
 
         if (!tierSvg) {
           if (c === "body") _svg += DEFAULT_SVG.mannequin;
           if (c === "necklace") _svg += DEFAULT_SVG.necklace;
           if (c === "mouth") _svg += DEFAULT_SVG.mouth;
         } else {
-          _svg += tierSvg;
+          _svg += `<g>${tierSvg}</g>`;
         }
       }
 
@@ -117,7 +121,7 @@ export default function Index() {
         {
           header: "Image",
           content: (
-            <div style={{ background: "white" }}>
+            <div style={{ padding: 16 }}>
               <Downloadable
                 fileName="custom-banny.svg"
                 downloadHref={`data:image/svg+xml;base64,${btoa(svg)}`}
@@ -125,7 +129,10 @@ export default function Index() {
                   fontSize: FONT_SIZE.lg,
                 }}
               >
-                <div dangerouslySetInnerHTML={{ __html: svg }} />
+                <div
+                  style={{ background: "white" }}
+                  dangerouslySetInnerHTML={{ __html: svg }}
+                />
               </Downloadable>
             </div>
           ),
