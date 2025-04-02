@@ -11,6 +11,7 @@ import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import moment from "moment";
 import Link from "next/link";
 import { useCallback, useMemo } from "react";
+import DressedBannyElem from "./DressedBannyElem";
 
 export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   const { tiers } = useAllTiers();
@@ -125,7 +126,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
                 pointerEvents: "none",
               }}
             >
-              <object data={info.image} width={size} height={size} />
+              <DressedBannyElem nftInfo={info} size={size} />
             </div>
           </Link>
         );
