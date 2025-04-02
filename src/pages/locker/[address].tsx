@@ -114,7 +114,9 @@ export default function Index() {
                       >
                         <Link
                           key={nft.tokenId}
-                          href={`${router.asPath}?nft=${nft.tokenId}`}
+                          href={`${router.asPath}?nft=${
+                            nft.chain.id
+                          }:${nft.tokenId.toString()}`}
                         >
                           <div style={{ pointerEvents: "none" }}>
                             {nft.category === "body" ? (
