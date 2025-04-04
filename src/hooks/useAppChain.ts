@@ -1,13 +1,7 @@
-import { Chain } from "@/model/chain";
 import { useMemo } from "react";
-import { mainnet, sepolia } from "viem/chains";
+import { mainnet } from "viem/chains";
 import { useAccount } from "wagmi";
 import { config } from "../../config.wagmi";
-
-export const isTestnet =
-  process.env.NEXT_PUBLIC_IS_TESTNET === "true" ? true : false;
-
-const defaultChain = (isTestnet ? sepolia : mainnet) as Chain;
 
 /**
  * Get the chain currently being preferred by the UI.
@@ -17,7 +11,7 @@ export const useAppChain = () => {
   const { chain } = useAccount();
 
   const _chain = useMemo(
-    () => config.chains.find((c) => c.id === chain?.id) ?? defaultChain,
+    () => config.chains.find((c) => c.id === chain?.id) ?? mainnet,
     [chain]
   );
 

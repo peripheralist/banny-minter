@@ -14,6 +14,7 @@ import { ShopContext } from "@/contexts/shopContext";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { ROUTES } from "@/utils/routes";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
@@ -27,11 +28,9 @@ export default function Drop() {
   const bannyNfts = useNfTsQuery({
     variables: {
       where: {
-        collection: BAN_HOOK,
+        hook: BAN_HOOK,
         category: CATEGORY_IDS.body,
-        owner_: {
-          wallet: address?.toLowerCase() ?? null,
-        },
+        owner: address,
       },
     },
   });
@@ -39,7 +38,7 @@ export default function Drop() {
   const needsBanny = useMemo(
     () =>
       (!bag.length || bag.every((b) => b.tier.category !== "body")) &&
-      !bannyNfts.data?.nfts.length &&
+      !bannyNfts.data?.nfts.items.length &&
       !bannyNfts.loading,
     [bannyNfts, bag]
   );
@@ -132,15 +131,9 @@ export default function Drop() {
                               buttonSize={
                                 isSmallScreen ? imgSize - 24 : imgSize
                               }
-                              onClick={() => {
-                                router.push(
-                                  router.asPath + `?item=${t.tierId}`,
-                                  undefined,
-                                  {
-                                    shallow: true,
-                                  }
-                                );
-                              }}
+                              onClick={() =>
+                                ROUTES.toTier({ router, tierId: t.tierId })
+                              }
                             />
                           )}
                           gridStyle={{
@@ -235,15 +228,9 @@ export default function Drop() {
                           key={t.tierId}
                           tier={t}
                           buttonSize={imgSize}
-                          onClick={() => {
-                            router.push(
-                              router.asPath + `?item=${t.tierId}`,
-                              undefined,
-                              {
-                                shallow: true,
-                              }
-                            );
-                          }}
+                          onClick={() =>
+                            ROUTES.toTier({ router, tierId: t.tierId })
+                          }
                         />
                       )}
                       gridStyle={{

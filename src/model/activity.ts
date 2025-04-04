@@ -1,24 +1,23 @@
 import { Chain } from "./chain";
 
 export type ActivityEvent = {
-  id: string;
   timestamp: number;
   caller: string;
   txHash: string;
-  chain: Chain;
+  chainId: Chain["id"];
 } & (
   | {
       type: "decorate";
       bannyBodyId: bigint;
       outfitIds: bigint[];
       backgroundId: bigint;
-      tokenUri: string
+      tokenUri: string;
     }
   | {
-      type: "mint";
+      type: "pay";
       beneficiary: string;
       amount: bigint;
-      note: string;
-      beneficiaryTokenCount: bigint;
+      memo: string;
+      newlyIssuedTokenCount: bigint;
     }
 );

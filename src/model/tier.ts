@@ -9,10 +9,10 @@ export type Tier = {
   image: string | undefined;
   svg: string | null;
   price: bigint;
-  initialSupply: bigint;
-  remainingSupply: bigint;
-  multiChainSupply?: Record<ChainId, { initial: bigint; remaining: bigint }> & {
-    total: bigint;
+  initialSupply: number;
+  remainingSupply: number;
+  multiChainSupply?: Record<ChainId, { initial: number; remaining: number }> & {
+    total: number;
   };
   info?: NFTInfo;
   embeddedSvgUrl?: string;
