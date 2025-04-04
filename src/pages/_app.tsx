@@ -7,7 +7,11 @@ import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { LooksApolloProvider } from "@/providers/LooksApolloProvider";
 import { LooksJBProvider } from "@/providers/LooksJBProvider";
 import "@/styles/globals.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import { PropsWithChildren } from "react";
 import { WagmiProvider } from "wagmi";
@@ -17,7 +21,11 @@ import NFTDetailModal from "@/components/modals/NFTDetailModal";
 import StoreSVGsModal from "@/components/modals/StoreSVGsModal";
 import ModalContextProvider from "@/contexts/ModalContextProvider";
 
-const queryClient = new QueryClient();
+const queryCache = new QueryCache();
+
+const queryClient = new QueryClient({
+  queryCache,
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

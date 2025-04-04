@@ -7,6 +7,7 @@ import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 import { useOwnedTiers } from "@/hooks/queries/useOwnedTiers";
+import { useAppChain } from "@/hooks/useAppChain";
 import { NFT } from "@/model/nft";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useMemo } from "react";
@@ -19,6 +20,8 @@ export default function Index() {
   const { setAlert } = useContext(AlertContext);
 
   const router = useRouter();
+
+  const appChain = useAppChain();
 
   const tokenId = useMemo(() => {
     try {
@@ -33,16 +36,19 @@ export default function Index() {
     variables: {
       where: {
         tokenId,
-        collection: BAN_HOOK,
+        hook: BAN_HOOK,
+        chainId: appChain.id,
       },
     },
   });
 
-  const nft = useMemo(() => nfts?.nfts[0], [nfts?.nfts]);
+  const nft = useMemo(() => nfts?.nfts.items[0], [nfts?.nfts]);
 
   const isOwner = useMemo(
     () =>
-      nft && address ? isAddressEqual(address, nft.owner.address) : undefined,
+      nft && address
+        ? isAddressEqual(address, nft.owner as `0x${string}`)
+        : undefined,
     [address, nft]
   );
 
@@ -59,7 +65,7 @@ export default function Index() {
         body: "To dress this Banny, connect the owner's wallet.",
       });
     }
-  }, [router, nft, isOwner, setAlert]);
+  }, [router, nft, isOwner, setAlert, address]);
 
   if (nftsLoading) return <FullscreenLoading />;
 

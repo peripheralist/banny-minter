@@ -38,10 +38,10 @@ export default function NftTierInfo({
 
   const isOwned = useMemo(
     () =>
-      address && nft?.owner.address
-        ? isAddressEqual(nft?.owner.address, address)
+      address && nft?.owner
+        ? isAddressEqual(nft.owner as `0x${string}`, address)
         : false,
-    [nft?.owner.address, address]
+    [nft?.owner, address]
   );
 
   const { isSmallScreen } = useWindowSize();
@@ -165,10 +165,10 @@ export default function NftTierInfo({
             label="Owner"
             value={
               <div style={{ display: "flex", gap: 8, alignItems: "baseline" }}>
-                <Link href={`/locker/${nft.owner.address}`}>
+                <Link href={`/locker/${nft.owner}`}>
                   <FormattedAddress
                     position="left"
-                    address={nft.owner.address}
+                    address={nft.owner as `0x${string}`}
                     style={{ cursor: "pointer" }}
                   />
                 </Link>{" "}

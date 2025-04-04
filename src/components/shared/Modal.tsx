@@ -68,7 +68,7 @@ export default function Modal({
         Close
       </ButtonPad>
     ),
-    [onClose, closeModal, __id]
+    [closeModal, __id]
   );
 
   const _Modal = useCallback(() => {
