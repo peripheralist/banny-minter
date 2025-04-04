@@ -9,14 +9,16 @@ import { CATEGORY_IDS, categoryOfId } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { WalletContext } from "@/contexts/walletContext";
-import { useMultichainNftsOf } from "@/hooks/queries/useMultichainNftsOf";
+import { useNftsOf } from "@/hooks/queries/useNftsOf";
 import { useAppChain } from "@/hooks/useAppChain";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { chainName } from "@/utils/chainName";
 import { parseTier } from "@/utils/parseTier";
+import { ROUTES } from "@/utils/routes";
 import { formatEthAddress } from "juice-sdk-core";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { Address, isAddress } from "viem";
 import { useEnsName } from "wagmi";
 
@@ -31,11 +33,7 @@ export default function Index() {
 
   const appChain = useAppChain();
 
-  const { data: nfts, isLoading, refetch } = useMultichainNftsOf(address);
-
-  useEffect(() => {
-    refetch();
-  }, [appChain, refetch]);
+  const { data: nfts, loading } = useNftsOf(address);
 
   const { isSmallScreen, width } = useWindowSize();
 
@@ -66,7 +64,7 @@ export default function Index() {
                 paddingLeft: 136,
                 paddingTop: 16,
               },
-              content: isLoading ? (
+              content: loading ? (
                 <div
                   style={{
                     height: "100%",
@@ -91,7 +89,7 @@ export default function Index() {
                 >
                   <CategoryGroupGrid
                     label
-                    items={nfts?.map((nft) => ({
+                    items={nfts?.nfts.items.map((nft) => ({
                       ...nft,
                       category: categoryOfId[nft.category],
                     }))}
@@ -102,6 +100,7 @@ export default function Index() {
                     emptyText="None owned"
                     render={(nft) => (
                       <ButtonPad
+                        key={`${nft.chainId}-${nft.tokenId}`}
                         fillBorder="white"
                         fillFg={"white"}
                         style={{
@@ -114,9 +113,10 @@ export default function Index() {
                       >
                         <Link
                           key={nft.tokenId}
-                          href={`${router.asPath}?nft=${
-                            nft.chain.id
-                          }:${nft.tokenId.toString()}`}
+                          href={`${router.asPath}${ROUTES.nftPath({
+                            chainId: nft.chainId,
+                            tokenId: nft.tokenId,
+                          })}`}
                         >
                           <div style={{ pointerEvents: "none" }}>
                             {nft.category === "body" ? (
@@ -161,14 +161,14 @@ export default function Index() {
                                   textTransform: "uppercase",
                                 }}
                               >
-                                {nft.chain.name}
+                                {chainName(nft.chainId)}
                               </span>
                             </div>
                           </div>
                         </Link>
 
                         {nft.category === "body" &&
-                          (nft.chain.id === appChain.id ? (
+                          (nft.chainId === appChain.id ? (
                             <Link
                               href={`/dress/${nft.tokenId.toString()}`}
                               style={{ width: "100%" }}
@@ -204,9 +204,9 @@ export default function Index() {
                                   lineHeight: 1.4,
                                 }}
                                 shadow="sm"
-                                onClick={() => switchChain?.(nft.chain.id)}
+                                onClick={() => switchChain?.(nft.chainId)}
                               >
-                                Dress on {nft.chain.name}
+                                Dress on {chainName(nft.chainId)}
                               </ButtonPad>
                             </div>
                           ))}

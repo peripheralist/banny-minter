@@ -1,6 +1,6 @@
 import Fuzz from "@/components/pixelRenderers/Fuzz";
-import { NfTsQuery } from "@/generated/graphql";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
+import { NFT } from "@/model/nft";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { useCallback } from "react";
 import Downloadable from "./Downloadable";
@@ -11,7 +11,7 @@ export default function DressedBannyNftImage({
   size,
   download,
 }: {
-  nft: NfTsQuery["nfts"][number] | undefined;
+  nft: NFT | undefined;
   size: number;
   download?: boolean;
 }) {

@@ -8,7 +8,6 @@ import { useNfTsQuery } from "@/generated/graphql";
 import { useRouterNftParams } from "@/hooks/useRouterNftParams";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
-import { createApolloClient } from "@/utils/createApolloClient";
 import { parseTier } from "@/utils/parseTier";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
@@ -25,24 +24,22 @@ export default function NFTDetailModal() {
 
   const { chain, tokenId } = useRouterNftParams(routerKey);
 
-  const apolloClient = useMemo(
-    () => (chain ? createApolloClient(chain) : undefined),
-    [chain]
-  );
-
   const { data } = useNfTsQuery({
-    client: apolloClient,
     variables: {
       where: {
-        tokenId: tokenId as unknown as bigint,
-        collection: BAN_HOOK,
+        tokenId: BigInt(tokenId ?? 0),
+        hook: BAN_HOOK,
+        chainId: chain?.id,
       },
     },
   });
 
-  const nft: NFT | undefined = useMemo(() => data?.nfts[0], [data?.nfts]);
+  const nft: NFT | undefined = useMemo(() => data?.nfts.items[0], [data?.nfts]);
 
-  const tier = useMemo(() => (nft ? parseTier(nft?.tier) : undefined), [nft]);
+  const tier = useMemo(
+    () => (nft?.tier ? parseTier(nft.tier) : undefined),
+    [nft]
+  );
 
   const imgSize = useMemo(
     () => Math.min(Math.max(width ? width - 96 : 0, 240), 400),
@@ -72,7 +69,8 @@ export default function NFTDetailModal() {
 
   return (
     <Modal
-      open={!!tokenId && !!nft}
+      id="nft-detail"
+      open={!!tokenId && !!chain}
       onClose={onClose}
       // action={{
       //   onClick: () => {

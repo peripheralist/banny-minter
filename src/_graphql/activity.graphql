@@ -1,0 +1,27 @@
+query PayEvents($where: PayEvent_filter) {
+  payEvents(where: $where) {
+    id
+    timestamp
+    txHash
+    caller
+
+    beneficiary
+    amount
+    memo
+    beneficiaryTokenCount
+  }
+}
+
+query DecorateBannyEvents($where: DecorateBannyEvent_filter) {
+  decorateBannyEvents(where: $where) {
+    id
+    timestamp
+    txHash
+    caller
+
+    bannyBodyId
+    outfitIds
+    backgroundId
+    tokenUri
+  }
+}

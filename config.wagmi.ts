@@ -1,4 +1,3 @@
-import { isTestnet } from "@/hooks/useAppChain";
 import { createConfig, http } from "wagmi";
 import {
   arbitrum,
@@ -39,7 +38,10 @@ export const config = createConfig({
     arbitrumSepolia,
     baseSepolia,
     optimismSepolia,
-    ...(isTestnet ? [] : [mainnet, arbitrum, base, optimism]),
+    mainnet,
+    arbitrum,
+    base,
+    optimism,
   ],
   transports: {
     [mainnet.id]: http(transportUrl("mainnet")),

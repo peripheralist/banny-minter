@@ -9,6 +9,7 @@ import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { ROUTES } from "@/utils/routes";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 
@@ -97,15 +98,9 @@ export default function Drop() {
                           key={t.tierId}
                           tier={t}
                           buttonSize={isSmallScreen ? imgSize - 24 : imgSize}
-                          onClick={() => {
-                            router.push(
-                              router.asPath + `?item=${t.tierId}`,
-                              undefined,
-                              {
-                                shallow: true,
-                              }
-                            );
-                          }}
+                          onClick={() =>
+                            ROUTES.toTier({ router, tierId: t.tierId })
+                          }
                         />
                       )}
                       gridStyle={{
@@ -161,15 +156,9 @@ export default function Drop() {
                           key={t.tierId}
                           tier={t}
                           buttonSize={imgSize}
-                          onClick={() => {
-                            router.push(
-                              router.asPath + `?item=${t.tierId}`,
-                              undefined,
-                              {
-                                shallow: true,
-                              }
-                            );
-                          }}
+                          onClick={() =>
+                            ROUTES.toTier({ router, tierId: t.tierId })
+                          }
                         />
                       )}
                       gridStyle={{

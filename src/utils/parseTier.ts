@@ -4,8 +4,10 @@ import { Tier } from "@/model/tier";
 import { decodeNFTInfo } from "./decodeNftInfo";
 
 export const parseTier = (
-  tier: NftTiersQuery["nfttiers"][number]
-): Tier | undefined => {
+  tier: NftTiersQuery["nftTiers"]["items"][number] | null
+): typeof tier extends null ? undefined : Tier => {
+  if (tier === null) return undefined as unknown as Tier;
+
   const info = decodeNFTInfo(tier.resolvedUri);
 
   const imgHref = '<image href="';

@@ -12,6 +12,10 @@ import moment from "moment";
 import Link from "next/link";
 import { useCallback, useMemo } from "react";
 import DressedBannyElem from "./DressedBannyElem";
+import { chainName } from "@/utils/chainName";
+import { config } from "../../../config.wagmi";
+import { formatEther } from "viem";
+import { ROUTES } from "@/utils/routes";
 
 export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   const { tiers } = useAllTiers();
@@ -20,9 +24,36 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
     switch (event.type) {
       case "decorate":
         return `Dressed Banny #${event.bannyBodyId.toString()}`;
-      case "mint":
-        const items = event.note.split("Minted tiers ")[1].split(", ");
-        return `Minted ${items.length} item${items.length > 1 ? "s" : ""}`;
+      case "pay":
+        let mainText = "";
+
+        if (!event.memo.startsWith("Minted tiers ")) {
+          mainText = `Paid ${formatEther(event.amount).substring(0, 6)} ETH`;
+        } else {
+          const items = event.memo.split("Minted tiers ")[1].split(", ");
+
+          mainText = `Minted ${items.length} item${
+            items.length > 1 ? "s" : ""
+          }`;
+        }
+
+        return (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+              width: "100%",
+            }}
+          >
+            {mainText}{" "}
+            <span style={{ fontSize: FONT_SIZE.xs, opacity: 0.6 }}>
+              earned{" "}
+              {Math.round(parseFloat(formatEther(event.newlyIssuedTokenCount)))}{" "}
+              $BAN
+            </span>
+          </div>
+        );
     }
   }, [event]);
 
@@ -54,8 +85,12 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
     const imgSize = 48;
 
     switch (event.type) {
-      case "mint":
-        const tierIds = event.note
+      case "pay":
+        if (!event.memo.startsWith("Minted tiers ")) {
+          return null;
+        }
+
+        const tierIds = event.memo
           .split("Minted tiers ")[1]
           .split(", ")
           .map((str) => parseInt(str));
@@ -119,7 +154,12 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
         const size = imgSize * (displayLarge ? 1.3 : 1);
 
         return (
-          <Link href={`?nft=${event.chain.id}:${info.tokenId}`}>
+          <Link
+            href={ROUTES.nftPath({
+              chainId: event.chainId,
+              tokenId: info.tokenId,
+            })}
+          >
             <div
               style={{
                 margin: displayLarge ? -(size * 0.125) : 0,
@@ -136,16 +176,18 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   const Chain = useCallback(
     () => (
       <div style={{ color: COLORS.blue300 }}>
-        {event.chain.name.toUpperCase()}
+        {chainName(event.chainId)?.toUpperCase()}
       </div>
     ),
-    [event.chain.name]
+    [event.chainId]
   );
 
-  const txUrl = useMemo(
-    () => `${event.chain.blockExplorers.default.url}/tx/${event.txHash}`,
-    [event]
-  );
+  const txUrl = useMemo(() => {
+    const chain = config.chains.find((c) => c.id === event.chainId);
+    return chain
+      ? `${chain.blockExplorers.default.url}/tx/${event.txHash}`
+      : undefined;
+  }, [event]);
 
   return (
     <ButtonPad
@@ -179,16 +221,16 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
         <div style={{ flex: 1 }} />
 
         <Caller />
-        <Link href={txUrl} target="blank">
-          {"TX>"}
-        </Link>
+        {txUrl && (
+          <Link href={txUrl} target="blank">
+            {"TX>"}
+          </Link>
+        )}
       </div>
 
       <Title />
 
-      <div style={{ maxWidth: "100%" }}>
-        <Body />
-      </div>
+      <Body />
     </ButtonPad>
   );
 }

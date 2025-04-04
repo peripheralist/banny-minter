@@ -1,79 +1,45 @@
-import { BAN_HOOK, BAN_REVNET_IDS } from "@/constants/contracts";
-import {
-  DecorateBannyEventsDocument,
-  DecorateBannyEventsQuery,
-  PayEventsDocument,
-  PayEventsQuery,
-  useNftTiersQuery,
-} from "@/generated/graphql";
+import { MAINNET_REVNET_ID, TESTNET_REVNET_ID } from "@/constants/contracts";
+import { useActivityQuery } from "@/generated/graphql";
 import { ActivityEvent } from "@/model/activity";
-import { Chain } from "@/model/chain";
-import { useMultichainQuery } from "./useMultichainQuery";
+import { useMemo } from "react";
+import { useAppChain } from "../useAppChain";
 
 /**
  * @returns All Looks NFT tiers
  */
 export function useAllActivity() {
-  const { data: allTiers, ...props } = useNftTiersQuery({
+  const appChain = useAppChain();
+
+  // If connected to testnet, only show data from testnets
+  const projectId = useMemo(
+    () => (appChain.testnet ? TESTNET_REVNET_ID : MAINNET_REVNET_ID),
+    [appChain.testnet]
+  );
+
+  const { data, ...props } = useActivityQuery({
     variables: {
-      where: {
-        collection: BAN_HOOK,
+      payWhere: {
+        projectId,
       },
     },
   });
 
-  const { data: mints } = useMultiChainMints();
-  const { data: decorates } = useMultiChainDecorates();
-
-  const timeSortedEvents = [...(mints ?? []), ...(decorates ?? [])]
-    .sort((a, b) => (a.timestamp > b.timestamp ? -1 : 1))
-    .map((e) => ({
-      ...e,
-      type: (e as { bannyBodyId: bigint }).bannyBodyId ? "decorate" : "mint",
-    })) as unknown as ActivityEvent[];
+  const timeSortedEvents = useMemo(
+    () =>
+      [
+        ...(data?.payEvents.items ?? []),
+        ...(data?.decorateBannyEvents.items ?? []),
+      ]
+        .sort((a, b) => (a.timestamp > b.timestamp ? -1 : 1))
+        .map((e) => ({
+          ...e,
+          type: (e as { bannyBodyId: bigint }).bannyBodyId ? "decorate" : "pay",
+        })) as unknown as ActivityEvent[],
+    [data?.payEvents.items, data?.decorateBannyEvents.items]
+  );
 
   return {
     ...props,
     events: timeSortedEvents,
   };
-}
-
-function useMultiChainMints() {
-  return useMultichainQuery<
-    PayEventsQuery,
-    PayEventsQuery["payEvents"][number] & {
-      chain: Chain;
-    }
-  >({
-    key: "multichain-pays",
-    document: PayEventsDocument,
-    variables: (chainId) => ({
-      where: {
-        projectId: BAN_REVNET_IDS(chainId),
-      },
-    }),
-    parse: (r, chain) =>
-      r.payEvents
-        .map((e) => ({
-          ...e,
-          chain,
-          bannyBodyId: undefined,
-          backgroundId: undefined,
-          outfitIds: [],
-        }))
-        .filter((e) => e.note.startsWith("Minted tiers")), // get only mints
-  });
-}
-
-function useMultiChainDecorates() {
-  return useMultichainQuery<
-    DecorateBannyEventsQuery,
-    DecorateBannyEventsQuery["decorateBannyEvents"][number] & {
-      chain: Chain;
-    }
-  >({
-    key: "multichain-decorates",
-    document: DecorateBannyEventsDocument,
-    parse: (r, chain) => r.decorateBannyEvents.map((e) => ({ ...e, chain })),
-  });
 }

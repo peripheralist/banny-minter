@@ -1,14 +1,12 @@
-import { NfTsQuery } from "@/generated/graphql";
+import { NFT } from "@/model/nft";
 import { EquippedTiers, Tier } from "@/model/tier";
 import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { parseTier } from "@/utils/parseTier";
+import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import { useMemo } from "react";
 import { useAllTiers } from "./useAllTiers";
-import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 
-export function useBannyEquippedTiers(
-  bannyNft: NfTsQuery["nfts"][number] | undefined
-) {
+export function useBannyEquippedTiers(bannyNft: NFT | undefined) {
   const { tiers, loading } = useAllTiers();
 
   const data = useMemo(() => {
@@ -16,10 +14,12 @@ export function useBannyEquippedTiers(
 
     const equipped: EquippedTiers = {};
 
-    const bannyNftTier = {
-      ...parseTier(bannyNft.tier),
-      tokenId: parseInt(bannyNft.tokenId.toString()),
-    } as Tier;
+    const bannyNftTier = bannyNft.tier
+      ? ({
+          ...parseTier(bannyNft.tier),
+          tokenId: parseInt(bannyNft.tokenId.toString()),
+        } as Tier)
+      : undefined;
 
     equipped.body = bannyNftTier;
 

@@ -1,4 +1,3 @@
-import FuzzMoment from "@/components/pixelRenderers/FuzzMoment";
 import ButtonPad from "@/components/shared/ButtonPad";
 import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
@@ -116,12 +115,6 @@ export default function TierShopButton({
         onClick={onClick}
       >
         <div style={{ pointerEvents: "none", marginTop: 12 }}>
-          <FuzzMoment
-            width={buttonSize - 16}
-            height={buttonSize - 16}
-            fill={"white"}
-            style={{ zIndex: 2, position: "absolute", margin: 8 }}
-          />
           <TierImage tier={tier} size={buttonSize - 16} />
         </div>
 

@@ -1,4 +1,4 @@
-import { NfTsQuery } from "@/generated/graphql";
+import { NFT } from "@/model/nft";
 import { Tier } from "@/model/tier";
 import { useMemo } from "react";
 import { Address } from "viem";
@@ -16,10 +16,10 @@ export function useOwnedTiers(wallet: Address | undefined) {
   const ownedTiers = useMemo(() => {
     if (!tiers) return;
 
-    return nfts?.nfts.reduce((acc, nft) => {
-      if (acc.some(({ tier }) => tier.tierId === nft.tier.tierId)) {
+    return nfts?.nfts.items.reduce((acc, nft) => {
+      if (acc.some(({ tier }) => tier.tierId === nft.tier?.tierId)) {
         return acc.map((obj) =>
-          obj.tier.tierId === nft.tier.tierId
+          obj.tier.tierId === nft.tier?.tierId
             ? {
                 ...obj,
                 nfts: [...obj.nfts, nft],
@@ -28,7 +28,7 @@ export function useOwnedTiers(wallet: Address | undefined) {
         );
       }
 
-      const tier = tiers.find((t) => t.tierId === nft.tier.tierId);
+      const tier = tiers.find((t) => t.tierId === nft.tier?.tierId);
 
       if (tier) {
         return [
@@ -41,7 +41,7 @@ export function useOwnedTiers(wallet: Address | undefined) {
       }
 
       return acc;
-    }, [] as { tier: Tier; nfts: NfTsQuery["nfts"][number][] }[]);
+    }, [] as { tier: Tier; nfts: NFT[] }[]);
   }, [tiers, nfts]);
 
   return {
