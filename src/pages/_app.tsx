@@ -24,23 +24,23 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <WagmiProvider config={config}>
         <LooksApolloProvider>
-          <ShopContextProvider>
-            <ModalContextProvider>
-              <AlertContextProvider>
-                <LooksJBProvider>
-                  <WalletContextProvider>
-                    <_EquipmentContextProvider>
+          <_EquipmentContextProvider>
+            <ShopContextProvider>
+              <ModalContextProvider>
+                <AlertContextProvider>
+                  <LooksJBProvider>
+                    <WalletContextProvider>
                       <Component {...pageProps} />
 
                       <TierDetailModal />
                       <NFTDetailModal />
                       <StoreSVGsModal />
-                    </_EquipmentContextProvider>
-                  </WalletContextProvider>
-                </LooksJBProvider>
-              </AlertContextProvider>
-            </ModalContextProvider>
-          </ShopContextProvider>
+                    </WalletContextProvider>
+                  </LooksJBProvider>
+                </AlertContextProvider>
+              </ModalContextProvider>
+            </ShopContextProvider>
+          </_EquipmentContextProvider>
         </LooksApolloProvider>
       </WagmiProvider>
     </QueryClientProvider>
