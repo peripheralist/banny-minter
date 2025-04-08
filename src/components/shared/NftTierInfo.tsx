@@ -293,7 +293,7 @@ export default function NftTierInfo({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
-      <NameDesc />
+      {nft && nft.category === 0 ? <div /> : <NameDesc />}
 
       <Details />
 

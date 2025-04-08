@@ -15,7 +15,7 @@ export const TOOLBAR_WIDTH = 164;
 export const TOOLBAR_LINKS = [
   {
     href: `/explore`,
-    label: "Explore",
+    label: "Activity",
   },
   {
     href: `/bannys`,

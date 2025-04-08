@@ -301,8 +301,6 @@ function Drawer({
   const { equipped, equippingCategory, unequippingCategory } =
     useContext(EquipmentContext);
 
-  console.log("asdf", equipped);
-
   return (
     <HeaderFrame
       header={

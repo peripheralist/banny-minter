@@ -194,7 +194,7 @@ export default function MintButton() {
           <BagItems />
 
           <div>
-            View items in your{" "}
+            Dress Banny in your{" "}
             <Link onClick={onClose} href={`/locker/${address}`}>
               locker
             </Link>

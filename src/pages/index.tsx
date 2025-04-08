@@ -198,20 +198,11 @@ export default function Home() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                fontSize: FONT_SIZE.lg,
               }}
               dimension
             >
-              <div style={{ fontSize: FONT_SIZE.lg, fontWeight: "bold" }}>
-                Drop {DROPS[0].id}: {DROPS[0].name}
-              </div>
-              <div
-                style={{
-                  fontSize: FONT_SIZE.xs,
-                  textTransform: "uppercase",
-                }}
-              >
-                Available now
-              </div>
+              Shop Drop {DROPS[0].id}: {DROPS[0].name}
             </ButtonPad>
           </Link>
 
@@ -224,7 +215,7 @@ export default function Home() {
               }}
               dimension
             >
-              Explore
+              Community Activity
             </ButtonPad>
           </Link>
 
@@ -289,7 +280,7 @@ function LockerButton() {
           margin: "0 auto",
         }}
       >
-        Locker
+        My Locker
       </ButtonPad>
     </Link>
   );
