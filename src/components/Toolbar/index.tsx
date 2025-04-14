@@ -23,7 +23,7 @@ export const TOOLBAR_LINKS = [
   // },
   {
     href: `/drops/1`,
-    label: "Drop #01",
+    label: "Shop",
   },
   {
     href: `/manifesto`,
