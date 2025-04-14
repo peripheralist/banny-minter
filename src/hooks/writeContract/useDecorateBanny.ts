@@ -1,10 +1,12 @@
+import { CATEGORY_IDS } from "@/constants/category";
 import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/contracts";
 import { Tier } from "@/model/tier";
+import axios from "axios";
+import { useAppChain } from "../useAppChain";
 import {
   WriteContractHandlerOptions,
   useWriteContractHandler,
 } from "./useWriteContractHandler";
-import { CATEGORY_IDS } from "@/constants/category";
 
 const decorateBannyWithAbi = [
   {
@@ -38,6 +40,8 @@ const decorateBannyWithAbi = [
 ];
 
 export function useDecorateBanny(options?: WriteContractHandlerOptions) {
+  const appChain = useAppChain();
+
   const { write: decorateBanny, ...data } = useWriteContractHandler(
     {
       abi: decorateBannyWithAbi,
@@ -67,7 +71,22 @@ export function useDecorateBanny(options?: WriteContractHandlerOptions) {
         return args;
       },
     },
-    options
+    {
+      ...options,
+      onSuccess: (v) => {
+        options?.onSuccess?.(v);
+
+        // wait a few seconds so hopefully opensea is updated?
+        setTimeout(() => {
+          axios
+            .post(`/api/refresh-metadata`, {
+              chainId: appChain.id,
+              tokenId: v[1],
+            })
+            .catch((e) => console.warn("Error refreshing metadata", e));
+        }, 10000);
+      },
+    }
   );
 
   return { decorateBanny, ...data };
