@@ -17,10 +17,10 @@ export const TOOLBAR_LINKS = [
     href: `/explore`,
     label: "Activity",
   },
-  {
-    href: `/bannys`,
-    label: "Banny Shop",
-  },
+  // {
+  //   href: `/bannys`,
+  //   label: "Banny Shop",
+  // },
   {
     href: `/drops/1`,
     label: "Drop #01",

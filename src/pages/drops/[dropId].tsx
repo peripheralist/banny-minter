@@ -2,48 +2,17 @@ import { CategoryGroupGrid } from "@/components/shared/CategoryGroupGrid";
 import CustomHead from "@/components/shared/CustomHead";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import RoundedFrame from "@/components/shared/RoundedFrame";
-import TierImage from "@/components/shared/TierImage";
 import TierShopButton from "@/components/shared/TierShopButton";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import { CATEGORY_IDS } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
-import { BAN_HOOK } from "@/constants/contracts";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { ShopContext } from "@/contexts/shopContext";
-import { useNfTsQuery } from "@/generated/graphql";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useMemo } from "react";
-import { useAccount } from "wagmi";
+import { useMemo } from "react";
 
 export default function Drop() {
-  const { address } = useAccount();
-
-  const { bag } = useContext(ShopContext);
-
-  const bannyNfts = useNfTsQuery({
-    variables: {
-      where: {
-        collection: BAN_HOOK,
-        category: CATEGORY_IDS.body,
-        owner_: {
-          wallet: address?.toLowerCase() ?? null,
-        },
-      },
-    },
-  });
-
-  const needsBanny = useMemo(
-    () =>
-      (!bag.length || bag.every((b) => b.tier.category !== "body")) &&
-      !bannyNfts.data?.nfts.length &&
-      !bannyNfts.loading,
-    [bannyNfts, bag]
-  );
-
   const router = useRouter();
 
   const dropId = useMemo(() => {
@@ -100,95 +69,52 @@ export default function Drop() {
                     }}
                     style={{ padding: 24 }}
                   >
-                    {needsBanny ? (
-                      <>
-                        <div style={{ marginBottom: 24 }}>
-                          <h1
-                            style={{
-                              fontSize: FONT_SIZE["2xl"],
-                              color: COLORS.blue600,
-                            }}
-                          >
-                            It{"'"}s dangerous to go alone. Take one of these!
-                          </h1>
-                          <p style={{ marginTop: 12, color: COLORS.blue500 }}>
-                            You{"'"}ll need a Banny to wear and preview Drop
-                            items. Add a Banny to your bag to get started.
-                          </p>
-                        </div>
+                    <div style={{ marginBottom: 24 }}>
+                      <h1
+                        style={{
+                          fontSize: FONT_SIZE["2xl"],
+                          color: COLORS.blue600,
+                        }}
+                      >
+                        It{"'"}s dangerous to go alone. Take one of these!
+                      </h1>
+                      <p style={{ marginTop: 12, color: COLORS.blue500 }}>
+                        You{"'"}ll need a Banny to wear and preview Drop items.
+                        Add a Banny to your bag to get started.
+                      </p>
+                    </div>
 
-                        <CategoryGroupGrid
-                          items={allTiers.filter((t) => t.category === "body")}
-                          excludeGroups={[
-                            "head",
-                            "outfit",
-                            "special",
-                            "background",
-                          ]}
-                          render={(t) => (
-                            <TierShopButton
-                              key={t.tierId}
-                              tier={t}
-                              buttonSize={
-                                isSmallScreen ? imgSize - 24 : imgSize
+                    <CategoryGroupGrid
+                      items={allTiers.filter((t) => t.category === "body")}
+                      excludeGroups={[
+                        "head",
+                        "outfit",
+                        "special",
+                        "background",
+                      ]}
+                      render={(t) => (
+                        <TierShopButton
+                          key={t.tierId}
+                          tier={t}
+                          buttonSize={isSmallScreen ? imgSize - 24 : imgSize}
+                          onClick={() => {
+                            router.push(
+                              router.asPath + `?item=${t.tierId}`,
+                              undefined,
+                              {
+                                shallow: true,
                               }
-                              onClick={() => {
-                                router.push(
-                                  router.asPath + `?item=${t.tierId}`,
-                                  undefined,
-                                  {
-                                    shallow: true,
-                                  }
-                                );
-                              }}
-                            />
-                          )}
-                          gridStyle={{
-                            gridTemplateColumns: `repeat(auto-fit, ${
-                              isSmallScreen ? imgSize - 24 : imgSize
-                            }px)`,
-                            gap: 4,
+                            );
                           }}
                         />
-                      </>
-                    ) : (
-                      <>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 20,
-                            color: COLORS.blue500,
-                          }}
-                        >
-                          <div
-                            style={{
-                              width: 32,
-                              minWidth: 32,
-                              height: 56,
-                              margin: "-16px 0px -20px",
-                              overflow: "hidden",
-                            }}
-                          >
-                            <div style={{ marginLeft: -36 }}>
-                              <TierImage
-                                tier={allTiers.find((t) => t.tierId === 4)}
-                                size={116}
-                              />
-                            </div>
-                          </div>
-                          <span style={{ maxHeight: 20 }}>
-                            Looking for Banny? Check the{" "}
-                            <Link
-                              style={{ display: "inline" }}
-                              href={"/bannys"}
-                            >
-                              Banny Shop
-                            </Link>
-                          </span>
-                        </div>
-                      </>
-                    )}
+                      )}
+                      gridStyle={{
+                        gridTemplateColumns: `repeat(auto-fit, ${
+                          isSmallScreen ? imgSize - 24 : imgSize
+                        }px)`,
+                        gap: 4,
+                      }}
+                    />
                   </RoundedFrame>
 
                   <div
