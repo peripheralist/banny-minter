@@ -12,7 +12,7 @@ type AllOtherInfo = {
   wornByBannyBodyId: NumString;
 };
 
-export type NFTInfo = {
+export type NFTMetadata = {
   name: string;
   productName: string;
   categoryName: string;

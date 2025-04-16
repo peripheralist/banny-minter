@@ -1,29 +1,34 @@
-query Activity($payWhere: payEventFilter, $decorateWhere: decorateBannyEventFilter) {
-  payEvents(where: $payWhere, limit: 100) {
+query ActivityEvents($where: activityEventFilter, $orderBy: String, $orderDirection: String) {
+  activityEvents(where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
     items {
       timestamp
       txHash
-      caller
       chainId
+      from
 
-      beneficiary
-      amount
-      memo
-      newlyIssuedTokenCount
-    }
-  }
+      payEvent {
+        timestamp
+        txHash
+        caller
+        chainId
 
-  decorateBannyEvents(where: $decorateWhere, limit: 100) {
-    items { 
-      timestamp
-      txHash
-      caller
-      chainId
+        beneficiary
+        amount
+        memo
+        newlyIssuedTokenCount
+      }
 
-      bannyBodyId
-      outfitIds
-      backgroundId
-      tokenUri
+      decorateBannyEvent {
+        timestamp
+        txHash
+        caller
+        chainId
+
+        bannyBodyId
+        outfitIds
+        backgroundId
+        tokenUriMetadata
+      }
     }
   }
 }

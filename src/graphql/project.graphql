@@ -1,0 +1,7 @@
+query Project($chainId: Float!, $projectId: Float!) {
+  project(chainId: $chainId, projectId: $projectId) {
+    suckerGroup {
+      id
+    }
+  }
+}

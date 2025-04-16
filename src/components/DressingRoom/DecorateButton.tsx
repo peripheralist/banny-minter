@@ -80,10 +80,11 @@ function ConfirmDressModal({
 
   const maybeUnapprovedTokenIds = useMemo(
     () =>
-      CATEGORIES.filter(
-        (c) => c !== "body" && !!equipped[c]?.tokenId && !equipped[c]?.equipped
-      ).map((c) => BigInt(equipped[c]!.tokenId!)),
+      CATEGORIES.filter((c) => {
+        const nft = equipped[c]?.nft;
 
+        return c !== "body" && !!nft?.tokenId && !nft.equipped;
+      }).map((c) => BigInt(equipped[c]!.nft?.tokenId!)),
     [equipped]
   );
 
@@ -100,7 +101,7 @@ function ConfirmDressModal({
       )
       .map(({ tokenId }) =>
         availableTiers?.find(
-          (_t) => _t.tokenId && BigInt(_t.tokenId) === tokenId
+          (_t) => _t.nft?.tokenId && BigInt(_t.nft.tokenId) === tokenId
         )
       )
       .filter((t) => !!t) as Tier[];
@@ -133,7 +134,7 @@ function ApproveNFTsModal({
   const { setApprovalForAll, isPending: approveAllPending } =
     useSetApprovalForAll({
       onSuccess: () => {
-        onApproved?.(nftTiers?.map((t) => BigInt(t.tokenId ?? 0)) ?? []);
+        onApproved?.(nftTiers?.map((t) => BigInt(t.nft?.tokenId ?? 0)) ?? []);
       },
     });
 
@@ -161,7 +162,7 @@ function ApproveNFTsModal({
 
         {nftTiers.map((t) => (
           <div
-            key={t.tokenId?.toString()}
+            key={t.nft?.tokenId?.toString()}
             style={{
               display: "flex",
               alignItems: "center",
@@ -176,19 +177,19 @@ function ApproveNFTsModal({
             </div>
 
             <div style={{ flex: 1 }}>
-              {t.name}{" "}
+              {t.metadata?.productName}{" "}
               <span style={{ fontSize: FONT_SIZE.xs }}>
-                #{t.tokenId?.toString()}
+                #{t.nft?.tokenId?.toString()}
               </span>
             </div>
 
             <ButtonPad
               containerStyle={{ width: 120 }}
               style={{ padding: "8px 12px" }}
-              onClick={() => approve({ tokenId: BigInt(t.tokenId || 0) })}
+              onClick={() => approve({ tokenId: BigInt(t.nft?.tokenId || 0) })}
               shadow="none"
               loading={
-                isPending && usedArgs?.includes(BigInt(t.tokenId || 0))
+                isPending && usedArgs?.includes(BigInt(t.nft?.tokenId || 0))
                   ? { fill: "black", width: 100, height: 24 }
                   : undefined
               }
@@ -310,7 +311,9 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
                         </RoundedFrame>
                       </div>
 
-                      <div style={{ textWrap: "wrap" }}>{tier?.name}</div>
+                      <div style={{ textWrap: "wrap" }}>
+                        {tier?.metadata?.productName}
+                      </div>
                     </div>
                   );
                 }

@@ -51,7 +51,7 @@ export default function Index() {
   }, [nft, size]);
 
   const title = useMemo(
-    () => `${tier?.name ?? "--"} #${tokenId}`,
+    () => `${tier?.metadata?.productName ?? "--"} #${tokenId}`,
     [tier, tokenId]
   );
 

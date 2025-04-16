@@ -53,9 +53,9 @@ export default function TierImage({
         <DefaultAsset size={_size} type="mannequin" style={style} />
       )}
 
-      {tier?.name ? (
+      {tier?.metadata?.productName ? (
         <AssetSvg
-          name={tier?.name}
+          name={tier?.metadata.productName}
           size={_size}
           style={{ position: "absolute", ...style }}
         />

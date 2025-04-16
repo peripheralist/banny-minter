@@ -2,6 +2,9 @@ import { ASSET_SVGS } from "@/constants/assetSvgs";
 import Image from "next/image";
 import { CSSProperties, useMemo } from "react";
 
+/**
+ * Library of asset SVGs for all tiers. Allows loading assets if they aren't available on-chain through nft or tier object.
+ */
 export default function AssetSvg({
   name,
   size,

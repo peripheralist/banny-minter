@@ -56,7 +56,7 @@ export default function StoreSVGsModal() {
                 </RoundedFrame>
               </div>
 
-              <div>{t.name}</div>
+              <div>{t.metadata?.productName}</div>
             </div>
           ))}
         </div>

@@ -1,6 +1,10 @@
+import NFTDetailModal from "@/components/modals/NFTDetailModal";
+import StoreSVGsModal from "@/components/modals/StoreSVGsModal";
+import TierDetailModal from "@/components/modals/TierDetailModal";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import AlertContextProvider from "@/contexts/AlertContextProvider";
 import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
+import ModalContextProvider from "@/contexts/ModalContextProvider";
 import ShopContextProvider from "@/contexts/ShopContextProvider";
 import WalletContextProvider from "@/contexts/WalletContextProvider";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
@@ -16,10 +20,6 @@ import type { AppProps } from "next/app";
 import { PropsWithChildren } from "react";
 import { WagmiProvider } from "wagmi";
 import { config } from "../../config.wagmi";
-import TierDetailModal from "@/components/modals/TierDetailModal";
-import NFTDetailModal from "@/components/modals/NFTDetailModal";
-import StoreSVGsModal from "@/components/modals/StoreSVGsModal";
-import ModalContextProvider from "@/contexts/ModalContextProvider";
 
 const queryCache = new QueryCache();
 

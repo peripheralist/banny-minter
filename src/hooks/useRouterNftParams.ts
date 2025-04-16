@@ -27,7 +27,7 @@ export function useRouterNftParams(key: string) {
 
       return { chain: undefined, tokenId: undefined };
     }
-  }, [param, appChain.id, chains, key]);
+  }, [param, appChain.id, chains]);
 
   return { chain, tokenId };
 }

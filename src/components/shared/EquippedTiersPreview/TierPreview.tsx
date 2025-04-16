@@ -85,7 +85,7 @@ export function TierPreview({
 
     return (
       <>
-        {tier?.name && (
+        {tier?.metadata && (
           <AssetSvg
             style={{
               position: "absolute",
@@ -93,13 +93,13 @@ export function TierPreview({
               ...fuzzMask(unequipFuzz),
             }}
             svgStyle={inheritedStyle}
-            name={tier.name}
+            name={tier.metadata.productName}
             size={size}
           />
         )}
 
         {category === "body" &&
-          (tier?.name ? (
+          (tier?.metadata?.productName ? (
             <>
               {!equipped.mouth && <DefaultAsset size={size} type="mouth" />}
               {!equipped.necklace && (

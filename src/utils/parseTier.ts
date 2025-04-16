@@ -1,14 +1,11 @@
 import { categoryOfId } from "@/constants/category";
 import { NftTiersQuery } from "@/generated/graphql";
 import { Tier } from "@/model/tier";
-import { decodeNFTInfo } from "./decodeNftInfo";
 
 export const parseTier = (
   tier: NftTiersQuery["nftTiers"]["items"][number] | null
 ): typeof tier extends null ? undefined : Tier => {
   if (tier === null) return undefined as unknown as Tier;
-
-  const info = decodeNFTInfo(tier.resolvedUri);
 
   const imgHref = '<image href="';
 
@@ -28,15 +25,10 @@ export const parseTier = (
   }
 
   return {
-    info,
-    image: info?.image,
-    tokenId: info?.tokenId ? parseInt(info.tokenId) : undefined,
-    name: info?.productName,
+    ...tier,
+    // tokenId: info?.tokenId ? parseInt(info.tokenId) : undefined,
+    // name: info?.productName,
     category: categoryOfId[tier.category],
-    tierId: tier.tierId,
-    price: tier.price,
-    initialSupply: tier.initialSupply,
-    remainingSupply: tier.remainingSupply,
     embeddedSvgUrl,
     svg: tier.svg?.toLowerCase().includes("<script") ? null : tier.svg, // crude injected script protection
   };

@@ -14,27 +14,49 @@ import { useCallback, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 import DressedBannyNftImage from "../shared/DressedBannyNftImage";
 import Loading from "../shared/Loading";
+import { Chain } from "@/model/chain";
 
 const routerKey = "nft";
 
 export default function NFTDetailModal() {
-  const { width } = useWindowSize();
-
   const router = useRouter();
 
   const { chain, tokenId } = useRouterNftParams(routerKey);
 
+  const onClose = useCallback(() => {
+    if (!router.query[routerKey]) return;
+
+    const newPath = router.asPath.split(`?${routerKey}=`)[0];
+    router.replace(newPath, undefined, { shallow: true });
+  }, [router]);
+
+  return tokenId && chain ? (
+    <NFTDetail tokenId={tokenId} chain={chain} onClose={onClose} />
+  ) : null;
+}
+
+function NFTDetail({
+  tokenId,
+  chain,
+  onClose,
+}: {
+  tokenId: number;
+  chain: Chain;
+  onClose: VoidFunction;
+}) {
   const { data } = useNfTsQuery({
     variables: {
       where: {
-        tokenId: BigInt(tokenId ?? 0),
+        tokenId: BigInt(tokenId),
         hook: BAN_HOOK,
-        chainId: chain?.id,
+        chainId: chain.id,
       },
     },
   });
 
   const nft: NFT | undefined = useMemo(() => data?.nfts.items[0], [data?.nfts]);
+
+  const { width } = useWindowSize();
 
   const tier = useMemo(
     () => (nft?.tier ? parseTier(nft.tier) : undefined),
@@ -60,17 +82,10 @@ export default function NFTDetailModal() {
     return <TierImage tier={parseTier(nft?.tier)} size={imgSize - 8} />;
   }, [nft, imgSize]);
 
-  const onClose = useCallback(() => {
-    if (!router.query[routerKey]) return;
-
-    const newPath = router.asPath.split(`?${routerKey}=`)[0];
-    router.replace(newPath, undefined, { shallow: true });
-  }, [router]);
-
   return (
     <Modal
       id="nft-detail"
-      open={!!tokenId && !!chain}
+      open
       onClose={onClose}
       // action={{
       //   onClick: () => {

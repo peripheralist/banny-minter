@@ -1,4 +1,4 @@
-import { createConfig, http } from "wagmi";
+import { createConfig, createStorage, http } from "wagmi";
 import {
   arbitrum,
   arbitrumSepolia,
@@ -33,6 +33,7 @@ export const config = createConfig({
         ]
       : []),
   ],
+  syncConnectedChain: false,
   chains: [
     sepolia,
     arbitrumSepolia,

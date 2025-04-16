@@ -1,6 +1,5 @@
 import { MAINNET_REVNET_ID, TESTNET_REVNET_ID } from "@/constants/contracts";
-import { useActivityQuery } from "@/generated/graphql";
-import { ActivityEvent } from "@/model/activity";
+import { useActivityEventsQuery, useProjectQuery } from "@/generated/graphql";
 import { useMemo } from "react";
 import { useAppChain } from "../useAppChain";
 
@@ -16,30 +15,26 @@ export function useAllActivity() {
     [appChain.testnet]
   );
 
-  const { data, ...props } = useActivityQuery({
+  const { data: project } = useProjectQuery({
     variables: {
-      payWhere: {
-        projectId,
-      },
+      chainId: appChain.id,
+      projectId,
     },
   });
 
-  const timeSortedEvents = useMemo(
-    () =>
-      [
-        ...(data?.payEvents.items ?? []),
-        ...(data?.decorateBannyEvents.items ?? []),
-      ]
-        .sort((a, b) => (a.timestamp > b.timestamp ? -1 : 1))
-        .map((e) => ({
-          ...e,
-          type: (e as { bannyBodyId: bigint }).bannyBodyId ? "decorate" : "pay",
-        })) as unknown as ActivityEvent[],
-    [data?.payEvents.items, data?.decorateBannyEvents.items]
-  );
+  const { data: events, ...props } = useActivityEventsQuery({
+    variables: {
+      where: {
+        suckerGroup: project?.project?.suckerGroup?.id,
+        OR: [{ payEvent_not: null }, { decorateBannyEvent_not: null }],
+      },
+      orderBy: "timestamp",
+      orderDirection: "desc",
+    },
+  });
 
   return {
     ...props,
-    events: timeSortedEvents,
+    events,
   };
 }

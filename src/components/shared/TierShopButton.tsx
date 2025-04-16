@@ -33,8 +33,8 @@ export default function TierShopButton({
 
   // Only use sold out treatment if tier is not a NFT
   const isSoldOut = useMemo(
-    () => tier.remainingSupply <= BigInt(0) && !tier.tokenId,
-    [tier.remainingSupply, tier.tokenId]
+    () => tier.remainingSupply <= BigInt(0) && !tier.nft?.tokenId,
+    [tier.remainingSupply, tier.nft?.tokenId]
   );
 
   const { isSmallScreen } = useWindowSize();
@@ -80,7 +80,7 @@ export default function TierShopButton({
         }}
       >
         <div style={{ fontSize: isSmallScreen ? FONT_SIZE.sm : FONT_SIZE.md }}>
-          {tier.name}
+          {tier.metadata?.productName}
         </div>
         <div style={{ fontSize: FONT_SIZE.xs }}>
           <Supply />

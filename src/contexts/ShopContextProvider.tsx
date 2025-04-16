@@ -67,7 +67,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
             {
               content_type: tier.category,
               content_id: tier.tierId,
-              content_name: tier.name,
+              content_name: tier.metadata?.productName,
               content_price: tier.price.toString(),
             },
           ],

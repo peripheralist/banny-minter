@@ -1,6 +1,6 @@
 import { NFT } from "@/model/nft";
+import { NFTMetadata } from "@/model/nftInfo";
 import { EquippedTiers, Tier } from "@/model/tier";
-import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { parseTier } from "@/utils/parseTier";
 import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import { useMemo } from "react";
@@ -23,7 +23,7 @@ export function useBannyEquippedTiers(bannyNft: NFT | undefined) {
 
     equipped.body = bannyNftTier;
 
-    const decoded = decodeNFTInfo(bannyNft.tokenUri);
+    const decoded = bannyNft.metadata as NFTMetadata;
 
     const allAssetIds = [...(decoded?.outfitIds ?? [])];
     if (decoded?.backgroundId) allAssetIds.push(decoded.backgroundId);

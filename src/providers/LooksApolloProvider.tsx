@@ -44,7 +44,10 @@ export function LooksApolloProvider({ children }: PropsWithChildren) {
     []
   );
 
-  const scalarsLink = useMemo(() => withScalars({ schema, typesMap }), []);
+  const scalarsLink = useMemo(
+    () => withScalars({ schema, typesMap }),
+    [schema, typesMap]
+  );
 
   const httpLink = useMemo(
     () =>
@@ -60,7 +63,7 @@ export function LooksApolloProvider({ children }: PropsWithChildren) {
         cache: apolloCache,
         link: ApolloLink.from([scalarsLink, httpLink]),
       }),
-    []
+    [httpLink, scalarsLink]
   );
 
   return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;

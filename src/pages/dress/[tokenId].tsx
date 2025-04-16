@@ -9,6 +9,7 @@ import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 import { useOwnedTiers } from "@/hooks/queries/useOwnedTiers";
 import { useAppChain } from "@/hooks/useAppChain";
 import { NFT } from "@/model/nft";
+import { Tier } from "@/model/tier";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useMemo } from "react";
 import { isAddressEqual } from "viem";
@@ -47,7 +48,7 @@ export default function Index() {
   const isOwner = useMemo(
     () =>
       nft && address
-        ? isAddressEqual(address, nft.owner as `0x${string}`)
+        ? isAddressEqual(address, nft.owner?.address as `0x${string}`)
         : undefined,
     [address, nft]
   );
@@ -83,20 +84,19 @@ function DressOwnedBanny({ bannyNft }: { bannyNft: NFT | undefined }) {
     if (!ownedTiers || !equippedTiers) return;
 
     // Format owned nft tiers (equipped nfts are unowned)
-    const formattedOwnedTiers = ownedTiers
+    const formattedOwnedTiers: Tier[] = ownedTiers
       .filter(
         ({ tier }) =>
-          tier.category !== "body" &&
+          tier.category !== "body" && // skip body tiers, we only want wearables
           equippedTiers[tier.category]?.tierId !== tier.tierId // only add tier if not equipped
       )
-      .map(({ tier, nfts }) => {
-        const tokenId = nfts[0].tokenId; // override tier tokenId with tokenId of first NFT
-
-        tier.tokenId = parseInt(tokenId.toString());
-        tier.ownedSupply = nfts.length;
-
-        return tier;
-      });
+      .map(({ tier, nfts }) => ({
+        ...tier,
+        nft: {
+          tokenId: Number(nfts[0].tokenId), // override tier tokenId with tokenId of first NFT
+          ownedSupply: nfts.length,
+        },
+      }));
 
     // Add equipped nft tiers
     const allFormattedTiers = Object.values(equippedTiers).reduce(
@@ -106,7 +106,10 @@ function DressOwnedBanny({ bannyNft }: { bannyNft: NFT | undefined }) {
             t.tierId === tier.tierId
               ? {
                   ...t,
-                  equipped: true,
+                  nft: {
+                    ...t.nft,
+                    equipped: true,
+                  },
                 }
               : t
           );
@@ -116,7 +119,10 @@ function DressOwnedBanny({ bannyNft }: { bannyNft: NFT | undefined }) {
           ...acc,
           {
             ...tier,
-            equipped: true,
+            nft: {
+              ...tier.nft,
+              equipped: true,
+            },
           },
         ];
       },

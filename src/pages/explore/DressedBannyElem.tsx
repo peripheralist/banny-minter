@@ -1,6 +1,6 @@
 import EquippedTiersPreview from "@/components/shared/EquippedTiersPreview";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
-import { NFTInfo } from "@/model/nftInfo";
+import { NFTMetadata } from "@/model/nftInfo";
 import { EquippedTiers, Tier } from "@/model/tier";
 import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import { useCallback, useMemo } from "react";
@@ -9,7 +9,7 @@ export default function DressedBannyElem({
   nftInfo,
   size,
 }: {
-  nftInfo: NFTInfo;
+  nftInfo: NFTMetadata;
   size: number;
 }) {
   const { tiers } = useAllTiers();

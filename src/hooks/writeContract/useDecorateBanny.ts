@@ -56,13 +56,13 @@ export function useDecorateBanny(options?: WriteContractHandlerOptions) {
         background: Tier | undefined;
         outfits: Tier[];
       }) => {
-        const bannyBodyId = BigInt(body?.tokenId ?? 0);
-        const backgroundId = BigInt(background?.tokenId ?? 0);
+        const bannyBodyId = BigInt(body?.nft?.tokenId ?? 0);
+        const backgroundId = BigInt(background?.nft?.tokenId ?? 0);
         const sortedOutfitIds = outfits
           .sort((o1, o2) =>
             CATEGORY_IDS[o1.category] < CATEGORY_IDS[o2.category] ? -1 : 1
           )
-          .map((o) => BigInt(o.tokenId!));
+          .map((o) => BigInt(o.nft?.tokenId!));
 
         const args = [BAN_HOOK, bannyBodyId, backgroundId, sortedOutfitIds];
 

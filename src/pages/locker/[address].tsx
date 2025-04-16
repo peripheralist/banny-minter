@@ -144,7 +144,7 @@ export default function Index() {
                               boxSizing: "border-box",
                             }}
                           >
-                            <div>{parseTier(nft.tier)?.name}</div>
+                            <div>{parseTier(nft.tier)?.metadata?.productName}</div>
                             <div
                               style={{
                                 display: "flex",

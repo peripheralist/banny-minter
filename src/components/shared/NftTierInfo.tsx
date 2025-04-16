@@ -7,8 +7,8 @@ import { useSupportedChains } from "@/hooks/useSupportedChains";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Chain } from "@/model/chain";
 import { NFT } from "@/model/nft";
+import { NFTMetadata } from "@/model/nftInfo";
 import { Tier } from "@/model/tier";
-import { decodeNFTInfo } from "@/utils/decodeNftInfo";
 import { formatEther } from "juice-sdk-core";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -39,7 +39,7 @@ export default function NftTierInfo({
   const isOwned = useMemo(
     () =>
       address && nft?.owner
-        ? isAddressEqual(nft.owner as `0x${string}`, address)
+        ? isAddressEqual(nft.owner.address as `0x${string}`, address)
         : false,
     [nft?.owner, address]
   );
@@ -83,7 +83,7 @@ export default function NftTierInfo({
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <h1 style={{ fontSize: FONT_SIZE["3xl"], marginTop: 24 }}>
-          {tier.name}
+          {tier.metadata?.productName}
         </h1>
 
         <div style={{ display: "flex" }}>
@@ -138,8 +138,6 @@ export default function NftTierInfo({
   }, [tier.multiChainSupply, NftInfoRow, chains]);
 
   const Specs = useCallback(() => {
-    const decoded = decodeNFTInfo(nft?.tokenUri);
-
     const drop = DROPS.find((d) => d.tierIds.includes(tier.tierId));
 
     const unstoredTiers =
@@ -168,7 +166,7 @@ export default function NftTierInfo({
                 <Link href={`/locker/${nft.owner}`}>
                   <FormattedAddress
                     position="left"
-                    address={nft.owner as `0x${string}`}
+                    address={nft.owner?.address as `0x${string}`}
                     style={{ cursor: "pointer" }}
                   />
                 </Link>{" "}
@@ -179,18 +177,22 @@ export default function NftTierInfo({
         )}
         {drop && <NftInfoRow label="Drop" value={`#${drop.id} ${drop.name}`} />}
         <NftInfoRow label="Type" value={tier.category} />
-        {decoded?.wornByBannyBodyId ? (
+        {(nft?.metadata as NFTMetadata)?.wornByBannyBodyId ? (
           <NftInfoRow
             label="Equipped"
-            value={decoded.wornByBannyBodyId === "0" ? "NO" : "YES"}
+            value={
+              (nft?.metadata as NFTMetadata).wornByBannyBodyId === "0"
+                ? "NO"
+                : "YES"
+            }
           />
         ) : null}
-        {decoded?.outfitIds?.length && equippedTiers ? (
+        {(nft?.metadata as NFTMetadata)?.outfitIds?.length && equippedTiers ? (
           <NftInfoRow
             label="Wearing"
             value={Object.values(equippedTiers)
               .filter((t) => t?.category !== "body")
-              .map((t) => t?.name)
+              .map((t) => t.metadata?.productName)
               .join(", ")}
           />
         ) : null}

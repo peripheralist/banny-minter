@@ -8,18 +8,22 @@ fragment TierData on nftTier {
   remainingSupply
   category
   chainId
+  metadata
 }
 
-query NFTs($where: nftFilter, $orderBy: String, $orderDirection: String) {
-  nfts(where: $where, orderBy: $orderBy, orderDirection: $orderDirection, limit: 1000) {
+query NFTs($where: nftFilter, $orderBy: String, $orderDirection: String, $limit: Int) {
+  nfts(where: $where, orderBy: $orderBy, orderDirection: $orderDirection, limit: $limit) {
     items {
       chainId
       tokenId
-      owner
-      tokenUri
+      owner {
+        address
+      }
+      metadata
       category
       tierId
       createdAt
+      customized
       tier {
         ...TierData
       }

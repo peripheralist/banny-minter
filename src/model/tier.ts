@@ -1,26 +1,25 @@
 import { Category } from "@/constants/category";
+import { NftTiersQuery } from "@/generated/graphql";
 import { ChainId } from "./chain";
-import { NFTInfo } from "./nftInfo";
 
-export type Tier = {
+type _Tier = NftTiersQuery["nftTiers"]["items"][number];
+
+export type Tier = Omit<_Tier, "category" | "metadata"> & {
   category: Category;
-  tierId: number;
-  name: string | undefined;
-  image: string | undefined;
-  svg: string | null;
-  price: bigint;
-  initialSupply: number;
-  remainingSupply: number;
   multiChainSupply?: Record<ChainId, { initial: number; remaining: number }> & {
     total: number;
   };
-  info?: NFTInfo;
+  metadata?: {
+    productName: string;
+  };
   embeddedSvgUrl?: string;
 
   // Below only if NFT
-  ownedSupply?: number;
-  tokenId?: number;
-  equipped?: boolean; // Only if NFT is equipped + owned by resolver contract
+  nft?: {
+    ownedSupply?: number;
+    tokenId?: number;
+    equipped?: boolean; // Only if NFT is equipped to a banny + owned by resolver contract
+  };
 };
 
 export type EquippedTiers = Partial<Record<Category, Tier | undefined>>;
