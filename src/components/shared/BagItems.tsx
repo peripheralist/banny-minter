@@ -25,7 +25,7 @@ export default function BagItems({ canRemove }: { canRemove?: boolean }) {
     >
       {bag.length
         ? bag.map(({ tier, quantity }) => {
-            const { tierId, name, price, category } = tier;
+            const { tierId, metadata, price, category } = tier;
 
             return (
               <div
@@ -58,7 +58,7 @@ export default function BagItems({ canRemove }: { canRemove?: boolean }) {
                 </div>
 
                 <div style={{ flex: 1 }}>
-                  <div>{name}</div>
+                  <div>{metadata?.productName}</div>
                   <div style={{ fontSize: FONT_SIZE.sm }}>
                     {quantity > 1 ? (
                       <span style={{ fontWeight: "bold" }}>(x{quantity}) </span>

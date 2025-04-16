@@ -11,7 +11,6 @@ import { useNfTsQuery } from "@/generated/graphql";
 import { useRouterNftParams } from "@/hooks/useRouterNftParams";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
-import { createApolloClient } from "@/utils/createApolloClient";
 import { parseTier } from "@/utils/parseTier";
 import { useCallback, useMemo } from "react";
 
@@ -25,22 +24,17 @@ export default function Index() {
 
   const { chain, tokenId } = useRouterNftParams("chainTokenId");
 
-  const apolloClient = useMemo(
-    () => (chain ? createApolloClient(chain) : undefined),
-    [chain]
-  );
-
   const { data } = useNfTsQuery({
-    client: apolloClient,
     variables: {
       where: {
-        tokenId: tokenId as unknown as bigint,
-        collection: BAN_HOOK,
+        tokenId: tokenId ? BigInt(tokenId) : undefined,
+        hook: BAN_HOOK,
+        chainId: chain?.id,
       },
     },
   });
 
-  const nft: NFT | undefined = useMemo(() => data?.nfts[0], [data?.nfts]);
+  const nft: NFT | undefined = useMemo(() => data?.nfts.items[0], [data?.nfts]);
 
   const tier = useMemo(() => (nft ? parseTier(nft?.tier) : undefined), [nft]);
 
@@ -57,7 +51,7 @@ export default function Index() {
   }, [nft, size]);
 
   const title = useMemo(
-    () => `${tier?.name ?? "--"} #${tokenId}`,
+    () => `${tier?.metadata?.productName ?? "--"} #${tokenId}`,
     [tier, tokenId]
   );
 

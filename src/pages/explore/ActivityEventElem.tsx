@@ -5,24 +5,58 @@ import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { ActivityEvent } from "@/model/activity";
+import { NFTMetadata } from "@/model/nftInfo";
 import { Tier } from "@/model/tier";
-import { decodeNFTInfo } from "@/utils/decodeNftInfo";
+import { chainName } from "@/utils/chainName";
+import { ROUTES } from "@/utils/routes";
 import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import moment from "moment";
 import Link from "next/link";
 import { useCallback, useMemo } from "react";
+import { formatEther } from "viem";
+import { config } from "../../../config.wagmi";
 import DressedBannyElem from "./DressedBannyElem";
 
 export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   const { tiers } = useAllTiers();
 
   const Title = useCallback(() => {
-    switch (event.type) {
-      case "decorate":
-        return `Dressed Banny #${event.bannyBodyId.toString()}`;
-      case "mint":
-        const items = event.note.split("Minted tiers ")[1].split(", ");
-        return `Minted ${items.length} item${items.length > 1 ? "s" : ""}`;
+    if (event.decorateBannyEvent) {
+      return `Dressed Banny #${event.decorateBannyEvent.bannyBodyId.toString()}`;
+    }
+    if (event.payEvent) {
+      let mainText = "";
+
+      if (!event.payEvent.memo?.startsWith("Minted tiers ")) {
+        mainText = `Paid ${formatEther(event.payEvent.amount).substring(
+          0,
+          6
+        )} ETH`;
+      } else {
+        const items = event.payEvent.memo.split("Minted tiers ")[1].split(", ");
+
+        mainText = `Minted ${items.length} item${items.length > 1 ? "s" : ""}`;
+      }
+
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+            width: "100%",
+          }}
+        >
+          {mainText}{" "}
+          <span style={{ fontSize: FONT_SIZE.xs, opacity: 0.6 }}>
+            earned{" "}
+            {Math.round(
+              parseFloat(formatEther(event.payEvent.newlyIssuedTokenCount))
+            )}{" "}
+            $BAN
+          </span>
+        </div>
+      );
     }
   }, [event]);
 
@@ -38,114 +72,126 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
     );
   }, [event.timestamp]);
 
-  const Caller = useCallback(() => {
+  const From = useCallback(() => {
     return (
-      <Link href={`/locker/${event.caller}`} target="blank">
+      <Link href={`/locker/${event.from}`} target="blank">
         <FormattedAddress
           position="left"
           style={{ cursor: "pointer" }}
-          address={event.caller as `0x${string}`}
+          address={event.from as `0x${string}`}
         />
       </Link>
     );
-  }, [event.caller]);
+  }, [event.from]);
 
   const Body = useCallback(() => {
     const imgSize = 48;
 
-    switch (event.type) {
-      case "mint":
-        const tierIds = event.note
-          .split("Minted tiers ")[1]
-          .split(", ")
-          .map((str) => parseInt(str));
+    if (event.payEvent) {
+      if (!event.payEvent.memo?.startsWith("Minted tiers ")) {
+        return null;
+      }
 
-        const _tiers = tierIds.reduce((acc, tierId) => {
-          if (acc.some((t) => t.tier.tierId === tierId)) {
-            return acc.map((t) =>
-              t.tier.tierId === tierId
-                ? { tier: t.tier, quantity: t.quantity + 1 }
-                : t
-            );
-          }
+      const tierIds = event.payEvent.memo
+        .split("Minted tiers ")[1]
+        .split(", ")
+        .map((str) => parseInt(str));
 
-          const tier = tiers?.find((t) => t.tierId === tierId);
+      const _tiers = tierIds.reduce((acc, tierId) => {
+        if (acc.some((t) => t.tier.tierId === tierId)) {
+          return acc.map((t) =>
+            t.tier.tierId === tierId
+              ? { tier: t.tier, quantity: t.quantity + 1 }
+              : t
+          );
+        }
 
-          if (tier) {
-            return [...acc, { tier, quantity: 1 }];
-          }
+        const tier = tiers?.find((t) => t.tierId === tierId);
 
-          return acc;
-        }, [] as { tier: Tier; quantity: number }[]);
+        if (tier) {
+          return [...acc, { tier, quantity: 1 }];
+        }
 
-        if (!_tiers) return "...";
+        return acc;
+      }, [] as { tier: Tier; quantity: number }[]);
 
-        return (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-            {_tiers.map(({ tier, quantity }) => (
-              <div key={tier.tierId} style={{ position: "relative" }}>
-                <TierImage tier={tier} size={imgSize} />
+      if (!_tiers) return "...";
 
-                {quantity > 1 && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 4,
-                      right: 0,
-                      fontSize: FONT_SIZE.xs,
-                      background: "white",
-                      color: COLORS.gray,
-                    }}
-                  >
-                    x{quantity}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        );
-      case "decorate":
-        const info = decodeNFTInfo(event.tokenUri);
+      return (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+          {_tiers.map(({ tier, quantity }) => (
+            <div key={tier.tierId} style={{ position: "relative" }}>
+              <TierImage tier={tier} size={imgSize} />
 
-        if (!tiers || !info) return "...";
-
-        const displayLarge = info.outfitIds?.every((tokenId) =>
-          // Return true if banny is NOT wearing a background
-          tiers
-            .filter((t) => t.category === "background")
-            .every((t) => t.tierId !== tierIdOfTokenId(tokenId))
-        );
-
-        const size = imgSize * (displayLarge ? 1.3 : 1);
-
-        return (
-          <Link href={`?nft=${event.chain.id}:${info.tokenId}`}>
-            <div
-              style={{
-                margin: displayLarge ? -(size * 0.125) : 0,
-                pointerEvents: "none",
-              }}
-            >
-              <DressedBannyElem nftInfo={info} size={size} />
+              {quantity > 1 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 4,
+                    right: 0,
+                    fontSize: FONT_SIZE.xs,
+                    background: "white",
+                    color: COLORS.gray,
+                  }}
+                >
+                  x{quantity}
+                </div>
+              )}
             </div>
-          </Link>
-        );
+          ))}
+        </div>
+      );
+    }
+
+    if (event.decorateBannyEvent) {
+      const info = event.decorateBannyEvent.tokenUriMetadata as NFTMetadata;
+
+      if (!tiers || !info) return "...";
+
+      const displayLarge = info.outfitIds?.every((tokenId) =>
+        // Return true if banny is NOT wearing a background
+        tiers
+          .filter((t) => t.category === "background")
+          .every((t) => t.tierId !== tierIdOfTokenId(tokenId))
+      );
+
+      const size = imgSize * (displayLarge ? 1.3 : 1);
+
+      return (
+        <Link
+          href={ROUTES.nftPath({
+            chainId: event.chainId,
+            tokenId: info.tokenId,
+          })}
+        >
+          <div
+            style={{
+              margin: displayLarge ? -(size * 0.125) : 0,
+              pointerEvents: "none",
+            }}
+          >
+            <DressedBannyElem nftInfo={info} size={size} />
+          </div>
+        </Link>
+      );
     }
   }, [event, tiers]);
 
   const Chain = useCallback(
     () => (
       <div style={{ color: COLORS.blue300 }}>
-        {event.chain.name.toUpperCase()}
+        {chainName(event.chainId)?.toUpperCase()}
       </div>
     ),
-    [event.chain.name]
+    [event.chainId]
   );
 
-  const txUrl = useMemo(
-    () => `${event.chain.blockExplorers.default.url}/tx/${event.txHash}`,
-    [event]
-  );
+  const txUrl = useMemo(() => {
+    const chain = config.chains.find((c) => c.id === event.chainId);
+    return chain
+      ? `${chain.blockExplorers.default.url}/tx/${event.txHash}`
+      : undefined;
+  }, [event]);
 
   return (
     <ButtonPad
@@ -178,17 +224,17 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
 
         <div style={{ flex: 1 }} />
 
-        <Caller />
-        <Link href={txUrl} target="blank">
-          {"TX>"}
-        </Link>
+        <From />
+        {txUrl && (
+          <Link href={txUrl} target="blank">
+            {"TX>"}
+          </Link>
+        )}
       </div>
 
       <Title />
 
-      <div style={{ maxWidth: "100%" }}>
-        <Body />
-      </div>
+      <Body />
     </ButtonPad>
   );
 }

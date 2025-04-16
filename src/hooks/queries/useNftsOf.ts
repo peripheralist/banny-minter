@@ -6,11 +6,10 @@ export function useNftsOf(wallet: Address | undefined) {
   return useNfTsQuery({
     variables: {
       where: {
-        collection: BAN_HOOK.toLowerCase(),
-        owner_: {
-          wallet: wallet?.toLowerCase() ?? null,
-        },
+        hook: BAN_HOOK.toLowerCase(),
+        owner: wallet,
       },
     },
+    // fetchPolicy: "cache-and-network",
   });
 }

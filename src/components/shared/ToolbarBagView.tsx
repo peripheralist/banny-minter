@@ -91,7 +91,7 @@ export default function ToolbarBagView({
           overflow: "hidden",
         }}
       >
-        {sections.map(({ header, content, contentStyle, sectionStyle }, i) => (
+        {sections.map(({ header, content, contentStyle, sectionStyle }) => (
           <HeaderFrame
             key={header.toString()}
             header={header}

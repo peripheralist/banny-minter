@@ -92,13 +92,25 @@ export default function MintButton() {
 
             <BagItems />
 
-            <p style={{ fontSize: FONT_SIZE.sm }}>
-              Payments go to the{" "}
-              <Link href={`https://app.revnet.eth.sucks/eth:4`} target="blank">
-                $BAN Revnet
-              </Link>{" "}
-              earning $BAN in return.
-            </p>
+            <ButtonPad
+              fillBg={COLORS.blue100}
+              fillBorder={COLORS.blue400}
+              fillFg={COLORS.blue50}
+              style={{ padding: 16 }}
+              onClick={() => switchChain?.()}
+              shadow="sm"
+            >
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                Network:
+                <div style={{ color: COLORS.blue500 }}>{appChain.name}</div>
+              </div>
+            </ButtonPad>
 
             <RoundedFrame
               background={"white"}
@@ -141,18 +153,15 @@ export default function MintButton() {
                 Wallet:
                 <FormattedAddress address={address} position="left" />
               </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
-                Network:
-                <div style={{ color: COLORS.blue500 }}>{appChain.name}</div>
-              </div>
             </RoundedFrame>
+
+            <p style={{ fontSize: FONT_SIZE.sm }}>
+              Payments go to the{" "}
+              <Link href={`https://app.revnet.eth.sucks/eth:4`} target="blank">
+                $BAN Revnet
+              </Link>{" "}
+              earning $BAN in return.
+            </p>
           </div>
         )}
       </Modal>

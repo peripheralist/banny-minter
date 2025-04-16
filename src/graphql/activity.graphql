@@ -1,27 +1,66 @@
-query PayEvents($where: PayEvent_filter) {
-  payEvents(where: $where) {
-    id
-    timestamp
-    txHash
-    caller
+query ActivityEvents($where: activityEventFilter, $orderBy: String, $orderDirection: String) {
+  activityEvents(where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+    items {
+      timestamp
+      txHash
+      chainId
+      from
 
-    beneficiary
-    amount
-    note
-    beneficiaryTokenCount
+      payEvent {
+        timestamp
+        txHash
+        caller
+        chainId
+
+        beneficiary
+        amount
+        memo
+        newlyIssuedTokenCount
+      }
+
+      decorateBannyEvent {
+        timestamp
+        txHash
+        caller
+        chainId
+
+        bannyBodyId
+        outfitIds
+        backgroundId
+        tokenUriMetadata
+      }
+    }
   }
 }
 
-query DecorateBannyEvents($where: DecorateBannyEvent_filter) {
-  decorateBannyEvents(where: $where) {
-    id
-    timestamp
-    txHash
-    caller
+query PayEvents($where: payEventFilter) {
+  payEvents(where: $where, limit: 1000) {
+    items {
+      timestamp
+      txHash
+      caller
+      chainId
 
-    bannyBodyId
-    outfitIds
-    backgroundId
-    tokenUri
+      beneficiary
+      amount
+      memo
+      newlyIssuedTokenCount
+    }
+  }
+}
+
+query DecorateBannyEvents($where: decorateBannyEventFilter) {
+  decorateBannyEvents(where: $where, limit: 1000) {
+    items { 
+      timestamp
+      txHash
+      caller
+      chainId
+
+      bannyBodyId
+      outfitIds
+      backgroundId
+      tokenUri
+    }
   }
 }

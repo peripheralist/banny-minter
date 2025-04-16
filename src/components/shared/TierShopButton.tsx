@@ -1,4 +1,3 @@
-import FuzzMoment from "@/components/pixelRenderers/FuzzMoment";
 import ButtonPad from "@/components/shared/ButtonPad";
 import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
@@ -34,8 +33,8 @@ export default function TierShopButton({
 
   // Only use sold out treatment if tier is not a NFT
   const isSoldOut = useMemo(
-    () => tier.remainingSupply <= BigInt(0) && !tier.tokenId,
-    [tier.remainingSupply, tier.tokenId]
+    () => tier.remainingSupply <= BigInt(0) && !tier.nft?.tokenId,
+    [tier.remainingSupply, tier.nft?.tokenId]
   );
 
   const { isSmallScreen } = useWindowSize();
@@ -81,7 +80,7 @@ export default function TierShopButton({
         }}
       >
         <div style={{ fontSize: isSmallScreen ? FONT_SIZE.sm : FONT_SIZE.md }}>
-          {tier.name}
+          {tier.metadata?.productName}
         </div>
         <div style={{ fontSize: FONT_SIZE.xs }}>
           <Supply />
@@ -116,12 +115,6 @@ export default function TierShopButton({
         onClick={onClick}
       >
         <div style={{ pointerEvents: "none", marginTop: 12 }}>
-          <FuzzMoment
-            width={buttonSize - 16}
-            height={buttonSize - 16}
-            fill={"white"}
-            style={{ zIndex: 2, position: "absolute", margin: 8 }}
-          />
           <TierImage tier={tier} size={buttonSize - 16} />
         </div>
 

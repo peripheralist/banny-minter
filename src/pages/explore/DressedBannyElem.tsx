@@ -1,6 +1,6 @@
 import EquippedTiersPreview from "@/components/shared/EquippedTiersPreview";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
-import { NFTInfo } from "@/model/nftInfo";
+import { NFTMetadata } from "@/model/nftInfo";
 import { EquippedTiers, Tier } from "@/model/tier";
 import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import { useCallback, useMemo } from "react";
@@ -9,7 +9,7 @@ export default function DressedBannyElem({
   nftInfo,
   size,
 }: {
-  nftInfo: NFTInfo;
+  nftInfo: NFTMetadata;
   size: number;
 }) {
   const { tiers } = useAllTiers();
@@ -31,7 +31,7 @@ export default function DressedBannyElem({
       if (assetTier) {
         equipped[assetTier.category] = {
           ...assetTier,
-          tokenId: parseInt(tokenId.toString()),
+          tokenId,
         } as Tier;
       } else {
         console.warn("Error finding tier for NFT with tokenId:", tokenId);
@@ -41,7 +41,7 @@ export default function DressedBannyElem({
     return equipped;
   }, [nftInfo, tiers]);
 
-  const Image = useCallback(
+  const Img = useCallback(
     () =>
       equippedTiers ? (
         <EquippedTiersPreview equipped={equippedTiers} size={size} />
@@ -49,5 +49,5 @@ export default function DressedBannyElem({
     [equippedTiers, size]
   );
 
-  return <Image />;
+  return <Img />;
 }

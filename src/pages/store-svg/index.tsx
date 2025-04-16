@@ -45,7 +45,9 @@ export default function Index() {
               >
                 {tiersToStore?.map((t) => (
                   <div key={t.tierId}>
-                    <RoundedFrame style={{ padding: 8 }}>{t.name}</RoundedFrame>
+                    <RoundedFrame style={{ padding: 8 }}>
+                      {t.metadata?.productName}
+                    </RoundedFrame>
                   </div>
                 ))}
               </div>

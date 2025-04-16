@@ -112,7 +112,7 @@ export default function Index() {
                   >
                     <TierImage size={80} tier={t} />
                     <br />
-                    {t.name}
+                    {t.metadata?.productName}
                   </ButtonPad>
                 ))}
             </div>

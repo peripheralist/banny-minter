@@ -8,41 +8,60 @@ import { useNfTsQuery } from "@/generated/graphql";
 import { useRouterNftParams } from "@/hooks/useRouterNftParams";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFT } from "@/model/nft";
-import { createApolloClient } from "@/utils/createApolloClient";
 import { parseTier } from "@/utils/parseTier";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 import DressedBannyNftImage from "../shared/DressedBannyNftImage";
 import Loading from "../shared/Loading";
+import { Chain } from "@/model/chain";
 
 const routerKey = "nft";
 
 export default function NFTDetailModal() {
-  const { width } = useWindowSize();
-
   const router = useRouter();
 
   const { chain, tokenId } = useRouterNftParams(routerKey);
 
-  const apolloClient = useMemo(
-    () => (chain ? createApolloClient(chain) : undefined),
-    [chain]
-  );
+  const onClose = useCallback(() => {
+    if (!router.query[routerKey]) return;
 
+    const newPath = router.asPath.split(`?${routerKey}=`)[0];
+    router.replace(newPath, undefined, { shallow: true });
+  }, [router]);
+
+  return tokenId && chain ? (
+    <NFTDetail tokenId={tokenId} chain={chain} onClose={onClose} />
+  ) : null;
+}
+
+function NFTDetail({
+  tokenId,
+  chain,
+  onClose,
+}: {
+  tokenId: number;
+  chain: Chain;
+  onClose: VoidFunction;
+}) {
   const { data } = useNfTsQuery({
-    client: apolloClient,
     variables: {
       where: {
-        tokenId: tokenId as unknown as bigint,
-        collection: BAN_HOOK,
+        tokenId: BigInt(tokenId),
+        hook: BAN_HOOK,
+        chainId: chain.id,
       },
     },
   });
 
-  const nft: NFT | undefined = useMemo(() => data?.nfts[0], [data?.nfts]);
+  const nft: NFT | undefined = useMemo(() => data?.nfts.items[0], [data?.nfts]);
 
-  const tier = useMemo(() => (nft ? parseTier(nft?.tier) : undefined), [nft]);
+  const { width } = useWindowSize();
+
+  const tier = useMemo(
+    () => (nft?.tier ? parseTier(nft.tier) : undefined),
+    [nft]
+  );
 
   const imgSize = useMemo(
     () => Math.min(Math.max(width ? width - 96 : 0, 240), 400),
@@ -63,16 +82,10 @@ export default function NFTDetailModal() {
     return <TierImage tier={parseTier(nft?.tier)} size={imgSize - 8} />;
   }, [nft, imgSize]);
 
-  const onClose = useCallback(() => {
-    if (!router.query[routerKey]) return;
-
-    const newPath = router.asPath.split(`?${routerKey}=`)[0];
-    router.replace(newPath, undefined, { shallow: true });
-  }, [router]);
-
   return (
     <Modal
-      open={!!tokenId && !!nft}
+      id="nft-detail"
+      open
       onClose={onClose}
       // action={{
       //   onClick: () => {

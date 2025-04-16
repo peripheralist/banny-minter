@@ -5,6 +5,7 @@ import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { ROUTES } from "@/utils/routes";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 
@@ -79,15 +80,9 @@ export default function Index() {
                           key={t.tierId}
                           tier={t}
                           buttonSize={imgSize}
-                          onClick={() => {
-                            router.push(
-                              router.asPath + `?item=${t.tierId}`,
-                              undefined,
-                              {
-                                shallow: true,
-                              }
-                            );
-                          }}
+                          onClick={() =>
+                            ROUTES.toTier({ router, tierId: t.tierId })
+                          }
                         />
                       )}
                       gridStyle={{

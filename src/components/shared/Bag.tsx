@@ -1,12 +1,12 @@
 import { COLORS } from "@/constants/colors";
+import { FONT_SIZE } from "@/constants/fontSize";
+import { EquipmentContext } from "@/contexts/equipmentContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { useCallback, useContext } from "react";
 import BagItems from "./BagItems";
 import MintButton from "./MintButton";
 import RoundedFrame from "./RoundedFrame";
 import TierImage from "./TierImage";
-import { FONT_SIZE } from "@/constants/fontSize";
-import { EquipmentContext } from "@/contexts/equipmentContext";
 
 export default function Bag({ open }: { open?: boolean }) {
   const { bag, itemsQuantity, emptyBag } = useContext(ShopContext);

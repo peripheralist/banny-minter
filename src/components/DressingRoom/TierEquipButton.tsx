@@ -35,14 +35,14 @@ export default function TierEquipButton({
           ...labelStyle,
         }}
       >
-        <div>{tier.name}</div>
+        <div>{tier.metadata?.productName}</div>
         <div
           style={{
             fontSize: FONT_SIZE.xs,
-            color: tier.equipped ? COLORS.pink : "black",
+            color: tier.nft?.equipped ? COLORS.pink : "black",
           }}
         >
-          {tier.equipped ? "DRESSED" : `${tier.ownedSupply} owned`}
+          {tier.nft?.equipped ? "DRESSED" : `${tier.nft?.ownedSupply} owned`}
         </div>
       </div>
     );

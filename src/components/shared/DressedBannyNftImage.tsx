@@ -1,7 +1,7 @@
 import Fuzz from "@/components/pixelRenderers/Fuzz";
-import { NfTsQuery } from "@/generated/graphql";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
-import { decodeNFTInfo } from "@/utils/decodeNftInfo";
+import { NFT } from "@/model/nft";
+import { NFTMetadata } from "@/model/nftInfo";
 import { useCallback } from "react";
 import Downloadable from "./Downloadable";
 import EquippedTiersPreview from "./EquippedTiersPreview";
@@ -11,17 +11,16 @@ export default function DressedBannyNftImage({
   size,
   download,
 }: {
-  nft: NfTsQuery["nfts"][number] | undefined;
+  nft: NFT | undefined;
   size: number;
   download?: boolean;
 }) {
   const { data: equippedTiers } = useBannyEquippedTiers(nft);
 
-  const info = decodeNFTInfo(nft?.tokenUri);
   // if (!info) return <Fuzz fill="#ccc" width={size} height={size} />;
   // return <object data={info.image} width={size} height={size} />;
 
-  const Image = useCallback(
+  const Preview = useCallback(
     () =>
       equippedTiers ? (
         <EquippedTiersPreview equipped={equippedTiers} size={size} />
@@ -29,18 +28,20 @@ export default function DressedBannyNftImage({
     [equippedTiers, size]
   );
 
-  if (!info || !nft || !equippedTiers) {
+  if (!nft || !equippedTiers) {
     return <Fuzz fill="#ccc" width={size} height={size} />;
   }
 
-  return download ? (
+  const info = nft.metadata as NFTMetadata;
+
+  return download && info ? (
     <Downloadable
       downloadHref={info.image}
       fileName={`banny-#${nft.tokenId.toString()}.svg`}
     >
-      <Image />
+      <Preview />
     </Downloadable>
   ) : (
-    <Image />
+    <Preview />
   );
 }

@@ -8,9 +8,10 @@ export function useRouterNftParams(key: string) {
   const appChain = useAppChain();
   const chains = useSupportedChains();
 
+  const param = router.query[key] as string;
+
   const { chain, tokenId } = useMemo(() => {
     try {
-      const param = router.query[key] as string;
       if (!param) return { chain: undefined, tokenId: undefined };
 
       const [_chainId, _tokenId] = param.includes(":")
@@ -26,7 +27,7 @@ export function useRouterNftParams(key: string) {
 
       return { chain: undefined, tokenId: undefined };
     }
-  }, [router.query, appChain.id, chains, key]);
+  }, [param, appChain.id, chains]);
 
   return { chain, tokenId };
 }
