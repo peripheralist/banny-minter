@@ -26,6 +26,7 @@ type Section = {
   content: JSX.Element;
   contentStyle?: CSSProperties;
   sectionStyle?: CSSProperties;
+  onScrollFinish?: VoidFunction;
 };
 
 const Toolbar = dynamic(() => import("@/components/Toolbar"), { ssr: false });
@@ -91,16 +92,19 @@ export default function ToolbarBagView({
           overflow: "hidden",
         }}
       >
-        {sections.map(({ header, content, contentStyle, sectionStyle }) => (
-          <HeaderFrame
-            key={header.toString()}
-            header={header}
-            contentStyle={contentStyle}
-            sectionStyle={sectionStyle}
-          >
-            {content}
-          </HeaderFrame>
-        ))}
+        {sections.map(
+          ({ header, content, contentStyle, sectionStyle, onScrollFinish }) => (
+            <HeaderFrame
+              key={header.toString()}
+              header={header}
+              contentStyle={contentStyle}
+              sectionStyle={sectionStyle}
+              onScrollFinish={onScrollFinish}
+            >
+              {content}
+            </HeaderFrame>
+          )
+        )}
 
         {bag.length > 0 && bagInitialized && !disableDrawer && (
           <Drawer

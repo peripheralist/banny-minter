@@ -11,7 +11,7 @@ export default function DressedBannyNftImage({
   size,
   download,
 }: {
-  nft: NFT | undefined;
+  nft: Pick<NFT, "tier" | "tokenId" | "metadata"> | undefined;
   size: number;
   download?: boolean;
 }) {

@@ -1,5 +1,9 @@
-query ActivityEvents($where: activityEventFilter, $orderBy: String, $orderDirection: String) {
-  activityEvents(where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+query ActivityEvents($where: activityEventFilter, $orderBy: String, $orderDirection: String, $limit: Int, $after: String) {
+  activityEvents(where: $where, orderBy: $orderBy, orderDirection: $orderDirection, limit: $limit, after: $after) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
     items {
       timestamp
       txHash

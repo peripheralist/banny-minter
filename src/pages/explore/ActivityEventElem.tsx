@@ -60,17 +60,14 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
     }
   }, [event]);
 
-  const Timestamp = useCallback(() => {
-    // https://momentjs.com/docs/#/customization/relative-time/
-    moment.relativeTimeThreshold("h", 24);
-    moment.relativeTimeThreshold("m", 60);
-    moment.relativeTimeThreshold("d", 365);
-    return (
+  const Timestamp = useCallback(
+    () => (
       <div style={{ color: COLORS.gray }}>
         {moment(event.timestamp * 1000).fromNow()}
       </div>
-    );
-  }, [event.timestamp]);
+    ),
+    [event.timestamp]
+  );
 
   const From = useCallback(() => {
     return (

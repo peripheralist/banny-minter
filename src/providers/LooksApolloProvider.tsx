@@ -16,8 +16,43 @@ import introspectionResult from "../../graphql.schema.json";
   return this.toString();
 };
 
+function merge(
+  existing: { pageInfo?: { endCursor?: string }; items: [] },
+  incoming: { pageInfo?: { endCursor?: string }; items: [] }
+) {
+  return {
+    ...existing,
+    ...incoming,
+    pageInfo: {
+      ...(existing.pageInfo ?? {}),
+      ...(incoming.pageInfo ?? {}),
+    },
+    items:
+      incoming.pageInfo &&
+      existing.pageInfo &&
+      incoming.pageInfo.endCursor === existing.pageInfo.endCursor // crude prevent double query
+        ? existing
+        : [...(existing.items || []), ...(incoming.items || [])],
+  };
+}
+
 // ensure the cache is created only once.
-const apolloCache = new InMemoryCache();
+const apolloCache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        nfts: {
+          keyArgs: ["where", "orderBy", "orderDirection"],
+          merge,
+        },
+        activityEvents: {
+          keyArgs: ["where", "orderBy", "orderDirection"],
+          merge,
+        },
+      },
+    },
+  },
+});
 
 export function LooksApolloProvider({ children }: PropsWithChildren) {
   const schema = useMemo(

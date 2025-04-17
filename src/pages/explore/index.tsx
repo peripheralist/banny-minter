@@ -13,23 +13,39 @@ import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { chainName } from "@/utils/chainName";
 import { ROUTES } from "@/utils/routes";
+import moment from "moment";
 import Link from "next/link";
 import { useCallback, useMemo } from "react";
 import ActivityEventElem from "./ActivityEventElem";
 
-export default function Activity() {
-  const { events, loading: eventsLoading } = useAllActivity();
+// https://momentjs.com/docs/#/customization/relative-time/
+moment.relativeTimeThreshold("h", 24);
+moment.relativeTimeThreshold("m", 60);
+moment.relativeTimeThreshold("d", 365);
 
-  const { data: bannys, loading: bannysLoading } = useNfTsQuery({
+export default function Activity() {
+  const {
+    events,
+    loading: eventsLoading,
+    fetchMore: fetchMoreActivity,
+  } = useAllActivity();
+
+  const {
+    data: bannys,
+    loading: bannysLoading,
+    fetchMore: fetchMoreBannys,
+  } = useNfTsQuery({
     variables: {
       where: {
         category: 0,
         hook: BAN_HOOK,
         customized: true,
       },
+      limit: 12,
       orderBy: "createdAt",
       orderDirection: "desc",
     },
+    notifyOnNetworkStatusChange: true,
   });
 
   const { isSmallScreen } = useWindowSize();
@@ -75,16 +91,18 @@ export default function Activity() {
               <ActivityEventElem key={`${e.chainId}-${e.txHash}`} event={e} />
             ))}
 
-            <div
-              style={{
-                padding: 24,
-                textAlign: "center",
-                opacity: 0.5,
-                fontSize: FONT_SIZE.sm,
-              }}
-            >
-              That{`'`}s everything
-            </div>
+            {!events?.activityEvents.pageInfo.hasNextPage && (
+              <div
+                style={{
+                  padding: 24,
+                  textAlign: "center",
+                  opacity: 0.5,
+                  fontSize: FONT_SIZE.sm,
+                }}
+              >
+                That{`'`}s everything
+              </div>
+            )}
           </>
         )}
       </div>
@@ -102,7 +120,59 @@ export default function Activity() {
             gap: 4,
           }}
         >
-          {bannysLoading ? (
+          {bannys?.nfts.items?.map((nft) => (
+            <Link
+              key={nft.chainId + "-" + nft.tokenId.toString()}
+              style={{ display: "block" }}
+              href={ROUTES.nftPath({
+                chainId: nft.chainId,
+                tokenId: nft.tokenId,
+              })}
+            >
+              <RoundedFrame
+                key={nft.chainId + "-" + nft.tokenId.toString()}
+                borderColor="white"
+                background={"white"}
+                style={{ pointerEvents: "none" }}
+                containerStyle={{ height: imgSize, width: imgSize }}
+              >
+                <DressedBannyNftImage nft={nft} size={imgSize} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    position: "absolute",
+                    bottom: 0,
+                    left: 4,
+                    right: 4,
+                    padding: 4,
+                    paddingBottom: 8,
+                    gap: 8,
+                    fontSize: FONT_SIZE.xs,
+                    textTransform: "uppercase",
+                    background: "white",
+                  }}
+                >
+                  <span style={{ color: COLORS.blue300 }}>
+                    {chainName(nft.chainId)}
+                  </span>
+
+                  <span style={{ color: COLORS.gray }}>
+                    {moment(nft.createdAt * 1000).fromNow()}
+                  </span>
+
+                  <div style={{ flex: 1 }} />
+
+                  <FormattedAddress
+                    style={{ color: COLORS.gray }}
+                    address={nft.owner?.address as `0x${string}`}
+                  />
+                </div>
+              </RoundedFrame>
+            </Link>
+          ))}
+
+          {bannysLoading && (
             <>
               <Fuzz
                 width={imgSize}
@@ -129,68 +199,11 @@ export default function Activity() {
                 fill={"white"}
               />
             </>
-          ) : (
-            bannys?.nfts.items?.map((nft) => (
-              <Link
-                key={nft.chainId + "-" + nft.tokenId.toString()}
-                style={{ display: "block" }}
-                href={ROUTES.nftPath({
-                  chainId: nft.chainId,
-                  tokenId: nft.tokenId,
-                })}
-              >
-                <RoundedFrame
-                  key={nft.chainId + "-" + nft.tokenId.toString()}
-                  borderColor="white"
-                  background={"white"}
-                  style={{ pointerEvents: "none" }}
-                  containerStyle={{ height: imgSize, width: imgSize }}
-                >
-                  <DressedBannyNftImage nft={nft} size={imgSize} />
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      position: "absolute",
-                      bottom: 0,
-                      left: 4,
-                      right: 4,
-                      fontSize: FONT_SIZE.xs,
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    <span
-                      style={{
-                        color: COLORS.blue300,
-                        background: "white",
-                        padding: 4,
-                        paddingBottom: 8,
-                      }}
-                    >
-                      {chainName(nft.chainId)}
-                    </span>
-
-                    <span
-                      style={{
-                        color: COLORS.gray,
-                        background: "white",
-                        padding: 4,
-                        paddingBottom: 8,
-                      }}
-                    >
-                      <FormattedAddress
-                        address={nft.owner?.address as `0x${string}`}
-                      />
-                    </span>
-                  </div>
-                </RoundedFrame>
-              </Link>
-            ))
           )}
         </div>
       </div>
     ),
-    [measuredRef, imgSize, bannys?.nfts.items]
+    [measuredRef, imgSize, bannys?.nfts.items, bannysLoading]
   );
 
   return (
@@ -207,13 +220,31 @@ export default function Activity() {
                 flex: 0,
               },
               content: <ActivityList />,
+              onScrollFinish:
+                events?.activityEvents.pageInfo.hasNextPage && !eventsLoading
+                  ? () =>
+                      fetchMoreActivity({
+                        variables: {
+                          after: events.activityEvents.pageInfo.endCursor,
+                        },
+                      })
+                  : undefined,
             },
             {
-              header: `Bannys (${bannys?.nfts.items.length ?? "--"})`,
+              header: `Bannys (${bannys?.nfts.totalCount ?? "--"})`,
               sectionStyle: {
                 flex: 1,
               },
               content: <BannysList />,
+              onScrollFinish:
+                bannys?.nfts.pageInfo.hasNextPage && !bannysLoading
+                  ? () =>
+                      fetchMoreBannys({
+                        variables: {
+                          after: bannys.nfts.pageInfo.endCursor,
+                        },
+                      })
+                  : undefined,
             },
           ]}
         />

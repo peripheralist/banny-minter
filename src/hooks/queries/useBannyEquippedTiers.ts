@@ -6,7 +6,9 @@ import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import { useMemo } from "react";
 import { useAllTiers } from "./useAllTiers";
 
-export function useBannyEquippedTiers(bannyNft: NFT | undefined) {
+export function useBannyEquippedTiers(
+  bannyNft: Pick<NFT, "tier" | "tokenId" | "metadata"> | undefined
+) {
   const { tiers, loading } = useAllTiers();
 
   const data = useMemo(() => {

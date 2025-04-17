@@ -11,8 +11,13 @@ fragment TierData on nftTier {
   metadata
 }
 
-query NFTs($where: nftFilter, $orderBy: String, $orderDirection: String, $limit: Int) {
-  nfts(where: $where, orderBy: $orderBy, orderDirection: $orderDirection, limit: $limit) {
+query NFTs($where: nftFilter, $orderBy: String, $orderDirection: String, $limit: Int, $after: String) {
+  nfts(where: $where, orderBy: $orderBy, orderDirection: $orderDirection, limit: $limit, after: $after) {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
     items {
       chainId
       tokenId

@@ -1,18 +1,20 @@
-import { useMeasuredRef } from "@/hooks/useMeasuredRef";
-import React, { CSSProperties, PropsWithChildren } from "react";
-import RoundedFrame from "./RoundedFrame";
 import { COLORS } from "@/constants/colors";
+import { useMeasuredRef } from "@/hooks/useMeasuredRef";
+import { CSSProperties, PropsWithChildren } from "react";
+import RoundedFrame from "./RoundedFrame";
 
 export default function HeaderFrame({
   children,
   header,
   sectionStyle,
   contentStyle,
+  onScrollFinish,
   onClick,
 }: PropsWithChildren<{
   header: string | JSX.Element;
   sectionStyle?: CSSProperties;
   contentStyle?: CSSProperties;
+  onScrollFinish?: VoidFunction;
   onClick?: VoidFunction;
 }>) {
   const { measuredRef: headerRef, height: headerHeight } = useMeasuredRef();
@@ -44,13 +46,36 @@ export default function HeaderFrame({
 
       <RoundedFrame
         background={COLORS.banana50}
-        style={{ overflow: "auto", ...contentStyle }}
         containerStyle={{
           width: "100%",
           height: `calc(100% - ${headerHeight}px)`,
         }}
       >
-        {children}
+        <div
+          onScroll={
+            onScrollFinish
+              ? (e) => {
+                  const { scrollTop, clientHeight, scrollHeight } =
+                    e.currentTarget;
+
+                  if (
+                    scrollHeight - (scrollTop + clientHeight) <
+                    Math.max(1000, clientHeight)
+                  ) {
+                    onScrollFinish();
+                  }
+                }
+              : undefined
+          }
+          style={{
+            overflow: "auto",
+            height: "100%",
+            width: "100%",
+            ...contentStyle,
+          }}
+        >
+          {children}
+        </div>
       </RoundedFrame>
     </div>
   );

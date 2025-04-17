@@ -30,7 +30,9 @@ export function useAllActivity() {
       },
       orderBy: "timestamp",
       orderDirection: "desc",
+      limit: 20,
     },
+    notifyOnNetworkStatusChange: true,
   });
 
   return {

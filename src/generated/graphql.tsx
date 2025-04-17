@@ -1858,6 +1858,7 @@ export type Nft = {
   customized: Maybe<Scalars['Boolean']['output']>;
   hook: Maybe<NftHook>;
   metadata: Maybe<Scalars['JSON']['output']>;
+  mintTx: Scalars['String']['output'];
   owner: Maybe<Participant>;
   project: Maybe<Project>;
   projectId: Scalars['Int']['output'];
@@ -1909,6 +1910,16 @@ export type NftFilter = {
   hook_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   hook_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   hook_starts_with?: InputMaybe<Scalars['String']['input']>;
+  mintTx?: InputMaybe<Scalars['String']['input']>;
+  mintTx_contains?: InputMaybe<Scalars['String']['input']>;
+  mintTx_ends_with?: InputMaybe<Scalars['String']['input']>;
+  mintTx_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  mintTx_not?: InputMaybe<Scalars['String']['input']>;
+  mintTx_not_contains?: InputMaybe<Scalars['String']['input']>;
+  mintTx_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  mintTx_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  mintTx_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  mintTx_starts_with?: InputMaybe<Scalars['String']['input']>;
   owner?: InputMaybe<Scalars['String']['input']>;
   owner_contains?: InputMaybe<Scalars['String']['input']>;
   owner_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -4279,10 +4290,12 @@ export type ActivityEventsQueryVariables = Exact<{
   where?: InputMaybe<ActivityEventFilter>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type ActivityEventsQuery = { activityEvents: { items: Array<{ timestamp: number, txHash: string, chainId: number, from: string, payEvent: { timestamp: number, txHash: string, caller: string, chainId: number, beneficiary: string, amount: bigint, memo: string | null, newlyIssuedTokenCount: bigint } | null, decorateBannyEvent: { timestamp: number, txHash: string, caller: string, chainId: number, bannyBodyId: bigint, outfitIds: Array<bigint> | null, backgroundId: bigint | null, tokenUriMetadata: any | null } | null }> } };
+export type ActivityEventsQuery = { activityEvents: { pageInfo: { endCursor: string | null, hasNextPage: boolean }, items: Array<{ timestamp: number, txHash: string, chainId: number, from: string, payEvent: { timestamp: number, txHash: string, caller: string, chainId: number, beneficiary: string, amount: bigint, memo: string | null, newlyIssuedTokenCount: bigint } | null, decorateBannyEvent: { timestamp: number, txHash: string, caller: string, chainId: number, bannyBodyId: bigint, outfitIds: Array<bigint> | null, backgroundId: bigint | null, tokenUriMetadata: any | null } | null }> } };
 
 export type PayEventsQueryVariables = Exact<{
   where?: InputMaybe<PayEventFilter>;
@@ -4305,10 +4318,11 @@ export type NfTsQueryVariables = Exact<{
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type NfTsQuery = { nfts: { items: Array<{ chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, owner: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null }> } };
+export type NfTsQuery = { nfts: { totalCount: number, pageInfo: { endCursor: string | null, hasNextPage: boolean }, items: Array<{ chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, owner: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null }> } };
 
 export type NftTiersQueryVariables = Exact<{
   where?: InputMaybe<NftTierFilter>;
@@ -4911,6 +4925,7 @@ export type NftResolvers<ContextType = any, ParentType extends ResolversParentTy
   customized?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   hook?: Resolver<Maybe<ResolversTypes['nftHook']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  mintTx?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owner?: Resolver<Maybe<ResolversTypes['participant']>, ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['project']>, ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -5425,12 +5440,18 @@ export const TierDataFragmentDoc = gql`
 }
     `;
 export const ActivityEventsDocument = gql`
-    query ActivityEvents($where: activityEventFilter, $orderBy: String, $orderDirection: String) {
+    query ActivityEvents($where: activityEventFilter, $orderBy: String, $orderDirection: String, $limit: Int, $after: String) {
   activityEvents(
     where: $where
     orderBy: $orderBy
     orderDirection: $orderDirection
+    limit: $limit
+    after: $after
   ) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
     items {
       timestamp
       txHash
@@ -5476,6 +5497,8 @@ export const ActivityEventsDocument = gql`
  *      where: // value for 'where'
  *      orderBy: // value for 'orderBy'
  *      orderDirection: // value for 'orderDirection'
+ *      limit: // value for 'limit'
+ *      after: // value for 'after'
  *   },
  * });
  */
@@ -5594,13 +5617,19 @@ export type DecorateBannyEventsLazyQueryHookResult = ReturnType<typeof useDecora
 export type DecorateBannyEventsSuspenseQueryHookResult = ReturnType<typeof useDecorateBannyEventsSuspenseQuery>;
 export type DecorateBannyEventsQueryResult = Apollo.QueryResult<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>;
 export const NfTsDocument = gql`
-    query NFTs($where: nftFilter, $orderBy: String, $orderDirection: String, $limit: Int) {
+    query NFTs($where: nftFilter, $orderBy: String, $orderDirection: String, $limit: Int, $after: String) {
   nfts(
     where: $where
     orderBy: $orderBy
     orderDirection: $orderDirection
     limit: $limit
+    after: $after
   ) {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
     items {
       chainId
       tokenId
@@ -5636,6 +5665,7 @@ export const NfTsDocument = gql`
  *      orderBy: // value for 'orderBy'
  *      orderDirection: // value for 'orderDirection'
  *      limit: // value for 'limit'
+ *      after: // value for 'after'
  *   },
  * });
  */
