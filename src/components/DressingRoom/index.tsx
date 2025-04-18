@@ -34,26 +34,39 @@ export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
   const formattedAvailableTiers = useMemo(() => {
     if (!nfts || !equippedTiers) return;
 
-    const availableNfts = nfts.nfts.items.map(parseTierOrNft);
+    const availableNfts = nfts.nfts.items.map(parseTierOrNft).filter((t) =>
+      // only body add tier for the bannyNft
+      t.category === "body"
+        ? t.tokenId === bannyNft.tokenId
+          ? true
+          : false
+        : true
+    );
 
     // Add equipped nft tiers
-    const formatted = Object.values(equippedTiers).reduce((acc, nft) => {
-      if (acc.some((nft) => nft.tierId === nft.tierId)) {
-        return acc.map((nft) => ({
-          ...nft,
-          ownedQuantity: (nft.ownedQuantity ?? 0) + 1,
-        }));
-      }
+    const formatted = Object.values(equippedTiers).reduce(
+      (acc, equippedTier) => {
+        if (
+          acc.some(
+            (availableNft) => availableNft.tierId === equippedTier.tierId
+          )
+        ) {
+          return acc.map((_availableNft) => ({
+            ..._availableNft,
+            ownedQuantity: (_availableNft.ownedQuantity ?? 0) + 1,
+          }));
+        }
 
-      return [
-        ...acc,
-        {
-          ...nft,
-          ownedQuantity: 1,
-          dressed: true,
-        } as TierOrNft<true>,
-      ];
-    }, availableNfts);
+        return [
+          ...acc,
+          {
+            ...equippedTier,
+            ownedQuantity: 1,
+          } as TierOrNft<true>,
+        ];
+      },
+      availableNfts
+    );
 
     return formatted;
   }, [nfts?.nfts.items, equippedTiers]);

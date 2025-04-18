@@ -25,7 +25,7 @@ export function useBannyEquippedTiers(bannyNft: TierOrNft<true> | undefined) {
       const assetTier = parsedTiers.find((t) => t.tierId === tierId);
 
       if (assetTier) {
-        equipped[assetTier.category] = assetTier;
+        equipped[assetTier.category] = { ...assetTier, tokenId, dressed: true };
       } else {
         console.warn("Error finding tier for NFT with tokenId:", tokenId);
       }
