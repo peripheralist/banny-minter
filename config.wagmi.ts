@@ -33,7 +33,6 @@ export const config = createConfig({
         ]
       : []),
   ],
-  syncConnectedChain: false,
   chains: [
     sepolia,
     arbitrumSepolia,
