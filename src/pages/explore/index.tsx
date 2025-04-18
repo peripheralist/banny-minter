@@ -43,7 +43,7 @@ export default function Activity() {
         customized: true,
       },
       limit: 12,
-      orderBy: "createdAt",
+      orderBy: "customizedAt",
       orderDirection: "desc",
     },
     notifyOnNetworkStatusChange: true,
@@ -78,33 +78,31 @@ export default function Activity() {
               }),
         }}
       >
-        {eventsLoading ? (
-          <>
-            <Fuzz width={400} height={128} pixelSize={8} fill={"white"} />
-            <Fuzz width={400} height={128} pixelSize={8} fill={"white"} />
-            <Fuzz width={400} height={128} pixelSize={8} fill={"white"} />
-            <Fuzz width={400} height={128} pixelSize={8} fill={"white"} />
-            <Fuzz width={400} height={128} pixelSize={8} fill={"white"} />
-          </>
-        ) : (
-          <>
-            {events?.activityEvents.items.map((e) => (
-              <ActivityEventElem key={`${e.chainId}-${e.txHash}`} event={e} />
-            ))}
+        {events?.activityEvents.items.map((e) => (
+          <ActivityEventElem key={`${e.chainId}-${e.txHash}`} event={e} />
+        ))}
 
-            {!events?.activityEvents.pageInfo.hasNextPage && (
-              <div
-                style={{
-                  padding: 24,
-                  textAlign: "center",
-                  opacity: 0.5,
-                  fontSize: FONT_SIZE.sm,
-                }}
-              >
-                That{`'`}s everything
-              </div>
-            )}
+        {eventsLoading && (
+          <>
+            <Fuzz width={400} height={128} pixelSize={8} fill={"white"} />
+            <Fuzz width={400} height={128} pixelSize={8} fill={"white"} />
+            <Fuzz width={400} height={128} pixelSize={8} fill={"white"} />
+            <Fuzz width={400} height={128} pixelSize={8} fill={"white"} />
+            <Fuzz width={400} height={128} pixelSize={8} fill={"white"} />
           </>
+        )}
+
+        {!events?.activityEvents.pageInfo.hasNextPage && (
+          <div
+            style={{
+              padding: 24,
+              textAlign: "center",
+              opacity: 0.5,
+              fontSize: FONT_SIZE.sm,
+            }}
+          >
+            That{`'`}s everything
+          </div>
         )}
       </div>
     ),
@@ -162,7 +160,7 @@ export default function Activity() {
                   </span>
 
                   <span style={{ color: COLORS.gray }}>
-                    {moment(nft.createdAt * 1000).fromNow()}
+                    {moment(nft.customizedAt * 1000).fromNow()}
                   </span>
 
                   <div style={{ flex: 1 }} />

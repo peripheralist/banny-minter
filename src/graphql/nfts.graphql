@@ -23,6 +23,7 @@ query NFT($tokenId: BigInt!, $chainId: Float!, $hook: String!) {
     tierId
     createdAt
     customized
+    customizedAt
     tier {
       ...TierData
     }
@@ -47,6 +48,7 @@ query NFTs($where: nftFilter, $orderBy: String, $orderDirection: String, $limit:
       tierId
       createdAt
       customized
+      customizedAt
       tier {
         ...TierData
       }

@@ -10,6 +10,5 @@ export function useNftsOf(wallet: Address | undefined) {
         owner: wallet,
       },
     },
-    // fetchPolicy: "cache-and-network",
   });
 }

@@ -1856,6 +1856,7 @@ export type Nft = {
   chainId: Scalars['Int']['output'];
   createdAt: Scalars['Int']['output'];
   customized: Maybe<Scalars['Boolean']['output']>;
+  customizedAt: Scalars['Int']['output'];
   hook: Maybe<NftHook>;
   metadata: Maybe<Scalars['JSON']['output']>;
   mintTx: Scalars['String']['output'];
@@ -1897,6 +1898,14 @@ export type NftFilter = {
   createdAt_not?: InputMaybe<Scalars['Int']['input']>;
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   customized?: InputMaybe<Scalars['Boolean']['input']>;
+  customizedAt?: InputMaybe<Scalars['Int']['input']>;
+  customizedAt_gt?: InputMaybe<Scalars['Int']['input']>;
+  customizedAt_gte?: InputMaybe<Scalars['Int']['input']>;
+  customizedAt_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  customizedAt_lt?: InputMaybe<Scalars['Int']['input']>;
+  customizedAt_lte?: InputMaybe<Scalars['Int']['input']>;
+  customizedAt_not?: InputMaybe<Scalars['Int']['input']>;
+  customizedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   customized_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
   customized_not?: InputMaybe<Scalars['Boolean']['input']>;
   customized_not_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
@@ -4320,7 +4329,7 @@ export type NftQueryVariables = Exact<{
 }>;
 
 
-export type NftQuery = { nft: { chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, owner: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null } | null };
+export type NftQuery = { nft: { chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, customizedAt: number, owner: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null } | null };
 
 export type NfTsQueryVariables = Exact<{
   where?: InputMaybe<NftFilter>;
@@ -4331,7 +4340,7 @@ export type NfTsQueryVariables = Exact<{
 }>;
 
 
-export type NfTsQuery = { nfts: { totalCount: number, pageInfo: { endCursor: string | null, hasNextPage: boolean }, items: Array<{ chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, owner: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null }> } };
+export type NfTsQuery = { nfts: { totalCount: number, pageInfo: { endCursor: string | null, hasNextPage: boolean }, items: Array<{ chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, customizedAt: number, owner: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null }> } };
 
 export type NftTiersQueryVariables = Exact<{
   where?: InputMaybe<NftTierFilter>;
@@ -4932,6 +4941,7 @@ export type NftResolvers<ContextType = any, ParentType extends ResolversParentTy
   chainId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   customized?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  customizedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   hook?: Resolver<Maybe<ResolversTypes['nftHook']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   mintTx?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -5638,6 +5648,7 @@ export const NftDocument = gql`
     tierId
     createdAt
     customized
+    customizedAt
     tier {
       ...TierData
     }
@@ -5704,6 +5715,7 @@ export const NfTsDocument = gql`
       tierId
       createdAt
       customized
+      customizedAt
       tier {
         ...TierData
       }

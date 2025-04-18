@@ -97,6 +97,11 @@ export function LooksApolloProvider({ children }: PropsWithChildren) {
       new ApolloClient({
         cache: apolloCache,
         link: ApolloLink.from([scalarsLink, httpLink]),
+        defaultOptions: {
+          watchQuery: {
+            fetchPolicy: "cache-and-network",
+          },
+        },
       }),
     [httpLink, scalarsLink]
   );

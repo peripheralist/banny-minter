@@ -19,19 +19,19 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
 
   const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("banny");
 
-  const { tiers } = useAllTiers();
+  const { parsedTiers } = useAllTiers();
 
   const { value: bag, setValue: setBag } = useLocalStorageState<ShoppingBag>(
     "bag_content",
     {
       defaultValue: [],
-      disabled: !tiers?.length,
+      disabled: !parsedTiers?.length,
       parse: (str) =>
         str
           ? JSON.parse(str).map(
               ({ tierId, quantity }: { tierId: number; quantity: number }) => ({
                 quantity,
-                tier: tiers?.find((t) => t.tierId === tierId),
+                tier: parsedTiers?.find((t) => t.tierId === tierId),
               })
             )
           : [],

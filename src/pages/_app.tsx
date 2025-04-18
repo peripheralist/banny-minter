@@ -61,10 +61,7 @@ function _DressBannyContextProvider({ children }: PropsWithChildren) {
   if (!parsedTiers) return <FullscreenLoading />;
 
   return (
-    <DressBannyContextProvider
-      cacheKey="bag_preview"
-      availableTiers={parsedTiers}
-    >
+    <DressBannyContextProvider cacheKey="shop" availableTiers={parsedTiers}>
       {children}
     </DressBannyContextProvider>
   );

@@ -14,7 +14,6 @@ export function useAllTiers() {
         chainId: 1,
       },
     },
-    fetchPolicy: "cache-and-network",
   });
 
   const _tiers = tiers?.nftTiers.items;
