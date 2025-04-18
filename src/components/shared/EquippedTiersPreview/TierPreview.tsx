@@ -1,8 +1,9 @@
 import { Category } from "@/constants/category";
 import { getInheritedStyle } from "@/constants/inheritedColors";
-import { EQUIP_DURATION_MILLIS } from "@/contexts/EquipmentContextProvider";
+import { EQUIP_DURATION_MILLIS } from "@/contexts/DressBannyContextProvider";
 import { useFuzz } from "@/hooks/useFuzz";
-import { EquippedTiers } from "@/model/tier";
+import { CategoryLib } from "@/model/categoryLib";
+import { TierOrNft } from "@/model/tierOrNft";
 import { useCallback, useMemo } from "react";
 import AssetSvg from "../AssetSvg";
 import DefaultAsset from "../DefaultAsset";
@@ -20,7 +21,7 @@ export function TierPreview({
   category: Category;
   pixelSize?: number;
   size: number;
-  equipped: EquippedTiers;
+  equipped: CategoryLib<TierOrNft>;
   equippingCategory?: Category;
   unequippingCategory?: Category;
 }) {

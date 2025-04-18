@@ -1,7 +1,7 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { EquipmentContext } from "@/contexts/equipmentContext";
-import { Tier } from "@/model/tier";
+import { DressBannyContext } from "@/contexts/dressBannyContext";
+import { TierOrNft } from "@/model/tierOrNft";
 import { CSSProperties, useCallback, useContext, useMemo } from "react";
 import FuzzMoment from "../pixelRenderers/FuzzMoment";
 import ButtonPad from "../shared/ButtonPad";
@@ -12,11 +12,11 @@ export default function TierEquipButton({
   size,
   labelStyle,
 }: {
-  tier: Tier;
+  tier: TierOrNft;
   size: number;
   labelStyle?: CSSProperties;
 }) {
-  const { equipped, equip } = useContext(EquipmentContext);
+  const { equipped, equip } = useContext(DressBannyContext);
 
   const isEquipped = useMemo(
     () => equipped[tier.category]?.tierId === tier.tierId,
@@ -39,10 +39,10 @@ export default function TierEquipButton({
         <div
           style={{
             fontSize: FONT_SIZE.xs,
-            color: tier.nft?.equipped ? COLORS.pink : "black",
+            color: tier?.dressed ? COLORS.pink : "black",
           }}
         >
-          {tier.nft?.equipped ? "DRESSED" : `${tier.nft?.ownedSupply} owned`}
+          {tier.dressed ? "DRESSED" : `${tier.ownedQuantity} owned`}
         </div>
       </div>
     );

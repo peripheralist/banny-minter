@@ -1,51 +1,38 @@
-import { NFT } from "@/model/nft";
+import { CategoryLib } from "@/model/categoryLib";
 import { NFTMetadata } from "@/model/nftInfo";
-import { EquippedTiers, Tier } from "@/model/tier";
-import { parseTier } from "@/utils/parseTier";
+import { TierOrNft } from "@/model/tierOrNft";
 import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import { useMemo } from "react";
 import { useAllTiers } from "./useAllTiers";
 
-export function useBannyEquippedTiers(
-  bannyNft: Pick<NFT, "tier" | "tokenId" | "metadata"> | undefined
-) {
-  const { tiers, loading } = useAllTiers();
+export function useBannyEquippedTiers(bannyNft: TierOrNft<true> | undefined) {
+  const { parsedTiers, loading } = useAllTiers();
 
   const data = useMemo(() => {
-    if (!tiers || !bannyNft) return;
+    if (!parsedTiers || !bannyNft) return;
 
-    const equipped: EquippedTiers = {};
+    const equipped: CategoryLib<TierOrNft> = {
+      body: bannyNft,
+    };
 
-    const bannyNftTier = bannyNft.tier
-      ? ({
-          ...parseTier(bannyNft.tier),
-          tokenId: parseInt(bannyNft.tokenId.toString()),
-        } as Tier)
-      : undefined;
+    const { outfitIds, backgroundId } = bannyNft.metadata as NFTMetadata;
 
-    equipped.body = bannyNftTier;
-
-    const decoded = bannyNft.metadata as NFTMetadata;
-
-    const allAssetIds = [...(decoded?.outfitIds ?? [])];
-    if (decoded?.backgroundId) allAssetIds.push(decoded.backgroundId);
+    const allAssetIds = [...(outfitIds ?? [])];
+    if (backgroundId) allAssetIds.push(backgroundId);
 
     allAssetIds.forEach((tokenId) => {
       const tierId = tierIdOfTokenId(tokenId);
-      const assetTier = tiers.find((t) => t.tierId === tierId);
+      const assetTier = parsedTiers.find((t) => t.tierId === tierId);
 
       if (assetTier) {
-        equipped[assetTier.category] = {
-          ...assetTier,
-          tokenId: parseInt(tokenId.toString()),
-        } as Tier;
+        equipped[assetTier.category] = assetTier;
       } else {
         console.warn("Error finding tier for NFT with tokenId:", tokenId);
       }
     });
 
     return equipped;
-  }, [bannyNft, tiers]);
+  }, [bannyNft, parsedTiers]);
 
   return { data, loading };
 }

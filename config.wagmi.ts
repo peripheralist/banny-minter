@@ -1,4 +1,4 @@
-import { createConfig, createStorage, http } from "wagmi";
+import { createConfig, http } from "wagmi";
 import {
   arbitrum,
   arbitrumSepolia,

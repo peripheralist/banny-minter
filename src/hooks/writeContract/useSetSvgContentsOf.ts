@@ -4,12 +4,12 @@ import {
   useWriteContractHandler,
 } from "./useWriteContractHandler";
 import { useAllTiers } from "../queries/useAllTiers";
-import { Tier } from "@/model/tier";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { TierOrNft } from "@/model/tierOrNft";
 
 export function useSetSvgContentsOf(
-  tiers: Tier[] | undefined,
+  tiers: TierOrNft[] | undefined,
   options?: WriteContractHandlerOptions
 ) {
   const { refetch } = useAllTiers();

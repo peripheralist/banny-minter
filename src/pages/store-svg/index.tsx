@@ -8,17 +8,18 @@ import { useSetSvgContentsOf } from "@/hooks/writeContract/useSetSvgContentsOf";
 import { useMemo } from "react";
 
 export default function Index() {
-  const { tiers } = useAllTiers();
+  const { parsedTiers } = useAllTiers();
 
   const appChain = useAppChain();
 
   const tiersToStore = useMemo(
-    () => tiers?.filter((t) => !!t.embeddedSvgUrl),
-    [tiers]
+    () => parsedTiers?.filter((t) => !!t.embeddedSvgUrl),
+    [parsedTiers]
   );
 
-  const { setSvgContentsOf, isPending, hash, isSuccess, ready } =
-    useSetSvgContentsOf(tiersToStore?.slice(0, 10));
+  const { setSvgContentsOf, isPending, ready } = useSetSvgContentsOf(
+    tiersToStore?.slice(0, 10)
+  );
 
   return (
     <ToolbarBagView

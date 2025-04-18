@@ -5,7 +5,7 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
 import { useIsHover } from "@/hooks/useIsHover";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { Tier } from "@/model/tier";
+import { TierOrNft } from "@/model/tierOrNft";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { formatEther } from "viem";
 
@@ -14,7 +14,7 @@ export default function TierShopButton({
   buttonSize,
   onClick,
 }: {
-  tier: Tier;
+  tier: TierOrNft;
   buttonSize: number;
   onClick?: VoidFunction;
 }) {
@@ -33,8 +33,8 @@ export default function TierShopButton({
 
   // Only use sold out treatment if tier is not a NFT
   const isSoldOut = useMemo(
-    () => tier.remainingSupply <= BigInt(0) && !tier.nft?.tokenId,
-    [tier.remainingSupply, tier.nft?.tokenId]
+    () => tier.remainingSupply <= BigInt(0),
+    [tier.remainingSupply]
   );
 
   const { isSmallScreen } = useWindowSize();
@@ -45,11 +45,11 @@ export default function TierShopButton({
     const { initialSupply, remainingSupply } = tier;
 
     const Supply = () => {
+      if (isSoldOut) {
+        return <div>SOLD OUT</div>;
+      }
       if (initialSupply >= BigInt(999999999)) {
         return <div style={{ opacity: 0.5 }}>Unlimited</div>;
-      }
-      if (remainingSupply <= BigInt(0)) {
-        return <div>SOLD OUT</div>;
       }
 
       let _initialSupply = initialSupply.toString();
@@ -87,7 +87,7 @@ export default function TierShopButton({
         </div>
       </div>
     );
-  }, [tier, isSmallScreen]);
+  }, [tier, isSmallScreen, isSoldOut]);
 
   return (
     <ButtonPad

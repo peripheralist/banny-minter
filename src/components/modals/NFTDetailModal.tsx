@@ -2,19 +2,17 @@ import Modal from "@/components/shared/Modal";
 import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
-import { CATEGORY_IDS } from "@/constants/category";
 import { BAN_HOOK } from "@/constants/contracts";
-import { useNfTsQuery } from "@/generated/graphql";
+import { useNftQuery } from "@/generated/graphql";
 import { useRouterNftParams } from "@/hooks/useRouterNftParams";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { NFT } from "@/model/nft";
-import { parseTier } from "@/utils/parseTier";
+import { Chain } from "@/model/chain";
+import { parseTierOrNft } from "@/utils/parseTier";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 import DressedBannyNftImage from "../shared/DressedBannyNftImage";
 import Loading from "../shared/Loading";
-import { Chain } from "@/model/chain";
 
 const routerKey = "nft";
 
@@ -44,24 +42,20 @@ function NFTDetail({
   chain: Chain;
   onClose: VoidFunction;
 }) {
-  const { data } = useNfTsQuery({
+  const { data } = useNftQuery({
     variables: {
-      where: {
-        tokenId: BigInt(tokenId),
-        hook: BAN_HOOK,
-        chainId: chain.id,
-      },
+      tokenId: BigInt(tokenId),
+      hook: BAN_HOOK,
+      chainId: chain.id,
     },
   });
 
-  const nft: NFT | undefined = useMemo(() => data?.nfts.items[0], [data?.nfts]);
+  const nft = useMemo(
+    () => (data?.nft ? parseTierOrNft(data.nft) : undefined),
+    [data?.nft]
+  );
 
   const { width } = useWindowSize();
-
-  const tier = useMemo(
-    () => (nft?.tier ? parseTier(nft.tier) : undefined),
-    [nft]
-  );
 
   const imgSize = useMemo(
     () => Math.min(Math.max(width ? width - 96 : 0, 240), 400),
@@ -69,17 +63,17 @@ function NFTDetail({
   );
 
   const NftImage = useCallback(() => {
-    if (nft?.category === CATEGORY_IDS.body) {
+    if (nft?.category === "body") {
       return <DressedBannyNftImage nft={nft} size={imgSize} download />;
     }
 
-    if (!nft?.tier) {
+    if (!nft) {
       return (
         <Fuzz width={imgSize} height={imgSize} pixelSize={8} fill="#808080" />
       );
     }
 
-    return <TierImage tier={parseTier(nft?.tier)} size={imgSize - 8} />;
+    return <TierImage tier={nft} size={imgSize - 8} />;
   }, [nft, imgSize]);
 
   return (
@@ -113,7 +107,7 @@ function NFTDetail({
             </RoundedFrame>
           </div>
 
-          {tier && <NftTierInfo nft={nft} tier={tier} chain={chain} />}
+          {nft && <NftTierInfo tierOrNft={nft} />}
         </div>
       ) : (
         <Loading />

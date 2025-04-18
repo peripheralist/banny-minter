@@ -48,7 +48,14 @@ export default function HeaderFrame({
         background={COLORS.banana50}
         containerStyle={{
           width: "100%",
+          maxWidth: "100%",
           height: `calc(100% - ${headerHeight}px)`,
+        }}
+        style={{
+          height: "100%",
+          width: "100%",
+          maxWidth: "100%",
+          boxSizing: "border-box",
         }}
       >
         <div
@@ -70,7 +77,8 @@ export default function HeaderFrame({
           style={{
             overflow: "auto",
             height: "100%",
-            width: "100%",
+            maxHeight: "100%",
+            boxSizing: "border-box",
             ...contentStyle,
           }}
         >

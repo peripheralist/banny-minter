@@ -1,7 +1,7 @@
 import { CATEGORIES, Category, CategoryGroup } from "@/constants/category";
 import { categoryIncompatibles } from "@/constants/incompatibles";
 import { useLocalStorageState } from "@/hooks/useLocalStorageState";
-import { EquipTierFns, EquippedTiers, Tier } from "@/model/tier";
+import { EquipTierFns, TierOrNft } from "@/model/tierOrNft";
 import {
   PropsWithChildren,
   useCallback,
@@ -9,11 +9,12 @@ import {
   useMemo,
   useState,
 } from "react";
-import { EquipmentContext } from "./equipmentContext";
+import { DressBannyContext } from "./dressBannyContext";
+import { CategoryLib } from "@/model/categoryLib";
 
 export const EQUIP_DURATION_MILLIS = 400;
 
-export default function EquipmentContextProvider({
+export default function DressBannyContextProvider({
   cacheKey,
   children,
   defaultGroup,
@@ -22,11 +23,11 @@ export default function EquipmentContextProvider({
 }: PropsWithChildren<{
   cacheKey?: string;
   defaultGroup?: CategoryGroup;
-  availableTiers: Tier[];
-  defaultEquippedTierIds?: Partial<Record<Category, number>>;
+  availableTiers: TierOrNft[];
+  defaultEquippedTierIds?: CategoryLib<number>;
 }>) {
   const { value: equippedTierId, setValue: setEquippedTierId } =
-    useLocalStorageState<Partial<Record<Category, number>>>(
+    useLocalStorageState<CategoryLib<number>>(
       cacheKey ? `equipped_${cacheKey}` : undefined,
       {
         defaultValue: {},
@@ -51,7 +52,7 @@ export default function EquipmentContextProvider({
           ...acc,
           [category]: equippedTierForCategory,
         };
-      }, {} as EquippedTiers),
+      }, {} as CategoryLib<TierOrNft>),
     [equippedTierId, availableTiers]
   );
 
@@ -122,14 +123,14 @@ export default function EquipmentContextProvider({
 
     // Sum price of all selected assets
     return CATEGORIES.reduce((acc, category) => {
-      const tier = equipped[category as Category];
+      const ton = equipped[category as Category];
 
-      return tier?.price ? acc + tier.price : acc;
+      return acc + (ton?.price ?? BigInt(0));
     }, BigInt(0));
   }, [availableTiers, equipped]);
 
   return (
-    <EquipmentContext.Provider
+    <DressBannyContext.Provider
       value={{
         equipped,
         equip,
@@ -143,6 +144,6 @@ export default function EquipmentContextProvider({
       }}
     >
       {children}
-    </EquipmentContext.Provider>
+    </DressBannyContext.Provider>
   );
 }

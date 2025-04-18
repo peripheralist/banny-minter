@@ -17,6 +17,7 @@ import moment from "moment";
 import Link from "next/link";
 import { useCallback, useMemo } from "react";
 import ActivityEventElem from "./ActivityEventElem";
+import { parseTierOrNft } from "@/utils/parseTier";
 
 // https://momentjs.com/docs/#/customization/relative-time/
 moment.relativeTimeThreshold("h", 24);
@@ -107,7 +108,7 @@ export default function Activity() {
         )}
       </div>
     ),
-    [events, isSmallScreen]
+    [events, eventsLoading, isSmallScreen]
   );
 
   const BannysList = useCallback(
@@ -136,7 +137,10 @@ export default function Activity() {
                 style={{ pointerEvents: "none" }}
                 containerStyle={{ height: imgSize, width: imgSize }}
               >
-                <DressedBannyNftImage nft={nft} size={imgSize} />
+                <DressedBannyNftImage
+                  nft={parseTierOrNft(nft)}
+                  size={imgSize}
+                />
                 <div
                   style={{
                     display: "flex",

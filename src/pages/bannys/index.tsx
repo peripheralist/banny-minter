@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { useMemo } from "react";
 
 export default function Index() {
-  const { tiers } = useAllTiers();
+  const { parsedTiers } = useAllTiers();
 
   const { isSmallScreen, width } = useWindowSize();
 
@@ -68,7 +68,7 @@ export default function Index() {
 
                   <div style={{ width: "100%" }}>
                     <CategoryGroupGrid
-                      items={tiers?.filter((t) => t.category === "body")}
+                      items={parsedTiers?.filter((t) => t.category === "body")}
                       excludeGroups={[
                         "head",
                         "outfit",

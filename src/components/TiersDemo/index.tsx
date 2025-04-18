@@ -1,6 +1,6 @@
 import { CATEGORIES, Category } from "@/constants/category";
-import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
-import { EquipmentContext } from "@/contexts/equipmentContext";
+import DressBannyContextProvider from "@/contexts/DressBannyContextProvider";
+import { DressBannyContext } from "@/contexts/dressBannyContext";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useContext, useEffect } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
@@ -14,18 +14,18 @@ export default function TiersDemo({
   size: number;
   pixelSize?: number;
 }) {
-  const { tiers } = useAllTiers();
+  const { parsedTiers } = useAllTiers();
 
-  if (!tiers) return null;
+  if (!parsedTiers) return null;
 
   return (
-    <EquipmentContextProvider
-      availableTiers={tiers.filter(
+    <DressBannyContextProvider
+      availableTiers={parsedTiers.filter(
         (t) => !excludedCategories.includes(t.category)
       )}
     >
       <_Demo size={size} pixelSize={pixelSize} />
-    </EquipmentContextProvider>
+    </DressBannyContextProvider>
   );
 }
 
@@ -42,7 +42,7 @@ function _Demo({
     equippingCategory,
     unequippingCategory,
     availableTiers,
-  } = useContext(EquipmentContext);
+  } = useContext(DressBannyContext);
 
   useEffect(() => {
     // default equip body

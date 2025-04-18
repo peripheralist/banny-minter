@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { EquipmentContext } from "@/contexts/equipmentContext";
+import { DressBannyContext } from "@/contexts/dressBannyContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { formatEther } from "juice-sdk-core";
 import { useContext } from "react";
@@ -8,7 +8,7 @@ import RoundedFrame from "./RoundedFrame";
 import TierImage from "./TierImage";
 
 export default function BagItems({ canRemove }: { canRemove?: boolean }) {
-  const { equipped, equip } = useContext(EquipmentContext);
+  const { equipped, equip } = useContext(DressBannyContext);
   const { bag, removeItem } = useContext(ShopContext);
 
   return (

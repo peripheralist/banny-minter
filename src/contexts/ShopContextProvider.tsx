@@ -1,7 +1,7 @@
 import { CategoryGroup } from "@/constants/category";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useLocalStorageState } from "@/hooks/useLocalStorageState";
-import { Tier } from "@/model/tier";
+import { TierOrNft } from "@/model/tierOrNft";
 import {
   PropsWithChildren,
   useCallback,
@@ -9,13 +9,13 @@ import {
   useMemo,
   useState,
 } from "react";
-import { EquipmentContext } from "./equipmentContext";
+import { DressBannyContext } from "./dressBannyContext";
 import { ShopContext, ShoppingBag } from "./shopContext";
 
 export const EQUIP_DURATION_MILLIS = 400;
 
 export default function ShopContextProvider({ children }: PropsWithChildren) {
-  const { equip } = useContext(EquipmentContext);
+  const { equip } = useContext(DressBannyContext);
 
   const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>("banny");
 
@@ -47,15 +47,15 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
   );
 
   const addItem = useCallback(
-    (tier: Tier) => {
+    (tier: TierOrNft) => {
       equip?.[tier.category](tier.tierId);
 
       setBag((b) =>
         b.some((_b) => _b.tier.tierId === tier.tierId)
-          ? b.map((_b) =>
-              _b.tier.tierId === tier.tierId
-                ? { tier: _b.tier, quantity: _b.quantity + 1 }
-                : _b
+          ? b.map((__b) =>
+              __b.tier.tierId === tier.tierId
+                ? { ...__b, quantity: __b.quantity + 1 }
+                : __b
             )
           : [...b, { tier, quantity: 1 }]
       );
@@ -67,7 +67,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
             {
               content_type: tier.category,
               content_id: tier.tierId,
-              content_name: tier.metadata?.productName,
+              content_name: tier.name,
               content_price: tier.price.toString(),
             },
           ],
@@ -78,7 +78,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
   );
 
   const removeItem = useCallback(
-    (tierId: Tier["tierId"]) => {
+    (tierId: TierOrNft["tierId"]) => {
       setBag((b) => {
         const tier = b.find(({ tier }) => tier.tierId === tierId);
 
@@ -107,8 +107,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
     () =>
       // Sum price of all selected assets
       bag.reduce(
-        (acc, { tier, quantity }) =>
-          tier.price ? acc + tier.price * BigInt(quantity) : acc,
+        (acc, { tier, quantity }) => acc + tier.price * BigInt(quantity),
         BigInt(0)
       ),
     [bag]

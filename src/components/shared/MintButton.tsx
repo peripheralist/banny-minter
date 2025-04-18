@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { EquipmentContext } from "@/contexts/equipmentContext";
+import { DressBannyContext } from "@/contexts/dressBannyContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { WalletContext } from "@/contexts/walletContext";
 import { useAppChain } from "@/hooks/useAppChain";
@@ -26,7 +26,7 @@ export default function MintButton() {
   const { address } = useAccount();
   const { connect, wrongNetwork, switchChain } = useContext(WalletContext);
   const { totalEquippedPrice, emptyBag, bag } = useContext(ShopContext);
-  const { unequipAll } = useContext(EquipmentContext);
+  const { unequipAll } = useContext(DressBannyContext);
 
   const { mint, isPending, isSuccess, hash } = useMint({
     onSuccess: () => {

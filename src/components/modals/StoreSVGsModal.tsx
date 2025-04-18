@@ -12,7 +12,7 @@ const routerKey = "store-svgs";
 export default function StoreSVGsModal() {
   const router = useRouter();
 
-  const { tiers: allTiers } = useAllTiers();
+  const { parsedTiers } = useAllTiers();
 
   const tierIds = useMemo(() => {
     if (!router.query[routerKey]) return;
@@ -27,8 +27,8 @@ export default function StoreSVGsModal() {
   }, [router.query]);
 
   const tiers = useMemo(
-    () => allTiers?.filter((t) => tierIds?.includes(t.tierId)),
-    [allTiers, tierIds]
+    () => parsedTiers?.filter((t) => tierIds?.includes(t.tierId)),
+    [parsedTiers, tierIds]
   );
 
   const { setSvgContentsOf, isPending, hash, isSuccess, ready } =

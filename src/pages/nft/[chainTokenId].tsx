@@ -1,20 +1,25 @@
-import Fuzz from "@/components/pixelRenderers/Fuzz";
 import CustomHead from "@/components/shared/CustomHead";
 import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import { CATEGORY_IDS } from "@/constants/category";
 import { BAN_HOOK } from "@/constants/contracts";
-import { useNfTsQuery } from "@/generated/graphql";
+import { useNftQuery } from "@/generated/graphql";
 import { useRouterNftParams } from "@/hooks/useRouterNftParams";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { NFT } from "@/model/nft";
-import { parseTier } from "@/utils/parseTier";
+import { parseTierOrNft } from "@/utils/parseTier";
 import { useCallback, useMemo } from "react";
 
 export default function Index() {
+  const { chain, tokenId } = useRouterNftParams("chainTokenId");
+
+  return chain && tokenId ? (
+    <Main tokenId={tokenId} chainId={chain.id} />
+  ) : null;
+}
+
+function Main({ tokenId, chainId }: { tokenId: number; chainId: number }) {
   const { isSmallScreen, width } = useWindowSize();
 
   const size = useMemo(
@@ -22,37 +27,30 @@ export default function Index() {
     [width]
   );
 
-  const { chain, tokenId } = useRouterNftParams("chainTokenId");
-
-  const { data } = useNfTsQuery({
+  const { data: _nft } = useNftQuery({
     variables: {
-      where: {
-        tokenId: tokenId ? BigInt(tokenId) : undefined,
-        hook: BAN_HOOK,
-        chainId: chain?.id,
-      },
+      tokenId: BigInt(tokenId),
+      hook: BAN_HOOK,
+      chainId,
     },
   });
 
-  const nft: NFT | undefined = useMemo(() => data?.nfts.items[0], [data?.nfts]);
-
-  const tier = useMemo(() => (nft ? parseTier(nft?.tier) : undefined), [nft]);
+  const nft = useMemo(
+    () => (_nft?.nft ? parseTierOrNft(_nft.nft) : undefined),
+    [_nft]
+  );
 
   const NftImage = useCallback(() => {
-    if (nft?.category === CATEGORY_IDS.body) {
+    if (nft?.category === "body") {
       return <DressedBannyNftImage nft={nft} size={size - 8} />;
     }
 
-    if (!nft?.tier) {
-      return <Fuzz width={size} height={size} pixelSize={8} fill="#808080" />;
-    }
-
-    return <TierImage tier={parseTier(nft?.tier)} size={size - 8} />;
+    return <TierImage tier={nft} size={size - 8} />;
   }, [nft, size]);
 
   const title = useMemo(
-    () => `${tier?.metadata?.productName ?? "--"} #${tokenId}`,
-    [tier, tokenId]
+    () => `${nft?.metadata?.productName ?? "--"} #${tokenId}`,
+    [nft, tokenId]
   );
 
   return (
@@ -81,7 +79,7 @@ export default function Index() {
                     </RoundedFrame>
                   </div>
 
-                  {tier && <NftTierInfo nft={nft} tier={tier} />}
+                  {nft && <NftTierInfo tierOrNft={nft} />}
                 </div>
               ),
             },

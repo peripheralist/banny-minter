@@ -1,7 +1,5 @@
-import { EquipmentContext } from "@/contexts/equipmentContext";
-import { useMeasuredRef } from "@/hooks/useMeasuredRef";
-import { useWindowSize } from "@/hooks/useWindowSize";
-import { useContext, useMemo } from "react";
+import { DressBannyContext } from "@/contexts/dressBannyContext";
+import { useContext } from "react";
 import { CategoryGroupGrid } from "../shared/CategoryGroupGrid";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import FullscreenLoading from "../shared/FullscreenLoading";
@@ -10,9 +8,9 @@ import DecorateButton from "./DecorateButton";
 import TierEquipButton from "./TierEquipButton";
 
 // TODO make two columns separate sections
-export default function LargeView({ tokenId }: { tokenId: bigint }) {
+export default function LargeView({ tokenId }: { tokenId: number }) {
   const { availableTiers, equipped, equippingCategory, unequippingCategory } =
-    useContext(EquipmentContext);
+    useContext(DressBannyContext);
 
   if (!availableTiers) return <FullscreenLoading />;
 

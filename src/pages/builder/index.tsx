@@ -2,28 +2,29 @@ import ButtonPad from "@/components/shared/ButtonPad";
 import Downloadable from "@/components/shared/Downloadable";
 import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import { CATEGORIES, Category, CATEGORY_IDS } from "@/constants/category";
+import { CATEGORIES, CATEGORY_IDS } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { DEFAULT_SVG } from "@/constants/defaultSvgs";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { getInheritedStyle } from "@/constants/inheritedColors";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
-import { Tier } from "@/model/tier";
+import { CategoryLib } from "@/model/categoryLib";
+import { TierOrNft } from "@/model/tierOrNft";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 
 export default function Index() {
   const [svg, setSvg] = useState<string>("");
-  const [equipped, setEquipped] = useState<Partial<Record<Category, Tier>>>({});
+  const [equipped, setEquipped] = useState<CategoryLib<TierOrNft>>({});
 
-  const onClickTier = useCallback((t: Tier) => {
+  const onClickTier = useCallback((t: TierOrNft) => {
     setEquipped((e) => ({
       ...e,
       [t.category]: e[t.category]?.tierId === t.tierId ? undefined : t,
     }));
   }, []);
 
-  const { tiers } = useAllTiers();
+  const { parsedTiers } = useAllTiers();
 
   useEffect(() => {
     const size = 400;
@@ -88,7 +89,7 @@ export default function Index() {
           },
           content: (
             <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-              {tiers
+              {parsedTiers
                 ?.sort((a, b) =>
                   CATEGORY_IDS[a.category] < CATEGORY_IDS[b.category] ? -1 : 1
                 )
@@ -112,7 +113,7 @@ export default function Index() {
                   >
                     <TierImage size={80} tier={t} />
                     <br />
-                    {t.metadata?.productName}
+                    {t.name}
                   </ButtonPad>
                 ))}
             </div>

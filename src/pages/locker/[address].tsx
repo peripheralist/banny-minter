@@ -13,7 +13,7 @@ import { useNftsOf } from "@/hooks/queries/useNftsOf";
 import { useAppChain } from "@/hooks/useAppChain";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { chainName } from "@/utils/chainName";
-import { parseTier } from "@/utils/parseTier";
+import { parseTierOrNft } from "@/utils/parseTier";
 import { ROUTES } from "@/utils/routes";
 import { formatEthAddress } from "juice-sdk-core";
 import Link from "next/link";
@@ -89,129 +89,122 @@ export default function Index() {
                 >
                   <CategoryGroupGrid
                     label
-                    items={nfts?.nfts.items.map((nft) => ({
-                      ...nft,
-                      category: categoryOfId[nft.category],
-                    }))}
+                    items={nfts?.nfts.items.map((nft) => parseTierOrNft(nft))}
                     gridStyle={{
                       gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
                       gap: 4,
                     }}
                     emptyText="None owned"
-                    render={(nft) => (
-                      <ButtonPad
-                        key={`${nft.chainId}-${nft.tokenId}`}
-                        fillBorder="white"
-                        fillFg={"white"}
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                          gap: 4,
-                        }}
-                        shadow="sm"
-                      >
-                        <Link
-                          key={nft.tokenId}
-                          href={`${router.asPath}${ROUTES.nftPath({
-                            chainId: nft.chainId,
-                            tokenId: nft.tokenId,
-                          })}`}
+                    render={(nft) => {
+                      return (
+                        <ButtonPad
+                          key={`${nft.chainId}-${nft.tokenId}`}
+                          fillBorder="white"
+                          fillFg={"white"}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                            gap: 4,
+                          }}
+                          shadow="sm"
                         >
-                          <div style={{ pointerEvents: "none" }}>
-                            {nft.category === "body" ? (
-                              <DressedBannyNftImage
-                                nft={{
-                                  ...nft,
-                                  category: CATEGORY_IDS[nft.category],
-                                }}
-                                size={imgSize}
-                              />
-                            ) : (
-                              <TierImage
-                                tier={parseTier(nft.tier)}
-                                size={imgSize}
-                              />
-                            )}
-                          </div>
-
-                          <div
-                            style={{
-                              color: "black",
-                              background: "white",
-                              width: "100%",
-                              padding: 8,
-                              boxSizing: "border-box",
-                            }}
+                          <Link
+                            key={nft.tokenId}
+                            href={`${router.asPath}${ROUTES.nftPath({
+                              chainId: nft.chainId,
+                              tokenId: nft.tokenId,
+                            })}`}
                           >
-                            <div>{parseTier(nft.tier)?.metadata?.productName}</div>
+                            <div style={{ pointerEvents: "none" }}>
+                              {nft.category === "body" ? (
+                                <DressedBannyNftImage
+                                  nft={nft}
+                                  size={imgSize}
+                                />
+                              ) : (
+                                <TierImage tier={nft} size={imgSize} />
+                              )}
+                            </div>
+
                             <div
                               style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                fontSize: FONT_SIZE.xs,
+                                color: "black",
+                                background: "white",
+                                width: "100%",
+                                padding: 8,
+                                boxSizing: "border-box",
                               }}
                             >
-                              <span style={{ opacity: 0.5 }}>
-                                #{nft.tokenId.toString()}
-                              </span>
-                              <span
+                              <div>{nft.name}</div>
+                              <div
                                 style={{
-                                  color: COLORS.blue400,
-                                  textTransform: "uppercase",
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  fontSize: FONT_SIZE.xs,
                                 }}
                               >
-                                {chainName(nft.chainId)}
-                              </span>
+                                <span style={{ opacity: 0.5 }}>
+                                  #{nft.tokenId.toString()}
+                                </span>
+                                <span
+                                  style={{
+                                    color: COLORS.blue400,
+                                    textTransform: "uppercase",
+                                  }}
+                                >
+                                  {chainName(nft.chainId)}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        </Link>
+                          </Link>
 
-                        {nft.category === "body" &&
-                          (nft.chainId === appChain.id ? (
-                            <Link
-                              href={`/dress/${nft.tokenId.toString()}`}
-                              style={{ width: "100%" }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <ButtonPad
-                                containerStyle={{
-                                  margin: 4,
-                                  marginTop: 0,
-                                  marginBottom: 8,
-                                }}
-                                style={{ padding: 8 }}
-                                shadow="sm"
+                          {nft.category === "body" &&
+                            (nft.chainId === appChain.id ? (
+                              <Link
+                                href={`/dress/${nft.tokenId.toString()}`}
+                                style={{ width: "100%" }}
+                                onClick={(e) => e.stopPropagation()}
                               >
-                                Dress
-                              </ButtonPad>
-                            </Link>
-                          ) : (
-                            <div
-                              style={{ width: "100%" }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <ButtonPad
-                                containerStyle={{
-                                  margin: 4,
-                                  marginTop: 0,
-                                  marginBottom: 8,
-                                }}
-                                style={{
-                                  padding: 8,
-                                  color: COLORS.blue400,
-                                  fontSize: FONT_SIZE.sm,
-                                  lineHeight: 1.4,
-                                }}
-                                shadow="sm"
-                                onClick={() => switchChain?.(nft.chainId)}
+                                <ButtonPad
+                                  containerStyle={{
+                                    margin: 4,
+                                    marginTop: 0,
+                                    marginBottom: 8,
+                                  }}
+                                  style={{ padding: 8 }}
+                                  shadow="sm"
+                                >
+                                  Dress
+                                </ButtonPad>
+                              </Link>
+                            ) : (
+                              <div
+                                style={{ width: "100%" }}
+                                onClick={(e) => e.stopPropagation()}
                               >
-                                Dress on {chainName(nft.chainId)}
-                              </ButtonPad>
-                            </div>
-                          ))}
-                      </ButtonPad>
-                    )}
+                                <ButtonPad
+                                  containerStyle={{
+                                    margin: 4,
+                                    marginTop: 0,
+                                    marginBottom: 8,
+                                  }}
+                                  style={{
+                                    padding: 8,
+                                    color: COLORS.blue400,
+                                    fontSize: FONT_SIZE.sm,
+                                    lineHeight: 1.4,
+                                  }}
+                                  shadow="sm"
+                                  onClick={() => switchChain?.(nft.chainId)}
+                                >
+                                  Dress on {chainName(nft.chainId)}
+                                </ButtonPad>
+                              </div>
+                            ))}
+                        </ButtonPad>
+                      );
+                    }}
                   />
                 </div>
               ),

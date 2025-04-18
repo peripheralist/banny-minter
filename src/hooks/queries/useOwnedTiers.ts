@@ -1,9 +1,10 @@
 import { NFT } from "@/model/nft";
-import { Tier } from "@/model/tier";
 import { useMemo } from "react";
 import { Address } from "viem";
 import { useAllTiers } from "./useAllTiers";
 import { useNftsOf } from "./useNftsOf";
+import { TierOrNft } from "@/model/tierOrNft";
+import { parseTierOrNft } from "@/utils/parseTier";
 
 /**
  * @returns all tiers owned by `wallet`, including all NFTs owned of each tier.
@@ -17,31 +18,32 @@ export function useOwnedTiers(wallet: Address | undefined) {
     if (!tiers) return;
 
     return nfts?.nfts.items.reduce((acc, nft) => {
-      if (acc.some(({ tier }) => tier.tierId === nft.tier?.tierId)) {
-        return acc.map((obj) =>
-          obj.tier.tierId === nft.tier?.tierId
+      if (acc.some((ton) => ton.tierId === nft.tier?.tierId)) {
+        // we already added a NFT with this tier
+        return acc.map((_ton) =>
+          _ton.tierId === nft.tier?.tierId
             ? {
-                ...obj,
-                nfts: [...obj.nfts, nft],
+                ..._ton,
+                ownedQuantity: (_ton.ownedQuantity || 0) + 1,
               }
-            : obj
+            : _ton
         );
       }
 
-      const tier = tiers.find((t) => t.tierId === nft.tier?.tierId);
+      const tier = nft.tier;
 
       if (tier) {
         return [
           ...acc,
           {
-            tier,
-            nfts: [nft],
+            ...parseTierOrNft(nft),
+            ownedQuantity: 1,
           },
         ];
       }
 
       return acc;
-    }, [] as { tier: Tier; nfts: NFT[] }[]);
+    }, [] as TierOrNft<true>[]);
   }, [tiers, nfts]);
 
   return {

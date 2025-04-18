@@ -17,22 +17,22 @@ import introspectionResult from "../../graphql.schema.json";
 };
 
 function merge(
-  existing: { pageInfo?: { endCursor?: string }; items: [] },
+  existing: { pageInfo?: { endCursor?: string }; items: [] } | undefined,
   incoming: { pageInfo?: { endCursor?: string }; items: [] }
 ) {
   return {
     ...existing,
     ...incoming,
     pageInfo: {
-      ...(existing.pageInfo ?? {}),
+      ...(existing?.pageInfo ?? {}),
       ...(incoming.pageInfo ?? {}),
     },
     items:
       incoming.pageInfo &&
-      existing.pageInfo &&
+      existing?.pageInfo &&
       incoming.pageInfo.endCursor === existing.pageInfo.endCursor // crude prevent double query
-        ? existing
-        : [...(existing.items || []), ...(incoming.items || [])],
+        ? incoming.items
+        : [...(existing?.items || []), ...(incoming.items || [])],
   };
 }
 

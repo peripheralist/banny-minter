@@ -6,19 +6,19 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { categoryIncompatibles } from "@/constants/incompatibles";
 import { ShopContext } from "@/contexts/shopContext";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { Tier } from "@/model/tier";
 import { formatEther } from "juice-sdk-core";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
+import { TierOrNft } from "@/model/tierOrNft";
 
 const IMG_COUNT = 4;
 
 export default function TierDetailModal() {
   const [imgIdx, setImgIdx] = useState(0);
 
-  const { tiers: allTiers } = useAllTiers();
+  const { parsedTiers } = useAllTiers();
 
   const { addItem } = useContext(ShopContext);
 
@@ -31,8 +31,8 @@ export default function TierDetailModal() {
 
     if (!tierId || isNaN(tierId)) return;
 
-    return allTiers?.find((t) => t.tierId === tierId);
-  }, [allTiers, router]);
+    return parsedTiers?.find((t) => t.tierId === tierId);
+  }, [parsedTiers, router]);
 
   useEffect(() => {
     // reset image idx
@@ -46,10 +46,10 @@ export default function TierDetailModal() {
 
       const setLength = 3;
 
-      const _tiers: Tier[] = [tier];
+      const _tiers: TierOrNft[] = [tier];
 
       for (let i = 0; i < setLength; i++) {
-        const options = allTiers?.filter(
+        const options = parsedTiers?.filter(
           (t) =>
             _tiers.every((_t) => t.tierId !== _t.tierId) &&
             !categoryIncompatibles[tier.category]?.includes(t.category) &&
@@ -71,7 +71,7 @@ export default function TierDetailModal() {
       sets.push(generateTiers());
     }
     return sets;
-  }, [tier, allTiers]);
+  }, [tier, parsedTiers]);
 
   const imgSize = useMemo(
     () => Math.min(Math.max(width ? width - 96 : 0, 240), 400),
@@ -194,13 +194,13 @@ export default function TierDetailModal() {
           </div>
         </div>
 
-        <NftTierInfo tier={tier} />
+        <NftTierInfo tierOrNft={tier} />
       </div>
     </Modal>
   );
 }
 
-function Look({ tiers, size }: { tiers: Tier[]; size: number }) {
+function Look({ tiers, size }: { tiers: TierOrNft[]; size: number }) {
   const equipped = useMemo(
     () =>
       tiers.reduce(

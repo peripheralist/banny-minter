@@ -4313,6 +4313,15 @@ export type DecorateBannyEventsQuery = { decorateBannyEvents: { items: Array<{ t
 
 export type TierDataFragment = { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null };
 
+export type NftQueryVariables = Exact<{
+  tokenId: Scalars['BigInt']['input'];
+  chainId: Scalars['Float']['input'];
+  hook: Scalars['String']['input'];
+}>;
+
+
+export type NftQuery = { nft: { chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, owner: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null } | null };
+
 export type NfTsQueryVariables = Exact<{
   where?: InputMaybe<NftFilter>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
@@ -5616,6 +5625,60 @@ export type DecorateBannyEventsQueryHookResult = ReturnType<typeof useDecorateBa
 export type DecorateBannyEventsLazyQueryHookResult = ReturnType<typeof useDecorateBannyEventsLazyQuery>;
 export type DecorateBannyEventsSuspenseQueryHookResult = ReturnType<typeof useDecorateBannyEventsSuspenseQuery>;
 export type DecorateBannyEventsQueryResult = Apollo.QueryResult<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>;
+export const NftDocument = gql`
+    query NFT($tokenId: BigInt!, $chainId: Float!, $hook: String!) {
+  nft(tokenId: $tokenId, chainId: $chainId, hook: $hook) {
+    chainId
+    tokenId
+    owner {
+      address
+    }
+    metadata
+    category
+    tierId
+    createdAt
+    customized
+    tier {
+      ...TierData
+    }
+  }
+}
+    ${TierDataFragmentDoc}`;
+
+/**
+ * __useNftQuery__
+ *
+ * To run a query within a React component, call `useNftQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNftQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNftQuery({
+ *   variables: {
+ *      tokenId: // value for 'tokenId'
+ *      chainId: // value for 'chainId'
+ *      hook: // value for 'hook'
+ *   },
+ * });
+ */
+export function useNftQuery(baseOptions: Apollo.QueryHookOptions<NftQuery, NftQueryVariables> & ({ variables: NftQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NftQuery, NftQueryVariables>(NftDocument, options);
+      }
+export function useNftLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NftQuery, NftQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NftQuery, NftQueryVariables>(NftDocument, options);
+        }
+export function useNftSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<NftQuery, NftQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<NftQuery, NftQueryVariables>(NftDocument, options);
+        }
+export type NftQueryHookResult = ReturnType<typeof useNftQuery>;
+export type NftLazyQueryHookResult = ReturnType<typeof useNftLazyQuery>;
+export type NftSuspenseQueryHookResult = ReturnType<typeof useNftSuspenseQuery>;
+export type NftQueryResult = Apollo.QueryResult<NftQuery, NftQueryVariables>;
 export const NfTsDocument = gql`
     query NFTs($where: nftFilter, $orderBy: String, $orderDirection: String, $limit: Int, $after: String) {
   nfts(

@@ -1,7 +1,7 @@
 import { CATEGORY_GROUPS, CATEGORY_GROUP_NAMES } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { EquipmentContext } from "@/contexts/equipmentContext";
+import { DressBannyContext } from "@/contexts/dressBannyContext";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useContext } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
@@ -11,9 +11,9 @@ import DecorateButton from "./DecorateButton";
 import TierEquipButton from "./TierEquipButton";
 import ToolbarBagView from "../shared/ToolbarBagView";
 
-export default function SmallView({ tokenId }: { tokenId: bigint }) {
+export default function SmallView({ tokenId }: { tokenId: number }) {
   const { availableTiers, equipped, equippingCategory, unequippingCategory } =
-    useContext(EquipmentContext);
+    useContext(DressBannyContext);
 
   const { measuredRef: previewRef, width: previewWidth } = useMeasuredRef();
 

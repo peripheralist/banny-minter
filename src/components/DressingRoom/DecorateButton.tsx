@@ -1,13 +1,18 @@
-import { CATEGORIES, Category } from "@/constants/category";
+import { CATEGORIES } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
+import { RESOLVER_ADDRESS } from "@/constants/contracts";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { EquipmentContext } from "@/contexts/equipmentContext";
+import { DressBannyContext } from "@/contexts/dressBannyContext";
 import { useIsApprovedForAll } from "@/hooks/readContract/useIsApprovedForAll";
 import { useNFTApprovals } from "@/hooks/readContract/useNFTApprovals";
+import { useAppChain } from "@/hooks/useAppChain";
 import { useApprove } from "@/hooks/writeContract/useApprove";
 import { useDecorateBanny } from "@/hooks/writeContract/useDecorateBanny";
 import { useSetApprovalForAll } from "@/hooks/writeContract/useSetApprovalForAll";
-import { Tier } from "@/model/tier";
+import { CategoryLib } from "@/model/categoryLib";
+import { TierOrNft } from "@/model/tierOrNft";
+import { libRequiresNfts } from "@/utils/libRequiresNfts";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Address } from "viem";
@@ -18,30 +23,35 @@ import Modal from "../shared/Modal";
 import RoundedFrame from "../shared/RoundedFrame";
 import TierImage from "../shared/TierImage";
 import TransactionPending from "../shared/TransactionPending";
-import { useAppChain } from "@/hooks/useAppChain";
-import Link from "next/link";
-import { RESOLVER_ADDRESS } from "@/constants/contracts";
 
 export default function DecorateButton() {
   const [initialEquipped, setInitialEquipped] =
-    useState<Partial<Record<Category, Tier | undefined>>>();
+    useState<CategoryLib<TierOrNft<true>>>();
 
-  const { equipped } = useContext(EquipmentContext);
+  const { equipped } = useContext(DressBannyContext);
+
+  const _equipped = libRequiresNfts(equipped);
 
   useEffect(() => {
     // wait for equipped to update
-    if (initialEquipped || CATEGORIES.every((c) => !equipped[c])) return;
+    if (
+      initialEquipped ||
+      !_equipped ||
+      CATEGORIES.every((c) => !_equipped[c])
+    ) {
+      return;
+    }
 
-    setInitialEquipped(equipped);
-  }, [equipped, initialEquipped]);
+    setInitialEquipped(_equipped);
+  }, [_equipped, initialEquipped]);
 
   const disabled = useMemo(() => {
-    if (!initialEquipped || !equipped) return;
+    if (!initialEquipped || !_equipped) return;
 
     return CATEGORIES.every(
-      (c) => initialEquipped[c]?.tierId === equipped[c]?.tierId
+      (c) => initialEquipped[c]?.tierId === _equipped[c]?.tierId
     );
-  }, [initialEquipped, equipped]);
+  }, [initialEquipped, _equipped]);
 
   const [isConfirming, setIsConfirming] = useState(false);
 
@@ -76,16 +86,18 @@ function ConfirmDressModal({
   const [approvedIds, setApprovedIds] = useState<BigInt[]>([]);
 
   const { address } = useAccount();
-  const { equipped, availableTiers } = useContext(EquipmentContext);
+  const { equipped, availableTiers } = useContext(DressBannyContext);
+
+  const _equipped = libRequiresNfts(equipped);
 
   const maybeUnapprovedTokenIds = useMemo(
     () =>
       CATEGORIES.filter((c) => {
-        const nft = equipped[c]?.nft;
+        const tier = _equipped?.[c];
 
-        return c !== "body" && !!nft?.tokenId && !nft.equipped;
-      }).map((c) => BigInt(equipped[c]!.nft?.tokenId!)),
-    [equipped]
+        return c !== "body" && tier && !!tier.tokenId && !tier.dressed;
+      }).map((c) => BigInt(_equipped![c]?.tokenId!)),
+    [_equipped]
   );
 
   const { approvals } = useNFTApprovals(maybeUnapprovedTokenIds);
@@ -101,10 +113,10 @@ function ConfirmDressModal({
       )
       .map(({ tokenId }) =>
         availableTiers?.find(
-          (_t) => _t.nft?.tokenId && BigInt(_t.nft.tokenId) === tokenId
+          (_t) => _t.tokenId && BigInt(_t.tokenId) === tokenId
         )
       )
-      .filter((t) => !!t) as Tier[];
+      .filter((t) => !!t) as TierOrNft<true>[];
   }, [approvals, availableTiers, approvedIds, isApprovedForAll]);
 
   if (!open) return null;
@@ -127,14 +139,14 @@ function ApproveNFTsModal({
   onApproved,
   onClose,
 }: {
-  nftTiers: Tier[] | undefined;
+  nftTiers: TierOrNft<true>[] | undefined;
   onApproved?: (tokenIds: BigInt[]) => void;
   onClose?: VoidFunction;
 }) {
   const { setApprovalForAll, isPending: approveAllPending } =
     useSetApprovalForAll({
       onSuccess: () => {
-        onApproved?.(nftTiers?.map((t) => BigInt(t.nft?.tokenId ?? 0)) ?? []);
+        onApproved?.(nftTiers?.map((t) => BigInt(t.tokenId)) ?? []);
       },
     });
 
@@ -162,7 +174,7 @@ function ApproveNFTsModal({
 
         {nftTiers.map((t) => (
           <div
-            key={t.nft?.tokenId?.toString()}
+            key={t.tokenId.toString()}
             style={{
               display: "flex",
               alignItems: "center",
@@ -177,19 +189,19 @@ function ApproveNFTsModal({
             </div>
 
             <div style={{ flex: 1 }}>
-              {t.metadata?.productName}{" "}
+              {t.name}{" "}
               <span style={{ fontSize: FONT_SIZE.xs }}>
-                #{t.nft?.tokenId?.toString()}
+                #{t.tokenId.toString()}
               </span>
             </div>
 
             <ButtonPad
               containerStyle={{ width: 120 }}
               style={{ padding: "8px 12px" }}
-              onClick={() => approve({ tokenId: BigInt(t.nft?.tokenId || 0) })}
+              onClick={() => approve({ tokenId: BigInt(t.tokenId) })}
               shadow="none"
               loading={
-                isPending && usedArgs?.includes(BigInt(t.nft?.tokenId || 0))
+                isPending && usedArgs?.includes(BigInt(t.tokenId))
                   ? { fill: "black", width: 100, height: 24 }
                   : undefined
               }
@@ -220,19 +232,23 @@ function ApproveNFTsModal({
 function DressModal({ onClose }: { onClose?: VoidFunction }) {
   const { decorateBanny, isPending, isSuccess, hash } = useDecorateBanny();
 
-  const { equipped } = useContext(EquipmentContext);
+  const { equipped } = useContext(DressBannyContext);
+
+  const _equipped = libRequiresNfts(equipped);
 
   const decorate = useCallback(() => {
+    if (!_equipped) return;
+
     const outfits = CATEGORIES.filter(
-      (c) => c !== "background" && c !== "body" && !!equipped[c]
-    ).map((c) => equipped[c]!);
+      (c) => c !== "background" && c !== "body" && !!_equipped[c]
+    ).map((c) => _equipped![c]!);
 
     decorateBanny({
-      body: equipped.body,
-      background: equipped.background,
+      body: _equipped.body,
+      background: _equipped.background,
       outfits,
     });
-  }, [equipped, decorateBanny]);
+  }, [_equipped, decorateBanny]);
 
   const router = useRouter();
 
@@ -311,9 +327,7 @@ function DressModal({ onClose }: { onClose?: VoidFunction }) {
                         </RoundedFrame>
                       </div>
 
-                      <div style={{ textWrap: "wrap" }}>
-                        {tier?.metadata?.productName}
-                      </div>
+                      <div style={{ textWrap: "wrap" }}>{tier?.name}</div>
                     </div>
                   );
                 }

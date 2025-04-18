@@ -1,9 +1,10 @@
 import { CATEGORIES, Category, CategoryGroup } from "@/constants/category";
-import { EquipTierFns, EquippedTiers, Tier } from "@/model/tier";
+import { CategoryLib } from "@/model/categoryLib";
+import { EquipTierFns, TierOrNft } from "@/model/tierOrNft";
 import { createContext } from "react";
 
 type Context = {
-  equipped: EquippedTiers;
+  equipped: CategoryLib<TierOrNft>;
   equip?: EquipTierFns;
   unequipAll?: VoidFunction;
   totalEquippedPrice?: bigint | null;
@@ -11,16 +12,16 @@ type Context = {
   setSelectedGroup?: (g: CategoryGroup) => void;
   equippingCategory?: Category;
   unequippingCategory?: Category;
-  availableTiers?: Tier[];
+  availableTiers?: TierOrNft[];
 };
 
-export const EquipmentContext = createContext<Context>({
+export const DressBannyContext = createContext<Context>({
   selectedGroup: "banny",
   equipped: CATEGORIES.reduce(
     (acc, category) => ({
       ...acc,
       [category]: undefined,
     }),
-    {} as EquippedTiers
+    {}
   ),
 });

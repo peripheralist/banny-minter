@@ -1,13 +1,13 @@
 import { CategoryGroup } from "@/constants/category";
-import { Tier } from "@/model/tier";
+import { TierOrNft } from "@/model/tierOrNft";
 import { createContext } from "react";
 
-export type ShoppingBag = { quantity: number; tier: Tier }[];
+export type ShoppingBag = { quantity: number; tier: TierOrNft }[];
 
 type Context = {
   bag: ShoppingBag;
-  addItem?: (t: Tier) => void;
-  removeItem?: (t: Tier["tierId"]) => void;
+  addItem?: (t: TierOrNft) => void;
+  removeItem?: (t: TierOrNft["tierId"]) => void;
   emptyBag?: VoidFunction;
   itemsQuantity?: number;
   totalEquippedPrice?: bigint | null;

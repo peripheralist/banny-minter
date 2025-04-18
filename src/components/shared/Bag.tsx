@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { EquipmentContext } from "@/contexts/equipmentContext";
+import { DressBannyContext } from "@/contexts/dressBannyContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { useCallback, useContext } from "react";
 import BagItems from "./BagItems";
@@ -10,7 +10,7 @@ import TierImage from "./TierImage";
 
 export default function Bag({ open }: { open?: boolean }) {
   const { bag, itemsQuantity, emptyBag } = useContext(ShopContext);
-  const { unequipAll } = useContext(EquipmentContext);
+  const { unequipAll } = useContext(DressBannyContext);
 
   const ItemsQuantity = useCallback(
     () => (

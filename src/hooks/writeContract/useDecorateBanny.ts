@@ -1,6 +1,6 @@
 import { CATEGORY_IDS } from "@/constants/category";
 import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/contracts";
-import { Tier } from "@/model/tier";
+import { TierOrNft } from "@/model/tierOrNft";
 import axios from "axios";
 import { useAppChain } from "../useAppChain";
 import {
@@ -52,17 +52,17 @@ export function useDecorateBanny(options?: WriteContractHandlerOptions) {
         background,
         outfits,
       }: {
-        body: Tier | undefined;
-        background: Tier | undefined;
-        outfits: Tier[];
+        body: TierOrNft<true> | undefined;
+        background: TierOrNft<true> | undefined;
+        outfits: TierOrNft<true>[];
       }) => {
-        const bannyBodyId = BigInt(body?.nft?.tokenId ?? 0);
-        const backgroundId = BigInt(background?.nft?.tokenId ?? 0);
+        const bannyBodyId = BigInt(body?.tokenId ?? 0);
+        const backgroundId = BigInt(background?.tokenId ?? 0);
         const sortedOutfitIds = outfits
           .sort((o1, o2) =>
             CATEGORY_IDS[o1.category] < CATEGORY_IDS[o2.category] ? -1 : 1
           )
-          .map((o) => BigInt(o.nft?.tokenId!));
+          .map((o) => BigInt(o.tokenId!));
 
         const args = [BAN_HOOK, bannyBodyId, backgroundId, sortedOutfitIds];
 

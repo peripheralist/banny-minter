@@ -1,7 +1,7 @@
-import { Tier } from "@/model/tier";
 import { useMemo } from "react";
 import AssetSvg from "./AssetSvg";
 import DefaultAsset from "./DefaultAsset";
+import { TierOrNft } from "@/model/tierOrNft";
 
 /**
  * Renders tier image with custom placement and size within frame. Should not be used in an image stack.
@@ -10,7 +10,7 @@ export default function TierImage({
   tier,
   size,
 }: {
-  tier: Tier | undefined;
+  tier: TierOrNft | undefined;
   size: number;
 }) {
   const { _size, style } = useMemo(() => {

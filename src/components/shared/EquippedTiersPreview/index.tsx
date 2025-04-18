@@ -1,7 +1,8 @@
 import { CATEGORIES, Category } from "@/constants/category";
-import { EquippedTiers } from "@/model/tier";
 import { TierPreview } from "./TierPreview";
 import { useMemo } from "react";
+import { CategoryLib } from "@/model/categoryLib";
+import { TierOrNft } from "@/model/tierOrNft";
 
 /**
  * Layers multiple tiers into a single image, with animation for equipping/unequipping tiers.
@@ -9,7 +10,7 @@ import { useMemo } from "react";
 export default function EquippedTiersPreview({
   ...props
 }: {
-  equipped: EquippedTiers;
+  equipped: CategoryLib<TierOrNft>;
   equippingCategory?: Category;
   unequippingCategory?: Category;
   size: number;

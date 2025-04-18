@@ -6,7 +6,7 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { ActivityEvent } from "@/model/activity";
 import { NFTMetadata } from "@/model/nftInfo";
-import { Tier } from "@/model/tier";
+import { TierOrNft } from "@/model/tierOrNft";
 import { chainName } from "@/utils/chainName";
 import { ROUTES } from "@/utils/routes";
 import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
@@ -16,9 +16,10 @@ import { useCallback, useMemo } from "react";
 import { formatEther } from "viem";
 import { config } from "../../../config.wagmi";
 import DressedBannyElem from "./DressedBannyElem";
+import { parseTierOrNft } from "@/utils/parseTier";
 
 export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
-  const { tiers } = useAllTiers();
+  const { parsedTiers } = useAllTiers();
 
   const Title = useCallback(() => {
     if (event.decorateBannyEvent) {
@@ -103,14 +104,20 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
           );
         }
 
-        const tier = tiers?.find((t) => t.tierId === tierId);
+        const tier = parsedTiers?.find((t) => t.tierId === tierId);
 
         if (tier) {
-          return [...acc, { tier, quantity: 1 }];
+          return [
+            ...acc,
+            {
+              tier,
+              quantity: 1,
+            },
+          ];
         }
 
         return acc;
-      }, [] as { tier: Tier; quantity: number }[]);
+      }, [] as { tier: TierOrNft; quantity: number }[]);
 
       if (!_tiers) return "...";
 
@@ -143,11 +150,11 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
     if (event.decorateBannyEvent) {
       const info = event.decorateBannyEvent.tokenUriMetadata as NFTMetadata;
 
-      if (!tiers || !info) return "...";
+      if (!parsedTiers || !info) return "...";
 
       const displayLarge = info.outfitIds?.every((tokenId) =>
         // Return true if banny is NOT wearing a background
-        tiers
+        parsedTiers
           .filter((t) => t.category === "background")
           .every((t) => t.tierId !== tierIdOfTokenId(tokenId))
       );
@@ -172,7 +179,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
         </Link>
       );
     }
-  }, [event, tiers]);
+  }, [event, parsedTiers]);
 
   const Chain = useCallback(
     () => (

@@ -1,7 +1,7 @@
 import Fuzz from "@/components/pixelRenderers/Fuzz";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
-import { NFT } from "@/model/nft";
 import { NFTMetadata } from "@/model/nftInfo";
+import { TierOrNft } from "@/model/tierOrNft";
 import { useCallback } from "react";
 import Downloadable from "./Downloadable";
 import EquippedTiersPreview from "./EquippedTiersPreview";
@@ -11,7 +11,7 @@ export default function DressedBannyNftImage({
   size,
   download,
 }: {
-  nft: Pick<NFT, "tier" | "tokenId" | "metadata"> | undefined;
+  nft: TierOrNft<true>;
   size: number;
   download?: boolean;
 }) {

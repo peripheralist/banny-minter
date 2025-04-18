@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { EquipmentContext } from "@/contexts/equipmentContext";
+import { DressBannyContext } from "@/contexts/dressBannyContext";
 import { ShopContext } from "@/contexts/shopContext";
 import useDebounce from "@/hooks/useDebounce";
 import { useLocalStorageState } from "@/hooks/useLocalStorageState";
@@ -131,7 +131,7 @@ function SmallScreenView({
 }) {
   const { bag } = useContext(ShopContext);
   const { equipped, equippingCategory, unequippingCategory } =
-    useContext(EquipmentContext);
+    useContext(DressBannyContext);
 
   const [selectedTabIdx, setSelectedTabIdx] = useState(0);
 
@@ -303,7 +303,7 @@ function Drawer({
   onClose?: VoidFunction;
 }) {
   const { equipped, equippingCategory, unequippingCategory } =
-    useContext(EquipmentContext);
+    useContext(DressBannyContext);
 
   return (
     <HeaderFrame

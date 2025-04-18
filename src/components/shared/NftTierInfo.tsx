@@ -3,12 +3,11 @@ import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ITEM_DESCRIPTIONS } from "@/constants/itemDescriptions";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
+import { useMultichainSupplies } from "@/hooks/queries/useMultichainSupplies";
 import { useSupportedChains } from "@/hooks/useSupportedChains";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { Chain } from "@/model/chain";
-import { NFT } from "@/model/nft";
 import { NFTMetadata } from "@/model/nftInfo";
-import { Tier } from "@/model/tier";
+import { TierOrNft } from "@/model/tierOrNft";
 import { formatEther } from "juice-sdk-core";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -19,29 +18,30 @@ import ButtonPad from "./ButtonPad";
 import FormattedAddress from "./FormattedAddress";
 import RoundedFrame from "./RoundedFrame";
 
-export default function NftTierInfo({
-  tier,
-  nft,
-  chain,
-}: {
-  tier: Tier;
-  nft?: NFT;
-  chain?: Chain;
-}) {
+export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
   const { address } = useAccount();
 
   const chains = useSupportedChains();
 
-  const { data: equippedTiers } = useBannyEquippedTiers(nft);
+  const { data: equippedTiers } = useBannyEquippedTiers(
+    tierOrNft.tokenId ? (tierOrNft as TierOrNft<true>) : undefined
+  );
+
+  const multiChainSupplies = useMultichainSupplies();
+
+  const multiChainSupply = useMemo(
+    () => multiChainSupplies?.[tierOrNft.tierId],
+    [multiChainSupplies, tierOrNft.tierId]
+  );
 
   const router = useRouter();
 
   const isOwned = useMemo(
     () =>
-      address && nft?.owner
-        ? isAddressEqual(nft.owner.address as `0x${string}`, address)
+      address && tierOrNft?.owner
+        ? isAddressEqual(tierOrNft.owner, address)
         : false,
-    [nft?.owner, address]
+    [tierOrNft, address]
   );
 
   const { isSmallScreen } = useWindowSize();
@@ -83,7 +83,7 @@ export default function NftTierInfo({
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <h1 style={{ fontSize: FONT_SIZE["3xl"], marginTop: 24 }}>
-          {tier.metadata?.productName}
+          {tierOrNft.metadata?.productName}
         </h1>
 
         <div style={{ display: "flex" }}>
@@ -96,7 +96,7 @@ export default function NftTierInfo({
               fontSize: FONT_SIZE.sm,
             }}
           >
-            {formatEther(BigInt(tier.price))} ETH
+            {formatEther(BigInt(tierOrNft.price))} ETH
           </RoundedFrame>
         </div>
 
@@ -106,14 +106,14 @@ export default function NftTierInfo({
             maxWidth: isSmallScreen ? "calc(100vw - 48px)" : 400,
           }}
         >
-          {ITEM_DESCRIPTIONS[tier.tierId]}
+          {ITEM_DESCRIPTIONS[tierOrNft.tierId]}
         </p>
       </div>
     );
-  }, [tier, isSmallScreen]);
+  }, [tierOrNft, isSmallScreen]);
 
   const Stock = useCallback(() => {
-    if (!tier.multiChainSupply) return null;
+    if (!multiChainSupply) return null;
 
     return (
       <div
@@ -128,17 +128,17 @@ export default function NftTierInfo({
           <NftInfoRow
             key={id}
             label={name}
-            value={`${
-              tier.multiChainSupply?.[id]?.remaining.toString() ?? "--"
-            }/${tier.multiChainSupply?.[id]?.initial.toString() ?? "--"}`}
+            value={`${multiChainSupply[id]?.remaining.toString() ?? "--"}/${
+              multiChainSupply[id]?.initial.toString() ?? "--"
+            }`}
           />
         ))}
       </div>
     );
-  }, [tier.multiChainSupply, NftInfoRow, chains]);
+  }, [NftInfoRow, chains, multiChainSupply]);
 
   const Specs = useCallback(() => {
-    const drop = DROPS.find((d) => d.tierIds.includes(tier.tierId));
+    const drop = DROPS.find((d) => d.tierIds.includes(tierOrNft.tierId));
 
     const unstoredTiers =
       equippedTiers &&
@@ -147,7 +147,7 @@ export default function NftTierInfo({
 
         if (!tier?.embeddedSvgUrl) return acc;
         return [...acc, tier];
-      }, [] as Tier[]);
+      }, [] as TierOrNft[]);
 
     return (
       <div
@@ -158,15 +158,15 @@ export default function NftTierInfo({
           fontSize: FONT_SIZE.sm,
         }}
       >
-        {nft && (
+        {tierOrNft.owner && (
           <NftInfoRow
             label="Owner"
             value={
               <div style={{ display: "flex", gap: 8, alignItems: "baseline" }}>
-                <Link href={`/locker/${nft.owner}`}>
+                <Link href={`/locker/${tierOrNft.owner}`}>
                   <FormattedAddress
                     position="left"
-                    address={nft.owner?.address as `0x${string}`}
+                    address={tierOrNft.owner}
                     style={{ cursor: "pointer" }}
                   />
                 </Link>{" "}
@@ -176,18 +176,16 @@ export default function NftTierInfo({
           />
         )}
         {drop && <NftInfoRow label="Drop" value={`#${drop.id} ${drop.name}`} />}
-        <NftInfoRow label="Type" value={tier.category} />
-        {(nft?.metadata as NFTMetadata)?.wornByBannyBodyId ? (
+        <NftInfoRow label="Type" value={tierOrNft.category} />
+        {(tierOrNft?.metadata as NFTMetadata)?.wornByBannyBodyId ? (
           <NftInfoRow
             label="Equipped"
             value={
-              (nft?.metadata as NFTMetadata).wornByBannyBodyId === "0"
-                ? "NO"
-                : "YES"
+              (tierOrNft?.metadata).wornByBannyBodyId === "0" ? "NO" : "YES"
             }
           />
         ) : null}
-        {(nft?.metadata as NFTMetadata)?.outfitIds?.length && equippedTiers ? (
+        {tierOrNft?.metadata?.outfitIds?.length && equippedTiers ? (
           <NftInfoRow
             label="Wearing"
             value={Object.values(equippedTiers)
@@ -196,9 +194,13 @@ export default function NftTierInfo({
               .join(", ")}
           />
         ) : null}
-        {nft && <NftInfoRow label="Token Id" value={nft.tokenId.toString()} />}
-        {chain && <NftInfoRow label="Chain" value={chain.name} />}
-        {nft ? (
+        {tierOrNft.tokenId && (
+          <NftInfoRow label="Token Id" value={tierOrNft.tokenId} />
+        )}
+        {tierOrNft.chain && (
+          <NftInfoRow label="Chain" value={tierOrNft.chain.name} />
+        )}
+        {tierOrNft.tokenId ? (
           <NftInfoRow
             label="SVGs"
             value={
@@ -220,7 +222,7 @@ export default function NftTierInfo({
               )
             }
           />
-        ) : tier.embeddedSvgUrl ? (
+        ) : tierOrNft.embeddedSvgUrl ? (
           <NftInfoRow
             label="SVG"
             value={
@@ -228,7 +230,7 @@ export default function NftTierInfo({
                 Not on-chain{" "}
                 <Link
                   href={`${router.asPath.split("?")[0]}?store-svgs=${
-                    tier.tierId
+                    tierOrNft.tierId
                   }`}
                 >
                   Store
@@ -239,10 +241,10 @@ export default function NftTierInfo({
         ) : null}
       </div>
     );
-  }, [NftInfoRow, nft, equippedTiers, isOwned, tier, router.asPath, chain]);
+  }, [NftInfoRow, tierOrNft, equippedTiers, isOwned, router.asPath]);
 
   const Details = useCallback(() => {
-    if (tier.multiChainSupply) {
+    if (multiChainSupply) {
       return (
         <>
           <div>
@@ -260,7 +262,7 @@ export default function NftTierInfo({
               style={{ padding: 12 }}
               containerStyle={{ marginTop: 4 }}
             >
-              {tier.initialSupply < BigInt(999999999) ? (
+              {tierOrNft.initialSupply < BigInt(999999999) ? (
                 <Stock />
               ) : (
                 <div style={{ fontSize: FONT_SIZE.sm }}>Unlimited</div>
@@ -291,18 +293,18 @@ export default function NftTierInfo({
     }
 
     return <Specs />;
-  }, [tier.multiChainSupply, tier.initialSupply, Stock, Specs]);
+  }, [multiChainSupply, tierOrNft.initialSupply, Stock, Specs]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
-      {nft && nft.category === 0 ? <div /> : <NameDesc />}
+      {tierOrNft.category === "body" ? <div /> : <NameDesc />}
 
       <Details />
 
-      {nft && isOwned && nft?.category === 0 && (
+      {isOwned && tierOrNft?.category === "body" && tierOrNft.tokenId && (
         <Link
           style={{ display: "block" }}
-          href={`/dress/${nft.tokenId.toString()}`}
+          href={`/dress/${tierOrNft.tokenId.toString()}`}
         >
           <ButtonPad style={{ padding: 16 }} dimension>
             Dressing room

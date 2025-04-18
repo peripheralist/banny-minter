@@ -3,7 +3,7 @@ import StoreSVGsModal from "@/components/modals/StoreSVGsModal";
 import TierDetailModal from "@/components/modals/TierDetailModal";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
 import AlertContextProvider from "@/contexts/AlertContextProvider";
-import EquipmentContextProvider from "@/contexts/EquipmentContextProvider";
+import DressBannyContextProvider from "@/contexts/DressBannyContextProvider";
 import ModalContextProvider from "@/contexts/ModalContextProvider";
 import ShopContextProvider from "@/contexts/ShopContextProvider";
 import WalletContextProvider from "@/contexts/WalletContextProvider";
@@ -32,7 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <WagmiProvider config={config}>
         <LooksApolloProvider>
-          <_EquipmentContextProvider>
+          <_DressBannyContextProvider>
             <ShopContextProvider>
               <ModalContextProvider>
                 <AlertContextProvider>
@@ -48,21 +48,24 @@ export default function App({ Component, pageProps }: AppProps) {
                 </AlertContextProvider>
               </ModalContextProvider>
             </ShopContextProvider>
-          </_EquipmentContextProvider>
+          </_DressBannyContextProvider>
         </LooksApolloProvider>
       </WagmiProvider>
     </QueryClientProvider>
   );
 }
 
-function _EquipmentContextProvider({ children }: PropsWithChildren) {
-  const { tiers } = useAllTiers();
+function _DressBannyContextProvider({ children }: PropsWithChildren) {
+  const { parsedTiers } = useAllTiers();
 
-  if (!tiers) return <FullscreenLoading />;
+  if (!parsedTiers) return <FullscreenLoading />;
 
   return (
-    <EquipmentContextProvider cacheKey="bag_preview" availableTiers={tiers}>
+    <DressBannyContextProvider
+      cacheKey="bag_preview"
+      availableTiers={parsedTiers}
+    >
       {children}
-    </EquipmentContextProvider>
+    </DressBannyContextProvider>
   );
 }

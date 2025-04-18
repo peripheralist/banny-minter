@@ -33,9 +33,9 @@ export default function Drop() {
     [isSmallScreen, width]
   );
 
-  const { tiers: allTiers } = useAllTiers();
+  const { parsedTiers } = useAllTiers();
 
-  if (!allTiers) return <FullscreenLoading />;
+  if (!parsedTiers) return <FullscreenLoading />;
 
   return (
     <>
@@ -86,7 +86,7 @@ export default function Drop() {
                     </div>
 
                     <CategoryGroupGrid
-                      items={allTiers.filter((t) => t.category === "body")}
+                      items={parsedTiers.filter((t) => t.category === "body")}
                       excludeGroups={[
                         "head",
                         "outfit",
@@ -148,7 +148,7 @@ export default function Drop() {
                     }}
                   >
                     <CategoryGroupGrid
-                      items={allTiers.filter((t) => t.category !== "body")}
+                      items={parsedTiers.filter((t) => t.category !== "body")}
                       label
                       excludeGroups={["banny"]}
                       render={(t) => (

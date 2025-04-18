@@ -1,7 +1,8 @@
 import EquippedTiersPreview from "@/components/shared/EquippedTiersPreview";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
+import { CategoryLib } from "@/model/categoryLib";
 import { NFTMetadata } from "@/model/nftInfo";
-import { EquippedTiers, Tier } from "@/model/tier";
+import { TierOrNft } from "@/model/tierOrNft";
 import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
 import { useCallback, useMemo } from "react";
 
@@ -12,12 +13,12 @@ export default function DressedBannyElem({
   nftInfo: NFTMetadata;
   size: number;
 }) {
-  const { tiers } = useAllTiers();
+  const { parsedTiers } = useAllTiers();
 
   const equippedTiers = useMemo(() => {
-    if (!tiers) return;
+    if (!parsedTiers) return;
 
-    const equipped: EquippedTiers = {};
+    const equipped: CategoryLib<TierOrNft> = {};
 
     const allAssetIds = [...(nftInfo?.outfitIds ?? [])];
     if (nftInfo?.backgroundId) allAssetIds.push(nftInfo.backgroundId);
@@ -26,20 +27,20 @@ export default function DressedBannyElem({
 
     [bannyBodyTokenId, ...allAssetIds].forEach((tokenId) => {
       const tierId = tierIdOfTokenId(tokenId!);
-      const assetTier = tiers.find((t) => t.tierId === tierId);
+      const assetTier = parsedTiers.find((t) => t.tierId === tierId);
 
       if (assetTier) {
         equipped[assetTier.category] = {
           ...assetTier,
           tokenId,
-        } as Tier;
+        };
       } else {
         console.warn("Error finding tier for NFT with tokenId:", tokenId);
       }
     });
 
     return equipped;
-  }, [nftInfo, tiers]);
+  }, [nftInfo, parsedTiers]);
 
   const Img = useCallback(
     () =>
