@@ -1,4 +1,5 @@
-import { API_URL } from "@/constants/apiUrl";
+import { API_URL, TESTNET_API_URL } from "@/constants/apiUrl";
+import { useAppChain } from "@/hooks/useAppChain";
 import {
   ApolloClient,
   ApolloLink,
@@ -8,7 +9,7 @@ import {
 } from "@apollo/client";
 import { FunctionsMap, withScalars } from "apollo-link-scalars";
 import { IntrospectionQuery, buildClientSchema } from "graphql";
-import { PropsWithChildren, useMemo } from "react";
+import { PropsWithChildren } from "react";
 import introspectionResult from "../../graphql.schema.json";
 
 // https://github.com/reduxjs/redux-devtools/issues/1541#issuecomment-1834205251
@@ -36,8 +37,7 @@ function merge(
   };
 }
 
-// ensure the cache is created only once.
-const apolloCache = new InMemoryCache({
+const cacheConfig = {
   typePolicies: {
     Query: {
       fields: {
@@ -52,59 +52,55 @@ const apolloCache = new InMemoryCache({
       },
     },
   },
-});
+} as const;
+
+// ensure the cache is created only once.
+const mainnetCache = new InMemoryCache(cacheConfig);
+const testnetCache = new InMemoryCache(cacheConfig);
+
+const schema = buildClientSchema(
+  introspectionResult as unknown as IntrospectionQuery
+);
+
+const typesMap: FunctionsMap = {
+  BigInt: {
+    serialize: (parsed: unknown): string | null => {
+      // convert bigints to strings
+      return parsed !== null ? (parsed as bigint).toString() : null;
+    },
+    parseValue: (raw: unknown): bigint | null => {
+      // convert bigint-typed strings to bigints
+      if (raw === undefined || raw === null) return null;
+
+      return BigInt(raw as string | number);
+    },
+  },
+};
+
+const scalarsLink = withScalars({ schema, typesMap });
+
+const httpLink = (testnet?: boolean) =>
+  new HttpLink({
+    uri: testnet ? TESTNET_API_URL : API_URL,
+  });
+
+const apolloClient = (testnet?: boolean) =>
+  new ApolloClient({
+    cache: testnet ? testnetCache : mainnetCache,
+    link: ApolloLink.from([scalarsLink, httpLink(testnet)]),
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: "cache-and-network",
+      },
+    },
+  });
 
 export function LooksApolloProvider({ children }: PropsWithChildren) {
-  const schema = useMemo(
-    () =>
-      buildClientSchema(introspectionResult as unknown as IntrospectionQuery),
-    []
+  const appChain = useAppChain();
+
+  return (
+    <ApolloProvider client={apolloClient(appChain.testnet)}>
+      {children}
+    </ApolloProvider>
   );
-
-  const typesMap: FunctionsMap = useMemo(
-    () => ({
-      BigInt: {
-        serialize: (parsed: unknown): string | null => {
-          // convert bigints to strings
-          return parsed !== null ? (parsed as bigint).toString() : null;
-        },
-        parseValue: (raw: unknown): bigint | null => {
-          // convert bigint-typed strings to bigints
-          if (raw === undefined || raw === null) return null;
-
-          return BigInt(raw as string | number);
-        },
-      },
-    }),
-    []
-  );
-
-  const scalarsLink = useMemo(
-    () => withScalars({ schema, typesMap }),
-    [schema, typesMap]
-  );
-
-  const httpLink = useMemo(
-    () =>
-      new HttpLink({
-        uri: API_URL,
-      }),
-    []
-  );
-
-  const apolloClient = useMemo(
-    () =>
-      new ApolloClient({
-        cache: apolloCache,
-        link: ApolloLink.from([scalarsLink, httpLink]),
-        defaultOptions: {
-          watchQuery: {
-            fetchPolicy: "cache-and-network",
-          },
-        },
-      }),
-    [httpLink, scalarsLink]
-  );
-
-  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 }

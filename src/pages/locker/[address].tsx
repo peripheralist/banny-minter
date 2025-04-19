@@ -5,7 +5,6 @@ import DressedBannyNftImage from "@/components/shared/DressedBannyNftImage";
 import Loading from "@/components/shared/Loading";
 import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import { CATEGORY_IDS, categoryOfId } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { WalletContext } from "@/contexts/walletContext";
