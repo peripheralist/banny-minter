@@ -4320,6 +4320,13 @@ export type DecorateBannyEventsQueryVariables = Exact<{
 
 export type DecorateBannyEventsQuery = { decorateBannyEvents: { items: Array<{ timestamp: number, txHash: string, caller: string, chainId: number, bannyBodyId: bigint, outfitIds: Array<bigint> | null, backgroundId: bigint | null, tokenUri: string | null }> } };
 
+export type MintNftEventsQueryVariables = Exact<{
+  where?: InputMaybe<MintNftEventFilter>;
+}>;
+
+
+export type MintNftEventsQuery = { mintNftEvents: { items: Array<{ tokenId: bigint }> } };
+
 export type TierDataFragment = { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null };
 
 export type NftQueryVariables = Exact<{
@@ -5635,6 +5642,48 @@ export type DecorateBannyEventsQueryHookResult = ReturnType<typeof useDecorateBa
 export type DecorateBannyEventsLazyQueryHookResult = ReturnType<typeof useDecorateBannyEventsLazyQuery>;
 export type DecorateBannyEventsSuspenseQueryHookResult = ReturnType<typeof useDecorateBannyEventsSuspenseQuery>;
 export type DecorateBannyEventsQueryResult = Apollo.QueryResult<DecorateBannyEventsQuery, DecorateBannyEventsQueryVariables>;
+export const MintNftEventsDocument = gql`
+    query MintNftEvents($where: mintNftEventFilter) {
+  mintNftEvents(where: $where) {
+    items {
+      tokenId
+    }
+  }
+}
+    `;
+
+/**
+ * __useMintNftEventsQuery__
+ *
+ * To run a query within a React component, call `useMintNftEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMintNftEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMintNftEventsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useMintNftEventsQuery(baseOptions?: Apollo.QueryHookOptions<MintNftEventsQuery, MintNftEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MintNftEventsQuery, MintNftEventsQueryVariables>(MintNftEventsDocument, options);
+      }
+export function useMintNftEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MintNftEventsQuery, MintNftEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MintNftEventsQuery, MintNftEventsQueryVariables>(MintNftEventsDocument, options);
+        }
+export function useMintNftEventsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MintNftEventsQuery, MintNftEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MintNftEventsQuery, MintNftEventsQueryVariables>(MintNftEventsDocument, options);
+        }
+export type MintNftEventsQueryHookResult = ReturnType<typeof useMintNftEventsQuery>;
+export type MintNftEventsLazyQueryHookResult = ReturnType<typeof useMintNftEventsLazyQuery>;
+export type MintNftEventsSuspenseQueryHookResult = ReturnType<typeof useMintNftEventsSuspenseQuery>;
+export type MintNftEventsQueryResult = Apollo.QueryResult<MintNftEventsQuery, MintNftEventsQueryVariables>;
 export const NftDocument = gql`
     query NFT($tokenId: BigInt!, $chainId: Float!, $hook: String!) {
   nft(tokenId: $tokenId, chainId: $chainId, hook: $hook) {

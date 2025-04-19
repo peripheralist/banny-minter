@@ -68,3 +68,11 @@ query DecorateBannyEvents($where: decorateBannyEventFilter) {
     }
   }
 }
+
+query MintNftEvents($where: mintNftEventFilter) {
+  mintNftEvents(where: $where) {
+    items {
+      tokenId
+    }
+  }
+}
