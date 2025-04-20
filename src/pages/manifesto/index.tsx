@@ -41,21 +41,21 @@ export default function Manifesto() {
                     fits that express your style
                   </li>
                   <li>
-                    When you purchase, you receive both the Banny assets AND
-                    $BAN tokens, from the{" "}
+                    When you purchase, your money goes to the{" "}
                     <Link
                       href={`https://app.revnet.eth.sucks/eth:4`}
                       target="blank"
                     >
-                      $BAN Revnet
+                      $BAN revnet
                     </Link>
+                    , returning $BAN tokens to you alongside your Banny assets
                   </li>
                   <li>
                     You can dress the Bannys you bought with the outfits you
                     bought, undress and slip on new ones at any time
                   </li>
                   <li>
-                    {`These tokens represent your ownership stake in the project's
+                    {`The $BAN tokens you get represent your ownership stake in the project's
                     revenue stream`}
                   </li>
                   <li>
@@ -83,7 +83,7 @@ export default function Manifesto() {
                   {`This isn't just another NFT project. It's a working model of a
                   different kind of economy where value flows to all
                   participants, where customers are owners that help grow the
-                  network. Built on Juicebox's RevNet infrastructure, Banny
+                  network. Built on Juicebox's revnet infrastructure, Banny
                   demonstrates how creativity, community, and commerce can align
                   in sustainable ways.`}
                 </p>
@@ -104,7 +104,7 @@ export default function Manifesto() {
                 </p>
                 <p>
                   Beyond fashion, Banny represents a mathematical constant in an
-                  unpredictable universe—a symbol that connects individual
+                  unpredictable universe: a symbol that connects individual
                   expression to collective value creation. Each Banny serves as
                   both personal statement and network signal, backed by
                   technology that honors the principles of fair exchange.
@@ -116,7 +116,7 @@ export default function Manifesto() {
                   each other.`}
                 </p>
                 <p>
-                  {`Banny doesn't promise; it proves. The RevNet infrastructure
+                  {`Banny doesn't promise; it proves. The revnet infrastructure
                   transforms retail from extraction to circulation, where value
                   flows in multiple directions where customers are owners that
                   help grow the network. Your participation isn't
@@ -144,7 +144,7 @@ export default function Manifesto() {
                   {`Your purchase yields not just the Banny and its attire, but
                   $BAN tokens—your claim to a transparent portion of the
                   project's revenue. These tokens are backed by a programmatic
-                  treasury where 38% of all issuance flows back to token
+                  treasury where 62% of all issuance flows back to token
                   holders, with a minimum redemption value that protects you and
                   moves as the project grows. As you move through the world with
                   your Banny, as new collaborations emerge and the community
@@ -155,7 +155,7 @@ export default function Manifesto() {
                   Your $BAN functions as capital, available for exchange or
                   collateralization. You can hold, cash out, or use your $BAN
                   tokens as collateral at any time. The ecosystem evolves as
-                  RevNets begin to interlink, creating networks of complementary
+                  revnets begin to interlink, creating networks of complementary
                   value systems, each culturally distinct yet governed by the
                   same principles.
                 </p>
@@ -173,7 +173,7 @@ export default function Manifesto() {
                   from the value you help generate.`}
                 </p>
                 <p>
-                  Banny and RevNets close this gap. They recognize that every
+                  Banny and revnets close this gap. They recognize that every
                   wearer is also a creator of value—that the boundary between
                   producer and consumer is artificial. They acknowledge that we
                   are all building value together.
