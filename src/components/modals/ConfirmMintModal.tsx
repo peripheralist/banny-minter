@@ -79,7 +79,7 @@ export function ConfirmMintModal() {
 
         return { ...tier, tokenId: Number(tokenId) } as TierOrNft<true>;
       })
-      .filter((t) => !!t);
+      .filter((t) => !!t) as TierOrNft<true>[];
 
     // must have minted at least two items
     if (!_mintedNfts || _mintedNfts.length < 2) {
@@ -108,7 +108,7 @@ export function ConfirmMintModal() {
       (acc, curr) => ({ ...acc, [curr.category]: curr }),
       {} as CategoryLib<TierOrNft<true>>
     );
-  }, [mintEvents]);
+  }, [mintEvents, parsedTiers]);
 
   const onClose = useCallback(() => {
     if (isSuccess) {

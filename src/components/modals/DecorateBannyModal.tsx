@@ -141,7 +141,7 @@ export function DecorateBannyModal({
         </div>
       ),
     };
-  }, [decorate, hash, isPending, isSuccess, equipped]);
+  }, [decorate, hash, isPending, isSuccess, equipped, appChain, title]);
 
   return (
     <Modal

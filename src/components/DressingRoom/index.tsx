@@ -72,7 +72,7 @@ export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
     }, [] as TierOrNft<true>[]);
 
     return condensed;
-  }, [nfts?.nfts.items, equippedTiers]);
+  }, [equippedTiers, bannyNft.tokenId, nfts]);
 
   const equippedTierIds = useMemo(() => {
     if (!equippedTiers) return {};
