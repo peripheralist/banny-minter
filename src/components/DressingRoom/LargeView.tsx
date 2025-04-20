@@ -39,10 +39,10 @@ export default function LargeView({ tokenId }: { tokenId: number }) {
               emptyText="None owned"
               items={availableTiers}
               render={(t) => (
-                <TierEquipButton key={t.tierId} tier={t} size={180} />
+                <TierEquipButton key={t.tierId} tier={t} size={200} />
               )}
               gridStyle={{
-                gridTemplateColumns: `repeat(auto-fit, ${180}px)`,
+                gridTemplateColumns: `repeat(auto-fit, ${200}px)`,
                 gap: 4,
               }}
               excludeGroups={["banny"]}

@@ -35,7 +35,7 @@ export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
     if (!nfts || !equippedTiers) return;
 
     const availableNfts = nfts.nfts.items.map(parseTierOrNft).filter((t) =>
-      // only body add tier for the bannyNft
+      // only add body tier for the bannyNft
       t.category === "body"
         ? t.tokenId === bannyNft.tokenId
           ? true
@@ -44,31 +44,34 @@ export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
     );
 
     // Add equipped nft tiers
-    const formatted = Object.values(equippedTiers).reduce(
-      (acc, equippedTier) => {
-        if (
-          acc.some(
-            (availableNft) => availableNft.tierId === equippedTier.tierId
-          )
-        ) {
-          return acc.map((_availableNft) => ({
-            ..._availableNft,
-            ownedQuantity: (_availableNft.ownedQuantity ?? 0) + 1,
-          }));
-        }
-
-        return [
-          ...acc,
-          {
-            ...equippedTier,
-            ownedQuantity: 1,
-          } as TierOrNft<true>,
-        ];
-      },
+    const withEquipped = Object.values(equippedTiers).reduce(
+      (acc, tier) => [
+        ...acc,
+        {
+          ...tier,
+          ownedQuantity: 1,
+        } as TierOrNft<true>,
+      ],
       availableNfts
     );
 
-    return formatted;
+    // Condense quantities
+    const condensed = withEquipped.reduce((acc, tier) => {
+      if (acc.some((t) => t.tierId === tier.tierId)) {
+        return acc.map((t) =>
+          t.tierId === tier.tierId
+            ? {
+                ...t,
+                ownedQuantity: (t.ownedQuantity ?? 0) + 1,
+              }
+            : t
+        );
+      }
+
+      return [...acc, tier];
+    }, [] as TierOrNft<true>[]);
+
+    return condensed;
   }, [nfts?.nfts.items, equippedTiers]);
 
   const equippedTierIds = useMemo(() => {

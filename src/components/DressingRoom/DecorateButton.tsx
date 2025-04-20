@@ -13,6 +13,8 @@ export default function DecorateButton() {
   const [initialEquipped, setInitialEquipped] =
     useState<CategoryLib<TierOrNft<true>>>();
 
+  const [isConfirming, setIsConfirming] = useState(false);
+
   const { equipped } = useContext(DressBannyContext);
 
   const _equipped = libRequiresNfts(equipped);
@@ -37,8 +39,6 @@ export default function DecorateButton() {
       (c) => initialEquipped[c]?.tierId === _equipped[c]?.tierId
     );
   }, [initialEquipped, _equipped]);
-
-  const [isConfirming, setIsConfirming] = useState(false);
 
   return (
     <>

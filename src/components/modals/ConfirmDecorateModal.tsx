@@ -65,5 +65,11 @@ export function ConfirmDecorateModal({
     );
   }
 
-  return <DecorateBannyModal equipped={equipped} onClose={onClose} />;
+  return (
+    <DecorateBannyModal
+      title="Dress your Banny"
+      equipped={equipped}
+      onClose={onClose}
+    />
+  );
 }

@@ -109,7 +109,6 @@ export default function Index() {
                           shadow="sm"
                         >
                           <Link
-                            key={nft.tokenId}
                             href={`${router.asPath}${ROUTES.nftPath({
                               chainId: nft.chainId,
                               tokenId: nft.tokenId,

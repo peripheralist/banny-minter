@@ -1,26 +1,28 @@
 import { CATEGORIES } from "@/constants/category";
+import { RESOLVER_ADDRESS } from "@/constants/contracts";
+import { FONT_SIZE } from "@/constants/fontSize";
+import { useAppChain } from "@/hooks/useAppChain";
 import { useDecorateBanny } from "@/hooks/writeContract/useDecorateBanny";
 import { CategoryLib } from "@/model/categoryLib";
 import { TierOrNft } from "@/model/tierOrNft";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo } from "react";
-import TransactionPending from "../shared/TransactionPending";
-import RoundedFrame from "../shared/RoundedFrame";
-import EquippedTiersPreview from "../shared/EquippedTiersPreview";
-import { FONT_SIZE } from "@/constants/fontSize";
 import Link from "next/link";
-import { RESOLVER_ADDRESS } from "@/constants/contracts";
-import { useAppChain } from "@/hooks/useAppChain";
-import TierImage from "../shared/TierImage";
+import { useRouter } from "next/router";
+import { PropsWithChildren, useCallback, useMemo } from "react";
+import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import Modal from "../shared/Modal";
+import RoundedFrame from "../shared/RoundedFrame";
+import TierImage from "../shared/TierImage";
+import TransactionPending from "../shared/TransactionPending";
 
 export function DecorateBannyModal({
+  title,
   equipped,
   onClose,
-}: {
-  equipped: CategoryLib<TierOrNft<true>>;
+}: PropsWithChildren<{
+  title: string;
+  equipped: CategoryLib<TierOrNft<true>> | undefined;
   onClose?: VoidFunction;
-}) {
+}>) {
   const appChain = useAppChain();
 
   const { decorateBanny, isPending, isSuccess, hash } = useDecorateBanny();
@@ -41,12 +43,15 @@ export function DecorateBannyModal({
 
   const router = useRouter();
 
-  const _onClose = useCallback(
-    () => (isSuccess ? router.reload() : onClose?.()),
-    [isSuccess, onClose, router]
-  );
+  const _onClose = useCallback(() => {
+    onClose?.();
+    if (isSuccess) router.reload();
+    // (isSuccess ? router.reload() : onClose?.())
+  }, [isSuccess, onClose, router]);
 
   const { content, action } = useMemo(() => {
+    if (!equipped) return {};
+
     if (isSuccess) {
       return {
         content: (
@@ -80,12 +85,10 @@ export function DecorateBannyModal({
     return {
       action: { onClick: decorate, text: "Dress" },
       content: (
-        <>
-          <h1 style={{ fontSize: FONT_SIZE["3xl"] }}>New fit?</h1>
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          <h1 style={{ fontSize: FONT_SIZE["3xl"] }}>{title}</h1>
 
-          <p
-            style={{ marginTop: 12, marginBottom: 24, fontSize: FONT_SIZE.sm }}
-          >
+          <p style={{ fontSize: FONT_SIZE.sm }}>
             When dressing a Banny, the accessory NFTs are transferred to the{" "}
             <Link
               href={`${appChain.blockExplorers.default.url}/address/${RESOLVER_ADDRESS}`}
@@ -135,7 +138,7 @@ export function DecorateBannyModal({
               )}
             </div>
           </div>
-        </>
+        </div>
       ),
     };
   }, [decorate, hash, isPending, isSuccess, equipped]);
@@ -143,7 +146,7 @@ export function DecorateBannyModal({
   return (
     <Modal
       id="decorate-banny"
-      open
+      open={!!equipped}
       onClose={_onClose}
       action={action}
       size="sm"
