@@ -247,28 +247,30 @@ export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
     if (multiChainSupply) {
       return (
         <>
-          <div>
-            <div
-              style={{
-                fontSize: FONT_SIZE.sm,
-                textTransform: "uppercase",
-              }}
-            >
-              Available Stock
+          {tierOrNft.tokenId ? null : (
+            <div>
+              <div
+                style={{
+                  fontSize: FONT_SIZE.sm,
+                  textTransform: "uppercase",
+                }}
+              >
+                Available Stock
+              </div>
+              <RoundedFrame
+                borderColor={"#ffffff88"}
+                background={"#ffffff88"}
+                style={{ padding: 12 }}
+                containerStyle={{ marginTop: 4 }}
+              >
+                {tierOrNft.initialSupply < BigInt(999999999) ? (
+                  <Stock />
+                ) : (
+                  <div style={{ fontSize: FONT_SIZE.sm }}>Unlimited</div>
+                )}
+              </RoundedFrame>
             </div>
-            <RoundedFrame
-              borderColor={"#ffffff88"}
-              background={"#ffffff88"}
-              style={{ padding: 12 }}
-              containerStyle={{ marginTop: 4 }}
-            >
-              {tierOrNft.initialSupply < BigInt(999999999) ? (
-                <Stock />
-              ) : (
-                <div style={{ fontSize: FONT_SIZE.sm }}>Unlimited</div>
-              )}
-            </RoundedFrame>
-          </div>
+          )}
 
           <div>
             <div
@@ -293,7 +295,7 @@ export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
     }
 
     return <Specs />;
-  }, [multiChainSupply, tierOrNft.initialSupply, Stock, Specs]);
+  }, [multiChainSupply, tierOrNft, Stock, Specs]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
