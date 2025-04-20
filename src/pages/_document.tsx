@@ -49,7 +49,7 @@ export default function Document() {
         />
         <meta
           property="twitter:image"
-          content="https://retail.banny.eth.sucks/assets/homepage_twitter.png"
+          content="https://retail.banny.eth.sucks/assets/homepage.png"
         />
       </Head>
 

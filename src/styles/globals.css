@@ -86,3 +86,7 @@ svg {
 svg, rect, path {
   shape-rendering: crispEdges;
 }
+
+li {
+  margin-bottom: 8px;
+}
