@@ -7,9 +7,11 @@ import BagItems from "./BagItems";
 import MintButton from "./MintButton";
 import RoundedFrame from "./RoundedFrame";
 import TierImage from "./TierImage";
+import { usePayerTokens } from "@/hooks/usePayerTokens";
 
 export default function Bag({ open }: { open?: boolean }) {
-  const { bag, itemsQuantity, emptyBag } = useContext(ShopContext);
+  const { bag, itemsQuantity, emptyBag, totalEquippedPrice } =
+    useContext(ShopContext);
   const { unequipAll } = useContext(DressBannyContext);
 
   const ItemsQuantity = useCallback(
@@ -21,6 +23,9 @@ export default function Bag({ open }: { open?: boolean }) {
     [itemsQuantity]
   );
 
+  const { formatted: formattedPayerTokens } =
+    usePayerTokens(totalEquippedPrice);
+
   return open ? (
     <div
       style={{
@@ -31,6 +36,8 @@ export default function Bag({ open }: { open?: boolean }) {
         height: "100%",
         boxSizing: "border-box",
         overflow: "hidden",
+        gap: 12,
+        padding: 12,
       }}
     >
       <div
@@ -38,8 +45,6 @@ export default function Bag({ open }: { open?: boolean }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: 12,
-          marginBottom: 12,
         }}
       >
         <ItemsQuantity />
@@ -57,11 +62,22 @@ export default function Bag({ open }: { open?: boolean }) {
         )}
       </div>
 
-      <div style={{ padding: 12, flex: 1, overflow: "auto" }}>
+      <div style={{ flex: 1, overflow: "auto" }}>
         <BagItems canRemove />
       </div>
 
-      <div style={{ padding: 12 }}>
+      <div>
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: FONT_SIZE.sm,
+            color: COLORS.pink,
+            marginBottom: 4,
+          }}
+        >
+          Receive {formattedPayerTokens} $BAN
+        </div>
+
         <MintButton />
       </div>
     </div>

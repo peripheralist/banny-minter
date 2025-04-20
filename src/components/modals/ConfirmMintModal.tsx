@@ -7,13 +7,11 @@ import { WalletContext } from "@/contexts/walletContext";
 import { useMintNftEventsQuery } from "@/generated/graphql";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useAppChain } from "@/hooks/useAppChain";
+import { usePayerTokens } from "@/hooks/usePayerTokens";
 import { useMint } from "@/hooks/writeContract/useMint";
 import { CategoryLib } from "@/model/categoryLib";
 import { TierOrNft } from "@/model/tierOrNft";
 import { tierIdOfTokenId } from "@/utils/tierIdOfTokenId";
-import { FixedInt } from "fpnum";
-import { getTokenAToBQuote } from "juice-sdk-core";
-import { useJBRuleset, useJBRulesetMetadata } from "juice-sdk-react";
 import Link from "next/link";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { formatEther, zeroAddress } from "viem";
@@ -117,27 +115,8 @@ export function ConfirmMintModal() {
     }
   }, [emptyBag, unequipAll, isSuccess]);
 
-  const ruleset = useJBRuleset();
-  const rulesetMetadata = useJBRulesetMetadata();
-
-  const formattedPayerTokens = useMemo(() => {
-    if (!totalEquippedPrice || !ruleset.data || !rulesetMetadata.data) {
-      return "--";
-    }
-
-    const { weight } = ruleset.data;
-
-    const { reservedPercent } = rulesetMetadata.data;
-
-    const tokenAAmt = new FixedInt(BigInt(totalEquippedPrice), 18);
-
-    const { payerTokens } = getTokenAToBQuote(tokenAAmt, {
-      weight,
-      reservedPercent,
-    });
-
-    return new FixedInt(payerTokens, 18).format(18);
-  }, [ruleset, rulesetMetadata, totalEquippedPrice]);
+  const { formatted: formattedPayerTokens } =
+    usePayerTokens(totalEquippedPrice);
 
   const formattedPrice = useMemo(
     () => `${totalEquippedPrice ? formatEther(totalEquippedPrice) : "--"} ETH`,
