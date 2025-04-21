@@ -1,6 +1,7 @@
+import { BAN_HOOK } from "@/constants/contracts";
+import { useNftTiersQuery } from "@/generated/graphql";
 import { ChainId } from "@/model/chain";
 import { useMemo } from "react";
-import { useAllTiers } from "./useAllTiers";
 
 type MultichainSupplies = Record<
   number,
@@ -8,11 +9,17 @@ type MultichainSupplies = Record<
 >;
 
 export function useMultichainSupplies() {
-  const { tiers } = useAllTiers();
+  const { data: tiers } = useNftTiersQuery({
+    variables: {
+      where: {
+        hook: BAN_HOOK,
+      },
+    },
+  });
 
   const multichainSupplies = useMemo(
     () =>
-      tiers?.reduce(
+      tiers?.nftTiers.items?.reduce(
         (acc, { tierId, initialSupply, remainingSupply, chainId }) => {
           const existingSupplies = acc?.[tierId];
 
