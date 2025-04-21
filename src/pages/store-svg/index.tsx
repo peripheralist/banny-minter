@@ -5,21 +5,23 @@ import { COLORS } from "@/constants/colors";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useAppChain } from "@/hooks/useAppChain";
 import { useSetSvgContentsOf } from "@/hooks/writeContract/useSetSvgContentsOf";
-import { useMemo } from "react";
+import { TierOrNft } from "@/model/tierOrNft";
+import { useMemo, useState } from "react";
 
 export default function Index() {
+  const [tiersToStore, setTiersToStore] = useState<TierOrNft[]>([]);
+
   const { parsedTiers } = useAllTiers();
 
   const appChain = useAppChain();
 
-  const tiersToStore = useMemo(
+  const storableTiers = useMemo(
     () => parsedTiers?.filter((t) => !!t.embeddedSvgUrl),
     [parsedTiers]
   );
 
-  const { setSvgContentsOf, isPending, ready } = useSetSvgContentsOf(
-    tiersToStore?.slice(0, 10)
-  );
+  const { setSvgContentsOf, isPending, ready } =
+    useSetSvgContentsOf(tiersToStore);
 
   return (
     <ToolbarBagView
@@ -44,13 +46,33 @@ export default function Index() {
                   flexWrap: "wrap",
                 }}
               >
-                {tiersToStore?.map((t) => (
-                  <div key={t.tierId}>
-                    <RoundedFrame style={{ padding: 8 }}>
-                      {t.metadata?.productName}
-                    </RoundedFrame>
-                  </div>
-                ))}
+                {storableTiers?.map((t) => {
+                  const selected = tiersToStore.some(
+                    ({ tierId }) => tierId === t.tierId
+                  );
+
+                  return (
+                    <div key={t.tierId}>
+                      <ButtonPad
+                        style={{
+                          padding: 8,
+                          color: selected ? "white" : undefined,
+                        }}
+                        fillFg={selected ? COLORS.pink : undefined}
+                        shadow="none"
+                        onClick={() =>
+                          setTiersToStore((_t) =>
+                            selected
+                              ? _t.filter(({ tierId }) => tierId !== t.tierId)
+                              : [..._t, t]
+                          )
+                        }
+                      >
+                        {t.metadata?.productName}
+                      </ButtonPad>
+                    </div>
+                  );
+                })}
               </div>
 
               <div style={{ maxWidth: 240 }}>
@@ -63,9 +85,9 @@ export default function Index() {
                   onClick={setSvgContentsOf}
                   style={{ padding: 8, color: "white" }}
                   fillFg={COLORS.pink}
-                  disabled={!ready}
+                  disabled={!ready || !tiersToStore.length}
                 >
-                  Store all (max 10)
+                  Store {tiersToStore.length}
                 </ButtonPad>
               </div>
             </div>
