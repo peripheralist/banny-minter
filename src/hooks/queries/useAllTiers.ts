@@ -4,6 +4,7 @@ import { TierOrNft } from "@/model/tierOrNft";
 import { parseTierOrNft } from "@/utils/parseTier";
 import { mainnet, sepolia } from "viem/chains";
 import { useAppChain } from "../useAppChain";
+import { useMemo } from "react";
 
 /**
  * @returns All Looks NFT tiers
@@ -22,18 +23,24 @@ export function useAllTiers() {
 
   const _tiers = tiers?.nftTiers.items;
 
+  const parsedTiers = useMemo(
+    () =>
+      _tiers
+        ?.map((t) => parseTierOrNft(t))
+        .reduce(
+          (acc, curr) =>
+            // remove duplicates
+            acc.some((parsed) => parsed.tierId === curr.tierId)
+              ? acc
+              : [...acc, curr],
+          [] as TierOrNft[]
+        ),
+    [_tiers]
+  );
+
   return {
     ...props,
     tiers: _tiers,
-    parsedTiers: _tiers
-      ?.map((t) => parseTierOrNft(t))
-      .reduce(
-        (acc, curr) =>
-          // remove duplicates
-          acc.some((parsed) => parsed.tierId === curr.tierId)
-            ? acc
-            : [...acc, curr],
-        [] as TierOrNft[]
-      ),
+    parsedTiers,
   };
 }
