@@ -153,13 +153,21 @@ export default function Activity() {
                     fontSize: FONT_SIZE.xs,
                     textTransform: "uppercase",
                     background: "white",
+                    whiteSpace: "pre",
                   }}
                 >
                   <span style={{ color: COLORS.blue300 }}>
                     {chainName(nft.chainId)}
                   </span>
 
-                  <span style={{ color: COLORS.gray }}>
+                  <span
+                    style={{
+                      color: COLORS.gray,
+                      minWidth: 0,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
                     {moment(nft.customizedAt * 1000).fromNow()}
                   </span>
 

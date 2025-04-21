@@ -7,6 +7,8 @@ import { useContext, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 import { ConfirmMintModal } from "../modals/ConfirmMintModal";
 import ButtonPad from "./ButtonPad";
+import RoundedFrame from "./RoundedFrame";
+import { usePayerTokens } from "@/hooks/usePayerTokens";
 
 export default function MintButton() {
   const [isConfirming, setIsConfirming] = useState(false);
@@ -21,51 +23,68 @@ export default function MintButton() {
     [totalEquippedPrice]
   );
 
+  const { formatted: formattedPayerTokens } =
+    usePayerTokens(totalEquippedPrice);
+
   return (
     <>
-      <ButtonPad
-        disabled={!bag.length}
-        style={{ padding: 12 }}
-        fillFg={COLORS.pink}
-        onClick={address ? () => setIsConfirming(true) : connect}
-        shadow="sm"
-        dimension
-      >
-        <div style={{ width: "100%" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "space-between",
-              width: "100%",
-              gap: 8,
-              fontSize: FONT_SIZE.lg,
-              opacity: address ? 1 : 0.4,
-              color: address ? "white" : "black",
-            }}
-          >
-            <div>Checkout</div>
+      <RoundedFrame background={"white"}>
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: FONT_SIZE.xs,
+            color: COLORS.pink,
+            margin: 8,
+            marginBottom: 4,
+          }}
+        >
+          RECEIVE {formattedPayerTokens} $BAN
+        </div>
 
-            <div>{formattedPrice}</div>
-          </div>
-
-          {!address && (
+        <ButtonPad
+          disabled={!bag.length}
+          style={{ padding: 12 }}
+          fillFg={COLORS.pink}
+          onClick={address ? () => setIsConfirming(true) : connect}
+          shadow="sm"
+          dimension
+        >
+          <div style={{ width: "100%" }}>
             <div
               style={{
-                textTransform: "uppercase",
-                color: "white",
+                display: "flex",
+                alignItems: "baseline",
+                justifyContent: "space-between",
+                width: "100%",
+                gap: 8,
+                fontSize: FONT_SIZE.lg,
+                opacity: address ? 1 : 0.4,
+                color: address ? "white" : "black",
               }}
             >
-              Connect wallet
-            </div>
-          )}
-        </div>
-      </ButtonPad>
+              <div>Checkout</div>
 
-      <ConfirmMintModal
-        open={isConfirming}
-        onClose={() => setIsConfirming(false)}
-      />
+              <div>{formattedPrice}</div>
+            </div>
+
+            {!address && (
+              <div
+                style={{
+                  textTransform: "uppercase",
+                  color: "white",
+                }}
+              >
+                Connect wallet
+              </div>
+            )}
+          </div>
+        </ButtonPad>
+
+        <ConfirmMintModal
+          open={isConfirming}
+          onClose={() => setIsConfirming(false)}
+        />
+      </RoundedFrame>
     </>
   );
 }

@@ -7,7 +7,6 @@ import BagItems from "./BagItems";
 import MintButton from "./MintButton";
 import RoundedFrame from "./RoundedFrame";
 import TierImage from "./TierImage";
-import { usePayerTokens } from "@/hooks/usePayerTokens";
 
 export default function Bag({ open }: { open?: boolean }) {
   const { bag, itemsQuantity, emptyBag, totalEquippedPrice } =
@@ -22,9 +21,6 @@ export default function Bag({ open }: { open?: boolean }) {
     ),
     [itemsQuantity]
   );
-
-  const { formatted: formattedPayerTokens } =
-    usePayerTokens(totalEquippedPrice);
 
   return open ? (
     <div
@@ -67,17 +63,6 @@ export default function Bag({ open }: { open?: boolean }) {
       </div>
 
       <div>
-        <div
-          style={{
-            textAlign: "center",
-            fontSize: FONT_SIZE.sm,
-            color: COLORS.pink,
-            marginBottom: 4,
-          }}
-        >
-          Receive {formattedPayerTokens} $BAN
-        </div>
-
         <MintButton />
       </div>
     </div>
