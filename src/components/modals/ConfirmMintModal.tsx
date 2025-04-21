@@ -24,7 +24,7 @@ import RoundedFrame from "../shared/RoundedFrame";
 import TransactionPending from "../shared/TransactionPending";
 import { ConfirmDecorateModal } from "./ConfirmDecorateModal";
 
-export function ConfirmMintModal() {
+export function ConfirmMintModal({ onClose }: { onClose?: VoidFunction }) {
   const [isPolling, setIsPolling] = useState(false);
 
   const appChain = useAppChain();
@@ -108,12 +108,13 @@ export function ConfirmMintModal() {
     );
   }, [mintEvents, parsedTiers]);
 
-  const onClose = useCallback(() => {
+  const _onClose = useCallback(() => {
     if (isSuccess) {
       emptyBag?.();
       unequipAll?.();
     }
-  }, [emptyBag, unequipAll, isSuccess]);
+    onClose?.();
+  }, [emptyBag, unequipAll, isSuccess, onClose]);
 
   const { formatted: formattedPayerTokens } =
     usePayerTokens(totalEquippedPrice);
@@ -126,10 +127,14 @@ export function ConfirmMintModal() {
   return (
     <>
       {mintedLib && (
-        <ConfirmDecorateModal open equipped={mintedLib} onClose={onClose} />
+        <ConfirmDecorateModal open equipped={mintedLib} onClose={_onClose} />
       )}
 
-      <Modal id="mint-success" open={!!isSuccess && !isPolling && !mintedLib}>
+      <Modal
+        id="mint-success"
+        open={!!isSuccess && !isPolling && !mintedLib}
+        onClose={_onClose}
+      >
         <div
           style={{
             display: "flex",
@@ -144,7 +149,7 @@ export function ConfirmMintModal() {
 
           <div>
             Dress Banny in your{" "}
-            <Link onClick={onClose} href={`/locker/${address}`}>
+            <Link onClick={_onClose} href={`/locker/${address}`}>
               locker
             </Link>
             .
@@ -169,6 +174,7 @@ export function ConfirmMintModal() {
                 text: `Mint (${formattedPrice})`,
               }
         }
+        onClose={onClose}
       >
         {isPending || isPolling ? (
           <TransactionPending hash={hash} text="Minting..." />

@@ -29,15 +29,12 @@ export default function TierDetailModal() {
   const itemId = router.query.item as string;
 
   const tier = useMemo(() => {
-    console.log("asdf tier");
     const tierId = parseInt(itemId);
 
     if (!tierId || isNaN(tierId)) return;
 
     return parsedTiers?.find((t) => t.tierId === tierId);
   }, [parsedTiers, itemId]);
-
-  console.log("asdf render");
 
   useEffect(() => {
     // reset image idx
