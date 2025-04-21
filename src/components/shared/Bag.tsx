@@ -9,8 +9,7 @@ import RoundedFrame from "./RoundedFrame";
 import TierImage from "./TierImage";
 
 export default function Bag({ open }: { open?: boolean }) {
-  const { bag, itemsQuantity, emptyBag, totalEquippedPrice } =
-    useContext(ShopContext);
+  const { bag, itemsQuantity, emptyBag } = useContext(ShopContext);
   const { unequipAll } = useContext(DressBannyContext);
 
   const ItemsQuantity = useCallback(
