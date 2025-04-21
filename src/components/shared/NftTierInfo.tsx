@@ -238,7 +238,9 @@ export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
               </span>
             }
           />
-        ) : null}
+        ) : (
+          <NftInfoRow label="SVG" value={"On-chain"} />
+        )}
       </div>
     );
   }, [NftInfoRow, tierOrNft, equippedTiers, isOwned, router.asPath]);
