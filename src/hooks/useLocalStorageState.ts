@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export function useLocalStorageState<V>(
   key: string | undefined,
@@ -40,5 +40,10 @@ export function useLocalStorageState<V>(
     );
   }, [_key, value, serialize, initialized, disabled]);
 
-  return { value, setValue, initialized };
+  const purge = useCallback(() => {
+    if (!_key) return;
+    localStorage.removeItem(_key);
+  }, [_key]);
+
+  return { value, setValue, initialized, purge };
 }

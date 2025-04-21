@@ -62,9 +62,10 @@ export default function MintButton() {
         </div>
       </ButtonPad>
 
-      {isConfirming && (
-        <ConfirmMintModal onClose={() => setIsConfirming(false)} />
-      )}
+      <ConfirmMintModal
+        open={isConfirming}
+        onClose={() => setIsConfirming(false)}
+      />
     </>
   );
 }

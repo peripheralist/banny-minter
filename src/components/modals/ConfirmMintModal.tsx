@@ -23,51 +23,74 @@ import Modal from "../shared/Modal";
 import RoundedFrame from "../shared/RoundedFrame";
 import TransactionPending from "../shared/TransactionPending";
 import { ConfirmDecorateModal } from "./ConfirmDecorateModal";
+import DressBannyContextProvider from "@/contexts/DressBannyContextProvider";
 
-export function ConfirmMintModal({ onClose }: { onClose?: VoidFunction }) {
-  const [isPolling, setIsPolling] = useState(false);
-
+export function ConfirmMintModal({
+  open,
+  onClose,
+}: {
+  open?: boolean;
+  onClose?: VoidFunction;
+}) {
+  const [phase, setPhase] = useState<
+    "none" | "minting" | "awaitingMints" | "decorating" | "success"
+  >("none");
   const appChain = useAppChain();
   const { address } = useAccount();
   const { parsedTiers } = useAllTiers();
 
   const { wrongNetwork, switchChain } = useContext(WalletContext);
-  const { totalEquippedPrice, emptyBag, bag } = useContext(ShopContext);
-  const { unequipAll } = useContext(DressBannyContext);
+  const {
+    totalEquippedPrice,
+    emptyBag,
+    bag,
+    purgeCache: purgeBagCache,
+  } = useContext(ShopContext);
+  const { unequipAll, purgeCache: purgeDressBannyCache } =
+    useContext(DressBannyContext);
 
   const { mint, isPending, isSuccess, hash } = useMint({
-    onSuccess: () => setIsPolling(true),
+    onSuccess: () => {
+      setPhase("awaitingMints");
+    },
   });
 
-  const { data: mintEvents } = useMintNftEventsQuery({
+  const {
+    data: mintEvents,
+    startPolling,
+    stopPolling,
+  } = useMintNftEventsQuery({
     variables: {
       where: {
         chainId: appChain.id,
         txHash: hash ?? zeroAddress, // effectively disable query from returning any events until hash exists
       },
     },
-    pollInterval: hash && isPolling ? 2000 : undefined,
+    fetchPolicy: "no-cache",
   });
 
   useEffect(() => {
-    if (!isPolling) return;
+    if (phase === "awaitingMints") return;
+
+    if (phase === "decorating" || phase === "success") {
+      purgeBagCache?.();
+      purgeDressBannyCache?.();
+      stopPolling();
+      return;
+    }
+
+    startPolling(2000);
 
     // wait max 60s for the mint transaction
     const timeout = setTimeout(() => {
-      setIsPolling(false);
+      setPhase("success");
     }, 60000);
 
     return () => clearTimeout(timeout);
-  }, [isPolling]);
+  }, [startPolling, stopPolling, phase, purgeBagCache, purgeDressBannyCache]);
 
-  useEffect(() => {
-    // stop polling once we have events
-    if (mintEvents?.mintNftEvents.items.length) setIsPolling(false);
-  }, [mintEvents]);
-
-  // build the category lib of items that can be dressed
-  const mintedLib = useMemo(() => {
-    const _mintedNfts = mintEvents?.mintNftEvents.items
+  const mintedNfts = useMemo(() => {
+    return mintEvents?.mintNftEvents.items
       ?.map(({ tokenId }) => {
         const tier = parsedTiers?.find(
           (t) => t.tierId === tierIdOfTokenId(Number(tokenId))
@@ -77,41 +100,53 @@ export function ConfirmMintModal({ onClose }: { onClose?: VoidFunction }) {
 
         return { ...tier, tokenId: Number(tokenId) } as TierOrNft<true>;
       })
-      .filter((t) => !!t) as TierOrNft<true>[];
+      .filter((t) => !!t);
+  }, [mintEvents]);
+
+  // build the category lib of items that can be dressed
+  const mintedLib = useMemo(() => {
+    if (!mintedNfts?.length || mintedNfts.length !== bag.length) {
+      // wait for all mintEvents
+      return;
+    }
 
     // must have minted at least two items
-    if (!_mintedNfts || _mintedNfts.length < 2) {
+    if (!mintedNfts || mintedNfts.length < 2) {
+      setPhase("success");
       return;
     }
 
     // must have minted exactly one body
-    if (
-      _mintedNfts.filter(({ category }) => category === "body").length !== 1
-    ) {
+    if (mintedNfts.filter(({ category }) => category === "body").length !== 1) {
+      setPhase("success");
       return;
     }
 
     // ensure all minted items are compatible
     if (
-      _mintedNfts.some((nft) =>
+      mintedNfts.some((nft) =>
         categoryIncompatibles[nft.category]?.some((c) =>
-          _mintedNfts.some((_nft) => _nft.category === c)
+          mintedNfts.some((_nft) => _nft.category === c)
         )
       )
     ) {
+      setPhase("success");
       return;
     }
 
-    return _mintedNfts.reduce(
+    setPhase("decorating");
+
+    return mintedNfts.reduce(
       (acc, curr) => ({ ...acc, [curr.category]: curr }),
       {} as CategoryLib<TierOrNft<true>>
     );
-  }, [mintEvents, parsedTiers]);
+  }, [mintedNfts, parsedTiers, bag]);
 
   const _onClose = useCallback(() => {
     if (isSuccess) {
       emptyBag?.();
       unequipAll?.();
+      setPhase("none"); // reset
     }
     onClose?.();
   }, [emptyBag, unequipAll, isSuccess, onClose]);
@@ -126,13 +161,19 @@ export function ConfirmMintModal({ onClose }: { onClose?: VoidFunction }) {
 
   return (
     <>
-      {mintedLib && (
-        <ConfirmDecorateModal open equipped={mintedLib} onClose={_onClose} />
+      {mintedLib && mintedNfts?.length && (
+        <DressBannyContextProvider availableTiers={mintedNfts}>
+          <ConfirmDecorateModal
+            open={open && phase === "decorating"}
+            equipped={mintedLib}
+            onClose={_onClose}
+          />
+        </DressBannyContextProvider>
       )}
 
       <Modal
         id="mint-success"
-        open={!!isSuccess && !isPolling && !mintedLib}
+        open={open && phase === "success"}
         onClose={_onClose}
       >
         <div
@@ -159,110 +200,122 @@ export function ConfirmMintModal({ onClose }: { onClose?: VoidFunction }) {
 
       <Modal
         id="confirm-mint"
-        open={!isSuccess || isPolling}
+        open={
+          open &&
+          (phase === "none" || phase === "minting" || phase === "awaitingMints")
+        }
         size="sm"
         action={
-          isPending || isPolling
-            ? undefined
-            : wrongNetwork && switchChain
-            ? {
-                onClick: switchChain,
-                text: `Unsupported network!`,
-              }
-            : {
-                onClick: mint,
-                text: `Mint (${formattedPrice})`,
-              }
+          phase === "none"
+            ? wrongNetwork && switchChain
+              ? {
+                  onClick: switchChain,
+                  text: `Unsupported network!`,
+                }
+              : {
+                  onClick: () => {
+                    mint();
+                    setPhase("minting");
+                  },
+                  text: `Mint (${formattedPrice})`,
+                }
+            : undefined
         }
-        onClose={onClose}
+        onClose={phase === "none" ? onClose : undefined}
       >
-        {isPending || isPolling ? (
-          <TransactionPending hash={hash} text="Minting..." />
-        ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <h1 style={{ fontSize: FONT_SIZE["3xl"] }}>Mint NFTs</h1>
+        {
+          // TODO separate state for awaitingMints? We know ahead of time if there are decoratable items in bag, could skip this step if not
+          phase === "minting" || phase === "awaitingMints" ? (
+            <TransactionPending hash={hash} text="Minting..." />
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+              <h1 style={{ fontSize: FONT_SIZE["3xl"] }}>Mint NFTs</h1>
 
-            <BagItems />
+              <BagItems />
 
-            {bag.some((b) => b.tier.category === "body") && (
-              <p>
-                Heads up: after you mint, you{"'"}ll need to dress your Banny in
-                a second transaction!
+              {bag.some((b) => b.tier.category === "body") && (
+                <p>
+                  Heads up: after you mint, you{"'"}ll need to dress your Banny
+                  in a second transaction!
+                </p>
+              )}
+
+              <ButtonPad
+                fillBg={COLORS.blue100}
+                fillBorder={COLORS.blue400}
+                fillFg={COLORS.blue50}
+                style={{ padding: 16 }}
+                onClick={() => switchChain?.()}
+                shadow="sm"
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  Network:
+                  <div style={{ color: COLORS.blue500 }}>{appChain.name}</div>
+                </div>
+              </ButtonPad>
+
+              <RoundedFrame
+                background={"white"}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 8,
+                  padding: 16,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>Total:</div>
+                  <div>{formattedPrice}</div>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  Earn:
+                  <span>{(formattedPayerTokens ?? "--").toString()} $BAN</span>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  Wallet:
+                  <FormattedAddress address={address} position="left" />
+                </div>
+              </RoundedFrame>
+
+              <p style={{ fontSize: FONT_SIZE.sm }}>
+                Payments go to the{" "}
+                <Link
+                  href={`https://app.revnet.eth.sucks/eth:4`}
+                  target="blank"
+                >
+                  $BAN Revnet
+                </Link>{" "}
+                earning $BAN in return.
               </p>
-            )}
-
-            <ButtonPad
-              fillBg={COLORS.blue100}
-              fillBorder={COLORS.blue400}
-              fillFg={COLORS.blue50}
-              style={{ padding: 16 }}
-              onClick={() => switchChain?.()}
-              shadow="sm"
-            >
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
-                Network:
-                <div style={{ color: COLORS.blue500 }}>{appChain.name}</div>
-              </div>
-            </ButtonPad>
-
-            <RoundedFrame
-              background={"white"}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
-                padding: 16,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div>Total:</div>
-                <div>{formattedPrice}</div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
-                Earn:
-                <span>{(formattedPayerTokens ?? "--").toString()} $BAN</span>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
-                Wallet:
-                <FormattedAddress address={address} position="left" />
-              </div>
-            </RoundedFrame>
-
-            <p style={{ fontSize: FONT_SIZE.sm }}>
-              Payments go to the{" "}
-              <Link href={`https://app.revnet.eth.sucks/eth:4`} target="blank">
-                $BAN Revnet
-              </Link>{" "}
-              earning $BAN in return.
-            </p>
-          </div>
-        )}
+            </div>
+          )
+        }
       </Modal>
     </>
   );

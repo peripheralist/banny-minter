@@ -12,10 +12,12 @@ import TierImage from "../shared/TierImage";
 import ButtonPad from "../shared/ButtonPad";
 
 export function ApproveNFTsModal({
+  open,
   nftTiers,
   onApproved,
   onClose,
 }: {
+  open?: boolean;
   nftTiers: TierOrNft<true>[] | undefined;
   onApproved?: (tokenIds: BigInt[]) => void;
   onClose?: VoidFunction;
@@ -38,7 +40,7 @@ export function ApproveNFTsModal({
   if (!nftTiers) return null;
 
   return (
-    <Modal id="approve-nfts" open onClose={onClose} size="sm">
+    <Modal id="approve-nfts" open={open} onClose={onClose} size="sm">
       <div
         style={{
           display: "flex",

@@ -13,6 +13,7 @@ type Context = {
   equippingCategory?: Category;
   unequippingCategory?: Category;
   availableTiers?: TierOrNft[];
+  purgeCache?: VoidFunction;
 };
 
 export const DressBannyContext = createContext<Context>({

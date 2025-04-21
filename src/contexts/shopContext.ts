@@ -13,6 +13,7 @@ type Context = {
   totalEquippedPrice?: bigint | null;
   selectedGroup: CategoryGroup;
   setSelectedGroup?: (g: CategoryGroup) => void;
+  purgeCache?: VoidFunction;
 };
 
 export const ShopContext = createContext<Context>({

@@ -68,7 +68,7 @@ export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
         );
       }
 
-      return [...acc, tier];
+      return [...acc, { ...tier, ownedQuantity: 1 }];
     }, [] as TierOrNft<true>[]);
 
     return condensed;

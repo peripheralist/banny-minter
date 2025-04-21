@@ -21,30 +21,31 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
 
   const { parsedTiers } = useAllTiers();
 
-  const { value: bag, setValue: setBag } = useLocalStorageState<ShoppingBag>(
-    "bag_content",
-    {
-      defaultValue: [],
-      disabled: !parsedTiers?.length,
-      parse: (str) =>
-        str
-          ? JSON.parse(str).map(
-              ({ tierId, quantity }: { tierId: number; quantity: number }) => ({
-                quantity,
-                tier: parsedTiers?.find((t) => t.tierId === tierId),
-              })
-            )
-          : [],
-      serialize: (b) =>
-        JSON.stringify(
-          b.map(({ tier, quantity }) => ({
-            tierId: tier.tierId,
-            category: tier.category,
-            quantity,
-          }))
-        ),
-    }
-  );
+  const {
+    value: bag,
+    setValue: setBag,
+    purge,
+  } = useLocalStorageState<ShoppingBag>("bag_content", {
+    defaultValue: [],
+    disabled: !parsedTiers?.length,
+    parse: (str) =>
+      str
+        ? JSON.parse(str).map(
+            ({ tierId, quantity }: { tierId: number; quantity: number }) => ({
+              quantity,
+              tier: parsedTiers?.find((t) => t.tierId === tierId),
+            })
+          )
+        : [],
+    serialize: (b) =>
+      JSON.stringify(
+        b.map(({ tier, quantity }) => ({
+          tierId: tier.tierId,
+          category: tier.category,
+          quantity,
+        }))
+      ),
+  });
 
   const addItem = useCallback(
     (tier: TierOrNft) => {
@@ -124,6 +125,7 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
         totalEquippedPrice,
         selectedGroup,
         setSelectedGroup,
+        purgeCache: purge,
       }}
     >
       {children}

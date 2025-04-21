@@ -26,15 +26,18 @@ export default function DressBannyContextProvider({
   availableTiers: TierOrNft[];
   defaultEquippedTierIds?: CategoryLib<number>;
 }>) {
-  const { value: equippedTierId, setValue: setEquippedTierId } =
-    useLocalStorageState<CategoryLib<number>>(
-      cacheKey ? `equipped_${cacheKey}` : undefined,
-      {
-        defaultValue: {},
-        parse: (str) => (str ? JSON.parse(str) : {}),
-        serialize: (v) => JSON.stringify(v),
-      }
-    );
+  const {
+    value: equippedTierId,
+    setValue: setEquippedTierId,
+    purge,
+  } = useLocalStorageState<CategoryLib<number>>(
+    cacheKey ? `equipped_${cacheKey}` : undefined,
+    {
+      defaultValue: {},
+      parse: (str) => (str ? JSON.parse(str) : {}),
+      serialize: (v) => JSON.stringify(v),
+    }
+  );
   const [selectedGroup, setSelectedGroup] = useState<CategoryGroup>(
     defaultGroup ?? "banny"
   );
@@ -141,6 +144,7 @@ export default function DressBannyContextProvider({
         equippingCategory,
         unequippingCategory,
         availableTiers,
+        purgeCache: purge,
       }}
     >
       {children}

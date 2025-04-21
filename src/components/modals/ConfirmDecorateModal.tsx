@@ -55,21 +55,18 @@ export function ConfirmDecorateModal({
 
   if (!open) return null;
 
-  if (nftsNeedApproval?.length) {
-    return (
-      <ApproveNFTsModal
-        nftTiers={nftsNeedApproval}
-        onApproved={(newIds) => setDidApproveIds((ids) => [...ids, ...newIds])}
+  return (
+    <>
+      <DecorateBannyModal
+        title="Dress your Banny"
+        equipped={equipped}
         onClose={onClose}
       />
-    );
-  }
-
-  return (
-    <DecorateBannyModal
-      title="Dress your Banny"
-      equipped={equipped}
-      onClose={onClose}
-    />
+      <ApproveNFTsModal
+        open={!!nftsNeedApproval?.length}
+        nftTiers={nftsNeedApproval}
+        onApproved={(newIds) => setDidApproveIds((ids) => [...ids, ...newIds])}
+      />
+    </>
   );
 }

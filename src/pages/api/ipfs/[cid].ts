@@ -34,7 +34,6 @@ export default async function handler(
       )
       .then((_res) => {
         const formattedRes = `{${_res.data.split("{")[1].split("}")[0]}}`;
-        console.log("asdf", { data: _res.data });
 
         try {
           return res.status(200).send(formattedRes);
