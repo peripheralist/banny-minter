@@ -100,8 +100,8 @@ export function ConfirmMintModal({
 
         return { ...tier, tokenId: Number(tokenId) } as TierOrNft<true>;
       })
-      .filter((t) => !!t);
-  }, [mintEvents]);
+      .filter((t) => !!t) as TierOrNft<true>[] | undefined;
+  }, [mintEvents, parsedTiers]);
 
   // build the category lib of items that can be dressed
   const mintedLib = useMemo(() => {
@@ -140,7 +140,7 @@ export function ConfirmMintModal({
       (acc, curr) => ({ ...acc, [curr.category]: curr }),
       {} as CategoryLib<TierOrNft<true>>
     );
-  }, [mintedNfts, parsedTiers, bag]);
+  }, [mintedNfts, bag]);
 
   const _onClose = useCallback(() => {
     if (isSuccess) {
