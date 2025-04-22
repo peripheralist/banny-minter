@@ -49,7 +49,7 @@ export function ConfirmMintModal({
   const { unequipAll, purgeCache: purgeDressBannyCache } =
     useContext(DressBannyContext);
 
-  const { mint, isPending, isSuccess, hash } = useMint({
+  const { mint, isSuccess, hash } = useMint({
     onSuccess: () => {
       setPhase("awaitingMints");
     },
@@ -70,7 +70,7 @@ export function ConfirmMintModal({
   });
 
   useEffect(() => {
-    if (phase === "awaitingMints") return;
+    if (phase === "none" || phase === "minting") return;
 
     if (phase === "decorating" || phase === "success") {
       purgeBagCache?.();
