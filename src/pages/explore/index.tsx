@@ -175,7 +175,7 @@ export default function Activity() {
 
                   <FormattedAddress
                     style={{ color: COLORS.gray }}
-                    address={nft.owner?.address as `0x${string}`}
+                    address={nft.wallet?.address as `0x${string}`}
                   />
                 </div>
               </RoundedFrame>

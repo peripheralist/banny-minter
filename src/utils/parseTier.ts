@@ -42,7 +42,7 @@ export const parseTierOrNft = (
     chain: _nft?.chainId
       ? config.chains.find((c) => c.id === _nft.chainId)
       : undefined,
-    owner: _nft?.owner ? (_nft.owner?.address as `0x${string}`) : undefined,
+    owner: _nft?.wallet ? (_nft.wallet?.address as `0x${string}`) : undefined,
     metadata: _nft?.metadata || _tier.metadata,
   } as TierOrNft<typeof tierOrNft.tokenId extends undefined ? false : true>;
 };

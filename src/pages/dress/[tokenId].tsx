@@ -39,7 +39,7 @@ export default function Index() {
   const isOwner = useMemo(
     () =>
       nft && address
-        ? isAddressEqual(address, nft.nft?.owner?.address as `0x${string}`)
+        ? isAddressEqual(address, nft.nft?.wallet?.address as `0x${string}`)
         : undefined,
     [address, nft]
   );

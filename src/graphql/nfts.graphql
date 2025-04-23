@@ -15,7 +15,7 @@ query NFT($tokenId: BigInt!, $chainId: Float!, $hook: String!) {
   nft(tokenId: $tokenId, chainId: $chainId, hook: $hook) {
     chainId
     tokenId
-    owner {
+    wallet {
       address
     }
     metadata
@@ -40,7 +40,7 @@ query NFTs($where: nftFilter, $orderBy: String, $orderDirection: String, $limit:
     items {
       chainId
       tokenId
-      owner {
+      wallet {
         address
       }
       metadata

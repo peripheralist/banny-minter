@@ -4336,7 +4336,7 @@ export type NftQueryVariables = Exact<{
 }>;
 
 
-export type NftQuery = { nft: { chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, customizedAt: number, owner: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null } | null };
+export type NftQuery = { nft: { chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, customizedAt: number, wallet: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null } | null };
 
 export type NfTsQueryVariables = Exact<{
   where?: InputMaybe<NftFilter>;
@@ -4347,7 +4347,7 @@ export type NfTsQueryVariables = Exact<{
 }>;
 
 
-export type NfTsQuery = { nfts: { totalCount: number, pageInfo: { endCursor: string | null, hasNextPage: boolean }, items: Array<{ chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, customizedAt: number, owner: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null }> } };
+export type NfTsQuery = { nfts: { totalCount: number, pageInfo: { endCursor: string | null, hasNextPage: boolean }, items: Array<{ chainId: number, tokenId: bigint, metadata: any | null, category: number, tierId: number, createdAt: number, customized: boolean | null, customizedAt: number, wallet: { address: string } | null, tier: { tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, category: number, chainId: number, metadata: any | null } | null }> } };
 
 export type NftTiersQueryVariables = Exact<{
   where?: InputMaybe<NftTierFilter>;
@@ -5689,7 +5689,7 @@ export const NftDocument = gql`
   nft(tokenId: $tokenId, chainId: $chainId, hook: $hook) {
     chainId
     tokenId
-    owner {
+    wallet {
       address
     }
     metadata
@@ -5756,7 +5756,7 @@ export const NfTsDocument = gql`
     items {
       chainId
       tokenId
-      owner {
+      wallet {
         address
       }
       metadata
