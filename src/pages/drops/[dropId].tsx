@@ -8,14 +8,22 @@ import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
+import { ShopContext } from "@/contexts/shopContext";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
+import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { ROUTES } from "@/utils/routes";
 import { useRouter } from "next/router";
-import { useMemo, useState } from "react";
+import { useContext, useMemo } from "react";
 
 export default function Drop() {
-  const [hideBannys, setHideBannys] = useState(false);
+  const { value: showBannys, setValue: setShowBannys } =
+    useLocalStorageState<boolean>("shop_show_bannys", {
+      defaultValue: true,
+    });
+
+  const { sort, setSort, priceFormat, setPriceFormat } =
+    useContext(ShopContext);
 
   const router = useRouter();
 
@@ -52,9 +60,86 @@ export default function Drop() {
           dynamicToolbar
           sections={[
             {
-              header: `Drop #${drop?.id.toString().padStart(2, "0")} | ${
-                drop?.name
-              }`,
+              header: (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    gap: 24,
+                  }}
+                >
+                  Drop #{drop?.id.toString().padStart(2, "0")} | {drop?.name}
+                </div>
+              ),
+              secondaryHeader: (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    flexWrap: "wrap",
+                    gap: 24,
+                    rowGap: 8,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      gap: 8,
+                    }}
+                  >
+                    <div style={{ fontSize: FONT_SIZE.sm }}>Sort:</div>
+                    <div
+                      style={{
+                        color: sort === "category" ? "white" : undefined,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setSort?.("category")}
+                    >
+                      Category
+                    </div>
+                    <div
+                      style={{
+                        color: sort === "price" ? "white" : undefined,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setSort?.("price")}
+                    >
+                      Price
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      gap: 8,
+                    }}
+                  >
+                    <div style={{ fontSize: FONT_SIZE.sm }}>Cost:</div>
+                    <div
+                      style={{
+                        color: priceFormat === "usd" ? "white" : undefined,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setPriceFormat?.("usd")}
+                    >
+                      USD
+                    </div>
+                    <div
+                      style={{
+                        color: priceFormat === "eth" ? "white" : undefined,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setPriceFormat?.("eth")}
+                    >
+                      ETH
+                    </div>
+                  </div>
+                </div>
+              ),
               contentStyle: {
                 position: "relative",
                 padding: 48,
@@ -73,41 +158,7 @@ export default function Drop() {
                     }}
                     style={{ padding: 24, color: COLORS.blue600 }}
                   >
-                    {hideBannys ? (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "baseline",
-                          gap: 12,
-                          cursor: "pointer",
-                        }}
-                        onClick={() => setHideBannys(false)}
-                      >
-                        <div
-                          style={{
-                            width: 80,
-                            height: 24,
-                            margin: -20,
-                          }}
-                        >
-                          <TierImage
-                            tier={parsedTiers.find((t) => t.tierId === 4)}
-                            size={80}
-                          />
-                        </div>
-                        <div style={{ flex: 1 }}>Looking for Banny?</div>
-                        <div
-                          style={{
-                            lineHeight: 0,
-                            height: 0,
-                            fontSize: FONT_SIZE["2xl"],
-                            transform: `rotate(180deg) translate(0, 8px)`,
-                          }}
-                        >
-                          ^
-                        </div>
-                      </div>
-                    ) : (
+                    {showBannys ? (
                       <>
                         <div style={{ marginBottom: 24 }}>
                           <div
@@ -117,7 +168,7 @@ export default function Drop() {
                               height: 0,
                               fontSize: FONT_SIZE["2xl"],
                             }}
-                            onClick={() => setHideBannys(true)}
+                            onClick={() => setShowBannys(false)}
                           >
                             ^
                           </div>
@@ -167,6 +218,40 @@ export default function Drop() {
                           }}
                         />
                       </>
+                    ) : (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "baseline",
+                          gap: 12,
+                          cursor: "pointer",
+                        }}
+                        onClick={() => setShowBannys(true)}
+                      >
+                        <div
+                          style={{
+                            width: 80,
+                            height: 24,
+                            margin: -20,
+                          }}
+                        >
+                          <TierImage
+                            tier={parsedTiers.find((t) => t.tierId === 4)}
+                            size={80}
+                          />
+                        </div>
+                        <div style={{ flex: 1 }}>Looking for Banny?</div>
+                        <div
+                          style={{
+                            lineHeight: 0,
+                            height: 0,
+                            fontSize: FONT_SIZE["2xl"],
+                            transform: `rotate(180deg) translate(0, 4px)`,
+                          }}
+                        >
+                          ^
+                        </div>
+                      </div>
                     )}
                   </RoundedFrame>
 
@@ -205,26 +290,54 @@ export default function Drop() {
                       gap: 64,
                     }}
                   >
-                    <CategoryGroupGrid
-                      items={parsedTiers.filter((t) => t.category !== "body")}
-                      label
-                      excludeGroups={["banny"]}
-                      render={(t) => (
-                        <TierShopButton
-                          key={t.tierId}
-                          tier={t}
-                          buttonSize={imgSize}
-                          onClick={() =>
-                            ROUTES.toTier({ router, tierId: t.tierId })
-                          }
-                        />
-                      )}
-                      gridStyle={{
-                        gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
-                        gap: 4,
-                        rowGap: 8,
-                      }}
-                    />
+                    {sort === "category" ? (
+                      <CategoryGroupGrid
+                        items={parsedTiers.filter((t) => t.category !== "body")}
+                        label
+                        excludeGroups={["banny"]}
+                        render={(t) => (
+                          <TierShopButton
+                            key={t.tierId}
+                            tier={t}
+                            buttonSize={imgSize}
+                            onClick={() =>
+                              ROUTES.toTier({ router, tierId: t.tierId })
+                            }
+                          />
+                        )}
+                        gridStyle={{
+                          gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
+                          gap: 4,
+                          rowGap: 8,
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
+                          gap: 4,
+                          rowGap: 8,
+                        }}
+                      >
+                        {parsedTiers
+                          .sort((a, b) => (a.price < b.price ? -1 : 1))
+                          .filter((t) => t.category !== "body")
+                          .map((t) => (
+                            <TierShopButton
+                              key={t.tierId}
+                              tier={t}
+                              buttonSize={
+                                isSmallScreen ? imgSize - 24 : imgSize
+                              }
+                              onClick={() =>
+                                ROUTES.toTier({ router, tierId: t.tierId })
+                              }
+                              category
+                            />
+                          ))}
+                      </div>
+                    )}
                   </div>
                 </>
               ),

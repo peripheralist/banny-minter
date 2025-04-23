@@ -3,6 +3,7 @@ import TierImage from "@/components/shared/TierImage";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ShopContext } from "@/contexts/shopContext";
+import { useFormattedUsdPrice } from "@/hooks/useFormattedUsdPrice";
 import { useIsHover } from "@/hooks/useIsHover";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { TierOrNft } from "@/model/tierOrNft";
@@ -13,13 +14,15 @@ export default function TierShopButton({
   tier,
   buttonSize,
   onClick,
+  category,
 }: {
   tier: TierOrNft;
   buttonSize: number;
   onClick?: VoidFunction;
+  category?: boolean;
 }) {
   const [added, setAdded] = useState(false);
-  const { addItem } = useContext(ShopContext);
+  const { addItem, priceFormat } = useContext(ShopContext);
 
   const onClickAdd = useCallback(() => {
     addItem?.(tier);
@@ -40,6 +43,29 @@ export default function TierShopButton({
   const { isSmallScreen } = useWindowSize();
 
   const { isHover, ...hoverProps } = useIsHover();
+
+  const formattedCategory = useMemo(() => {
+    if (!category) return null;
+
+    switch (tier.category) {
+      case "specialBody":
+        return "special (body)";
+      case "specialLegs":
+        return "special (legs)";
+      case "specialHead":
+        return "special (head)";
+      case "specialSuit":
+        return "special (suit)";
+      case "suitBottom":
+        return "suit (bottom)";
+      case "suitTop":
+        return "suit (top)";
+      case "headTop":
+        return "head (top)";
+      default:
+        return tier.category;
+    }
+  }, [category, tier]);
 
   const Label = useCallback(() => {
     const { initialSupply, remainingSupply } = tier;
@@ -82,12 +108,25 @@ export default function TierShopButton({
         <div style={{ fontSize: isSmallScreen ? FONT_SIZE.sm : FONT_SIZE.md }}>
           {tier.metadata?.productName}
         </div>
+        {formattedCategory && (
+          <div
+            style={{
+              textTransform: "uppercase",
+              fontSize: FONT_SIZE.xs,
+              color: COLORS.gray,
+            }}
+          >
+            {formattedCategory}
+          </div>
+        )}
         <div style={{ fontSize: FONT_SIZE.xs }}>
           <Supply />
         </div>
       </div>
     );
-  }, [tier, isSmallScreen, isSoldOut]);
+  }, [tier, isSmallScreen, isSoldOut, formattedCategory]);
+
+  const usdPrice = useFormattedUsdPrice(tier.price);
 
   return (
     <ButtonPad
@@ -111,6 +150,7 @@ export default function TierShopButton({
           justifyContent: "space-between",
           height: "100%",
           gap: 8,
+          width: "calc(100% - 16px)",
         }}
         onClick={onClick}
       >
@@ -130,7 +170,14 @@ export default function TierShopButton({
           onClick={onClickAdd}
           shadow="sm"
         >
-          {added ? "Added" : `Add Ξ${formatEther(tier.price)}`}
+          {added ? (
+            "Added"
+          ) : (
+            <span>
+              Add{" "}
+              {priceFormat === "eth" ? `Ξ${formatEther(tier.price)}` : usdPrice}
+            </span>
+          )}
         </ButtonPad>
       </div>
     </ButtonPad>

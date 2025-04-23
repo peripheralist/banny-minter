@@ -6,12 +6,14 @@ import RoundedFrame from "./RoundedFrame";
 export default function HeaderFrame({
   children,
   header,
+  secondaryHeader,
   sectionStyle,
   contentStyle,
   onScrollFinish,
   onClick,
 }: PropsWithChildren<{
   header: string | JSX.Element;
+  secondaryHeader?: string | JSX.Element;
   sectionStyle?: CSSProperties;
   contentStyle?: CSSProperties;
   onScrollFinish?: VoidFunction;
@@ -24,7 +26,11 @@ export default function HeaderFrame({
       <div ref={headerRef} style={{ paddingBottom: 8 }}>
         <RoundedFrame
           background={"black"}
-          style={{ display: "flex", alignItems: "baseline" }}
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            gap: 16,
+          }}
           containerStyle={{
             flex: 1,
             marginBottom: -24,
@@ -36,11 +42,23 @@ export default function HeaderFrame({
               textTransform: "uppercase",
               padding: "8px 16px",
               color: COLORS.banana200,
-              width: "100%",
+              flex: 1,
             }}
           >
             {header}
           </h4>
+
+          {secondaryHeader && (
+            <div
+              style={{
+                textTransform: "uppercase",
+                padding: "8px 16px",
+                color: COLORS.banana200,
+              }}
+            >
+              {secondaryHeader}
+            </div>
+          )}
         </RoundedFrame>
       </div>
 

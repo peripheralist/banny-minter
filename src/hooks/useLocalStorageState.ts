@@ -25,7 +25,15 @@ export function useLocalStorageState<V>(
 
     const raw = localStorage.getItem(_key);
 
-    setValue(parse ? parse(raw) : (raw as V));
+    if (raw !== undefined && raw !== null) {
+      setValue(
+        parse
+          ? parse(raw)
+          : typeof value === "boolean"
+          ? ((raw === "true") as V)
+          : (raw as V)
+      );
+    }
 
     setInitialized(true); // ensure initial read completes before updating cache
   }, [_key, parse, initialized, disabled]);

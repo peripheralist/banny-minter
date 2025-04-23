@@ -1,8 +1,11 @@
 import { CategoryGroup } from "@/constants/category";
 import { TierOrNft } from "@/model/tierOrNft";
-import { createContext } from "react";
+import { createContext, Dispatch, SetStateAction } from "react";
 
 export type ShoppingBag = { quantity: number; tier: TierOrNft }[];
+
+export type ShopSort = "category" | "price";
+export type ShopPriceFormat = "usd" | "eth";
 
 type Context = {
   bag: ShoppingBag;
@@ -14,6 +17,10 @@ type Context = {
   selectedGroup: CategoryGroup;
   setSelectedGroup?: (g: CategoryGroup) => void;
   purgeCache?: VoidFunction;
+  sort?: ShopSort;
+  setSort?: Dispatch<SetStateAction<ShopSort>>;
+  priceFormat?: ShopPriceFormat;
+  setPriceFormat?: Dispatch<SetStateAction<ShopPriceFormat>>;
 };
 
 export const ShopContext = createContext<Context>({

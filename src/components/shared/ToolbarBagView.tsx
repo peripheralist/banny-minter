@@ -11,6 +11,7 @@ import {
   CSSProperties,
   Dispatch,
   SetStateAction,
+  useCallback,
   useContext,
   useMemo,
   useState,
@@ -23,6 +24,7 @@ import RoundedFrame from "./RoundedFrame";
 
 type Section = {
   header: string | JSX.Element;
+  secondaryHeader?: string | JSX.Element;
   content: JSX.Element;
   contentStyle?: CSSProperties;
   sectionStyle?: CSSProperties;
@@ -93,10 +95,18 @@ export default function ToolbarBagView({
         }}
       >
         {sections.map(
-          ({ header, content, contentStyle, sectionStyle, onScrollFinish }) => (
+          ({
+            header,
+            secondaryHeader,
+            content,
+            contentStyle,
+            sectionStyle,
+            onScrollFinish,
+          }) => (
             <HeaderFrame
               key={header.toString()}
               header={header}
+              secondaryHeader={secondaryHeader}
               contentStyle={contentStyle}
               sectionStyle={sectionStyle}
               onScrollFinish={onScrollFinish}
@@ -141,11 +151,19 @@ function SmallScreenView({
         <h4
           key={header.toString()}
           onClick={() => setSelectedTabIdx(i)}
-          style={{ color: selectedTabIdx === i ? "white" : COLORS.banana100 }}
+          style={{
+            color: selectedTabIdx === i ? "white" : COLORS.banana100,
+            width: sections.length === 1 ? "100%" : undefined,
+          }}
         >
           {header}
         </h4>
       )),
+    [sections, selectedTabIdx]
+  );
+
+  const Subheader = useMemo(
+    () => sections[selectedTabIdx].secondaryHeader,
     [sections, selectedTabIdx]
   );
 
@@ -223,6 +241,21 @@ function SmallScreenView({
           }}
         >
           {Tabs}
+        </div>
+
+        <div
+          hidden={!Subheader}
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            gap: 24,
+            padding: "10px 12px 8px",
+            background: "black",
+            color: COLORS.banana100,
+            textTransform: "uppercase",
+          }}
+        >
+          {Subheader}
         </div>
       </div>
 

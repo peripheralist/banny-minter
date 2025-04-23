@@ -10,7 +10,12 @@ import {
   useState,
 } from "react";
 import { DressBannyContext } from "./dressBannyContext";
-import { ShopContext, ShoppingBag } from "./shopContext";
+import {
+  ShopContext,
+  ShoppingBag,
+  ShopPriceFormat,
+  ShopSort,
+} from "./shopContext";
 
 export const EQUIP_DURATION_MILLIS = 400;
 
@@ -46,6 +51,18 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
         }))
       ),
   });
+
+  const { value: sort, setValue: setSort } = useLocalStorageState<ShopSort>(
+    "shop_sort",
+    {
+      defaultValue: "category",
+    }
+  );
+
+  const { value: priceFormat, setValue: setPriceFormat } =
+    useLocalStorageState<ShopPriceFormat>("shop_price_format", {
+      defaultValue: "eth",
+    });
 
   const addItem = useCallback(
     (tier: TierOrNft) => {
@@ -126,6 +143,10 @@ export default function ShopContextProvider({ children }: PropsWithChildren) {
         selectedGroup,
         setSelectedGroup,
         purgeCache: purge,
+        sort,
+        setSort,
+        priceFormat,
+        setPriceFormat,
       }}
     >
       {children}
