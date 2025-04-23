@@ -294,16 +294,6 @@ function SmallScreenView({
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          <h4
-            style={{
-              padding: 12,
-              paddingBottom: 0,
-              fontSize: isSmallScreen ? FONT_SIZE.xl : FONT_SIZE["2xl"],
-            }}
-          >
-            Bag
-          </h4>
-
           <div style={{ padding: 12 }}>
             <RoundedFrame background={"white"}>
               <EquippedTiersPreview
