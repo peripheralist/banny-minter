@@ -26,7 +26,12 @@ export default function BagItems({ canRemove }: { canRemove?: boolean }) {
     >
       {bag.length
         ? bag.map(({ tier, quantity }) => (
-            <BagItem tier={tier} quantity={quantity} canRemove={canRemove} />
+            <BagItem
+              key={tier.tierId}
+              tier={tier}
+              quantity={quantity}
+              canRemove={canRemove}
+            />
           ))
         : "Bag is empty"}
     </div>

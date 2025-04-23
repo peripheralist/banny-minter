@@ -26,10 +26,10 @@ export function useLocalStorageState<V>(
     const raw = localStorage.getItem(_key);
 
     if (raw !== undefined && raw !== null) {
-      setValue(
+      setValue((v) =>
         parse
           ? parse(raw)
-          : typeof value === "boolean"
+          : typeof v === "boolean"
           ? ((raw === "true") as V)
           : (raw as V)
       );
