@@ -13,11 +13,12 @@ export default function Bag({ open }: { open?: boolean }) {
   const { unequipAll } = useContext(DressBannyContext);
 
   const ItemsQuantity = useCallback(
-    () => (
-      <div>
-        {itemsQuantity} item{itemsQuantity && itemsQuantity > 1 ? "s" : ""}
-      </div>
-    ),
+    () =>
+      itemsQuantity ? (
+        <div>
+          {itemsQuantity} item{itemsQuantity && itemsQuantity > 1 ? "s" : ""}
+        </div>
+      ) : null,
     [itemsQuantity]
   );
 
@@ -44,7 +45,7 @@ export default function Bag({ open }: { open?: boolean }) {
       >
         <ItemsQuantity />
 
-        {itemsQuantity && (
+        {itemsQuantity ? (
           <div
             onClick={() => {
               emptyBag?.();
@@ -54,7 +55,7 @@ export default function Bag({ open }: { open?: boolean }) {
           >
             Clear
           </div>
-        )}
+        ) : null}
       </div>
 
       <div style={{ flex: 1, overflow: "auto" }}>

@@ -29,17 +29,19 @@ export default function MintButton() {
   return (
     <>
       <RoundedFrame background={"white"}>
-        <div
-          style={{
-            textAlign: "center",
-            fontSize: FONT_SIZE.xs,
-            color: COLORS.pink,
-            margin: 8,
-            marginBottom: 4,
-          }}
-        >
-          RECEIVE {formattedPayerTokens} $BAN
-        </div>
+        {formattedPayerTokens && (
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: FONT_SIZE.xs,
+              color: COLORS.pink,
+              margin: 8,
+              marginBottom: 4,
+            }}
+          >
+            RECEIVE {formattedPayerTokens} $BAN
+          </div>
+        )}
 
         <ButtonPad
           disabled={!bag.length}

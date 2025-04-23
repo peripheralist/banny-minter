@@ -157,7 +157,7 @@ function SmallScreenView({
 
   const _showHeader = useDebounce(showHeader, 200);
 
-  const { width: windowWidth } = useWindowSize();
+  const { width: windowWidth, isSmallScreen } = useWindowSize();
 
   const bagWidth = useMemo(
     () => Math.min(480, windowWidth - 48),
@@ -261,7 +261,15 @@ function SmallScreenView({
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          <h4 style={{ padding: 12, fontSize: FONT_SIZE["2xl"] }}>Bag</h4>
+          <h4
+            style={{
+              padding: 12,
+              paddingBottom: 0,
+              fontSize: isSmallScreen ? FONT_SIZE.xl : FONT_SIZE["2xl"],
+            }}
+          >
+            Bag
+          </h4>
 
           <div style={{ padding: 12 }}>
             <RoundedFrame background={"white"}>
