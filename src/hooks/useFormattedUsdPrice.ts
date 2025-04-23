@@ -1,8 +1,14 @@
 import { useEtherPrice } from "juice-sdk-react";
+import { useMemo } from "react";
 import { formatEther } from "viem";
 
 export function useFormattedUsdPrice(tierPrice: bigint) {
   const { data: price } = useEtherPrice();
 
-  return `$${(Number(formatEther(tierPrice)) * (price ?? 0)).toFixed(0)}`;
+  const number = useMemo(
+    () => Number(formatEther(tierPrice)) * (price ?? 0),
+    [tierPrice, price]
+  );
+
+  return `$${number.toFixed(number < 1 ? 2 : 0)}`;
 }
