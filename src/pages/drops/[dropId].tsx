@@ -118,7 +118,7 @@ export default function Drop() {
                       gap: 8,
                     }}
                   >
-                    <div style={{ fontSize: FONT_SIZE.sm }}>Cost:</div>
+                    <div style={{ fontSize: FONT_SIZE.sm }}>Currency:</div>
                     <div
                       style={{
                         color: priceFormat === "usd" ? "white" : undefined,
