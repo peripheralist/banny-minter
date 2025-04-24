@@ -25,7 +25,7 @@ export function useAllActivity() {
   const { data: events, ...props } = useActivityEventsQuery({
     variables: {
       where: {
-        suckerGroup: project?.project?.suckerGroup?.id,
+        suckerGroupId: project?.project?.suckerGroup?.id,
         OR: [{ payEvent_not: null }, { decorateBannyEvent_not: null }],
       },
       orderBy: "timestamp",
