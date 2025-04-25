@@ -22,6 +22,7 @@ export type TierOrNft<hasNft extends boolean = boolean> = {
   name?: string;
 
   embeddedSvgUrl?: string;
+  reserveQuantity: number;
 } & Omit<NftTiersQuery["nftTiers"]["items"][number], "category" | "name"> &
   (hasNft extends true ? NftProps : Partial<NftProps>);
 

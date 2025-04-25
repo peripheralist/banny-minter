@@ -6,6 +6,7 @@ fragment TierData on nftTier {
   svg
   initialSupply
   remainingSupply
+  reserveFrequency
   category
   chainId
   metadata

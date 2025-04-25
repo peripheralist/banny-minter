@@ -12,6 +12,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import EquippedTiersPreview from "../shared/EquippedTiersPreview";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { TierOrNft } from "@/model/tierOrNft";
+import { useAppChain } from "@/hooks/useAppChain";
 
 const IMG_COUNT = 4;
 
@@ -35,6 +36,11 @@ export default function TierDetailModal() {
 
     return parsedTiers?.find((t) => t.tierId === tierId);
   }, [parsedTiers, itemId]);
+
+  const isSoldOut = useMemo(
+    () => (tier ? tier.remainingSupply <= BigInt(0) : undefined),
+    [tier]
+  );
 
   useEffect(() => {
     // reset image idx
@@ -115,13 +121,17 @@ export default function TierDetailModal() {
     <Modal
       open
       onClose={onClose}
-      action={{
-        onClick: () => {
-          addItem?.(tier);
-          onClose();
-        },
-        text: `Add to bag Ξ${formatEther(tier.price)}`,
-      }}
+      action={
+        isSoldOut
+          ? undefined
+          : {
+              onClick: () => {
+                addItem?.(tier);
+                onClose();
+              },
+              text: `Add to bag Ξ${formatEther(tier.price)}`,
+            }
+      }
     >
       <div
         style={{

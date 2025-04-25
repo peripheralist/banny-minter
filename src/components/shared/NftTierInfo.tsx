@@ -1,4 +1,5 @@
 import { CATEGORIES } from "@/constants/category";
+import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ITEM_DESCRIPTIONS } from "@/constants/itemDescriptions";
@@ -17,9 +18,12 @@ import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
 import FormattedAddress from "./FormattedAddress";
 import RoundedFrame from "./RoundedFrame";
+import { useAppChain } from "@/hooks/useAppChain";
 
 export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
   const { address } = useAccount();
+
+  const appChain = useAppChain();
 
   const chains = useSupportedChains();
 
@@ -42,6 +46,11 @@ export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
         ? isAddressEqual(tierOrNft.owner, address)
         : false,
     [tierOrNft, address]
+  );
+
+  const isSoldOut = useMemo(
+    () => tierOrNft.remainingSupply <= BigInt(0),
+    [tierOrNft]
   );
 
   const { isSmallScreen } = useWindowSize();
@@ -86,18 +95,21 @@ export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
           {tierOrNft.metadata?.productName}
         </h1>
 
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <RoundedFrame
             background={"black"}
             containerStyle={{ width: "auto" }}
             style={{
               padding: "8px 12px",
               color: "white",
+              fontWeight: 'bold',
               fontSize: FONT_SIZE.sm,
             }}
           >
             {formatEther(BigInt(tierOrNft.price))} ETH
           </RoundedFrame>
+
+          {isSoldOut ? `SOLD OUT (${appChain.name})` : ""}
         </div>
 
         <p
@@ -110,7 +122,7 @@ export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
         </p>
       </div>
     );
-  }, [tierOrNft, isSmallScreen]);
+  }, [tierOrNft, isSmallScreen, isSoldOut, appChain]);
 
   const Stock = useCallback(() => {
     if (!multiChainSupply) return null;
@@ -124,15 +136,27 @@ export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
           gap: 8,
         }}
       >
-        {chains.map(({ id, name }) => (
-          <NftInfoRow
-            key={id}
-            label={name}
-            value={`${multiChainSupply[id]?.remaining.toString() ?? "--"}/${
-              multiChainSupply[id]?.initial.toString() ?? "--"
-            }`}
-          />
-        ))}
+        {chains.map(({ id, name }) => {
+          const { remaining, initial } = multiChainSupply[id];
+
+          return (
+            <NftInfoRow
+              key={id}
+              label={name}
+              value={
+                <span>
+                  {remaining.toString() ?? "--"}/{initial.toString() ?? "--"}{" "}
+                </span>
+              }
+            />
+          );
+        })}
+
+        {multiChainSupply.reserved > 0 ? (
+          <div style={{ color: COLORS.gray, marginTop: 16 }}>
+            {multiChainSupply.reserved} reserved per chain
+          </div>
+        ) : null}
       </div>
     );
   }, [NftInfoRow, chains, multiChainSupply]);
@@ -227,7 +251,7 @@ export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
             label="SVG"
             value={
               <span>
-                Not on-chain{" "}
+                Not on-chain yet{" "}
                 <Link
                   href={`${router.asPath.split("?")[0]}?store-svgs=${
                     tierOrNft.tierId

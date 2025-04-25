@@ -32,6 +32,16 @@ export const parseTierOrNft = (
 
   const _tier = _nft?.tier ?? tierOrNft;
 
+  const initialSupply =
+    _nft?.tier?.initialSupply ?? (tierOrNft as _Tier).initialSupply;
+  const remainingSupply =
+    _nft?.tier?.remainingSupply ?? (tierOrNft as _Tier).remainingSupply;
+  const reserveFrequency =
+    _nft?.tier?.reserveFrequency ?? (tierOrNft as _Tier).reserveFrequency ?? 0;
+
+  const reserveQuantity =
+    reserveFrequency > 0 ? Math.ceil(initialSupply / reserveFrequency) : 0;
+
   return {
     ..._tier,
     name: tierOrNft?.metadata.productName,
@@ -43,6 +53,9 @@ export const parseTierOrNft = (
       ? config.chains.find((c) => c.id === _nft.chainId)
       : undefined,
     owner: _nft?.wallet ? (_nft.wallet?.address as `0x${string}`) : undefined,
+    initialSupply: initialSupply - reserveQuantity,
+    remainingSupply: remainingSupply - reserveQuantity,
+    reserveQuantity,
     metadata: _nft?.metadata || _tier.metadata,
   } as TierOrNft<typeof tierOrNft.tokenId extends undefined ? false : true>;
 };

@@ -34,11 +34,7 @@ export default function TierShopButton({
     }, 1000);
   }, [tier, addItem]);
 
-  // Only use sold out treatment if tier is not a NFT
-  const isSoldOut = useMemo(
-    () => tier.remainingSupply <= BigInt(0),
-    [tier.remainingSupply]
-  );
+  const isSoldOut = useMemo(() => tier.remainingSupply <= BigInt(0), [tier]);
 
   const { isSmallScreen } = useWindowSize();
 
@@ -71,26 +67,23 @@ export default function TierShopButton({
     const { initialSupply, remainingSupply } = tier;
 
     const Supply = () => {
-      if (isSoldOut) {
-        return <div>SOLD OUT</div>;
-      }
       if (initialSupply >= BigInt(999999999)) {
         return <div style={{ opacity: 0.5 }}>Unlimited</div>;
       }
 
-      let _initialSupply = initialSupply.toString();
-      if (_initialSupply.endsWith("000000")) {
-        _initialSupply =
-          _initialSupply.substring(0, _initialSupply.length - 6) + "M";
-      } else if (_initialSupply.endsWith("000")) {
-        _initialSupply =
-          _initialSupply.substring(0, _initialSupply.length - 3) + "K";
+      let initialSupplyStr = initialSupply.toString();
+      if (initialSupplyStr.endsWith("000000")) {
+        initialSupplyStr =
+          initialSupplyStr.substring(0, initialSupplyStr.length - 6) + "M";
+      } else if (initialSupplyStr.endsWith("000")) {
+        initialSupplyStr =
+          initialSupplyStr.substring(0, initialSupplyStr.length - 3) + "K";
       }
 
       return (
         <div>
           <span>{remainingSupply.toString()}</span>
-          <span style={{ opacity: 0.5 }}>/{_initialSupply} in stock</span>
+          <span style={{ opacity: 0.5 }}>/{initialSupplyStr} in stock</span>
         </div>
       );
     };
@@ -124,7 +117,7 @@ export default function TierShopButton({
         </div>
       </div>
     );
-  }, [tier, isSmallScreen, isSoldOut, formattedCategory]);
+  }, [tier, isSmallScreen, formattedCategory]);
 
   const usdPrice = useFormattedUsdPrice(tier.price);
 
@@ -133,7 +126,7 @@ export default function TierShopButton({
       fillFg={"white"}
       fillBorder={"white"}
       style={{
-        opacity: isSoldOut ? 0.7 : 1,
+        opacity: 1,
         cursor: "default",
         display: "flex",
         flexDirection: "column",
@@ -163,14 +156,17 @@ export default function TierShopButton({
 
       <div style={{ width: "calc(100% - 16px)" }} {...hoverProps}>
         <ButtonPad
-          style={{ padding: 8, color: COLORS.pink }}
+          style={{ padding: 8, color: isSoldOut ? "black" : COLORS.pink }}
           fillFg={added ? COLORS.pinkLite : "white"}
           fillBorder={added ? COLORS.pink : isHover ? "#000000aa" : "#00000064"}
           containerStyle={{ marginBottom: 8, width: "100%" }}
           onClick={onClickAdd}
+          disabled={isSoldOut}
           shadow="sm"
         >
-          {added ? (
+          {isSoldOut ? (
+            "Sold out"
+          ) : added ? (
             "Added"
           ) : (
             <span>
