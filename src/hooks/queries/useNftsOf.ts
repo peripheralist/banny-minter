@@ -9,6 +9,7 @@ export function useNftsOf(wallet: Address | undefined) {
         hook: BAN_HOOK.toLowerCase(),
         owner: wallet,
       },
+      limit: 1000,
     },
   });
 }
