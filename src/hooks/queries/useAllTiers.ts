@@ -16,7 +16,7 @@ export function useAllTiers() {
     variables: {
       where: {
         hook: BAN_HOOK,
-        chainId: appChain.testnet ? sepolia.id : mainnet.id,
+        chainId: appChain.id,
       },
     },
   });
