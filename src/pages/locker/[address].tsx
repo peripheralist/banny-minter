@@ -11,6 +11,7 @@ import { WalletContext } from "@/contexts/walletContext";
 import { useNftsOf } from "@/hooks/queries/useNftsOf";
 import { useAppChain } from "@/hooks/useAppChain";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { TierOrNft } from "@/model/tierOrNft";
 import { chainName } from "@/utils/chainName";
 import { parseTierOrNft } from "@/utils/parseTier";
 import { ROUTES } from "@/utils/routes";
@@ -33,6 +34,22 @@ export default function Index() {
   const appChain = useAppChain();
 
   const { data: nfts, loading } = useNftsOf(address);
+
+  const nftAggregates = useMemo(() => {
+    if (!nfts) return;
+
+    return nfts.nfts.items.map(parseTierOrNft).reduce((acc, nft) => {
+      if (acc.some((t) => t.tierId === nft.tierId && t.category !== "body")) {
+        return acc.map((t) =>
+          t.tierId === nft.tierId
+            ? { ...t, ownedQuantity: (t.ownedQuantity ?? 0) + 1 }
+            : t
+        );
+      }
+
+      return [...acc, nft];
+    }, [] as TierOrNft<true>[]);
+  }, [nfts]);
 
   const { isSmallScreen, width } = useWindowSize();
 
@@ -88,7 +105,7 @@ export default function Index() {
                 >
                   <CategoryGroupGrid
                     label
-                    items={nfts?.nfts.items.map((nft) => parseTierOrNft(nft))}
+                    items={nftAggregates}
                     gridStyle={{
                       gridTemplateColumns: `repeat(auto-fit, ${imgSize}px)`,
                       gap: 4,
@@ -140,11 +157,16 @@ export default function Index() {
                                   display: "flex",
                                   justifyContent: "space-between",
                                   fontSize: FONT_SIZE.xs,
+                                  color: COLORS.gray,
                                 }}
                               >
-                                <span style={{ opacity: 0.5 }}>
-                                  #{nft.tokenId.toString()}
-                                </span>
+                                {nft.category !== "body" &&
+                                nft.ownedQuantity &&
+                                nft.ownedQuantity > 1 ? (
+                                  <span>{nft.ownedQuantity} owned</span>
+                                ) : (
+                                  <span>#{nft.tokenId.toString()}</span>
+                                )}
                                 <span
                                   style={{
                                     color: COLORS.blue400,
