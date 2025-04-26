@@ -74,7 +74,7 @@ export default function ToolbarIcon() {
           ))}
 
           {connectedAddress && (
-            <_Link href={"/locker/" + connectedAddress}>Locker</_Link>
+            <_Link href={"/locker/" + connectedAddress}>My locker</_Link>
           )}
 
           <div style={{ flex: 1 }}></div>

@@ -70,7 +70,7 @@ export default function Index() {
 
         {connectedAddress && (
           <_Link frame href={"/locker/" + connectedAddress}>
-            Locker
+            My locker
           </_Link>
         )}
       </div>

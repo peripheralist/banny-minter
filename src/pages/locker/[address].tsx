@@ -19,13 +19,23 @@ import { formatEthAddress } from "juice-sdk-core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
-import { Address, isAddress } from "viem";
-import { useEnsName } from "wagmi";
+import { Address, isAddress, isAddressEqual } from "viem";
+import { useAccount, useEnsName } from "wagmi";
 
 export default function Index() {
   const router = useRouter();
 
+  const { address: connectedAddress } = useAccount();
+
   const address = router.query.address as Address | undefined;
+
+  const isOwner = useMemo(
+    () =>
+      address && connectedAddress
+        ? isAddressEqual(address, connectedAddress)
+        : false,
+    [address, connectedAddress]
+  );
 
   const { data: ensName } = useEnsName({ address, chainId: 1 });
 
@@ -179,49 +189,51 @@ export default function Index() {
                             </div>
                           </Link>
 
-                          {nft.category === "body" &&
-                            (nft.chainId === appChain.id ? (
-                              <Link
-                                href={`/dress/${nft.tokenId.toString()}`}
-                                style={{ width: "100%" }}
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <ButtonPad
-                                  containerStyle={{
-                                    margin: 4,
-                                    marginTop: 0,
-                                    marginBottom: 8,
-                                  }}
-                                  style={{ padding: 8 }}
-                                  shadow="sm"
+                          {isOwner
+                            ? nft.category === "body" &&
+                              (nft.chainId === appChain.id ? (
+                                <Link
+                                  href={`/dress/${nft.tokenId.toString()}`}
+                                  style={{ width: "100%" }}
+                                  onClick={(e) => e.stopPropagation()}
                                 >
-                                  Dress
-                                </ButtonPad>
-                              </Link>
-                            ) : (
-                              <div
-                                style={{ width: "100%" }}
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <ButtonPad
-                                  containerStyle={{
-                                    margin: 4,
-                                    marginTop: 0,
-                                    marginBottom: 8,
-                                  }}
-                                  style={{
-                                    padding: 8,
-                                    color: COLORS.blue400,
-                                    fontSize: FONT_SIZE.sm,
-                                    lineHeight: 1.4,
-                                  }}
-                                  shadow="sm"
-                                  onClick={() => switchChain?.(nft.chainId)}
+                                  <ButtonPad
+                                    containerStyle={{
+                                      margin: 4,
+                                      marginTop: 0,
+                                      marginBottom: 8,
+                                    }}
+                                    style={{ padding: 8 }}
+                                    shadow="sm"
+                                  >
+                                    Dress
+                                  </ButtonPad>
+                                </Link>
+                              ) : (
+                                <div
+                                  style={{ width: "100%" }}
+                                  onClick={(e) => e.stopPropagation()}
                                 >
-                                  Dress on {chainName(nft.chainId)}
-                                </ButtonPad>
-                              </div>
-                            ))}
+                                  <ButtonPad
+                                    containerStyle={{
+                                      margin: 4,
+                                      marginTop: 0,
+                                      marginBottom: 8,
+                                    }}
+                                    style={{
+                                      padding: 8,
+                                      color: COLORS.blue400,
+                                      fontSize: FONT_SIZE.sm,
+                                      lineHeight: 1.4,
+                                    }}
+                                    shadow="sm"
+                                    onClick={() => switchChain?.(nft.chainId)}
+                                  >
+                                    Dress on {chainName(nft.chainId)}
+                                  </ButtonPad>
+                                </div>
+                              ))
+                            : null}
                         </ButtonPad>
                       );
                     }}
