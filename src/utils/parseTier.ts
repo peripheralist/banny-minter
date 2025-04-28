@@ -57,5 +57,6 @@ export const parseTierOrNft = (
     remainingSupply: remainingSupply - reserveQuantity,
     reserveQuantity,
     metadata: _nft?.metadata || _tier.metadata,
+    customized: _nft?.customized,
   } as TierOrNft<typeof tierOrNft.tokenId extends undefined ? false : true>;
 };

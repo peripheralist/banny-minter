@@ -17,6 +17,7 @@ export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
   const appChain = useAppChain();
   const { address } = useAccount();
 
+  // Only NFTs owned by connected wallet. Does not include worn NFTs owned by resolver contract
   const { data: nfts, loading } = useNfTsQuery({
     variables: {
       where: {

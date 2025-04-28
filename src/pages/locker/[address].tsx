@@ -206,7 +206,7 @@ export default function Index() {
                                     style={{ padding: 8 }}
                                     shadow="sm"
                                   >
-                                    Dress
+                                    {nft.customized ? "Dress/Undress" : "Dress"}
                                   </ButtonPad>
                                 </Link>
                               ) : (

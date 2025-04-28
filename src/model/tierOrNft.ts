@@ -14,6 +14,7 @@ type NftProps = {
   owner?: `0x${string}`;
   dressed?: boolean; // owned by resolver contract
   ownedQuantity?: number;
+  customized?: boolean
 };
 
 export type TierOrNft<hasNft extends boolean = boolean> = {

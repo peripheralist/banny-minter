@@ -24,6 +24,12 @@ export default function TierEquipButton({
   );
 
   const Label = useCallback(() => {
+    let label = `${tier.ownedQuantity} owned`;
+
+    if (tier.dressed) {
+      label = isEquipped ? "DRESSED" : "UNDRESS";
+    }
+
     return (
       <div
         style={{
@@ -42,11 +48,11 @@ export default function TierEquipButton({
             color: tier?.dressed ? COLORS.pink : "black",
           }}
         >
-          {tier.dressed ? "DRESSED" : `${tier.ownedQuantity} owned`}
+          {label}
         </div>
       </div>
     );
-  }, [tier, labelStyle]);
+  }, [tier, labelStyle, isEquipped]);
 
   return (
     <ButtonPad
