@@ -155,8 +155,10 @@ export default function Drop() {
                       marginTop: 24,
                       marginBottom: 48,
                       height: "auto",
+                      cursor: showBannys ? "default" : "pointer",
                     }}
                     style={{ padding: 24, color: COLORS.blue600 }}
+                    onClick={() => setShowBannys(true)}
                   >
                     {showBannys ? (
                       <>
@@ -224,9 +226,7 @@ export default function Drop() {
                           display: "flex",
                           alignItems: "baseline",
                           gap: 12,
-                          cursor: "pointer",
                         }}
-                        onClick={() => setShowBannys(true)}
                       >
                         <div
                           style={{
