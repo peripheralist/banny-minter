@@ -44,7 +44,10 @@ export const parseTierOrNft = (
 
   return {
     ..._tier,
-    name: tierOrNft?.metadata.productName,
+    name:
+      _nft?.category === 0
+        ? `Banny ${_nft.tokenId}`
+        : tierOrNft?.metadata.productName,
     svg: svg?.toLowerCase().includes("<script") ? null : svg ?? null, // crude injected script protection
     category: categoryOfId[tierOrNft?.category!],
     embeddedSvgUrl,
