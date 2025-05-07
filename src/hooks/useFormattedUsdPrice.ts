@@ -10,5 +10,5 @@ export function useFormattedUsdPrice(tierPrice: bigint) {
     [tierPrice, price]
   );
 
-  return `$${number.toFixed(number < 1 ? 2 : 0)}`;
+  return `$${Number(number.toFixed(number < 100 ? 2 : 0)).toLocaleString()}`;
 }
