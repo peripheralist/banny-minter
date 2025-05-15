@@ -81,7 +81,7 @@ const scalarsLink = withScalars({ schema, typesMap });
 
 const httpLink = (testnet?: boolean) =>
   new HttpLink({
-    uri: testnet ? TESTNET_API_URL : API_URL,
+    uri: `${testnet ? TESTNET_API_URL : API_URL}/graphql`,
   });
 
 const apolloClient = (testnet?: boolean) =>

@@ -31,9 +31,9 @@ Interface for Banny Retail ($BAN Revnet). Supports NFT minting, dressing Bannys,
 
 ## Infrastructure
 
-### Subgraph
+### Graphql queries
 
-A subgraph url is used to query NFT tokens and tiers, using [Apollo graphql client](https://www.apollographql.com/). Types are generated at build time, using `yarn codegen`.
+A [bendystraw url](https://bendystraw.xyz) is used to query NFT tokens and tiers, using [Apollo graphql client](https://www.apollographql.com/). Types are generated at build time, using `yarn codegen`.
 
 ### juice-sdk-react
 

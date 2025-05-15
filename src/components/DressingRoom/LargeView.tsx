@@ -7,7 +7,6 @@ import ToolbarBagView from "../shared/ToolbarBagView";
 import DecorateButton from "./DecorateButton";
 import TierEquipButton from "./TierEquipButton";
 
-// TODO make two columns separate sections
 export default function LargeView({ tokenId }: { tokenId: number }) {
   const { availableTiers, equipped, equippingCategory, unequippingCategory } =
     useContext(DressBannyContext);
