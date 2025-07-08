@@ -3,11 +3,13 @@ import Link from "next/link";
 import { CSSProperties, PropsWithChildren } from "react";
 
 export default function Downloadable({
+  downloadText,
   children,
   downloadHref,
   fileName,
   buttonStyle,
 }: PropsWithChildren<{
+  downloadText?: string;
   downloadHref: string;
   fileName: string;
   buttonStyle?: CSSProperties;
@@ -28,7 +30,7 @@ export default function Downloadable({
         download={fileName}
         href={downloadHref}
       >
-        ↓SVG
+        {downloadText ?? "↓SVG"}
       </Link>
     </div>
   );
