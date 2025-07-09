@@ -112,7 +112,7 @@ export function useAdjustTiers(options?: WriteContractHandlerOptions) {
           votingUnits: number;
           reserveFrequency: number;
           reserveBeneficiary: Address;
-          encodedIPFSUri: string;
+          encodedIpfsUri: string;
           category: number;
           discountPercent: number;
           allowOwnerMint: boolean;

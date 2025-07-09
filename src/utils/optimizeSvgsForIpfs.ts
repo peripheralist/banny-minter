@@ -1,8 +1,6 @@
 import axios from "axios";
 
 export interface IpfsUploadResponse {
-  cid: string; // e.g. Qm…
-  encodedCid: `0x${string}`; // hex-encoded, ready for on-chain use
   svgHash: `0x${string}`;
   svgContents: string;
 }
@@ -15,7 +13,7 @@ export interface FileUploadResult extends IpfsUploadResponse {
  * Uploads many browser `File` objects to `/api/ipfs/upload`.
  * Resolves with results in the same order as the input array.
  */
-export async function storeFilesToIpfs(
+export async function optimizeSvgsForIpfs(
   files: File[]
 ): Promise<FileUploadResult[]> {
   const tasks = files.map(async (file) => {
@@ -23,12 +21,12 @@ export async function storeFilesToIpfs(
     form.append("file", file, file.name);
 
     try {
-      const res = await axios.post("/api/ipfs/upload", form);
+      const res = await axios.post("/api/ipfs/optimize", form);
 
       return { fileName: file.name, ...(res.data as IpfsUploadResponse) };
     } catch (e) {
       throw new Error(
-        `Upload failed for ${file.name}: ${(e as Error).message}`
+        `Optimization failed for ${file.name}: ${(e as Error).message}`
       );
     }
   });

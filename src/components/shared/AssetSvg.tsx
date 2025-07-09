@@ -7,22 +7,27 @@ import { CSSProperties, useMemo } from "react";
  */
 export default function AssetSvg({
   name,
+  svgContents,
   size,
   style,
   svgStyle,
 }: {
   name: string;
+  svgContents?: string | null;
   size: number;
   style?: CSSProperties;
   svgStyle?: string;
 }) {
   const _name = useMemo(() => name.toLowerCase().replaceAll(" ", "-"), [name]);
 
-  const svg = useMemo(() => {
-    return `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}' viewBox='0 0 400 400' fill='none'>${
-      svgStyle ?? ""
-    }${ASSET_SVGS[_name]}</svg>`;
-  }, [size, _name, svgStyle]);
+  const svg = useMemo(
+    () =>
+      // ASSET_SVGS pattern allows loading svg data locally when not on-chain yet
+      `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}' viewBox='0 0 400 400' fill='none'>${
+        svgStyle ?? ""
+      }${svgContents ?? ASSET_SVGS[_name]}</svg>`,
+    [size, _name, svgStyle, svgContents]
+  );
 
   return (
     <Image

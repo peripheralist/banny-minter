@@ -38,7 +38,7 @@ const INHERITED_FILLS: Record<number, string[]> = {
 };
 
 const getFillsForBody = (bodyTierId: number) => {
-  const [b1, b2, b3, b4, a1, a2, a3] = INHERITED_FILLS[bodyTierId];
+  const [b1, b2, b3, b4, a1, a2, a3] = INHERITED_FILLS[bodyTierId] ?? [];
 
   return { b1, b2, b3, b4, a1, a2, a3 };
 };

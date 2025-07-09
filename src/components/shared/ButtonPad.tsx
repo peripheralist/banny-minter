@@ -41,6 +41,8 @@ export default function ButtonPad({
   const [clicked, setClicked] = useState<boolean>();
 
   const shadowDepth = useMemo(() => {
+    if (disabled) return 0;
+
     switch (shadow) {
       case undefined:
       case "md":
@@ -50,7 +52,7 @@ export default function ButtonPad({
     }
 
     return 0;
-  }, [shadow]);
+  }, [shadow, disabled]);
 
   const _onClick: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {

@@ -23,7 +23,7 @@ export default function DressBannyContextProvider({
 }: PropsWithChildren<{
   cacheKey?: string;
   defaultGroup?: CategoryGroup;
-  availableTiers: TierOrNft[];
+  availableTiers: Pick<TierOrNft, 'category' | 'tierId' | 'metadata' | 'tokenId'>[];
   defaultEquippedTierIds?: CategoryLib<number>;
 }>) {
   const {

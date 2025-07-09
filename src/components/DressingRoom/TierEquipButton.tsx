@@ -12,7 +12,10 @@ export default function TierEquipButton({
   size,
   labelStyle,
 }: {
-  tier: TierOrNft;
+  tier: Pick<
+    TierOrNft,
+    "category" | "tierId" | "ownedQuantity" | "dressed" | "metadata"
+  >;
   size: number;
   labelStyle?: CSSProperties;
 }) {

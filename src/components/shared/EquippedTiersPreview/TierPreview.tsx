@@ -86,7 +86,7 @@ export function TierPreview({
 
     return (
       <>
-        {tier?.metadata && (
+        {tier?.name && (
           <AssetSvg
             style={{
               position: "absolute",
@@ -94,8 +94,9 @@ export function TierPreview({
               ...fuzzMask(unequipFuzz),
             }}
             svgStyle={inheritedStyle}
-            name={tier.metadata.productName}
+            name={tier.name}
             size={size}
+            svgContents={tier.svg}
           />
         )}
 

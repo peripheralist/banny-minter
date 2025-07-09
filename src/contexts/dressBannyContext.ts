@@ -12,7 +12,7 @@ type Context = {
   setSelectedGroup?: (g: CategoryGroup) => void;
   equippingCategory?: Category;
   unequippingCategory?: Category;
-  availableTiers?: TierOrNft[];
+  availableTiers?: Pick<TierOrNft, 'category' | 'tierId' | 'metadata' | 'tokenId'>[];
   purgeCache?: VoidFunction;
 };
 

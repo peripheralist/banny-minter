@@ -1,17 +1,25 @@
 import ButtonPad from "@/components/shared/ButtonPad";
 import Downloadable from "@/components/shared/Downloadable";
+import EquippedTiersPreview from "@/components/shared/EquippedTiersPreview";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import { CATEGORY_IDS } from "@/constants/category";
+import { CATEGORIES, Category, CATEGORY_IDS } from "@/constants/category";
+import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
+import { DressBannyContext } from "@/contexts/dressBannyContext";
+import DressBannyContextProvider from "@/contexts/DressBannyContextProvider";
 import { useSetProductNames } from "@/hooks/writeContract/setProductNames";
 import { useSetSvgHashsOf } from "@/hooks/writeContract/setSvgHashsOf";
 import { useAdjustTiers } from "@/hooks/writeContract/useAdjustTiers";
+import { optimizeSvgsForIpfs } from "@/utils/optimizeSvgsForIpfs";
 import { storeFilesToIpfs } from "@/utils/storeFilesToIpfs";
 import Image from "next/image";
 import {
+  Dispatch,
   InputHTMLAttributes,
+  SetStateAction,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -27,31 +35,125 @@ type TierObj = {
   initialSupply: number;
   reserveFrequency: number;
   cid: string | null;
-  encodedIPFSUri: string | null;
-  category: number;
+  encodedIpfsUri: string | null;
+  category: Category;
 
   svgHash?: string;
+  svg?: string;
 
   // some properties not exposed to UI
-  // reserveBeneficiary: address(0);
-  // votingUnits: 0;
-  // discountPercent: 0;
-  // cannotIncreaseDiscountPercent: false;
-  // allowOwnerMint: false;
-  // useReserveBeneficiaryAsDefault: false;
-  // transfersPausable: false;
-  // useVotingUnits: false;
-  // cannotBeRemoved: false;
+  reserveBeneficiary: `0x${string}`;
+  votingUnits: number;
+  discountPercent: number;
+  cannotIncreaseDiscountPercent: boolean;
+  allowOwnerMint: boolean;
+  useReserveBeneficiaryAsDefault: boolean;
+  transfersPausable: boolean;
+  useVotingUnits: boolean;
+  cannotBeRemoved: boolean;
 };
 
-const PREVIEW_IMG_SIZE = 200;
+const PREVIEW_IMG_SIZE = 180;
 
 export default function Index() {
-  const [files, setFiles] = useState<File[] | null>(null);
-  const [isStoringToIpfs, setIsStoringToIpfs] = useState(false);
-  const [ipfsStoringProgress, setIpfsStoringProgress] = useState(0);
-  const [didAdjustTiers, setDidAdjustTiers] = useState(false);
   const [tiers, setTiers] = useState<TierObj[]>([]);
+
+  return (
+    <DressBannyContextProvider
+      availableTiers={tiers.map((t) => ({
+        ...t,
+        tierId: t.upc,
+        metadata: {
+          productName: t.name,
+        },
+        reserveQuantity:
+          t.reserveFrequency > 0
+            ? Math.ceil(t.initialSupply / t.reserveFrequency)
+            : 0,
+      }))}
+    >
+      <ToolbarBagView
+        disableDrawer
+        sections={[
+          {
+            header: "Store Tiers",
+            sectionStyle: {
+              flex: 1,
+            },
+            contentStyle: {
+              padding: 24,
+            },
+            content: <DefineTiersView tiers={tiers} setTiers={setTiers} />,
+          },
+          {
+            header: "Preview",
+            sectionStyle: {
+              flex: 0,
+            },
+            contentStyle: {
+              padding: 8,
+            },
+            content: (
+              <div>
+                <RoundedFrame background={"white"}>
+                  <UploadTiersPreview />
+                </RoundedFrame>
+
+                <div style={{ fontSize: FONT_SIZE.sm, padding: "0 12px" }}>
+                  <ol>
+                    <li>
+                      <strong>Upload SVG files.</strong>
+                    </li>
+                    <li>
+                      <strong>Optimize SVGs</strong> (to preview assets only) or{" "}
+                      <strong>Store all files on IPFS</strong> (to prepare for
+                      adding tiers)
+                    </li>
+                    <li>
+                      <strong>Define info for each tier.</strong> Ensure UPCs
+                      are unique!
+                    </li>
+                    <li>
+                      <strong>Store tiers on-chain.</strong> Calls adjustTiers()
+                      with tier info
+                    </li>
+                    <li>
+                      <strong>Set SVG hashes.</strong> Calls setSvgHashsOf()
+                      with chosen UPCs and hashes of optimized SVGs
+                    </li>
+                    <li>
+                      <strong>Set product names.</strong> Calls
+                      setProductNames() with chosen UPCs and names
+                    </li>
+                  </ol>
+
+                  <p>
+                    For best results do not refresh this page after getting
+                    started!
+                  </p>
+                </div>
+              </div>
+            ),
+          },
+        ]}
+      />
+    </DressBannyContextProvider>
+  );
+}
+
+function DefineTiersView({
+  tiers,
+  setTiers,
+}: {
+  tiers: TierObj[];
+  setTiers: Dispatch<SetStateAction<TierObj[]>>;
+}) {
+  const [files, setFiles] = useState<File[] | null>(null);
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const [isStoringToIpfs, setIsStoringToIpfs] = useState(false);
+  const [didAdjustTiers, setDidAdjustTiers] = useState(false);
+
+  const { equip, equipped } = useContext(DressBannyContext);
 
   useEffect(() => {
     if (!files) {
@@ -68,18 +170,29 @@ export default function Index() {
         fileUrl: _urls[i],
 
         // set default initial values
-        upc: i,
+        upc: i + 1,
         price: "0",
         initialSupply: 0,
         reserveFrequency: 0,
         cid: null,
-        encodedIPFSUri: null,
-        category: 0,
+        encodedIpfsUri: null,
+        category: "body",
+
+        // hidden from UI
+        reserveBeneficiary: zeroAddress,
+        votingUnits: 0,
+        discountPercent: 0,
+        cannotIncreaseDiscountPercent: false,
+        allowOwnerMint: false,
+        useReserveBeneficiaryAsDefault: false,
+        transfersPausable: false,
+        useVotingUnits: false,
+        cannotBeRemoved: false,
       })) ?? []
     );
 
     return () => _urls.forEach((u) => URL.revokeObjectURL(u));
-  }, [files]);
+  }, [files, setTiers]);
 
   const TierInput = useCallback(
     ({
@@ -104,20 +217,20 @@ export default function Index() {
             <select
               style={{ width: "100%" }}
               name={property}
-              value={tiers[index]["category"]}
+              defaultValue={tiers[index]["category"]}
               onChange={(e) =>
                 setTiers((_tiers) =>
                   _tiers.map((t, i) =>
                     index === i
-                      ? { ...t, category: parseInt(e.target.value) }
+                      ? { ...t, category: e.target.value as Category }
                       : t
                   )
                 )
               }
             >
-              {Object.entries(CATEGORY_IDS).map(([label, value]) => (
-                <option key={value} value={value}>
-                  {label} ({value})
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
                 </option>
               ))}
             </select>
@@ -133,6 +246,15 @@ export default function Index() {
           break;
       }
 
+      const defaultValue = tiers[index][property];
+
+      if (
+        typeof defaultValue !== "string" &&
+        typeof defaultValue !== "number"
+      ) {
+        return null;
+      }
+
       return (
         <div>
           {Label}{" "}
@@ -142,7 +264,7 @@ export default function Index() {
             type={type}
             placeholder={property}
             disabled={disabled}
-            defaultValue={tiers[index][property]}
+            defaultValue={defaultValue}
             onBlur={(e) => {
               // onChange re-renders the input, losing focus. so we use onBlur instead
               setTiers((_tiers) =>
@@ -155,12 +277,14 @@ export default function Index() {
         </div>
       );
     },
-    [tiers]
+    [tiers, setTiers]
   );
 
   const TierPreviews = useCallback(
     () =>
       tiers?.map((t, i) => {
+        const isEquipped = equipped[t.category]?.tierId === t.upc;
+
         return (
           <RoundedFrame
             containerStyle={{ width: PREVIEW_IMG_SIZE + 16 }}
@@ -174,17 +298,16 @@ export default function Index() {
                 gap: 4,
               }}
             >
-              {t.fileUrl ? (
-                <Image
-                  style={{ background: "white", boxSizing: "border-box" }}
-                  alt={t.name}
-                  width={PREVIEW_IMG_SIZE}
-                  height={PREVIEW_IMG_SIZE}
-                  src={t.fileUrl}
-                />
-              ) : (
-                t.name
-              )}
+              <Image
+                style={{
+                  background: "white",
+                  boxSizing: "border-box",
+                }}
+                alt={t.name}
+                width={PREVIEW_IMG_SIZE}
+                height={PREVIEW_IMG_SIZE}
+                src={t.fileUrl ?? "broken"}
+              />
 
               <div
                 style={{
@@ -193,35 +316,44 @@ export default function Index() {
                   overflowWrap: "anywhere",
                 }}
               >
-                CID: {t.cid || "Not stored on IPFS"}
+                CID: {t.cid || "Not on IPFS"}
               </div>
 
-              {t.cid && (
-                <>
-                  <TierInput property="upc" index={i} />
-                  <TierInput property="name" index={i} />
-                  <TierInput
-                    property="category"
-                    index={i}
-                    disabled={didAdjustTiers}
-                  />
-                  <TierInput
-                    property="price"
-                    index={i}
-                    disabled={didAdjustTiers}
-                  />
-                  <TierInput
-                    property="initialSupply"
-                    index={i}
-                    disabled={didAdjustTiers}
-                  />
-                  <TierInput
-                    property="reserveFrequency"
-                    index={i}
-                    disabled={didAdjustTiers}
-                  />
-                </>
+              {t.svg && (
+                <ButtonPad
+                  fillFg={isEquipped ? COLORS.pink : undefined}
+                  style={{
+                    color: isEquipped ? "white" : undefined,
+                    padding: "6px 8px",
+                    fontSize: FONT_SIZE.sm,
+                  }}
+                  onClick={() =>
+                    equip?.[t.category](isEquipped ? undefined : t.upc)
+                  }
+                  shadow="none"
+                >
+                  Preview
+                </ButtonPad>
               )}
+
+              <TierInput property="upc" index={i} />
+              <TierInput property="name" index={i} />
+              <TierInput
+                property="category"
+                index={i}
+                disabled={didAdjustTiers}
+              />
+              <TierInput property="price" index={i} disabled={didAdjustTiers} />
+              <TierInput
+                property="initialSupply"
+                index={i}
+                disabled={didAdjustTiers}
+              />
+              <TierInput
+                property="reserveFrequency"
+                index={i}
+                disabled={didAdjustTiers}
+              />
 
               {didAdjustTiers ? null : (
                 <ButtonPad
@@ -236,11 +368,16 @@ export default function Index() {
           </RoundedFrame>
         );
       }),
-    [tiers, TierInput, didAdjustTiers]
+    [tiers, TierInput, didAdjustTiers, equip, equipped, setTiers]
+  );
+
+  const didOptimize = useMemo(
+    () => !!tiers.length && tiers.every((t) => !!t.svg),
+    [tiers]
   );
 
   const didStoreIpfs = useMemo(
-    () => !!tiers.length && tiers.every((t) => !!t.encodedIPFSUri),
+    () => !!tiers.length && tiers.every((t) => !!t.encodedIpfsUri),
     [tiers]
   );
 
@@ -262,217 +399,215 @@ export default function Index() {
     useSetProductNames();
 
   return (
-    <ToolbarBagView
-      disableDrawer
-      sections={[
-        {
-          header: "Store Tiers",
-          contentStyle: {
-            padding: 24,
-          },
-          content: (
-            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-              <div style={{ fontSize: FONT_SIZE.sm }}>
-                <ol>
-                  <li>
-                    <strong>Upload SVG files.</strong>
-                  </li>
-                  <li>
-                    <strong>Store all files on IPFS.</strong> Uses optimized
-                    SVGs with {`<svg>`} wrapper stripped
-                  </li>
-                  <li>
-                    <strong>Define info for each tier.</strong> Ensure UPCs are
-                    unique!
-                  </li>
-                  <li>
-                    <strong>Store tiers on-chain.</strong> Calls adjustTiers()
-                    with tier info
-                  </li>
-                  <li>
-                    <strong>Set SVG hashes.</strong> Calls setSvgHashsOf() with
-                    chosen UPCs and hashes of optimized SVGs
-                  </li>
-                  <li>
-                    <strong>Set product names.</strong> Calls setProductNames()
-                    with chosen UPCs and names
-                  </li>
-                </ol>
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <input
+        type="file"
+        accept="image/svg+xml"
+        multiple
+        onChange={(e) => {
+          const files = e.target.files;
 
-                <p>For best results do not refresh this page after getting started!</p>
-              </div>
+          if (!files) {
+            setFiles(null);
+            return;
+          }
 
-              <input
-                type="file"
-                accept="image/svg+xml"
-                multiple
-                onChange={(e) => {
-                  const files = e.target.files;
+          let _files: File[] = [];
+          for (let i = 0; i < files.length; i++) {
+            const file = files.item(i);
+            if (file) _files.push(file);
+          }
 
-                  if (!files) {
-                    setFiles(null);
-                    return;
-                  }
+          setFiles(_files);
+        }}
+      />
 
-                  let _files: File[] = [];
-                  for (let i = 0; i < files.length; i++) {
-                    const file = files.item(i);
-                    if (file) _files.push(file);
-                  }
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(auto-fit, ${PREVIEW_IMG_SIZE}px)`,
+          gap: 12,
+        }}
+      >
+        <TierPreviews />
+      </div>
 
-                  setFiles(_files);
-                }}
-              />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+          maxWidth: 300,
+        }}
+      >
+        <ButtonPad
+          shadow="sm"
+          style={{ padding: "8px 12px" }}
+          disabled={!files || isOptimizing || didOptimize}
+          loading={
+            isOptimizing ? { fill: "black", width: 180, height: 16 } : undefined
+          }
+          onClick={
+            files
+              ? () => {
+                  setIsOptimizing(true);
 
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: `repeat(auto-fit, ${PREVIEW_IMG_SIZE}px)`,
-                  gap: 20,
-                }}
-              >
-                <TierPreviews />
-              </div>
+                  optimizeSvgsForIpfs(files)
+                    .then((stored) => {
+                      setIsOptimizing(false);
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 8,
-                  maxWidth: 240,
-                }}
-              >
-                <ButtonPad
-                  shadow="sm"
-                  style={{ padding: "8px 12px" }}
-                  disabled={!files || isStoringToIpfs || didStoreIpfs}
-                  loading={
-                    isStoringToIpfs
-                      ? { fill: "black", width: 180, height: 16 }
-                      : undefined
-                  }
-                  onClick={
-                    files
-                      ? () => {
-                          setIsStoringToIpfs(true);
+                      setTiers((_tiers) =>
+                        _tiers.map((t, i) => ({
+                          ...t,
+                          svgHash: stored[i].svgHash,
+                          svg: stored[i].svgContents,
+                        }))
+                      );
+                    })
+                    .catch((e) => {
+                      setIsOptimizing(false);
+                    });
+                }
+              : undefined
+          }
+        >
+          Optimize SVGs
+        </ButtonPad>
 
-                          storeFilesToIpfs(files, setIpfsStoringProgress)
-                            .then((stored) => {
-                              setIsStoringToIpfs(false);
+        <ButtonPad
+          shadow="sm"
+          style={{ padding: "8px 12px" }}
+          disabled={!files || isStoringToIpfs || didStoreIpfs}
+          loading={
+            isStoringToIpfs
+              ? { fill: "black", width: 180, height: 16 }
+              : undefined
+          }
+          onClick={
+            files
+              ? () => {
+                  setIsStoringToIpfs(true);
 
-                              setTiers((_tiers) =>
-                                _tiers.map((t, i) => ({
-                                  ...t,
-                                  cid: stored[i].cid,
-                                  encodedIPFSUri: stored[i].encodedCid,
-                                }))
-                              );
-                            })
-                            .catch((e) => {
-                              setIpfsStoringProgress(0);
-                              setIsStoringToIpfs(false);
-                            });
-                        }
-                      : undefined
-                  }
-                >
-                  {isStoringToIpfs
-                    ? `${ipfsStoringProgress}/${tiers.length}`
-                    : "Store on IPFS"}
-                </ButtonPad>
+                  storeFilesToIpfs(files)
+                    .then((stored) => {
+                      setIsStoringToIpfs(false);
 
-                <ButtonPad
-                  shadow="sm"
-                  style={{ padding: "8px 12px" }}
-                  disabled={!didStoreIpfs || didAdjustTiers}
-                  loading={
-                    isAdjustingTiers
-                      ? { fill: "black", width: 180, height: 16 }
-                      : undefined
-                  }
-                  onClick={
-                    didStoreIpfs
-                      ? () =>
-                          adjustTiers({
-                            tiersToAdd: tiers.map((t) => ({
-                              ...t,
-                              encodedIPFSUri: t.encodedIPFSUri!,
-                              reserveBeneficiary: zeroAddress,
-                              votingUnits: 0,
-                              discountPercent: 0,
-                              cannotIncreaseDiscountPercent: false,
-                              allowOwnerMint: false,
-                              useReserveBeneficiaryAsDefault: false,
-                              transfersPausable: false,
-                              useVotingUnits: false,
-                              cannotBeRemoved: false,
-                            })),
-                            tierIdsToRemove: [],
-                          })
-                      : undefined
-                  }
-                >
-                  Adjust Tiers
-                </ButtonPad>
+                      setTiers((_tiers) =>
+                        _tiers.map((t, i) => ({
+                          ...t,
+                          cid: stored[i].cid,
+                          encodedIPFSUri: stored[i].encodedCid,
+                          svgHash: stored[i].svgHash,
+                          svg: stored[i].svgContents,
+                        }))
+                      );
+                    })
+                    .catch((e) => {
+                      setIsStoringToIpfs(false);
+                    });
+                }
+              : undefined
+          }
+        >
+          Optimize + Store on IPFS
+        </ButtonPad>
 
-                <ButtonPad
-                  shadow="sm"
-                  style={{ padding: "8px 12px" }}
-                  disabled={!didAdjustTiers || !hasSvgHashes}
-                  loading={
-                    isSettingSvgHashsOf
-                      ? { fill: "black", width: 180, height: 16 }
-                      : undefined
-                  }
-                  onClick={
-                    didAdjustTiers && hasSvgHashes
-                      ? () =>
-                          setSvgHashsOf({
-                            upcs: tiers.map((t) => t.upc.toString()),
-                            svgHashs: tiers.map((t) => t.svgHash!),
-                          })
-                      : undefined
-                  }
-                >
-                  Set SVG Hashes
-                </ButtonPad>
+        <ButtonPad
+          shadow="sm"
+          style={{ padding: "8px 12px" }}
+          disabled={!didStoreIpfs || didAdjustTiers}
+          loading={
+            isAdjustingTiers
+              ? { fill: "black", width: 180, height: 16 }
+              : undefined
+          }
+          onClick={
+            didStoreIpfs
+              ? () =>
+                  adjustTiers({
+                    tiersToAdd: tiers.map((t) => ({
+                      ...t,
+                      category: CATEGORY_IDS[t.category],
+                      encodedIpfsUri: t.encodedIpfsUri!,
+                    })),
+                    tierIdsToRemove: [],
+                  })
+              : undefined
+          }
+        >
+          Adjust Tiers
+        </ButtonPad>
 
-                <ButtonPad
-                  shadow="sm"
-                  style={{ padding: "8px 12px" }}
-                  disabled={!didAdjustTiers || !hasNames}
-                  loading={
-                    isSettingProductNames
-                      ? { fill: "black", width: 180, height: 16 }
-                      : undefined
-                  }
-                  onClick={
-                    didAdjustTiers && hasNames
-                      ? () =>
-                          setProductNames({
-                            upcs: tiers.map((t) => t.upc.toString()),
-                            names: tiers.map((t) => t.name),
-                          })
-                      : undefined
-                  }
-                >
-                  Set Product Names
-                </ButtonPad>
+        <ButtonPad
+          shadow="sm"
+          style={{ padding: "8px 12px" }}
+          disabled={!didAdjustTiers || !hasSvgHashes}
+          loading={
+            isSettingSvgHashsOf
+              ? { fill: "black", width: 180, height: 16 }
+              : undefined
+          }
+          onClick={
+            didAdjustTiers && hasSvgHashes
+              ? () =>
+                  setSvgHashsOf({
+                    upcs: tiers.map((t) => t.upc.toString()),
+                    svgHashs: tiers.map((t) => t.svgHash!),
+                  })
+              : undefined
+          }
+        >
+          Set SVG Hashes
+        </ButtonPad>
 
-                {tiers.length > 0 && (
-                  <div style={{ marginTop: 40 }}>
-                    <Downloadable
-                      downloadText="Download"
-                      downloadHref={JSON.stringify(tiers, null, 2)}
-                      fileName={`banny-tiers-${new Date().valueOf()}.json`}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          ),
-        },
-      ]}
+        <ButtonPad
+          shadow="sm"
+          style={{ padding: "8px 12px" }}
+          disabled={!didAdjustTiers || !hasNames}
+          loading={
+            isSettingProductNames
+              ? { fill: "black", width: 180, height: 16 }
+              : undefined
+          }
+          onClick={
+            didAdjustTiers && hasNames
+              ? () =>
+                  setProductNames({
+                    upcs: tiers.map((t) => t.upc.toString()),
+                    names: tiers.map((t) => t.name),
+                  })
+              : undefined
+          }
+        >
+          Set Product Names
+        </ButtonPad>
+
+        {tiers.length > 0 && (
+          <div style={{ marginTop: 40 }}>
+            <Downloadable
+              downloadText="Download tiers data"
+              downloadHref={`data:application/json;base64,${btoa(
+                JSON.stringify(tiers, null, 2)
+              )}`}
+              fileName={`banny-tiers-${new Date().valueOf()}.json`}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function UploadTiersPreview() {
+  const { equipped, equippingCategory, unequippingCategory } =
+    useContext(DressBannyContext);
+
+  return (
+    <EquippedTiersPreview
+      equipped={equipped}
+      equippingCategory={equippingCategory}
+      unequippingCategory={unequippingCategory}
+      size={400}
     />
   );
 }

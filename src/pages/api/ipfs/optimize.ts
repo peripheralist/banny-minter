@@ -12,14 +12,6 @@ export const config = { api: { bodyParser: false } }; // Important for multipart
 
 /* ---------- helpers ---------- */
 
-const base58 = BASE(
-  "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-);
-
-function encodeIpfsUri(cid: string): `0x${string}` {
-  return `0x${Buffer.from(base58.decode(cid).slice(2)).toString("hex")}`;
-}
-
 function stripSvgWrapper(svg: string) {
   return svg.replace(/^<svg[^>]*>|<\/svg>$/g, "");
 }
@@ -73,26 +65,8 @@ export default async function handler(
       f.originalFilename ?? "upload.svg"
     );
 
-    const ipfsRes = await axios.post(
-      `https://ipfs.infura.io:5001/api/v0/add`,
-      fd,
-      {
-        headers: {
-          Authorization:
-            "Basic " +
-            Buffer.from(
-              `${process.env.IPFS_INFURA_API_KEY}:${process.env.IPFS_INFURA_API_KEY_SECRET}`
-            ).toString("base64"),
-        },
-        timeout: 30000,
-      }
-    );
-
-    const { Hash: cid } = await ipfsRes.data;
-    const encodedCid = encodeIpfsUri(cid);
-
     // ── 4. Respond ───────────────────────────────────────────────────
-    return res.status(200).json({ cid, encodedCid, svgHash, svgContents: inner });
+    return res.status(200).json({ svgHash, svgContents: inner });
   } catch (e) {
     return res
       .status(500)

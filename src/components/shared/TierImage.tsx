@@ -10,7 +10,7 @@ export default function TierImage({
   tier,
   size,
 }: {
-  tier: TierOrNft | undefined;
+  tier: Pick<TierOrNft, "category" | "metadata"> | undefined;
   size: number;
 }) {
   const { _size, style } = useMemo(() => {
