@@ -1,16 +1,20 @@
 import ButtonPad from "@/components/shared/ButtonPad";
 import Downloadable from "@/components/shared/Downloadable";
 import EquippedTiersPreview from "@/components/shared/EquippedTiersPreview";
+import { TierPreview } from "@/components/shared/EquippedTiersPreview/TierPreview";
 import RoundedFrame from "@/components/shared/RoundedFrame";
+import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { CATEGORIES, Category, CATEGORY_IDS } from "@/constants/category";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { DressBannyContext } from "@/contexts/dressBannyContext";
 import DressBannyContextProvider from "@/contexts/DressBannyContextProvider";
+import { useAllTiers } from "@/hooks/queries/useAllTiers";
 import { useSetProductNames } from "@/hooks/writeContract/setProductNames";
 import { useSetSvgHashsOf } from "@/hooks/writeContract/setSvgHashsOf";
 import { useAdjustTiers } from "@/hooks/writeContract/useAdjustTiers";
+import { TierOrNft } from "@/model/tierOrNft";
 import { optimizeSvgsForIpfs } from "@/utils/optimizeSvgsForIpfs";
 import { storeFilesToIpfs } from "@/utils/storeFilesToIpfs";
 import Image from "next/image";
@@ -57,20 +61,26 @@ const PREVIEW_IMG_SIZE = 180;
 
 export default function Index() {
   const [tiers, setTiers] = useState<TierObj[]>([]);
+  const { parsedTiers: allTiers } = useAllTiers();
+
+  const bannyTiers = allTiers?.filter((t) => t.category === "body") ?? [];
 
   return (
     <DressBannyContextProvider
-      availableTiers={tiers.map((t) => ({
-        ...t,
-        tierId: t.upc,
-        metadata: {
-          productName: t.name,
-        },
-        reserveQuantity:
-          t.reserveFrequency > 0
-            ? Math.ceil(t.initialSupply / t.reserveFrequency)
-            : 0,
-      }))}
+      availableTiers={[
+        ...tiers.map((t) => ({
+          ...t,
+          tierId: t.upc,
+          metadata: {
+            productName: t.name,
+          },
+          reserveQuantity:
+            t.reserveFrequency > 0
+              ? Math.ceil(t.initialSupply / t.reserveFrequency)
+              : 0,
+        })),
+        ...bannyTiers,
+      ]}
     >
       <ToolbarBagView
         disableDrawer
@@ -94,10 +104,14 @@ export default function Index() {
               padding: 8,
             },
             content: (
-              <div>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 4 }}
+              >
                 <RoundedFrame background={"white"}>
                   <UploadTiersPreview />
                 </RoundedFrame>
+
+                <BodyTiers tiers={bannyTiers} />
 
                 <div style={{ fontSize: FONT_SIZE.sm, padding: "0 12px" }}>
                   <ol>
@@ -170,7 +184,7 @@ function DefineTiersView({
         fileUrl: _urls[i],
 
         // set default initial values
-        upc: i + 1,
+        upc: i + 5,
         price: "0",
         initialSupply: 0,
         reserveFrequency: 0,
@@ -609,5 +623,30 @@ function UploadTiersPreview() {
       unequippingCategory={unequippingCategory}
       size={400}
     />
+  );
+}
+
+function BodyTiers({ tiers }: { tiers: TierOrNft[] }) {
+  const { equip, equipped } = useContext(DressBannyContext);
+
+  const size = 64
+
+  return (
+    <div style={{ display: "flex", gap: 4 }}>
+      {tiers.map((t) => (
+        <RoundedFrame
+          key={t.tierId}
+          onClick={() => equip?.body(t.tierId)}
+          borderColor={
+            equipped["body"]?.tierId === t.tierId ? COLORS.pink : undefined
+          }
+          background={"white"}
+          style={{ padding: 4 }}
+          containerStyle={{ width: size + 8 }}
+        >
+          <TierImage tier={t} size={size} />
+        </RoundedFrame>
+      ))}
+    </div>
   );
 }
