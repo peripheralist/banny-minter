@@ -32,6 +32,7 @@ export function useAllActivity() {
       orderDirection: "desc",
       limit: 20,
     },
+    skip: !project,
     notifyOnNetworkStatusChange: true,
   });
 

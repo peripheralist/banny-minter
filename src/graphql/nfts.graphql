@@ -13,7 +13,7 @@ fragment TierData on nftTier {
 }
 
 query NFT($tokenId: BigInt!, $chainId: Float!, $hook: String!) {
-  nft(tokenId: $tokenId, chainId: $chainId, hook: $hook) {
+  nft(tokenId: $tokenId, chainId: $chainId, hook: $hook, version: 4) {
     chainId
     tokenId
     wallet {
