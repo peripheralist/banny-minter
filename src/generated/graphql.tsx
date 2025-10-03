@@ -6490,14 +6490,6 @@ export type NftTiersQueryVariables = Exact<{
 
 export type NftTiersQuery = { nftTiers: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> } };
 
-export type AllNftTiersQueryVariables = Exact<{
-  hook?: InputMaybe<Scalars['String']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-export type AllNftTiersQuery = { body: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, background: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, backside: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, necklace: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, head: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, glasses: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, mouth: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, legs: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, suit: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, suitBottom: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, suitTop: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, headTop: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, hand: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, specialSuit: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, specialLegs: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, specialHead: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> }, specialBody: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> } };
-
 export type ProjectQueryVariables = Exact<{
   chainId: Scalars['Float']['input'];
   projectId: Scalars['Float']['input'];
@@ -8173,7 +8165,7 @@ export type MintNftEventsSuspenseQueryHookResult = ReturnType<typeof useMintNftE
 export type MintNftEventsQueryResult = Apollo.QueryResult<MintNftEventsQuery, MintNftEventsQueryVariables>;
 export const NftDocument = gql`
     query NFT($tokenId: BigInt!, $chainId: Float!, $hook: String!) {
-  nft(tokenId: $tokenId, chainId: $chainId, hook: $hook, version: 4) {
+  nft(tokenId: $tokenId, chainId: $chainId, hook: $hook, version: 5) {
     chainId
     tokenId
     wallet {
@@ -8339,200 +8331,9 @@ export type NftTiersQueryHookResult = ReturnType<typeof useNftTiersQuery>;
 export type NftTiersLazyQueryHookResult = ReturnType<typeof useNftTiersLazyQuery>;
 export type NftTiersSuspenseQueryHookResult = ReturnType<typeof useNftTiersSuspenseQuery>;
 export type NftTiersQueryResult = Apollo.QueryResult<NftTiersQuery, NftTiersQueryVariables>;
-export const AllNftTiersDocument = gql`
-    query AllNFTTiers($hook: String, $orderBy: String) {
-  body: nftTiers(
-    where: {category: 0, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  background: nftTiers(
-    where: {category: 1, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  backside: nftTiers(
-    where: {category: 2, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  necklace: nftTiers(
-    where: {category: 3, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  head: nftTiers(
-    where: {category: 4, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  glasses: nftTiers(
-    where: {category: 5, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  mouth: nftTiers(
-    where: {category: 6, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  legs: nftTiers(
-    where: {category: 7, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  suit: nftTiers(
-    where: {category: 8, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  suitBottom: nftTiers(
-    where: {category: 9, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  suitTop: nftTiers(
-    where: {category: 10, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  headTop: nftTiers(
-    where: {category: 11, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  hand: nftTiers(
-    where: {category: 12, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  specialSuit: nftTiers(
-    where: {category: 13, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  specialLegs: nftTiers(
-    where: {category: 13, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  specialHead: nftTiers(
-    where: {category: 13, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-  specialBody: nftTiers(
-    where: {category: 13, hook: $hook}
-    orderBy: $orderBy
-    limit: 1000
-  ) {
-    items {
-      ...TierData
-    }
-  }
-}
-    ${TierDataFragmentDoc}`;
-
-/**
- * __useAllNftTiersQuery__
- *
- * To run a query within a React component, call `useAllNftTiersQuery` and pass it any options that fit your needs.
- * When your component renders, `useAllNftTiersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAllNftTiersQuery({
- *   variables: {
- *      hook: // value for 'hook'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useAllNftTiersQuery(baseOptions?: Apollo.QueryHookOptions<AllNftTiersQuery, AllNftTiersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AllNftTiersQuery, AllNftTiersQueryVariables>(AllNftTiersDocument, options);
-      }
-export function useAllNftTiersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllNftTiersQuery, AllNftTiersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AllNftTiersQuery, AllNftTiersQueryVariables>(AllNftTiersDocument, options);
-        }
-export function useAllNftTiersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AllNftTiersQuery, AllNftTiersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AllNftTiersQuery, AllNftTiersQueryVariables>(AllNftTiersDocument, options);
-        }
-export type AllNftTiersQueryHookResult = ReturnType<typeof useAllNftTiersQuery>;
-export type AllNftTiersLazyQueryHookResult = ReturnType<typeof useAllNftTiersLazyQuery>;
-export type AllNftTiersSuspenseQueryHookResult = ReturnType<typeof useAllNftTiersSuspenseQuery>;
-export type AllNftTiersQueryResult = Apollo.QueryResult<AllNftTiersQuery, AllNftTiersQueryVariables>;
 export const ProjectDocument = gql`
     query Project($chainId: Float!, $projectId: Float!) {
-  project(chainId: $chainId, projectId: $projectId, version: 4) {
+  project(chainId: $chainId, projectId: $projectId, version: 5) {
     suckerGroup {
       id
     }

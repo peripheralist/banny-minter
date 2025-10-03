@@ -1,17 +1,12 @@
-import { BAN_REVNET_IDS } from "@/constants/contracts";
+import { BAN_REVNET_ID } from "@/constants/contracts";
 import { useAppChain } from "@/hooks/useAppChain";
 import { JBChainId, JBProjectProvider } from "juice-sdk-react";
-import { PropsWithChildren, useEffect, useMemo, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 
 export function LooksJBProvider({ children }: PropsWithChildren) {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const appChain = useAppChain();
-
-  const projectId = useMemo(
-    () => BigInt(BAN_REVNET_IDS(appChain.id)),
-    [appChain.id]
-  );
 
   useEffect(() => {
     setIsHydrated(true);
@@ -21,7 +16,10 @@ export function LooksJBProvider({ children }: PropsWithChildren) {
 
   return (
     // TODO ChainId and JBChainId should be the same
-    <JBProjectProvider chainId={appChain.id as JBChainId} projectId={projectId}>
+    <JBProjectProvider
+      chainId={appChain.id as JBChainId}
+      projectId={BigInt(BAN_REVNET_ID)}
+    >
       {children}
     </JBProjectProvider>
   );

@@ -1,6 +1,6 @@
 import {
   BAN_HOOK,
-  BAN_REVNET_IDS,
+  BAN_REVNET_ID,
   TERMINAL_ADDRESS,
 } from "@/constants/contracts";
 import { AlertContext } from "@/contexts/alertContext";
@@ -49,14 +49,7 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
 
   const { chain } = useAccount();
 
-  const revnetId = useMemo(
-    () => (chain ? BAN_REVNET_IDS(chain?.id) : undefined),
-    [chain]
-  );
-
   console.log("Mint using params:", {
-    chain,
-    revnetId,
     value: totalEquippedPrice,
     wallet: connectedWalletAddress,
     hook: BAN_HOOK,
@@ -66,14 +59,8 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
   });
 
   const mint = useCallback(() => {
-    if (
-      !connectedWalletAddress ||
-      !totalEquippedPrice ||
-      !metadata ||
-      !revnetId
-    ) {
+    if (!connectedWalletAddress || !totalEquippedPrice || !metadata) {
       console.error("Missing something smh", {
-        revnetId,
         connectedWalletAddress,
         totalEquippedPrice,
         metadata,
@@ -87,7 +74,7 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
     writeContract({
       address: TERMINAL_ADDRESS,
       args: [
-        BigInt(revnetId),
+        BigInt(BAN_REVNET_ID),
         NATIVE_TOKEN,
         totalEquippedPrice,
         connectedWalletAddress, // mint to connected wallet
@@ -98,7 +85,6 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
       value: totalEquippedPrice ?? undefined,
     });
   }, [
-    revnetId,
     connectedWalletAddress,
     totalEquippedPrice,
     metadata,

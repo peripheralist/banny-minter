@@ -15,6 +15,7 @@ export default function TierImage({
 }) {
   const { _size, style } = useMemo(() => {
     switch (tier?.category) {
+      case "eyes":
       case "glasses":
       case "headTop":
       case "mouth":

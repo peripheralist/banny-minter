@@ -13,7 +13,7 @@ fragment TierData on nftTier {
 }
 
 query NFT($tokenId: BigInt!, $chainId: Float!, $hook: String!) {
-  nft(tokenId: $tokenId, chainId: $chainId, hook: $hook, version: 4) {
+  nft(tokenId: $tokenId, chainId: $chainId, hook: $hook, version: 5) {
     chainId
     tokenId
     wallet {
@@ -59,94 +59,6 @@ query NFTs($where: nftFilter, $orderBy: String, $orderDirection: String, $limit:
 
 query NFTTiers($where: nftTierFilter, $orderBy: String) {
   nftTiers(where: $where, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-}
-
-query AllNFTTiers($hook: String, $orderBy: String) {
-  body: nftTiers(where: {category: 0, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  background: nftTiers(where: {category: 1, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  backside: nftTiers(where: {category: 2, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  necklace: nftTiers(where: {category: 3, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  head: nftTiers(where: {category: 4, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  glasses: nftTiers(where: {category: 5, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  mouth: nftTiers(where: {category: 6, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  legs: nftTiers(where: {category: 7, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  suit: nftTiers(where: {category: 8, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  suitBottom: nftTiers(where: {category: 9, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  suitTop: nftTiers(where: {category: 10, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  headTop: nftTiers(where: {category: 11, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  hand: nftTiers(where: {category: 12, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  specialSuit: nftTiers(where: {category: 13, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  specialLegs: nftTiers(where: {category: 13, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  specialHead: nftTiers(where: {category: 13, hook: $hook}, orderBy: $orderBy, limit: 1000) {
-    items {
-      ...TierData
-    }
-  }
-  specialBody: nftTiers(where: {category: 13, hook: $hook}, orderBy: $orderBy, limit: 1000) {
     items {
       ...TierData
     }
