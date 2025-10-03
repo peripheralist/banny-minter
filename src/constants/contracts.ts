@@ -11,4 +11,4 @@ export const TERMINAL_ADDRESS =
   "0xdb9644369c79c3633cde70d2df50d827d7dc7dbc" as Address;
 
 export const BAN_SUCKER_GROUP_ID =
-  "d0b8721d-bce5-49b4-8a10-fd2d8a6b8cca" as Address;
+  "3b4c625e143bb9987d6424c329b4d56a" as Address;
