@@ -2,7 +2,7 @@ import { Address } from "viem";
 
 export const BAN_REVNET_ID = 4;
 
-export const BAN_HOOK = "0x2da41cdc79ae49f2725ab549717b2dbcfc42b958" as Address;
+export const BAN_HOOK = "0xb4ec363c2e7db0ceca9aa1759338d7d1b49d1750" as Address;
 
 export const RESOLVER_ADDRESS =
   "0xa5f8911d4cfd60a6697479f078409434424fe666" as Address;
