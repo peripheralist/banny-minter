@@ -2,10 +2,12 @@ import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { categoryIncompatibles } from "@/constants/incompatibles";
 import { DressBannyContext } from "@/contexts/dressBannyContext";
+import DressBannyContextProvider from "@/contexts/DressBannyContextProvider";
 import { ShopContext } from "@/contexts/shopContext";
 import { WalletContext } from "@/contexts/walletContext";
 import { useMintNftEventsQuery } from "@/generated/graphql";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
+import { useCreditBalance } from "@/hooks/queries/useCreditBalance";
 import { useAppChain } from "@/hooks/useAppChain";
 import { usePayerTokens } from "@/hooks/usePayerTokens";
 import { useMint } from "@/hooks/writeContract/useMint";
@@ -23,7 +25,8 @@ import Modal from "../shared/Modal";
 import RoundedFrame from "../shared/RoundedFrame";
 import TransactionPending from "../shared/TransactionPending";
 import { ConfirmDecorateModal } from "./ConfirmDecorateModal";
-import DressBannyContextProvider from "@/contexts/DressBannyContextProvider";
+
+type PayOption = "ETH" | "CREDITS";
 
 export function ConfirmMintModal({
   open,
@@ -32,12 +35,15 @@ export function ConfirmMintModal({
   open?: boolean;
   onClose?: VoidFunction;
 }) {
+  const [payOption, setPayOption] = useState<PayOption>("ETH");
   const [phase, setPhase] = useState<
     "none" | "minting" | "awaitingMints" | "decorating" | "success"
   >("none");
   const appChain = useAppChain();
   const { address } = useAccount();
   const { parsedTiers } = useAllTiers();
+
+  const creditBalance = useCreditBalance();
 
   const { wrongNetwork, switchChain } = useContext(WalletContext);
   const {
@@ -50,6 +56,7 @@ export function ConfirmMintModal({
     useContext(DressBannyContext);
 
   const { mint, isSuccess, hash } = useMint({
+    useCredits: payOption === "CREDITS",
     onSuccess: () => {
       setPhase("awaitingMints");
     },
@@ -151,13 +158,41 @@ export function ConfirmMintModal({
     onClose?.();
   }, [emptyBag, unequipAll, isSuccess, onClose]);
 
-  const { formatted: formattedPayerTokens } =
-    usePayerTokens(totalEquippedPrice);
+  const { formatted: formattedBanFromETH } = usePayerTokens(totalEquippedPrice);
 
-  const formattedPrice = useMemo(
+  const { formatted: formattedBanFromCredits } = usePayerTokens(
+    (totalEquippedPrice ?? BigInt(0)) - (creditBalance ?? BigInt(0))
+  );
+
+  const formattedEthPrice = useMemo(
     () => `${totalEquippedPrice ? formatEther(totalEquippedPrice) : "--"} ETH`,
     [totalEquippedPrice]
   );
+
+  const formattedCreditsPrice = useMemo(() => {
+    if (!totalEquippedPrice || !creditBalance || creditBalance < BigInt(0)) {
+      return;
+    }
+
+    const ethAmt =
+      creditBalance > totalEquippedPrice
+        ? BigInt(0)
+        : totalEquippedPrice - creditBalance;
+
+    const creditsAmt =
+      creditBalance > totalEquippedPrice ? totalEquippedPrice : creditBalance;
+
+    const formattedEthAmt =
+      ethAmt > 0 ? formatEther(ethAmt) + " ETH" : undefined;
+    const formattedCreditsAmt =
+      creditsAmt > 0
+        ? parseFloat(formatEther(creditsAmt)).toFixed(2) + " credits"
+        : undefined;
+
+    return [formattedEthAmt, formattedCreditsAmt]
+      .filter((x) => !!x)
+      .join(" + ");
+  }, [creditBalance, totalEquippedPrice]);
 
   return (
     <>
@@ -217,7 +252,11 @@ export function ConfirmMintModal({
                     mint();
                     setPhase("minting");
                   },
-                  text: `Mint (${formattedPrice})`,
+                  text: `Mint (${
+                    payOption === "ETH"
+                      ? formattedEthPrice
+                      : formattedCreditsPrice
+                  })`,
                 }
             : undefined
         }
@@ -260,6 +299,77 @@ export function ConfirmMintModal({
                 </div>
               </ButtonPad>
 
+              {creditBalance && creditBalance > 0 ? (
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "baseline",
+                    }}
+                  >
+                    <h2>Choose pay option</h2>
+                    <div>(Credit balance: {formatEther(creditBalance)})</div>
+                  </div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <ButtonPad
+                      containerStyle={{ flex: 1 }}
+                      fillBg={payOption === "ETH" ? COLORS.blue100 : undefined}
+                      fillBorder={
+                        payOption === "ETH" ? COLORS.blue400 : undefined
+                      }
+                      fillFg={payOption === "ETH" ? COLORS.blue50 : undefined}
+                      style={{
+                        padding: 16,
+                        color: payOption === "ETH" ? COLORS.blue500 : undefined,
+                      }}
+                      onClick={() => setPayOption("ETH")}
+                      shadow="sm"
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {formattedEthPrice}
+                      </div>
+                    </ButtonPad>
+
+                    <ButtonPad
+                      containerStyle={{ flex: 1 }}
+                      fillBg={
+                        payOption === "CREDITS" ? COLORS.blue100 : undefined
+                      }
+                      fillBorder={
+                        payOption === "CREDITS" ? COLORS.blue400 : undefined
+                      }
+                      fillFg={
+                        payOption === "CREDITS" ? COLORS.blue50 : undefined
+                      }
+                      style={{
+                        padding: 16,
+                        color:
+                          payOption === "CREDITS" ? COLORS.blue500 : undefined,
+                      }}
+                      onClick={() => setPayOption("CREDITS")}
+                      shadow="sm"
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {formattedCreditsPrice}
+                      </div>
+                    </ButtonPad>
+                  </div>
+                </div>
+              ) : null}
+
               <RoundedFrame
                 background={"white"}
                 style={{
@@ -277,7 +387,11 @@ export function ConfirmMintModal({
                   }}
                 >
                   <div>Total:</div>
-                  <div>{formattedPrice}</div>
+                  <div>
+                    {payOption === "ETH"
+                      ? formattedEthPrice
+                      : formattedCreditsPrice}
+                  </div>
                 </div>
 
                 <div
@@ -288,7 +402,12 @@ export function ConfirmMintModal({
                   }}
                 >
                   Earn:
-                  <span>{(formattedPayerTokens ?? "--").toString()} $BAN</span>
+                  <span>
+                    {(payOption === "ETH"
+                      ? formattedBanFromETH
+                      : formattedBanFromCredits) ?? "--"}{" "}
+                    $BAN
+                  </span>
                 </div>
 
                 <div

@@ -2,7 +2,9 @@ import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { DressBannyContext } from "@/contexts/dressBannyContext";
 import { ShopContext } from "@/contexts/shopContext";
+import { useCreditBalance } from "@/hooks/queries/useCreditBalance";
 import { useCallback, useContext } from "react";
+import { formatEther } from "viem";
 import BagItems from "./BagItems";
 import MintButton from "./MintButton";
 import RoundedFrame from "./RoundedFrame";
@@ -11,6 +13,7 @@ import TierImage from "./TierImage";
 export default function Bag({ open }: { open?: boolean }) {
   const { bag, itemsQuantity, emptyBag } = useContext(ShopContext);
   const { unequipAll } = useContext(DressBannyContext);
+  const creditBalance = useCreditBalance();
 
   const ItemsQuantity = useCallback(
     () =>
@@ -61,6 +64,21 @@ export default function Bag({ open }: { open?: boolean }) {
       <div style={{ flex: 1, overflow: "auto" }}>
         <BagItems canRemove />
       </div>
+
+      {creditBalance && creditBalance > BigInt(0) ? (
+        <div
+          style={{
+            fontSize: FONT_SIZE.sm,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>Credits:</div>
+          <div>
+            {parseFloat(formatEther(creditBalance ?? BigInt(0))).toFixed(4)}
+          </div>
+        </div>
+      ) : null}
 
       <div>
         <MintButton />

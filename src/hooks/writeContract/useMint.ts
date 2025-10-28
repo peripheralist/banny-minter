@@ -12,12 +12,17 @@ import {
 } from "juice-sdk-react";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
+import { useCreditBalance } from "../queries/useCreditBalance";
 
-export function useMint(props?: { onSuccess?: VoidFunction }) {
+export function useMint(props?: {
+  onSuccess?: VoidFunction;
+  useCredits?: boolean;
+}) {
   const [isComplete, setIsComplete] = useState(false);
   const { address: connectedWalletAddress } = useAccount();
   const { setAlert } = useContext(AlertContext);
   const { bag, totalEquippedPrice } = useContext(ShopContext);
+  const creditBalance = useCreditBalance();
 
   const tierIds = useMemo(
     () =>
@@ -71,6 +76,13 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
 
     setIsComplete(false);
 
+    const value =
+      props?.useCredits && creditBalance
+        ? creditBalance > totalEquippedPrice
+          ? BigInt(0)
+          : totalEquippedPrice - creditBalance
+        : totalEquippedPrice ?? undefined;
+
     writeContract({
       address: TERMINAL_ADDRESS,
       args: [
@@ -82,9 +94,11 @@ export function useMint(props?: { onSuccess?: VoidFunction }) {
         memo,
         metadata,
       ],
-      value: totalEquippedPrice ?? undefined,
+      value,
     });
   }, [
+    props?.useCredits,
+    creditBalance,
     connectedWalletAddress,
     totalEquippedPrice,
     metadata,
