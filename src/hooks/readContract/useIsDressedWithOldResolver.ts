@@ -3,13 +3,15 @@ import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { config } from "../../../config.wagmi";
 
-export function useIsDressedWithOldResolver(bannyBodyId: number) {
+export function useIsDressedWithOldResolver(bannyBodyId: number | undefined) {
   const [loading, setLoading] = useState(false);
 
   const [dressedTokenIds, setDressedTokenIds] = useState<bigint[]>();
 
   useEffect(() => {
     async function getOutfitIds() {
+      if (!bannyBodyId) return;
+
       setLoading(true);
 
       const result = await readContract(config, {

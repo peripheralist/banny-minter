@@ -27,6 +27,7 @@ export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
         owner: address,
         chainId: appChain.id,
       },
+      limit: 1000,
     },
   });
 

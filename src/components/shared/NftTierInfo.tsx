@@ -21,6 +21,7 @@ import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
 import FormattedAddress from "./FormattedAddress";
 import RoundedFrame from "./RoundedFrame";
+import { useIsDressedWithOldResolver } from "@/hooks/readContract/useIsDressedWithOldResolver";
 
 export default function NftTierInfo({
   tierOrNft,
@@ -59,6 +60,10 @@ export default function NftTierInfo({
   const isSoldOut = useMemo(
     () => tierOrNft.remainingSupply <= BigInt(0),
     [tierOrNft]
+  );
+
+  const { dressedTokenIds: oldOutfitTokenIds } = useIsDressedWithOldResolver(
+    tierOrNft?.tokenId
   );
 
   const { isSmallScreen } = useWindowSize();
@@ -362,6 +367,12 @@ export default function NftTierInfo({
               </ButtonPad>
             ))}
         </Link>
+      ) : null}
+
+      {oldOutfitTokenIds && oldOutfitTokenIds?.length > 0 ? (
+        <div style={{ fontSize: FONT_SIZE.sm }}>
+          Click dress to retrieve outfits from previous version
+        </div>
       ) : null}
     </div>
   );
