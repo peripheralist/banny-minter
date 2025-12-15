@@ -3,24 +3,32 @@ import { COLORS } from "@/constants/colors";
 import { DROPS } from "@/constants/drops";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { ITEM_DESCRIPTIONS } from "@/constants/itemDescriptions";
+import { WalletContext } from "@/contexts/walletContext";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 import { useMultichainSupplies } from "@/hooks/queries/useMultichainSupplies";
+import { useAppChain } from "@/hooks/useAppChain";
 import { useSupportedChains } from "@/hooks/useSupportedChains";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { NFTMetadata } from "@/model/nftInfo";
 import { TierOrNft } from "@/model/tierOrNft";
+import { chainName } from "@/utils/chainName";
 import { formatEther } from "juice-sdk-core";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { isAddressEqual } from "viem";
 import { useAccount } from "wagmi";
 import ButtonPad from "./ButtonPad";
 import FormattedAddress from "./FormattedAddress";
 import RoundedFrame from "./RoundedFrame";
-import { useAppChain } from "@/hooks/useAppChain";
 
-export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
+export default function NftTierInfo({
+  tierOrNft,
+  switchChain,
+}: {
+  tierOrNft: TierOrNft;
+  switchChain?: (n: number | undefined) => void;
+}) {
   const { address } = useAccount();
 
   const appChain = useAppChain();
@@ -102,7 +110,7 @@ export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
             style={{
               padding: "8px 12px",
               color: "white",
-              fontWeight: 'bold',
+              fontWeight: "bold",
               fontSize: FONT_SIZE.sm,
             }}
           >
@@ -329,16 +337,32 @@ export default function NftTierInfo({ tierOrNft }: { tierOrNft: TierOrNft }) {
 
       <Details />
 
-      {isOwned && tierOrNft?.category === "body" && tierOrNft.tokenId && (
+      {isOwned && tierOrNft.tokenId ? (
         <Link
           style={{ display: "block" }}
           href={`/dress/${tierOrNft.tokenId.toString()}`}
         >
-          <ButtonPad style={{ padding: 16 }} dimension>
-            Dressing room
-          </ButtonPad>
+          {tierOrNft.category === "body" &&
+            (tierOrNft.chainId === appChain.id ? (
+              <ButtonPad style={{ padding: 16 }}>
+                {tierOrNft.customized ? "Dress/Undress" : "Dress"}
+              </ButtonPad>
+            ) : (
+              <ButtonPad
+                style={{
+                  padding: 16,
+                  color: COLORS.blue400,
+                }}
+                shadow="sm"
+                onClick={() => {
+                  switchChain?.(tierOrNft.chainId);
+                }}
+              >
+                Dress on {chainName(tierOrNft.chainId)}
+              </ButtonPad>
+            ))}
         </Link>
-      )}
+      ) : null}
     </div>
   );
 }

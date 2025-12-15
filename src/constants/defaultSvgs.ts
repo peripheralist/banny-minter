@@ -121,4 +121,14 @@ export const DEFAULT_SVG = {
 </g>`,
   necklace: `<style>.o{fill:#050505;}.w{fill:#f9f9f9;}</style><g class="o"><path d="M190 173h-37v-3h-10v-4h-6v4h3v3h-3v4h6v3h10v4h37v-4h3v-3h-3v-4zm-40 4h-3v-4h3v4zm7 3v-3h3v3h-3zm6 0v-3h4v3h-4zm7 0v-3h3v3h-3zm7 0v-3h3v3h-3zm10 0h-4v-3h4v3z"/><path d="M190 170h3v3h-3z"/><path d="M193 166h4v4h-4zm0 7h4v4h-4z"/></g><g class="w"><path d="M137 170h3v3h-3zm10 3h3v4h-3zm10 4h3v3h-3zm6 0h4v3h-4zm7 0h3v3h-3zm7 0h3v3h-3zm6 0h4v3h-4zm7-4h3v4h-3z"/><path d="M193 170h4v3h-4z"/></g>`,
   mouth: `<style>.o{fill:#050505;}</style><g class="o"><path d="M183 160v-4h-20v4h-3v3h3v4h24v-7h-4zm-13 3v-3h10v3h-10z" fill="#ad71c8"/><path d="M170 160h10v3h-10z"/></g>`,
+  eyes: `<style>.o{fill:#050505;}.w{fill:#f9f9f9;}</style>
+  <g class="o">
+    <path d="M177 140v3h6v11h10v-11h4v-3h-20z" />
+    <path d="M153 140v3h7v8 3h7 3v-11h3v-3h-20z" />
+  </g>
+  <g class="w">
+    <path d="M153 143h7v4h-7z" />
+    <path d="M157 147h3v3h-3zm20-4h6v4h-6z" />
+    <path d="M180 147h3v3h-3z" />
+  </g>`,
 };

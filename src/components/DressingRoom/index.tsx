@@ -12,6 +12,8 @@ import { useAccount } from "wagmi";
 import FullscreenLoading from "../shared/FullscreenLoading";
 import LargeView from "./LargeView";
 import SmallView from "./SmallView";
+import { useIsDressedWithOldResolver } from "@/hooks/readContract/useIsDressedWithOldResolver";
+import { MigrateOutfitModal } from "../modals/MigrateOutfitModal";
 
 export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
   const appChain = useAppChain();
@@ -29,6 +31,10 @@ export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
   });
 
   const { data: equippedTiers } = useBannyEquippedTiers(bannyNft);
+
+  const { dressedTokenIds: oldOutfitTokenIds } = useIsDressedWithOldResolver(
+    bannyNft.tokenId
+  );
 
   const { isSmallScreen } = useWindowSize();
 
@@ -98,6 +104,14 @@ export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
       ) : (
         <LargeView tokenId={bannyNft.tokenId} />
       )}
+
+      {oldOutfitTokenIds?.length && oldOutfitTokenIds.length > 0 ? (
+        <MigrateOutfitModal
+          open={true}
+          bannyNft={bannyNft}
+          dressedTokenIds={oldOutfitTokenIds}
+        />
+      ) : null}
     </DressBannyContextProvider>
   ) : (
     <FullscreenLoading />

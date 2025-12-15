@@ -107,6 +107,9 @@ export function TierPreview({
               {!equipped.necklace && (
                 <DefaultAsset size={size} type="necklace" />
               )}
+              {!equipped.eyes && (
+                <DefaultAsset size={size} type="eyes" />
+              )}
             </>
           ) : (
             <DefaultAsset size={size} type="mannequin" />

@@ -9,10 +9,11 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import { Chain } from "@/model/chain";
 import { parseTierOrNft } from "@/utils/parseTier";
 import { useRouter } from "next/router";
-import { useCallback, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import Fuzz from "../pixelRenderers/Fuzz";
 import DressedBannyNftImage from "../shared/DressedBannyNftImage";
 import Loading from "../shared/Loading";
+import { WalletContext } from "@/contexts/walletContext";
 
 const routerKey = "nft";
 
@@ -42,6 +43,8 @@ function NFTDetail({
   chain: Chain;
   onClose: VoidFunction;
 }) {
+  const { switchChain } = useContext(WalletContext);
+
   const { data } = useNftQuery({
     variables: {
       tokenId: BigInt(tokenId),
@@ -107,7 +110,7 @@ function NFTDetail({
             </RoundedFrame>
           </div>
 
-          {nft && <NftTierInfo tierOrNft={nft} />}
+          <NftTierInfo tierOrNft={nft} switchChain={switchChain} />
         </div>
       ) : (
         <Loading />

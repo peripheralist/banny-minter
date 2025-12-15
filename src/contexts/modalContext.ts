@@ -8,7 +8,7 @@ export type ModalConfig = {
 
 type Context = {
   openModal?: (c: ModalConfig) => void;
-  closeModal?: (id: ModalConfig["id"]) => void;
+  closeModal?: (id: ModalConfig["id"], skipOnClose?: boolean) => void;
 };
 
 export const ModalContext = createContext<Context>({});

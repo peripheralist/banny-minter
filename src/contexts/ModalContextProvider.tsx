@@ -19,9 +19,11 @@ export default function ModalContextProvider({ children }: PropsWithChildren) {
     });
   }, []);
 
-  const closeModal = useCallback((id: string) => {
+  const closeModal = useCallback((id: string, skipOnClose?: boolean) => {
     setModals((m) => {
-      m.find(({ id: _id }) => _id === id)?.onClose?.();
+      if (!skipOnClose) {
+        m.find(({ id: _id }) => _id === id)?.onClose?.();
+      }
       return m.filter(({ id: _id }) => _id !== id);
     });
   }, []);

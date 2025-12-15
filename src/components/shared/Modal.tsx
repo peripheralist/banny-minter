@@ -8,6 +8,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useRef,
 } from "react";
 import ButtonPad from "./ButtonPad";
 import RoundedFrame from "./RoundedFrame";
@@ -31,6 +32,11 @@ export default function Modal({
   const __id = id ?? _id;
 
   const { openModal, closeModal } = useContext(ModalContext);
+
+  const closeModalRef = useRef(closeModal);
+  closeModalRef.current = closeModal;
+
+  const openRef = useRef(open);
 
   const { isSmallScreen } = useWindowSize();
 
@@ -163,6 +169,22 @@ export default function Modal({
       closeModal?.(__id);
     }
   }, [open, openModal, closeModal, onClose, __id, _Modal]);
+
+  // Cleanup on unmount only (skip onClose since this is not a user-initiated close)
+  useEffect(() => {
+    openRef.current = true;
+    return () => {
+      // Use setTimeout to defer cleanup - if StrictMode remounts immediately,
+      // the openRef will be set back to true before this runs
+      const modalId = __id;
+      setTimeout(() => {
+        if (!openRef.current) {
+          closeModalRef.current?.(modalId, true);
+        }
+      }, 0);
+      openRef.current = false;
+    };
+  }, [__id]);
 
   return null;
 }

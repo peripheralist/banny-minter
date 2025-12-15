@@ -7,9 +7,7 @@ import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { COLORS } from "@/constants/colors";
 import { FONT_SIZE } from "@/constants/fontSize";
-import { WalletContext } from "@/contexts/walletContext";
 import { useNftsOf } from "@/hooks/queries/useNftsOf";
-import { useAppChain } from "@/hooks/useAppChain";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { TierOrNft } from "@/model/tierOrNft";
 import { chainName } from "@/utils/chainName";
@@ -18,30 +16,16 @@ import { ROUTES } from "@/utils/routes";
 import { formatEthAddress } from "juice-sdk-core";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useMemo } from "react";
-import { Address, isAddress, isAddressEqual } from "viem";
-import { useAccount, useEnsName } from "wagmi";
+import { useMemo } from "react";
+import { Address, isAddress } from "viem";
+import { useEnsName } from "wagmi";
 
 export default function Index() {
   const router = useRouter();
 
-  const { address: connectedAddress } = useAccount();
-
   const address = router.query.address as Address | undefined;
 
-  const isOwner = useMemo(
-    () =>
-      address && connectedAddress
-        ? isAddressEqual(address, connectedAddress)
-        : false,
-    [address, connectedAddress]
-  );
-
   const { data: ensName } = useEnsName({ address, chainId: 1 });
-
-  const { switchChain } = useContext(WalletContext);
-
-  const appChain = useAppChain();
 
   const { data: nfts, loading } = useNftsOf(address);
 
@@ -188,52 +172,6 @@ export default function Index() {
                               </div>
                             </div>
                           </Link>
-
-                          {isOwner
-                            ? nft.category === "body" &&
-                              (nft.chainId === appChain.id ? (
-                                <Link
-                                  href={`/dress/${nft.tokenId.toString()}`}
-                                  style={{ width: "100%" }}
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <ButtonPad
-                                    containerStyle={{
-                                      margin: 4,
-                                      marginTop: 0,
-                                      marginBottom: 8,
-                                    }}
-                                    style={{ padding: 8 }}
-                                    shadow="sm"
-                                  >
-                                    {nft.customized ? "Dress/Undress" : "Dress"}
-                                  </ButtonPad>
-                                </Link>
-                              ) : (
-                                <div
-                                  style={{ width: "100%" }}
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <ButtonPad
-                                    containerStyle={{
-                                      margin: 4,
-                                      marginTop: 0,
-                                      marginBottom: 8,
-                                    }}
-                                    style={{
-                                      padding: 8,
-                                      color: COLORS.blue400,
-                                      fontSize: FONT_SIZE.sm,
-                                      lineHeight: 1.4,
-                                    }}
-                                    shadow="sm"
-                                    onClick={() => switchChain?.(nft.chainId)}
-                                  >
-                                    Dress on {chainName(nft.chainId)}
-                                  </ButtonPad>
-                                </div>
-                              ))
-                            : null}
                         </ButtonPad>
                       );
                     }}

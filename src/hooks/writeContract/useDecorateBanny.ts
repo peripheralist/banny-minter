@@ -1,5 +1,9 @@
 import { CATEGORY_IDS } from "@/constants/category";
-import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/contracts";
+import {
+  BAN_HOOK,
+  RESOLVER_ADDRESS,
+  RESOLVER_ADDRESS_OLD,
+} from "@/constants/contracts";
 import { TierOrNft } from "@/model/tierOrNft";
 import axios from "axios";
 import { useAppChain } from "../useAppChain";
@@ -39,13 +43,17 @@ const decorateBannyWithAbi = [
   },
 ];
 
-export function useDecorateBanny(options?: WriteContractHandlerOptions) {
+export function useDecorateBanny(
+  options?: WriteContractHandlerOptions & { useOldResolver?: boolean }
+) {
   const appChain = useAppChain();
 
   const { write: decorateBanny, ...data } = useWriteContractHandler(
     {
       abi: decorateBannyWithAbi,
-      address: RESOLVER_ADDRESS,
+      address: options?.useOldResolver
+        ? RESOLVER_ADDRESS_OLD
+        : RESOLVER_ADDRESS,
       functionName: "decorateBannyWith",
       args: ({
         body,
