@@ -19,7 +19,7 @@ import { useContext, useMemo } from "react";
 export default function Drop() {
   const { value: showBannys, setValue: setShowBannys } =
     useLocalStorageState<boolean>("shop_show_bannys", {
-      defaultValue: true,
+      defaultValue: false,
     });
 
   const { sort, setSort, priceFormat, setPriceFormat } =
@@ -170,23 +170,16 @@ export default function Drop() {
                               height: 0,
                               fontSize: FONT_SIZE["2xl"],
                             }}
-                            onClick={() => setShowBannys(false)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowBannys(false);
+                            }}
                           >
                             ^
                           </div>
                           <h1 style={{ fontSize: FONT_SIZE["2xl"] }}>
-                            It{"'"}s dangerous to go alone. Take one of these!
+                            Choose your Banny model
                           </h1>
-                          <p
-                            style={{
-                              marginTop: 12,
-                              color: COLORS.blue500,
-                              lineHeight: 1.25,
-                            }}
-                          >
-                            You{"'"}ll need a Banny to wear and preview Drop
-                            items. Add a Banny to your bag to get started.
-                          </p>
                         </div>
 
                         <CategoryGroupGrid

@@ -33,7 +33,7 @@ export default function Manifesto() {
                 <p>{`Aware of their silk, their feel, their makeup.`}</p>
                 <p>{`In awe of the great mystery and its unfolding.`}</p>
                 <p>{`Unbothered by the curves of its fabric.`}</p>
-                <p>{`Students of the games, their players, their flaws.`}</p>
+                <p>{`Observers of the vibrating trends, both tired and fresh.`}</p>
                 <p>{`Modeling alternatives, dressing up, dressing down.`}</p>
                 <p>{`Follow their eyes, observe their point of view.`}</p>
                 <p>{`And when you see it too, opt out to opt in.`}</p>

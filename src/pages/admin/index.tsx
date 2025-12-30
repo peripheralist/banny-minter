@@ -1,7 +1,6 @@
 import ButtonPad from "@/components/shared/ButtonPad";
 import Downloadable from "@/components/shared/Downloadable";
 import EquippedTiersPreview from "@/components/shared/EquippedTiersPreview";
-import { TierPreview } from "@/components/shared/EquippedTiersPreview/TierPreview";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
@@ -11,9 +10,10 @@ import { FONT_SIZE } from "@/constants/fontSize";
 import { DressBannyContext } from "@/contexts/dressBannyContext";
 import DressBannyContextProvider from "@/contexts/DressBannyContextProvider";
 import { useAllTiers } from "@/hooks/queries/useAllTiers";
-import { useSetProductNames } from "@/hooks/writeContract/setProductNames";
-import { useSetSvgHashsOf } from "@/hooks/writeContract/setSvgHashsOf";
-import { useAdjustTiers } from "@/hooks/writeContract/useAdjustTiers";
+import { useLocalStorageState } from "@/hooks/useLocalStorageState";
+import { useOmnichainAdjustTiers } from "@/hooks/writeContract/useOmnichainAdjustTiers";
+import { useOmnichainSetProductNames } from "@/hooks/writeContract/useOmnichainSetProductNames";
+import { useOmnichainSetSvgHashsOf } from "@/hooks/writeContract/useOmnichainSetSvgHashsOf";
 import { TierOrNft } from "@/model/tierOrNft";
 import { optimizeSvgsForIpfs } from "@/utils/optimizeSvgsForIpfs";
 import { storeFilesToIpfs } from "@/utils/storeFilesToIpfs";
@@ -28,7 +28,9 @@ import {
   useMemo,
   useState,
 } from "react";
-import { zeroAddress } from "viem";
+import { JB_CHAINS, JBChainId } from "juice-sdk-core";
+import { ChainPayment } from "juice-sdk-react";
+import { formatEther, parseEther, zeroAddress } from "viem";
 
 type TierObj = {
   file: File;
@@ -60,10 +62,19 @@ type TierObj = {
 const PREVIEW_IMG_SIZE = 180;
 
 export default function Index() {
-  const [tiers, setTiers] = useState<TierObj[]>([]);
+  const { value: tiers, setValue: setTiers } = useLocalStorageState<TierObj[]>(
+    "admin_adjust_tiers",
+    {
+      defaultValue: [],
+      parse: (s) => (s ? JSON.parse(s) : []),
+      serialize: (v) => JSON.stringify(v),
+    }
+  );
   const { parsedTiers: allTiers } = useAllTiers();
 
   const bannyTiers = allTiers?.filter((t) => t.category === "body") ?? [];
+
+  if (!tiers) return null;
 
   return (
     <DressBannyContextProvider
@@ -104,9 +115,7 @@ export default function Index() {
               padding: 8,
             },
             content: (
-              <div
-                style={{ display: "flex", flexDirection: "column", gap: 4 }}
-              >
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <RoundedFrame background={"white"}>
                   <UploadTiersPreview />
                 </RoundedFrame>
@@ -120,7 +129,7 @@ export default function Index() {
                     </li>
                     <li>
                       <strong>Optimize SVGs</strong> (to preview assets only) or{" "}
-                      <strong>Store all files on IPFS</strong> (to prepare for
+                      <strong>Optimize + Store on IPFS</strong> (to prepare for
                       adding tiers)
                     </li>
                     <li>
@@ -165,9 +174,59 @@ function DefineTiersView({
   const [files, setFiles] = useState<File[] | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [isStoringToIpfs, setIsStoringToIpfs] = useState(false);
-  const [didAdjustTiers, setDidAdjustTiers] = useState(false);
+
+  // Payment index state for each omnichain operation
+  const [adjustTiersPaymentIndex, setAdjustTiersPaymentIndex] = useState(0);
+  const [svgHashesPaymentIndex, setSvgHashesPaymentIndex] = useState(0);
+  const [productNamesPaymentIndex, setProductNamesPaymentIndex] = useState(0);
 
   const { equip, equipped } = useContext(DressBannyContext);
+
+  // Omnichain Adjust Tiers
+  const {
+    getQuote: getAdjustTiersQuote,
+    quoteData: adjustTiersQuoteData,
+    isQuoting: isQuotingAdjustTiers,
+    sendTransaction: sendAdjustTiersTx,
+    isSending: isSendingAdjustTiers,
+    isSendSuccess: isAdjustTiersSendSuccess,
+    startPolling: startPollingAdjustTiers,
+    isPolling: isPollingAdjustTiers,
+    isComplete: didAdjustTiers,
+    bundleResponse: adjustTiersBundleResponse,
+    error: adjustTiersError,
+    chains,
+  } = useOmnichainAdjustTiers();
+
+  // Omnichain Set SVG Hashes
+  const {
+    getQuote: getSvgHashesQuote,
+    quoteData: svgHashesQuoteData,
+    isQuoting: isQuotingSvgHashes,
+    sendTransaction: sendSvgHashesTx,
+    isSending: isSendingSvgHashes,
+    isSendSuccess: isSvgHashesSendSuccess,
+    startPolling: startPollingSvgHashes,
+    isPolling: isPollingSvgHashes,
+    isComplete: didSetSvgHashes,
+    bundleResponse: svgHashesBundleResponse,
+    error: svgHashesError,
+  } = useOmnichainSetSvgHashsOf();
+
+  // Omnichain Set Product Names
+  const {
+    getQuote: getProductNamesQuote,
+    quoteData: productNamesQuoteData,
+    isQuoting: isQuotingProductNames,
+    sendTransaction: sendProductNamesTx,
+    isSending: isSendingProductNames,
+    isSendSuccess: isProductNamesSendSuccess,
+    startPolling: startPollingProductNames,
+    isPolling: isPollingProductNames,
+    isComplete: didSetProductNames,
+    bundleResponse: productNamesBundleResponse,
+    error: productNamesError,
+  } = useOmnichainSetProductNames();
 
   useEffect(() => {
     if (!files) {
@@ -213,10 +272,12 @@ function DefineTiersView({
       property,
       index,
       disabled,
+      wad,
     }: {
       property: keyof Omit<TierObj, "file" | "encodedIPFSUri" | "cid">;
       index: number;
       disabled?: boolean;
+      wad?: boolean;
     }) => {
       const Label = (
         <label htmlFor={property} style={{ fontSize: FONT_SIZE.sm }}>
@@ -271,7 +332,14 @@ function DefineTiersView({
 
       return (
         <div>
-          {Label}{" "}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'baseline' }}>
+            <span>{Label}</span>
+            {wad ? (
+              <span style={{ fontSize: FONT_SIZE.sm }}>
+                ({formatEther(BigInt(defaultValue))} ETH)
+              </span>
+            ) : null}
+          </div>
           <input
             style={{ width: "100%", boxSizing: "border-box" }}
             name={property}
@@ -283,7 +351,14 @@ function DefineTiersView({
               // onChange re-renders the input, losing focus. so we use onBlur instead
               setTiers((_tiers) =>
                 _tiers.map((t, i) =>
-                  index === i ? { ...t, [property]: e.target.value } : t
+                  index === i
+                    ? {
+                        ...t,
+                        [property]: wad
+                          ? parseEther(e.target.value).toString()
+                          : e.target.value,
+                      }
+                    : t
                 )
               );
             }}
@@ -357,7 +432,12 @@ function DefineTiersView({
                 index={i}
                 disabled={didAdjustTiers}
               />
-              <TierInput property="price" index={i} disabled={didAdjustTiers} />
+              <TierInput
+                wad
+                property="price"
+                index={i}
+                disabled={didAdjustTiers}
+              />
               <TierInput
                 property="initialSupply"
                 index={i}
@@ -404,13 +484,6 @@ function DefineTiersView({
     () => !!tiers.length && tiers.every((t) => !!t.name),
     [tiers]
   );
-
-  const { adjustTiers, isPending: isAdjustingTiers } = useAdjustTiers({
-    onSuccess: () => setDidAdjustTiers(true),
-  });
-  const { setSvgHashsOf, isPending: isSettingSvgHashsOf } = useSetSvgHashsOf();
-  const { setProductNames, isPending: isSettingProductNames } =
-    useSetProductNames();
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
@@ -526,75 +599,422 @@ function DefineTiersView({
           Optimize + Store on IPFS
         </ButtonPad>
 
-        <ButtonPad
-          shadow="sm"
-          style={{ padding: "8px 12px" }}
-          disabled={!didStoreIpfs || didAdjustTiers}
-          loading={
-            isAdjustingTiers
-              ? { fill: "black", width: 180, height: 16 }
-              : undefined
-          }
-          onClick={
-            didStoreIpfs
-              ? () =>
-                  adjustTiers({
-                    tiersToAdd: tiers.map((t) => ({
-                      ...t,
-                      category: CATEGORY_IDS[t.category],
-                      encodedIpfsUri: t.encodedIpfsUri!,
-                    })),
-                    tierIdsToRemove: [],
-                  })
-              : undefined
-          }
+        {/* Omnichain Adjust Tiers Flow */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            padding: 12,
+            border: "1px solid #ccc",
+            borderRadius: 4,
+          }}
         >
-          Adjust Tiers
-        </ButtonPad>
+          <div style={{ fontSize: FONT_SIZE.sm, fontWeight: "bold" }}>
+            Adjust Tiers (All {chains.length} Chains)
+          </div>
 
-        <ButtonPad
-          shadow="sm"
-          style={{ padding: "8px 12px" }}
-          disabled={!didAdjustTiers || !hasSvgHashes}
-          loading={
-            isSettingSvgHashsOf
-              ? { fill: "black", width: 180, height: 16 }
-              : undefined
-          }
-          onClick={
-            didAdjustTiers && hasSvgHashes
-              ? () =>
-                  setSvgHashsOf({
-                    upcs: tiers.map((t) => t.upc.toString()),
-                    svgHashs: tiers.map((t) => t.svgHash!),
-                  })
-              : undefined
-          }
-        >
-          Set SVG Hashes
-        </ButtonPad>
+          {/* Step 1: Get Quote */}
+          {!adjustTiersQuoteData && !didAdjustTiers && (
+            <ButtonPad
+              shadow="sm"
+              style={{ padding: "8px 12px" }}
+              disabled={!didStoreIpfs || isQuotingAdjustTiers}
+              loading={
+                isQuotingAdjustTiers
+                  ? { fill: "black", width: 180, height: 16 }
+                  : undefined
+              }
+              onClick={
+                didStoreIpfs
+                  ? () =>
+                      getAdjustTiersQuote({
+                        tiersToAdd: tiers.map((t) => ({
+                          ...t,
+                          category: CATEGORY_IDS[t.category],
+                          encodedIpfsUri: t.encodedIpfsUri!,
+                        })),
+                        tierIdsToRemove: [],
+                      })
+                  : undefined
+              }
+            >
+              Get Quote
+            </ButtonPad>
+          )}
 
-        <ButtonPad
-          shadow="sm"
-          style={{ padding: "8px 12px" }}
-          disabled={!didAdjustTiers || !hasNames}
-          loading={
-            isSettingProductNames
-              ? { fill: "black", width: 180, height: 16 }
-              : undefined
-          }
-          onClick={
-            didAdjustTiers && hasNames
-              ? () =>
-                  setProductNames({
-                    upcs: tiers.map((t) => t.upc.toString()),
-                    names: tiers.map((t) => t.name),
-                  })
-              : undefined
-          }
+          {/* Step 2: Select Payment & Send */}
+          {adjustTiersQuoteData &&
+            !isAdjustTiersSendSuccess &&
+            !didAdjustTiers && (
+              <>
+                <div style={{ fontSize: FONT_SIZE.sm }}>
+                  Select payment chain:
+                </div>
+                <select
+                  style={{ padding: 8, width: "100%" }}
+                  value={adjustTiersPaymentIndex}
+                  onChange={(e) =>
+                    setAdjustTiersPaymentIndex(Number(e.target.value))
+                  }
+                >
+                  {(adjustTiersQuoteData.payment_info as ChainPayment[]).map(
+                    (payment, index) => (
+                      <option key={payment.chain} value={index}>
+                        {formatEther(BigInt(payment.amount))} ETH on{" "}
+                        {JB_CHAINS[payment.chain as JBChainId]?.name ??
+                          `Chain ${payment.chain}`}
+                      </option>
+                    )
+                  )}
+                </select>
+                <ButtonPad
+                  shadow="sm"
+                  style={{ padding: "8px 12px" }}
+                  fillFg={COLORS.pink}
+                  disabled={isSendingAdjustTiers}
+                  loading={
+                    isSendingAdjustTiers
+                      ? { fill: "white", width: 180, height: 16 }
+                      : undefined
+                  }
+                  onClick={async () => {
+                    try {
+                      await sendAdjustTiersTx(
+                        adjustTiersQuoteData.payment_info[
+                          adjustTiersPaymentIndex
+                        ]
+                      );
+                      startPollingAdjustTiers(adjustTiersQuoteData.bundle_uuid);
+                    } catch (e) {
+                      console.error("Failed to send:", e);
+                    }
+                  }}
+                >
+                  <span style={{ color: "white" }}>Pay & Deploy</span>
+                </ButtonPad>
+              </>
+            )}
+
+          {/* Step 3: Bundle Status */}
+          {(isPollingAdjustTiers || didAdjustTiers) &&
+            adjustTiersBundleResponse && (
+              <div
+                style={{
+                  fontSize: FONT_SIZE.sm,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 4,
+                }}
+              >
+                <div style={{ fontWeight: "bold" }}>
+                  {didAdjustTiers ? "Complete!" : "Pending..."}
+                </div>
+                {adjustTiersBundleResponse.transactions?.map((txn) => (
+                  <div
+                    key={txn.tx_uuid}
+                    style={{ display: "flex", gap: 8, alignItems: "center" }}
+                  >
+                    <span>
+                      {JB_CHAINS[txn.request.chain as JBChainId]?.name ??
+                        `Chain ${txn.request.chain}`}
+                      :
+                    </span>
+                    <span
+                      style={{
+                        color:
+                          txn.status?.state === "Success"
+                            ? "green"
+                            : txn.status?.state === "Failed"
+                            ? "red"
+                            : "orange",
+                      }}
+                    >
+                      {txn.status?.state ?? "Pending"}
+                    </span>
+                    {txn.status?.state === "Success" &&
+                      "hash" in (txn.status.data ?? {}) && (
+                        <a
+                          href={`${
+                            JB_CHAINS[txn.request.chain as JBChainId]?.chain
+                              ?.blockExplorers?.default?.url
+                          }/tx/${(txn.status.data as { hash: string }).hash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: COLORS.blue400 }}
+                        >
+                          View
+                        </a>
+                      )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+          {/* Error display */}
+          {adjustTiersError && (
+            <div style={{ color: "red", fontSize: FONT_SIZE.sm }}>
+              Error: {adjustTiersError.message}
+            </div>
+          )}
+
+          {/* Already complete */}
+          {didAdjustTiers && !adjustTiersBundleResponse && (
+            <div style={{ color: "green", fontSize: FONT_SIZE.sm }}>
+              ✅ Tiers adjusted on all chains
+            </div>
+          )}
+        </div>
+
+        {/* Omnichain Set SVG Hashes */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            padding: 12,
+            border: "1px solid #ccc",
+            borderRadius: 4,
+          }}
         >
-          Set Product Names
-        </ButtonPad>
+          <div style={{ fontSize: FONT_SIZE.sm, fontWeight: "bold" }}>
+            Set SVG Hashes (All {chains.length} Chains)
+          </div>
+
+          {!svgHashesQuoteData && !didSetSvgHashes && (
+            <ButtonPad
+              shadow="sm"
+              style={{ padding: "8px 12px" }}
+              disabled={!didAdjustTiers || !hasSvgHashes || isQuotingSvgHashes}
+              loading={
+                isQuotingSvgHashes
+                  ? { fill: "black", width: 180, height: 16 }
+                  : undefined
+              }
+              onClick={
+                didAdjustTiers && hasSvgHashes
+                  ? () =>
+                      getSvgHashesQuote({
+                        upcs: tiers.map((t) => t.upc.toString()),
+                        svgHashs: tiers.map((t) => t.svgHash!),
+                      })
+                  : undefined
+              }
+            >
+              Get Quote
+            </ButtonPad>
+          )}
+
+          {svgHashesQuoteData &&
+            !isSvgHashesSendSuccess &&
+            !didSetSvgHashes && (
+              <>
+                <select
+                  style={{ padding: 8, width: "100%" }}
+                  value={svgHashesPaymentIndex}
+                  onChange={(e) =>
+                    setSvgHashesPaymentIndex(Number(e.target.value))
+                  }
+                >
+                  {(svgHashesQuoteData.payment_info as ChainPayment[]).map(
+                    (payment, index) => (
+                      <option key={payment.chain} value={index}>
+                        {formatEther(BigInt(payment.amount))} ETH on{" "}
+                        {JB_CHAINS[payment.chain as JBChainId]?.name ??
+                          `Chain ${payment.chain}`}
+                      </option>
+                    )
+                  )}
+                </select>
+                <ButtonPad
+                  shadow="sm"
+                  style={{ padding: "8px 12px" }}
+                  fillFg={COLORS.pink}
+                  disabled={isSendingSvgHashes}
+                  loading={
+                    isSendingSvgHashes
+                      ? { fill: "white", width: 180, height: 16 }
+                      : undefined
+                  }
+                  onClick={async () => {
+                    try {
+                      await sendSvgHashesTx(
+                        svgHashesQuoteData.payment_info[svgHashesPaymentIndex]
+                      );
+                      startPollingSvgHashes(svgHashesQuoteData.bundle_uuid);
+                    } catch (e) {
+                      console.error("Failed to send:", e);
+                    }
+                  }}
+                >
+                  <span style={{ color: "white" }}>Pay & Deploy</span>
+                </ButtonPad>
+              </>
+            )}
+
+          {(isPollingSvgHashes || didSetSvgHashes) &&
+            svgHashesBundleResponse && (
+              <div style={{ fontSize: FONT_SIZE.sm }}>
+                <div style={{ fontWeight: "bold" }}>
+                  {didSetSvgHashes ? "Complete!" : "Pending..."}
+                </div>
+                {svgHashesBundleResponse.transactions?.map((txn) => (
+                  <div key={txn.tx_uuid} style={{ display: "flex", gap: 8 }}>
+                    <span>
+                      {JB_CHAINS[txn.request.chain as JBChainId]?.name}:
+                    </span>
+                    <span
+                      style={{
+                        color:
+                          txn.status?.state === "Success" ? "green" : "orange",
+                      }}
+                    >
+                      {txn.status?.state ?? "Pending"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+          {svgHashesError && (
+            <div style={{ color: "red", fontSize: FONT_SIZE.sm }}>
+              Error: {svgHashesError.message}
+            </div>
+          )}
+
+          {didSetSvgHashes && !svgHashesBundleResponse && (
+            <div style={{ color: "green", fontSize: FONT_SIZE.sm }}>
+              ✅ SVG hashes set on all chains
+            </div>
+          )}
+        </div>
+
+        {/* Omnichain Set Product Names */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            padding: 12,
+            border: "1px solid #ccc",
+            borderRadius: 4,
+          }}
+        >
+          <div style={{ fontSize: FONT_SIZE.sm, fontWeight: "bold" }}>
+            Set Product Names (All {chains.length} Chains)
+          </div>
+
+          {!productNamesQuoteData && !didSetProductNames && (
+            <ButtonPad
+              shadow="sm"
+              style={{ padding: "8px 12px" }}
+              disabled={!didAdjustTiers || !hasNames || isQuotingProductNames}
+              loading={
+                isQuotingProductNames
+                  ? { fill: "black", width: 180, height: 16 }
+                  : undefined
+              }
+              onClick={
+                didAdjustTiers && hasNames
+                  ? () =>
+                      getProductNamesQuote({
+                        upcs: tiers.map((t) => t.upc.toString()),
+                        names: tiers.map((t) => t.name),
+                      })
+                  : undefined
+              }
+            >
+              Get Quote
+            </ButtonPad>
+          )}
+
+          {productNamesQuoteData &&
+            !isProductNamesSendSuccess &&
+            !didSetProductNames && (
+              <>
+                <select
+                  style={{ padding: 8, width: "100%" }}
+                  value={productNamesPaymentIndex}
+                  onChange={(e) =>
+                    setProductNamesPaymentIndex(Number(e.target.value))
+                  }
+                >
+                  {(productNamesQuoteData.payment_info as ChainPayment[]).map(
+                    (payment, index) => (
+                      <option key={payment.chain} value={index}>
+                        {formatEther(BigInt(payment.amount))} ETH on{" "}
+                        {JB_CHAINS[payment.chain as JBChainId]?.name ??
+                          `Chain ${payment.chain}`}
+                      </option>
+                    )
+                  )}
+                </select>
+                <ButtonPad
+                  shadow="sm"
+                  style={{ padding: "8px 12px" }}
+                  fillFg={COLORS.pink}
+                  disabled={isSendingProductNames}
+                  loading={
+                    isSendingProductNames
+                      ? { fill: "white", width: 180, height: 16 }
+                      : undefined
+                  }
+                  onClick={async () => {
+                    try {
+                      await sendProductNamesTx(
+                        productNamesQuoteData.payment_info[
+                          productNamesPaymentIndex
+                        ]
+                      );
+                      startPollingProductNames(
+                        productNamesQuoteData.bundle_uuid
+                      );
+                    } catch (e) {
+                      console.error("Failed to send:", e);
+                    }
+                  }}
+                >
+                  <span style={{ color: "white" }}>Pay & Deploy</span>
+                </ButtonPad>
+              </>
+            )}
+
+          {(isPollingProductNames || didSetProductNames) &&
+            productNamesBundleResponse && (
+              <div style={{ fontSize: FONT_SIZE.sm }}>
+                <div style={{ fontWeight: "bold" }}>
+                  {didSetProductNames ? "Complete!" : "Pending..."}
+                </div>
+                {productNamesBundleResponse.transactions?.map((txn) => (
+                  <div key={txn.tx_uuid} style={{ display: "flex", gap: 8 }}>
+                    <span>
+                      {JB_CHAINS[txn.request.chain as JBChainId]?.name}:
+                    </span>
+                    <span
+                      style={{
+                        color:
+                          txn.status?.state === "Success" ? "green" : "orange",
+                      }}
+                    >
+                      {txn.status?.state ?? "Pending"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+          {productNamesError && (
+            <div style={{ color: "red", fontSize: FONT_SIZE.sm }}>
+              Error: {productNamesError.message}
+            </div>
+          )}
+
+          {didSetProductNames && !productNamesBundleResponse && (
+            <div style={{ color: "green", fontSize: FONT_SIZE.sm }}>
+              ✅ Product names set on all chains
+            </div>
+          )}
+        </div>
 
         {tiers.length > 0 && (
           <div style={{ marginTop: 40 }}>
@@ -629,7 +1049,7 @@ function UploadTiersPreview() {
 function BodyTiers({ tiers }: { tiers: TierOrNft[] }) {
   const { equip, equipped } = useContext(DressBannyContext);
 
-  const size = 64
+  const size = 64;
 
   return (
     <div style={{ display: "flex", gap: 4 }}>
