@@ -1,15 +1,17 @@
 import { RESOLVER_ADDRESS } from "@/constants/contracts";
+import { useGetRelayrTxQuote } from "@/hooks/relayr/useGetRelayrTxQuote";
 import { useSupportedChains } from "@/hooks/useSupportedChains";
 import { JBChainId } from "juice-sdk-core";
 import {
   RelayrPostBundleResponse,
   useGetRelayrTxBundle,
-  useGetRelayrTxQuote,
   useSendRelayrTx,
 } from "juice-sdk-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { encodeFunctionData } from "viem";
 import { useAccount } from "wagmi";
+
+const QUOTE_STORAGE_KEY = "omnichain_set_svg_hashs_quote";
 
 const setSvgHashsOfAbi = [
   {
@@ -39,6 +41,24 @@ export type SetSvgHashsOfArgs = {
 
 const GAS_ESTIMATE = BigInt(200_000);
 
+// Load/save quote from localStorage
+function loadStoredQuote(): RelayrPostBundleResponse | null {
+  try {
+    const stored = localStorage.getItem(QUOTE_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveStoredQuote(quote: RelayrPostBundleResponse): void {
+  localStorage.setItem(QUOTE_STORAGE_KEY, JSON.stringify(quote));
+}
+
+function clearStoredQuote(): void {
+  localStorage.removeItem(QUOTE_STORAGE_KEY);
+}
+
 /**
  * Hook to set SVG hashes across multiple chains using relayr.
  */
@@ -48,16 +68,21 @@ export function useOmnichainSetSvgHashsOf() {
 
   const {
     getRelayrTxQuote,
-    data: quoteData,
+    resumeSigning,
+    pendingProgress,
+    signingProgress,
+    data: freshQuoteData,
     isPending: isQuoting,
     reset: resetQuote,
   } = useGetRelayrTxQuote();
+
   const {
     sendRelayrTx,
     isPending: isSending,
     isSuccess: isSendSuccess,
     error: sendError,
   } = useSendRelayrTx();
+
   const {
     startPolling,
     isPolling,
@@ -67,6 +92,23 @@ export function useOmnichainSetSvgHashsOf() {
   } = useGetRelayrTxBundle();
 
   const [error, setError] = useState<Error | null>(null);
+  const [storedQuote, setStoredQuote] = useState<RelayrPostBundleResponse | null>(null);
+
+  // Load stored quote on mount
+  useEffect(() => {
+    setStoredQuote(loadStoredQuote());
+  }, []);
+
+  // Save fresh quote when received
+  useEffect(() => {
+    if (freshQuoteData) {
+      saveStoredQuote(freshQuoteData);
+      setStoredQuote(freshQuoteData);
+    }
+  }, [freshQuoteData]);
+
+  // Use stored quote if available, otherwise use fresh
+  const quoteData = storedQuote ?? freshQuoteData;
 
   const getQuote = useCallback(
     async (
@@ -111,6 +153,17 @@ export function useOmnichainSetSvgHashsOf() {
     [address, chains, getRelayrTxQuote]
   );
 
+  const resumeQuote = useCallback(async (): Promise<RelayrPostBundleResponse | undefined> => {
+    setError(null);
+    try {
+      return await resumeSigning();
+    } catch (e) {
+      const err = e instanceof Error ? e : new Error("Failed to resume signing");
+      setError(err);
+      throw err;
+    }
+  }, [resumeSigning]);
+
   const sendTransaction = useCallback(
     async (paymentInfo: RelayrPostBundleResponse["payment_info"][number]) => {
       try {
@@ -129,13 +182,19 @@ export function useOmnichainSetSvgHashsOf() {
 
   const reset = useCallback(() => {
     resetQuote();
+    clearStoredQuote();
+    setStoredQuote(null);
     setError(null);
   }, [resetQuote]);
 
   return {
     getQuote,
+    resumeQuote,
     quoteData,
     isQuoting,
+    signingProgress,
+    pendingProgress,
+    hasPendingProgress: !!pendingProgress,
     sendTransaction,
     isSending,
     isSendSuccess,

@@ -1,15 +1,17 @@
 import { BAN_HOOK } from "@/constants/contracts";
+import { useGetRelayrTxQuote } from "@/hooks/relayr/useGetRelayrTxQuote";
 import { useSupportedChains } from "@/hooks/useSupportedChains";
 import { JBChainId } from "juice-sdk-core";
 import {
   RelayrPostBundleResponse,
   useGetRelayrTxBundle,
-  useGetRelayrTxQuote,
   useSendRelayrTx,
 } from "juice-sdk-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Address, encodeFunctionData } from "viem";
 import { useAccount } from "wagmi";
+
+const QUOTE_STORAGE_KEY = "omnichain_adjust_tiers_quote";
 
 const adjustTiersAbi = [
   {
@@ -85,27 +87,87 @@ export type AdjustTiersArgs = {
 // Gas estimate per chain for adjustTiers (with buffer for trusted forwarder)
 const GAS_ESTIMATE = BigInt(500_000);
 
+// Load/save quote from localStorage
+function loadStoredQuote(): RelayrPostBundleResponse | null {
+  try {
+    const stored = localStorage.getItem(QUOTE_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveStoredQuote(quote: RelayrPostBundleResponse): void {
+  localStorage.setItem(QUOTE_STORAGE_KEY, JSON.stringify(quote));
+}
+
+function clearStoredQuote(): void {
+  localStorage.removeItem(QUOTE_STORAGE_KEY);
+}
+
 /**
  * Hook to adjust NFT tiers across multiple chains using relayr.
  *
  * Flow:
- * 1. Call `getQuote(args)` to get a relayr quote for all chains
- * 2. Present payment options to user from `quoteData.payment_info`
- * 3. Call `sendTransaction(paymentInfo)` with selected payment option
- * 4. Poll bundle status with `startPolling(bundleUuid)`
+ * 1. Call `getQuote(args)` to start signing for all chains
+ *    - MetaMask will switch networks for each chain (may cause refreshes)
+ *    - Progress is cached to localStorage, use `resumeSigning()` after refresh
+ * 2. Once all chains are signed, quote is returned
+ * 3. Present payment options to user from `quoteData.payment_info`
+ * 4. Call `sendTransaction(paymentInfo)` with selected payment option
+ * 5. Poll bundle status with `startPolling(bundleUuid)`
  */
 export function useOmnichainAdjustTiers() {
   const { address } = useAccount();
   const chains = useSupportedChains();
 
-  const { getRelayrTxQuote, data: quoteData, isPending: isQuoting, reset: resetQuote } = useGetRelayrTxQuote();
-  const { sendRelayrTx, isPending: isSending, isSuccess: isSendSuccess, error: sendError } = useSendRelayrTx();
-  const { startPolling, isPolling, isComplete, response: bundleResponse, error: bundleError } = useGetRelayrTxBundle();
+  const {
+    getRelayrTxQuote,
+    resumeSigning,
+    pendingProgress,
+    signingProgress,
+    data: freshQuoteData,
+    isPending: isQuoting,
+    reset: resetQuote,
+  } = useGetRelayrTxQuote();
+
+  const {
+    sendRelayrTx,
+    isPending: isSending,
+    isSuccess: isSendSuccess,
+    error: sendError,
+  } = useSendRelayrTx();
+
+  const {
+    startPolling,
+    isPolling,
+    isComplete,
+    response: bundleResponse,
+    error: bundleError,
+  } = useGetRelayrTxBundle();
 
   const [error, setError] = useState<Error | null>(null);
+  const [storedQuote, setStoredQuote] = useState<RelayrPostBundleResponse | null>(null);
+
+  // Load stored quote on mount
+  useEffect(() => {
+    setStoredQuote(loadStoredQuote());
+  }, []);
+
+  // Save fresh quote when received
+  useEffect(() => {
+    if (freshQuoteData) {
+      saveStoredQuote(freshQuoteData);
+      setStoredQuote(freshQuoteData);
+    }
+  }, [freshQuoteData]);
+
+  // Use stored quote if available, otherwise use fresh
+  const quoteData = storedQuote ?? freshQuoteData;
 
   /**
    * Get a relayr quote for adjusting tiers across all supported chains.
+   * This will switch networks for each chain to sign.
    */
   const getQuote = useCallback(
     async (args: AdjustTiersArgs): Promise<RelayrPostBundleResponse | undefined> => {
@@ -164,6 +226,20 @@ export function useOmnichainAdjustTiers() {
     [address, chains, getRelayrTxQuote]
   );
 
+  /**
+   * Resume signing if there's pending progress (after page refresh).
+   */
+  const resumeQuote = useCallback(async (): Promise<RelayrPostBundleResponse | undefined> => {
+    setError(null);
+    try {
+      return await resumeSigning();
+    } catch (e) {
+      const err = e instanceof Error ? e : new Error("Failed to resume signing");
+      setError(err);
+      throw err;
+    }
+  }, [resumeSigning]);
+
   const sendTransaction = useCallback(
     async (paymentInfo: RelayrPostBundleResponse["payment_info"][number]) => {
       try {
@@ -182,14 +258,22 @@ export function useOmnichainAdjustTiers() {
   // Reset hook state for a new transaction
   const reset = useCallback(() => {
     resetQuote();
+    clearStoredQuote();
+    setStoredQuote(null);
     setError(null);
   }, [resetQuote]);
 
   return {
     // Quote
     getQuote,
+    resumeQuote,
     quoteData,
     isQuoting,
+
+    // Signing progress (for UI)
+    signingProgress,
+    pendingProgress,
+    hasPendingProgress: !!pendingProgress,
 
     // Send
     sendTransaction,

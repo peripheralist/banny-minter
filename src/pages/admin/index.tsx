@@ -185,8 +185,11 @@ function DefineTiersView({
   // Omnichain Adjust Tiers
   const {
     getQuote: getAdjustTiersQuote,
+    resumeQuote: resumeAdjustTiersQuote,
     quoteData: adjustTiersQuoteData,
     isQuoting: isQuotingAdjustTiers,
+    signingProgress: adjustTiersSigningProgress,
+    hasPendingProgress: hasAdjustTiersPendingProgress,
     sendTransaction: sendAdjustTiersTx,
     isSending: isSendingAdjustTiers,
     isSendSuccess: isAdjustTiersSendSuccess,
@@ -201,8 +204,11 @@ function DefineTiersView({
   // Omnichain Set SVG Hashes
   const {
     getQuote: getSvgHashesQuote,
+    resumeQuote: resumeSvgHashesQuote,
     quoteData: svgHashesQuoteData,
     isQuoting: isQuotingSvgHashes,
+    signingProgress: svgHashesSigningProgress,
+    hasPendingProgress: hasSvgHashesPendingProgress,
     sendTransaction: sendSvgHashesTx,
     isSending: isSendingSvgHashes,
     isSendSuccess: isSvgHashesSendSuccess,
@@ -216,8 +222,11 @@ function DefineTiersView({
   // Omnichain Set Product Names
   const {
     getQuote: getProductNamesQuote,
+    resumeQuote: resumeProductNamesQuote,
     quoteData: productNamesQuoteData,
     isQuoting: isQuotingProductNames,
+    signingProgress: productNamesSigningProgress,
+    hasPendingProgress: hasProductNamesPendingProgress,
     sendTransaction: sendProductNamesTx,
     isSending: isSendingProductNames,
     isSendSuccess: isProductNamesSendSuccess,
@@ -332,7 +341,13 @@ function DefineTiersView({
 
       return (
         <div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: 'baseline' }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+            }}
+          >
             <span>{Label}</span>
             {wad ? (
               <span style={{ fontSize: FONT_SIZE.sm }}>
@@ -583,7 +598,7 @@ function DefineTiersView({
                         _tiers.map((t, i) => ({
                           ...t,
                           cid: stored[i].cid,
-                          encodedIPFSUri: stored[i].encodedCid,
+                          encodedIpfsUri: stored[i].encodedCid,
                           svgHash: stored[i].svgHash,
                           svg: stored[i].svgContents,
                         }))
@@ -614,33 +629,64 @@ function DefineTiersView({
             Adjust Tiers (All {chains.length} Chains)
           </div>
 
-          {/* Step 1: Get Quote */}
+          {/* Step 1: Adjust tiers */}
           {!adjustTiersQuoteData && !didAdjustTiers && (
-            <ButtonPad
-              shadow="sm"
-              style={{ padding: "8px 12px" }}
-              disabled={!didStoreIpfs || isQuotingAdjustTiers}
-              loading={
-                isQuotingAdjustTiers
-                  ? { fill: "black", width: 180, height: 16 }
-                  : undefined
-              }
-              onClick={
-                didStoreIpfs
-                  ? () =>
-                      getAdjustTiersQuote({
-                        tiersToAdd: tiers.map((t) => ({
-                          ...t,
-                          category: CATEGORY_IDS[t.category],
-                          encodedIpfsUri: t.encodedIpfsUri!,
-                        })),
-                        tierIdsToRemove: [],
-                      })
-                  : undefined
-              }
-            >
-              Get Quote
-            </ButtonPad>
+            <>
+              {/* Show resume button if there's pending signing progress */}
+              {hasAdjustTiersPendingProgress && (
+                <ButtonPad
+                  shadow="sm"
+                  style={{ padding: "8px 12px", marginBottom: 8 }}
+                  fillFg={COLORS.pink}
+                  onClick={() => resumeAdjustTiersQuote()}
+                >
+                  Resume Signing
+                </ButtonPad>
+              )}
+
+              {/* Show signing progress */}
+              {adjustTiersSigningProgress && (
+                <div style={{ fontSize: FONT_SIZE.sm, marginBottom: 8 }}>
+                  Signing: {adjustTiersSigningProgress.signedChains}/
+                  {adjustTiersSigningProgress.totalChains} chains
+                  {adjustTiersSigningProgress.currentChain && (
+                    <span>
+                      {" "}
+                      (current:{" "}
+                      {JB_CHAINS[adjustTiersSigningProgress.currentChain as JBChainId]?.name ??
+                        adjustTiersSigningProgress.currentChain}
+                      )
+                    </span>
+                  )}
+                </div>
+              )}
+
+              <ButtonPad
+                shadow="sm"
+                style={{ padding: "8px 12px" }}
+                disabled={!didStoreIpfs || isQuotingAdjustTiers}
+                loading={
+                  isQuotingAdjustTiers
+                    ? { fill: "black", width: 180, height: 16 }
+                    : undefined
+                }
+                onClick={
+                  didStoreIpfs
+                    ? () =>
+                        getAdjustTiersQuote({
+                          tiersToAdd: tiers.map((t) => ({
+                            ...t,
+                            category: CATEGORY_IDS[t.category],
+                            encodedIpfsUri: t.encodedIpfsUri!,
+                          })),
+                          tierIdsToRemove: [],
+                        })
+                    : undefined
+                }
+              >
+                Get Quote
+              </ButtonPad>
+            </>
           )}
 
           {/* Step 2: Select Payment & Send */}
