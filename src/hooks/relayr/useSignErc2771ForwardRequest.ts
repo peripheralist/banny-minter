@@ -6,10 +6,7 @@
  * The calling code should handle caching/resuming across refreshes.
  */
 
-import {
-  erc2771ForwarderAbi,
-  erc2771ForwarderAddress,
-} from "juice-sdk-core";
+import { erc2771ForwarderAbi, erc2771ForwarderAddress } from "juice-sdk-core";
 import { JBChainId } from "juice-sdk-core";
 import { Address, encodeFunctionData } from "viem";
 import { useAccount, useConfig, useSignTypedData, useSwitchChain } from "wagmi";
@@ -22,6 +19,9 @@ export type ERC2771ForwardRequestData = {
   gas: bigint;
   data: `0x${string}`;
 };
+
+export const ERC2771_FORWARDER_ADDRESS =
+  "0xc29d6995AB3b0Df4650aD643adeAc55e7acBb566";
 
 export function useSignErc2771ForwardRequest() {
   const { address } = useAccount();
@@ -48,19 +48,21 @@ export function useSignErc2771ForwardRequest() {
 
     // Read nonce from the target chain
     const nonce = await publicClient.readContract({
-      address: erc2771ForwarderAddress[chainId],
+      address: ERC2771_FORWARDER_ADDRESS,
       abi: erc2771ForwarderAbi,
       functionName: "nonces",
       args: [address],
     });
 
     // Deadline 48 hours from now
-    const deadline = Number(((Date.now() + 3600 * 48 * 1000) / 1000).toFixed(0));
+    const deadline = Number(
+      ((Date.now() + 3600 * 48 * 1000) / 1000).toFixed(0)
+    );
 
     const domain = {
       name: "Juicebox",
       chainId,
-      verifyingContract: erc2771ForwarderAddress[chainId],
+      verifyingContract: ERC2771_FORWARDER_ADDRESS,
       version: "1",
     } as const;
 

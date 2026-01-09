@@ -5,11 +5,12 @@
  * This allows resuming after MetaMask causes page refreshes on chain switches.
  */
 
-import { erc2771ForwarderAddress, JBChainId } from "juice-sdk-core";
-import { RelayrPostBundleResponse } from "juice-sdk-react";
 import { useMutation } from "@tanstack/react-query";
+import { JBChainId } from "juice-sdk-core";
+import { RelayrPostBundleResponse } from "juice-sdk-react";
 import { useCallback, useEffect, useState } from "react";
 import {
+  ERC2771_FORWARDER_ADDRESS,
   ERC2771ForwardRequestData,
   useSignErc2771ForwardRequest,
 } from "./useSignErc2771ForwardRequest";
@@ -89,7 +90,7 @@ function useRequestRelayrQuote() {
       const transactions = args.map((ct) => ({
         chain: ct.chain,
         data: ct.data,
-        target: erc2771ForwarderAddress[ct.chain],
+        target: ERC2771_FORWARDER_ADDRESS,
         value: ct.value,
       }));
 
@@ -128,7 +129,8 @@ export function useGetRelayrTxQuote() {
   } | null>(null);
 
   // Check for existing progress on mount
-  const [pendingProgress, setPendingProgress] = useState<SigningProgress | null>(null);
+  const [pendingProgress, setPendingProgress] =
+    useState<SigningProgress | null>(null);
 
   useEffect(() => {
     const progress = loadProgress();
@@ -138,7 +140,9 @@ export function useGetRelayrTxQuote() {
   }, []);
 
   // Resume signing from cached progress
-  const resumeSigning = useCallback(async (): Promise<RelayrPostBundleResponse | undefined> => {
+  const resumeSigning = useCallback(async (): Promise<
+    RelayrPostBundleResponse | undefined
+  > => {
     const progress = loadProgress();
     if (!progress) return;
 
@@ -158,7 +162,9 @@ export function useGetRelayrTxQuote() {
     for (const tx of progress.txInputs) {
       if (progress.signatures[tx.chainId]) continue;
 
-      setSigningProgress((prev) => prev ? { ...prev, currentChain: tx.chainId } : null);
+      setSigningProgress((prev) =>
+        prev ? { ...prev, currentChain: tx.chainId } : null
+      );
 
       const txData = deserializeTxData(tx.data);
       const signedData = await sign(txData, tx.chainId);
@@ -214,7 +220,9 @@ export function useGetRelayrTxQuote() {
 
     // Sign for each chain
     for (const d of data) {
-      setSigningProgress((prev) => prev ? { ...prev, currentChain: d.chainId } : null);
+      setSigningProgress((prev) =>
+        prev ? { ...prev, currentChain: d.chainId } : null
+      );
 
       const signedData = await sign(d.data, d.chainId);
 
