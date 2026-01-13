@@ -1,4 +1,5 @@
 import ButtonPad from "@/components/shared/ButtonPad";
+import Modal from "@/components/shared/Modal";
 import Downloadable from "@/components/shared/Downloadable";
 import EquippedTiersPreview from "@/components/shared/EquippedTiersPreview";
 import RoundedFrame from "@/components/shared/RoundedFrame";
@@ -30,7 +31,8 @@ import {
 } from "react";
 import { JB_CHAINS, JBChainId } from "juice-sdk-core";
 import { ChainPayment } from "juice-sdk-react";
-import { formatEther, parseEther, zeroAddress } from "viem";
+import { encodeFunctionData, formatEther, parseEther, zeroAddress } from "viem";
+import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/contracts";
 
 type TierObj = {
   file: File;
@@ -174,6 +176,8 @@ function DefineTiersView({
   const [files, setFiles] = useState<File[] | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [isStoringToIpfs, setIsStoringToIpfs] = useState(false);
+  const [showJsonModal, setShowJsonModal] = useState(false);
+  const [jsonInput, setJsonInput] = useState("");
 
   // Payment index state for each omnichain operation
   const [adjustTiersPaymentIndex, setAdjustTiersPaymentIndex] = useState(0);
@@ -393,7 +397,7 @@ function DefineTiersView({
           <RoundedFrame
             containerStyle={{ width: PREVIEW_IMG_SIZE + 16 }}
             style={{ padding: 8 }}
-            key={t.fileUrl}
+            key={t.fileUrl ?? `tier-${i}`}
           >
             <div
               style={{
@@ -402,16 +406,33 @@ function DefineTiersView({
                 gap: 4,
               }}
             >
-              <Image
-                style={{
-                  background: "white",
-                  boxSizing: "border-box",
-                }}
-                alt={t.name}
-                width={PREVIEW_IMG_SIZE}
-                height={PREVIEW_IMG_SIZE}
-                src={t.fileUrl ?? "broken"}
-              />
+              {t.fileUrl ? (
+                <Image
+                  style={{
+                    background: "white",
+                    boxSizing: "border-box",
+                  }}
+                  alt={t.name}
+                  width={PREVIEW_IMG_SIZE}
+                  height={PREVIEW_IMG_SIZE}
+                  src={t.fileUrl}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: PREVIEW_IMG_SIZE,
+                    height: PREVIEW_IMG_SIZE,
+                    background: "#f0f0f0",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: FONT_SIZE.sm,
+                    color: "#999",
+                  }}
+                >
+                  No preview
+                </div>
+              )}
 
               <div
                 style={{
@@ -500,29 +521,235 @@ function DefineTiersView({
     [tiers]
   );
 
+  // Log the adjustTiers calldata for debugging
+  useEffect(() => {
+    if (!didStoreIpfs || !tiers.length) return;
+
+    const adjustTiersAbi = [
+      {
+        type: "function",
+        name: "adjustTiers",
+        inputs: [
+          {
+            name: "tiersToAdd",
+            type: "tuple[]",
+            components: [
+              { name: "price", type: "uint104" },
+              { name: "initialSupply", type: "uint32" },
+              { name: "votingUnits", type: "uint32" },
+              { name: "reserveFrequency", type: "uint16" },
+              { name: "reserveBeneficiary", type: "address" },
+              { name: "encodedIPFSUri", type: "bytes32" },
+              { name: "category", type: "uint24" },
+              { name: "discountPercent", type: "uint8" },
+              { name: "allowOwnerMint", type: "bool" },
+              { name: "useReserveBeneficiaryAsDefault", type: "bool" },
+              { name: "transfersPausable", type: "bool" },
+              { name: "useVotingUnits", type: "bool" },
+              { name: "cannotBeRemoved", type: "bool" },
+              { name: "cannotIncreaseDiscountPercent", type: "bool" },
+            ],
+          },
+          { name: "tierIdsToRemove", type: "uint256[]" },
+        ],
+        outputs: [],
+        stateMutability: "nonpayable",
+      },
+    ] as const;
+
+    try {
+      const calldata = encodeFunctionData({
+        abi: adjustTiersAbi,
+        functionName: "adjustTiers",
+        args: [
+          tiers.map((t) => ({
+            price: BigInt(t.price),
+            initialSupply: t.initialSupply,
+            votingUnits: t.votingUnits,
+            reserveFrequency: t.reserveFrequency,
+            reserveBeneficiary: t.reserveBeneficiary,
+            encodedIPFSUri: t.encodedIpfsUri as `0x${string}`,
+            category: CATEGORY_IDS[t.category],
+            discountPercent: t.discountPercent,
+            allowOwnerMint: t.allowOwnerMint,
+            useReserveBeneficiaryAsDefault: t.useReserveBeneficiaryAsDefault,
+            transfersPausable: t.transfersPausable,
+            useVotingUnits: t.useVotingUnits,
+            cannotBeRemoved: t.cannotBeRemoved,
+            cannotIncreaseDiscountPercent: t.cannotIncreaseDiscountPercent,
+          })),
+          [], // tierIdsToRemove
+        ],
+      });
+      console.log("adjustTiers calldata:", { target: BAN_HOOK, calldata });
+    } catch (e) {
+      console.error("Failed to encode adjustTiers:", e);
+    }
+  }, [tiers, didStoreIpfs]);
+
+  // Log the setSvgHashsOf calldata for debugging
+  useEffect(() => {
+    if (!hasSvgHashes || !tiers.length) return;
+
+    const setSvgHashsOfAbi = [
+      {
+        type: "function",
+        name: "setSvgHashsOf",
+        inputs: [
+          { name: "upcs", type: "uint256[]" },
+          { name: "svgHashs", type: "bytes32[]" },
+        ],
+        outputs: [],
+        stateMutability: "nonpayable",
+      },
+    ] as const;
+
+    try {
+      const calldata = encodeFunctionData({
+        abi: setSvgHashsOfAbi,
+        functionName: "setSvgHashsOf",
+        args: [
+          tiers.map((t) => BigInt(t.upc)),
+          tiers.map((t) => t.svgHash as `0x${string}`),
+        ],
+      });
+      console.log("setSvgHashsOf calldata:", { target: RESOLVER_ADDRESS, calldata });
+    } catch (e) {
+      console.error("Failed to encode setSvgHashsOf:", e);
+    }
+  }, [tiers, hasSvgHashes]);
+
+  // Log the setProductNames calldata for debugging
+  useEffect(() => {
+    if (!hasNames || !tiers.length) return;
+
+    const setProductNamesAbi = [
+      {
+        type: "function",
+        name: "setProductNames",
+        inputs: [
+          { name: "upcs", type: "uint256[]" },
+          { name: "names", type: "string[]" },
+        ],
+        outputs: [],
+        stateMutability: "nonpayable",
+      },
+    ] as const;
+
+    try {
+      const calldata = encodeFunctionData({
+        abi: setProductNamesAbi,
+        functionName: "setProductNames",
+        args: [
+          tiers.map((t) => BigInt(t.upc)),
+          tiers.map((t) => t.name),
+        ],
+      });
+      console.log("setProductNames calldata:", { target: RESOLVER_ADDRESS, calldata });
+    } catch (e) {
+      console.error("Failed to encode setProductNames:", e);
+    }
+  }, [tiers, hasNames]);
+
+  const handleJsonImport = useCallback(() => {
+    try {
+      const parsed = JSON.parse(jsonInput) as TierObj[];
+      if (!Array.isArray(parsed)) {
+        alert("JSON must be an array of tiers");
+        return;
+      }
+
+      // Map the JSON data to TierObj, excluding file/fileUrl since those won't work
+      const importedTiers: TierObj[] = parsed.map((t, i) => ({
+        file: new File([], t.name || `tier-${i}`), // placeholder empty file
+        fileUrl: undefined, // blob URLs won't work
+        upc: t.upc ?? i + 1,
+        name: t.name ?? "",
+        price: t.price ?? "0",
+        initialSupply: typeof t.initialSupply === "string" ? parseInt(t.initialSupply) : (t.initialSupply ?? 0),
+        reserveFrequency: typeof t.reserveFrequency === "string" ? parseInt(t.reserveFrequency) : (t.reserveFrequency ?? 0),
+        cid: t.cid ?? null,
+        encodedIpfsUri: t.encodedIpfsUri ?? null,
+        category: t.category ?? "body",
+        svgHash: t.svgHash,
+        svg: t.svg,
+        reserveBeneficiary: t.reserveBeneficiary ?? zeroAddress,
+        votingUnits: t.votingUnits ?? 0,
+        discountPercent: t.discountPercent ?? 0,
+        cannotIncreaseDiscountPercent: t.cannotIncreaseDiscountPercent ?? false,
+        allowOwnerMint: t.allowOwnerMint ?? false,
+        useReserveBeneficiaryAsDefault: t.useReserveBeneficiaryAsDefault ?? false,
+        transfersPausable: t.transfersPausable ?? false,
+        useVotingUnits: t.useVotingUnits ?? false,
+        cannotBeRemoved: t.cannotBeRemoved ?? false,
+      }));
+
+      setTiers(importedTiers);
+      setShowJsonModal(false);
+      setJsonInput("");
+    } catch (e) {
+      alert("Invalid JSON: " + (e instanceof Error ? e.message : "Unknown error"));
+    }
+  }, [jsonInput, setTiers]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      <input
-        type="file"
-        accept="image/svg+xml"
-        multiple
-        onChange={(e) => {
-          const files = e.target.files;
+      {/* JSON Import Modal */}
+      <Modal
+        open={showJsonModal}
+        onClose={() => setShowJsonModal(false)}
+        action={{ onClick: handleJsonImport, text: "Import" }}
+        size="sm"
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ fontWeight: "bold", fontSize: FONT_SIZE.lg }}>
+            Import Tiers JSON
+          </div>
+          <textarea
+            style={{
+              width: "100%",
+              height: 300,
+              fontFamily: "monospace",
+              fontSize: 12,
+              padding: 8,
+              boxSizing: "border-box",
+            }}
+            placeholder="Paste JSON array here..."
+            value={jsonInput}
+            onChange={(e) => setJsonInput(e.target.value)}
+          />
+        </div>
+      </Modal>
 
-          if (!files) {
-            setFiles(null);
-            return;
-          }
+      <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+        <input
+          type="file"
+          accept="image/svg+xml"
+          multiple
+          onChange={(e) => {
+            const files = e.target.files;
 
-          let _files: File[] = [];
-          for (let i = 0; i < files.length; i++) {
-            const file = files.item(i);
-            if (file) _files.push(file);
-          }
+            if (!files) {
+              setFiles(null);
+              return;
+            }
 
-          setFiles(_files);
-        }}
-      />
+            let _files: File[] = [];
+            for (let i = 0; i < files.length; i++) {
+              const file = files.item(i);
+              if (file) _files.push(file);
+            }
+
+            setFiles(_files);
+          }}
+        />
+        <ButtonPad
+          style={{ padding: "6px 12px", fontSize: FONT_SIZE.sm }}
+          onClick={() => setShowJsonModal(true)}
+        >
+          Import JSON
+        </ButtonPad>
+      </div>
 
       <div
         style={{
