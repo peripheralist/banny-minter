@@ -8,10 +8,10 @@ export const RESOLVER_ADDRESS_OLD =
   "0x47c011146a4498a70e0bf2e4585acf9cade85954" as Address;
 
 export const RESOLVER_ADDRESS =
-  "0x2De178aDde33Cf27d391E9506C7B6f8b2DDc5efF" as Address;
+  "0x6318f3130775cdf9a9b5b14fb4865db07f68f610" as Address;
 
 export const TERMINAL_ADDRESS =
-  "0xdb9644369c79c3633cde70d2df50d827d7dc7dbc" as Address;
+  "0x2f4d9393469d6c9467dbf17d181dd9bc5c02bb25" as Address;
 
 export const BAN_SUCKER_GROUP_ID =
-  "3b4c625e143bb9987d6424c329b4d56a" as Address;
+  "cc6161455ff08b0561cecced147ded63" as Address;
