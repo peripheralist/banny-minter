@@ -46,6 +46,8 @@ export type Query = {
   borrowLoanEvents: BorrowLoanEventPage;
   burnEvent: Maybe<BurnEvent>;
   burnEvents: BurnEventPage;
+  cashOutTaxSnapshot: Maybe<CashOutTaxSnapshot>;
+  cashOutTaxSnapshots: CashOutTaxSnapshotPage;
   cashOutTokensEvent: Maybe<CashOutTokensEvent>;
   cashOutTokensEvents: CashOutTokensEventPage;
   decorateBannyEvent: Maybe<DecorateBannyEvent>;
@@ -56,6 +58,10 @@ export type Query = {
   liquidateLoanEvents: LiquidateLoanEventPage;
   loan: Maybe<Loan>;
   loans: LoanPage;
+  manualBurnEvent: Maybe<ManualBurnEvent>;
+  manualBurnEvents: ManualBurnEventPage;
+  manualMintTokensEvent: Maybe<ManualMintTokensEvent>;
+  manualMintTokensEvents: ManualMintTokensEventPage;
   mintNftEvent: Maybe<MintNftEvent>;
   mintNftEvents: MintNftEventPage;
   mintTokensEvent: Maybe<MintTokensEvent>;
@@ -98,6 +104,8 @@ export type Query = {
   suckerGroupMoment: Maybe<SuckerGroupMoment>;
   suckerGroupMoments: SuckerGroupMomentPage;
   suckerGroups: SuckerGroupPage;
+  suckerTransaction: Maybe<SuckerTransaction>;
+  suckerTransactions: SuckerTransactionPage;
   useAllowanceEvent: Maybe<UseAllowanceEvent>;
   useAllowanceEvents: UseAllowanceEventPage;
   wallet: Maybe<Wallet>;
@@ -117,6 +125,7 @@ export type Query_SuckersArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<_SuckerFilter>;
@@ -132,6 +141,7 @@ export type QueryActivityEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ActivityEventFilter>;
@@ -147,6 +157,7 @@ export type QueryAddToBalanceEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<AddToBalanceEventFilter>;
@@ -162,6 +173,7 @@ export type QueryAutoIssueEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<AutoIssueEventFilter>;
@@ -177,6 +189,7 @@ export type QueryBorrowLoanEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<BorrowLoanEventFilter>;
@@ -192,9 +205,29 @@ export type QueryBurnEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<BurnEventFilter>;
+};
+
+
+export type QueryCashOutTaxSnapshotArgs = {
+  chainId: Scalars['Float']['input'];
+  projectId: Scalars['Float']['input'];
+  rulesetId: Scalars['BigInt']['input'];
+  version: Scalars['Float']['input'];
+};
+
+
+export type QueryCashOutTaxSnapshotsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<CashOutTaxSnapshotFilter>;
 };
 
 
@@ -207,6 +240,7 @@ export type QueryCashOutTokensEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<CashOutTokensEventFilter>;
@@ -222,6 +256,7 @@ export type QueryDecorateBannyEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<DecorateBannyEventFilter>;
@@ -237,6 +272,7 @@ export type QueryDeployErc20EventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<DeployErc20EventFilter>;
@@ -252,6 +288,7 @@ export type QueryLiquidateLoanEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<LiquidateLoanEventFilter>;
@@ -269,9 +306,42 @@ export type QueryLoansArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<LoanFilter>;
+};
+
+
+export type QueryManualBurnEventArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryManualBurnEventsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<ManualBurnEventFilter>;
+};
+
+
+export type QueryManualMintTokensEventArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryManualMintTokensEventsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<ManualMintTokensEventFilter>;
 };
 
 
@@ -284,6 +354,7 @@ export type QueryMintNftEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<MintNftEventFilter>;
@@ -299,6 +370,7 @@ export type QueryMintTokensEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<MintTokensEventFilter>;
@@ -324,6 +396,7 @@ export type QueryNftHooksArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<NftHookFilter>;
@@ -342,6 +415,7 @@ export type QueryNftTiersArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<NftTierFilter>;
@@ -352,6 +426,7 @@ export type QueryNftsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<NftFilter>;
@@ -368,6 +443,7 @@ export type QueryParticipantArgs = {
 
 export type QueryParticipantSnapshotArgs = {
   address: Scalars['String']['input'];
+  block: Scalars['Float']['input'];
   chainId: Scalars['Float']['input'];
   projectId: Scalars['Float']['input'];
   version: Scalars['Float']['input'];
@@ -378,6 +454,7 @@ export type QueryParticipantSnapshotsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ParticipantSnapshotFilter>;
@@ -388,6 +465,7 @@ export type QueryParticipantsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ParticipantFilter>;
@@ -403,6 +481,7 @@ export type QueryPayEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<PayEventFilter>;
@@ -422,6 +501,7 @@ export type QueryPermissionHoldersArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<PermissionHolderFilter>;
@@ -444,6 +524,7 @@ export type QueryProjectCreateEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ProjectCreateEventFilter>;
@@ -462,6 +543,7 @@ export type QueryProjectMomentsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ProjectMomentFilter>;
@@ -472,6 +554,7 @@ export type QueryProjectsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ProjectFilter>;
@@ -487,6 +570,7 @@ export type QueryReallocateLoanEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ReallocateLoanEventFilter>;
@@ -502,6 +586,7 @@ export type QueryRepayLoanEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<RepayLoanEventFilter>;
@@ -517,6 +602,7 @@ export type QuerySendPayoutToSplitEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<SendPayoutToSplitEventFilter>;
@@ -532,6 +618,7 @@ export type QuerySendPayoutsEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<SendPayoutsEventFilter>;
@@ -547,6 +634,7 @@ export type QuerySendReservedTokensToSplitEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<SendReservedTokensToSplitEventFilter>;
@@ -562,6 +650,7 @@ export type QuerySendReservedTokensToSplitsEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<SendReservedTokensToSplitsEventFilter>;
@@ -577,6 +666,7 @@ export type QueryStoreAutoIssuanceAmountEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<StoreAutoIssuanceAmountEventFilter>;
@@ -589,8 +679,8 @@ export type QuerySuckerGroupArgs = {
 
 
 export type QuerySuckerGroupMomentArgs = {
-  block: Scalars['Float']['input'];
   suckerGroupId: Scalars['String']['input'];
+  timestamp: Scalars['Float']['input'];
   version: Scalars['Float']['input'];
 };
 
@@ -599,6 +689,7 @@ export type QuerySuckerGroupMomentsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<SuckerGroupMomentFilter>;
@@ -609,9 +700,29 @@ export type QuerySuckerGroupsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<SuckerGroupFilter>;
+};
+
+
+export type QuerySuckerTransactionArgs = {
+  chainId: Scalars['Float']['input'];
+  index: Scalars['Float']['input'];
+  sucker: Scalars['String']['input'];
+  token: Scalars['String']['input'];
+};
+
+
+export type QuerySuckerTransactionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<SuckerTransactionFilter>;
 };
 
 
@@ -624,6 +735,7 @@ export type QueryUseAllowanceEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<UseAllowanceEventFilter>;
@@ -639,9 +751,15 @@ export type QueryWalletsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<WalletFilter>;
+};
+
+export type ViewPageInfo = {
+  hasNextPage: Scalars['Boolean']['output'];
+  hasPreviousPage: Scalars['Boolean']['output'];
 };
 
 export type _Sucker = {
@@ -709,6 +827,8 @@ export type ActivityEvent = {
   from: Scalars['String']['output'];
   id: Scalars['String']['output'];
   liquidateLoanEvent: Maybe<LiquidateLoanEvent>;
+  manualBurnEvent: Maybe<ManualBurnEvent>;
+  manualMintTokensEvent: Maybe<ManualMintTokensEvent>;
   mintNftEvent: Maybe<MintNftEvent>;
   mintTokensEvent: Maybe<MintTokensEvent>;
   payEvent: Maybe<PayEvent>;
@@ -841,6 +961,26 @@ export type ActivityEventFilter = {
   liquidateLoanEvent_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   liquidateLoanEvent_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   liquidateLoanEvent_starts_with?: InputMaybe<Scalars['String']['input']>;
+  manualBurnEvent?: InputMaybe<Scalars['String']['input']>;
+  manualBurnEvent_contains?: InputMaybe<Scalars['String']['input']>;
+  manualBurnEvent_ends_with?: InputMaybe<Scalars['String']['input']>;
+  manualBurnEvent_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  manualBurnEvent_not?: InputMaybe<Scalars['String']['input']>;
+  manualBurnEvent_not_contains?: InputMaybe<Scalars['String']['input']>;
+  manualBurnEvent_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  manualBurnEvent_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  manualBurnEvent_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  manualBurnEvent_starts_with?: InputMaybe<Scalars['String']['input']>;
+  manualMintTokensEvent?: InputMaybe<Scalars['String']['input']>;
+  manualMintTokensEvent_contains?: InputMaybe<Scalars['String']['input']>;
+  manualMintTokensEvent_ends_with?: InputMaybe<Scalars['String']['input']>;
+  manualMintTokensEvent_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  manualMintTokensEvent_not?: InputMaybe<Scalars['String']['input']>;
+  manualMintTokensEvent_not_contains?: InputMaybe<Scalars['String']['input']>;
+  manualMintTokensEvent_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  manualMintTokensEvent_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  manualMintTokensEvent_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  manualMintTokensEvent_starts_with?: InputMaybe<Scalars['String']['input']>;
   mintNftEvent?: InputMaybe<Scalars['String']['input']>;
   mintNftEvent_contains?: InputMaybe<Scalars['String']['input']>;
   mintNftEvent_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -1016,6 +1156,8 @@ export enum ActivityEventType {
   decorateBannyEvent = 'decorateBannyEvent',
   deployErc20Event = 'deployErc20Event',
   liquidateLoanEvent = 'liquidateLoanEvent',
+  manualBurnEvent = 'manualBurnEvent',
+  manualMintTokensEvent = 'manualMintTokensEvent',
   mintNftEvent = 'mintNftEvent',
   mintTokensEvent = 'mintTokensEvent',
   payEvent = 'payEvent',
@@ -1628,6 +1770,94 @@ export type BurnEventFilter = {
 
 export type BurnEventPage = {
   items: Array<BurnEvent>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type CashOutTaxSnapshot = {
+  cashOutTax: Scalars['Int']['output'];
+  chainId: Scalars['Int']['output'];
+  duration: Scalars['BigInt']['output'];
+  projectId: Scalars['Int']['output'];
+  rulesetId: Scalars['BigInt']['output'];
+  start: Scalars['BigInt']['output'];
+  suckerGroupId: Scalars['String']['output'];
+  version: Scalars['Int']['output'];
+};
+
+export type CashOutTaxSnapshotFilter = {
+  AND?: InputMaybe<Array<InputMaybe<CashOutTaxSnapshotFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<CashOutTaxSnapshotFilter>>>;
+  cashOutTax?: InputMaybe<Scalars['Int']['input']>;
+  cashOutTax_gt?: InputMaybe<Scalars['Int']['input']>;
+  cashOutTax_gte?: InputMaybe<Scalars['Int']['input']>;
+  cashOutTax_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  cashOutTax_lt?: InputMaybe<Scalars['Int']['input']>;
+  cashOutTax_lte?: InputMaybe<Scalars['Int']['input']>;
+  cashOutTax_not?: InputMaybe<Scalars['Int']['input']>;
+  cashOutTax_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  chainId?: InputMaybe<Scalars['Int']['input']>;
+  chainId_gt?: InputMaybe<Scalars['Int']['input']>;
+  chainId_gte?: InputMaybe<Scalars['Int']['input']>;
+  chainId_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  chainId_lt?: InputMaybe<Scalars['Int']['input']>;
+  chainId_lte?: InputMaybe<Scalars['Int']['input']>;
+  chainId_not?: InputMaybe<Scalars['Int']['input']>;
+  chainId_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  duration?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  duration_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_not?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  projectId?: InputMaybe<Scalars['Int']['input']>;
+  projectId_gt?: InputMaybe<Scalars['Int']['input']>;
+  projectId_gte?: InputMaybe<Scalars['Int']['input']>;
+  projectId_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  projectId_lt?: InputMaybe<Scalars['Int']['input']>;
+  projectId_lte?: InputMaybe<Scalars['Int']['input']>;
+  projectId_not?: InputMaybe<Scalars['Int']['input']>;
+  projectId_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  rulesetId?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  rulesetId_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_not?: InputMaybe<Scalars['BigInt']['input']>;
+  rulesetId_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  start?: InputMaybe<Scalars['BigInt']['input']>;
+  start_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  start_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  start_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  start_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  start_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  start_not?: InputMaybe<Scalars['BigInt']['input']>;
+  start_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  suckerGroupId?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_contains?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  suckerGroupId_not?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  suckerGroupId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  version?: InputMaybe<Scalars['Int']['input']>;
+  version_gt?: InputMaybe<Scalars['Int']['input']>;
+  version_gte?: InputMaybe<Scalars['Int']['input']>;
+  version_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  version_lt?: InputMaybe<Scalars['Int']['input']>;
+  version_lte?: InputMaybe<Scalars['Int']['input']>;
+  version_not?: InputMaybe<Scalars['Int']['input']>;
+  version_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+};
+
+export type CashOutTaxSnapshotPage = {
+  items: Array<CashOutTaxSnapshot>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
@@ -2253,6 +2483,7 @@ export type Loan = {
   createdAt: Scalars['Int']['output'];
   id: Scalars['BigInt']['output'];
   owner: Scalars['String']['output'];
+  participant: Maybe<Participant>;
   prepaidDuration: Scalars['Int']['output'];
   prepaidFeePercent: Scalars['Int']['output'];
   project: Maybe<Project>;
@@ -2262,6 +2493,7 @@ export type Loan = {
   token: Scalars['String']['output'];
   tokenUri: Maybe<Scalars['String']['output']>;
   version: Scalars['Int']['output'];
+  wallet: Maybe<Wallet>;
 };
 
 export type LoanFilter = {
@@ -2401,6 +2633,292 @@ export type LoanFilter = {
 
 export type LoanPage = {
   items: Array<Loan>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type ManualBurnEvent = {
+  amount: Scalars['BigInt']['output'];
+  chainId: Scalars['Int']['output'];
+  creditAmount: Scalars['BigInt']['output'];
+  erc20Amount: Scalars['BigInt']['output'];
+  from: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  project: Maybe<Project>;
+  projectId: Scalars['Int']['output'];
+  suckerGroupId: Scalars['String']['output'];
+  timestamp: Scalars['Int']['output'];
+  txHash: Scalars['String']['output'];
+  version: Scalars['Int']['output'];
+};
+
+export type ManualBurnEventFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ManualBurnEventFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ManualBurnEventFilter>>>;
+  amount?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  amount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  chainId?: InputMaybe<Scalars['Int']['input']>;
+  chainId_gt?: InputMaybe<Scalars['Int']['input']>;
+  chainId_gte?: InputMaybe<Scalars['Int']['input']>;
+  chainId_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  chainId_lt?: InputMaybe<Scalars['Int']['input']>;
+  chainId_lte?: InputMaybe<Scalars['Int']['input']>;
+  chainId_not?: InputMaybe<Scalars['Int']['input']>;
+  chainId_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  creditAmount?: InputMaybe<Scalars['BigInt']['input']>;
+  creditAmount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  creditAmount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  creditAmount_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  creditAmount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  creditAmount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  creditAmount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  creditAmount_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  erc20Amount?: InputMaybe<Scalars['BigInt']['input']>;
+  erc20Amount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  erc20Amount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  erc20Amount_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  erc20Amount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  erc20Amount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  erc20Amount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  erc20Amount_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  from?: InputMaybe<Scalars['String']['input']>;
+  from_contains?: InputMaybe<Scalars['String']['input']>;
+  from_ends_with?: InputMaybe<Scalars['String']['input']>;
+  from_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  from_not?: InputMaybe<Scalars['String']['input']>;
+  from_not_contains?: InputMaybe<Scalars['String']['input']>;
+  from_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  from_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  from_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  from_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  projectId?: InputMaybe<Scalars['Int']['input']>;
+  projectId_gt?: InputMaybe<Scalars['Int']['input']>;
+  projectId_gte?: InputMaybe<Scalars['Int']['input']>;
+  projectId_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  projectId_lt?: InputMaybe<Scalars['Int']['input']>;
+  projectId_lte?: InputMaybe<Scalars['Int']['input']>;
+  projectId_not?: InputMaybe<Scalars['Int']['input']>;
+  projectId_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  suckerGroupId?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_contains?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  suckerGroupId_not?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  suckerGroupId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  timestamp_lt?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_not?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  txHash?: InputMaybe<Scalars['String']['input']>;
+  txHash_contains?: InputMaybe<Scalars['String']['input']>;
+  txHash_ends_with?: InputMaybe<Scalars['String']['input']>;
+  txHash_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  txHash_not?: InputMaybe<Scalars['String']['input']>;
+  txHash_not_contains?: InputMaybe<Scalars['String']['input']>;
+  txHash_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  txHash_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  txHash_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  txHash_starts_with?: InputMaybe<Scalars['String']['input']>;
+  version?: InputMaybe<Scalars['Int']['input']>;
+  version_gt?: InputMaybe<Scalars['Int']['input']>;
+  version_gte?: InputMaybe<Scalars['Int']['input']>;
+  version_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  version_lt?: InputMaybe<Scalars['Int']['input']>;
+  version_lte?: InputMaybe<Scalars['Int']['input']>;
+  version_not?: InputMaybe<Scalars['Int']['input']>;
+  version_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+};
+
+export type ManualBurnEventPage = {
+  items: Array<ManualBurnEvent>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type ManualMintTokensEvent = {
+  beneficiary: Scalars['String']['output'];
+  beneficiaryTokenCount: Scalars['BigInt']['output'];
+  caller: Scalars['String']['output'];
+  chainId: Scalars['Int']['output'];
+  from: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  logIndex: Scalars['Int']['output'];
+  memo: Maybe<Scalars['String']['output']>;
+  project: Maybe<Project>;
+  projectId: Scalars['Int']['output'];
+  reservedPercent: Scalars['BigInt']['output'];
+  suckerGroupId: Scalars['String']['output'];
+  timestamp: Scalars['Int']['output'];
+  tokenCount: Scalars['BigInt']['output'];
+  txHash: Scalars['String']['output'];
+  version: Scalars['Int']['output'];
+};
+
+export type ManualMintTokensEventFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ManualMintTokensEventFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ManualMintTokensEventFilter>>>;
+  beneficiary?: InputMaybe<Scalars['String']['input']>;
+  beneficiaryTokenCount?: InputMaybe<Scalars['BigInt']['input']>;
+  beneficiaryTokenCount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  beneficiaryTokenCount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  beneficiaryTokenCount_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  beneficiaryTokenCount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  beneficiaryTokenCount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  beneficiaryTokenCount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  beneficiaryTokenCount_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  beneficiary_contains?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_ends_with?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  beneficiary_not?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_not_contains?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  beneficiary_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_starts_with?: InputMaybe<Scalars['String']['input']>;
+  caller?: InputMaybe<Scalars['String']['input']>;
+  caller_contains?: InputMaybe<Scalars['String']['input']>;
+  caller_ends_with?: InputMaybe<Scalars['String']['input']>;
+  caller_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  caller_not?: InputMaybe<Scalars['String']['input']>;
+  caller_not_contains?: InputMaybe<Scalars['String']['input']>;
+  caller_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  caller_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  caller_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  caller_starts_with?: InputMaybe<Scalars['String']['input']>;
+  chainId?: InputMaybe<Scalars['Int']['input']>;
+  chainId_gt?: InputMaybe<Scalars['Int']['input']>;
+  chainId_gte?: InputMaybe<Scalars['Int']['input']>;
+  chainId_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  chainId_lt?: InputMaybe<Scalars['Int']['input']>;
+  chainId_lte?: InputMaybe<Scalars['Int']['input']>;
+  chainId_not?: InputMaybe<Scalars['Int']['input']>;
+  chainId_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  from?: InputMaybe<Scalars['String']['input']>;
+  from_contains?: InputMaybe<Scalars['String']['input']>;
+  from_ends_with?: InputMaybe<Scalars['String']['input']>;
+  from_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  from_not?: InputMaybe<Scalars['String']['input']>;
+  from_not_contains?: InputMaybe<Scalars['String']['input']>;
+  from_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  from_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  from_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  from_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  logIndex?: InputMaybe<Scalars['Int']['input']>;
+  logIndex_gt?: InputMaybe<Scalars['Int']['input']>;
+  logIndex_gte?: InputMaybe<Scalars['Int']['input']>;
+  logIndex_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  logIndex_lt?: InputMaybe<Scalars['Int']['input']>;
+  logIndex_lte?: InputMaybe<Scalars['Int']['input']>;
+  logIndex_not?: InputMaybe<Scalars['Int']['input']>;
+  logIndex_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  memo?: InputMaybe<Scalars['String']['input']>;
+  memo_contains?: InputMaybe<Scalars['String']['input']>;
+  memo_ends_with?: InputMaybe<Scalars['String']['input']>;
+  memo_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  memo_not?: InputMaybe<Scalars['String']['input']>;
+  memo_not_contains?: InputMaybe<Scalars['String']['input']>;
+  memo_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  memo_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  memo_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  memo_starts_with?: InputMaybe<Scalars['String']['input']>;
+  projectId?: InputMaybe<Scalars['Int']['input']>;
+  projectId_gt?: InputMaybe<Scalars['Int']['input']>;
+  projectId_gte?: InputMaybe<Scalars['Int']['input']>;
+  projectId_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  projectId_lt?: InputMaybe<Scalars['Int']['input']>;
+  projectId_lte?: InputMaybe<Scalars['Int']['input']>;
+  projectId_not?: InputMaybe<Scalars['Int']['input']>;
+  projectId_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  reservedPercent?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedPercent_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedPercent_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedPercent_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  reservedPercent_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedPercent_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedPercent_not?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedPercent_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  suckerGroupId?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_contains?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  suckerGroupId_not?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  suckerGroupId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  timestamp_lt?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_not?: InputMaybe<Scalars['Int']['input']>;
+  timestamp_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  tokenCount?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenCount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenCount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenCount_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  tokenCount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenCount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenCount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  tokenCount_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  txHash?: InputMaybe<Scalars['String']['input']>;
+  txHash_contains?: InputMaybe<Scalars['String']['input']>;
+  txHash_ends_with?: InputMaybe<Scalars['String']['input']>;
+  txHash_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  txHash_not?: InputMaybe<Scalars['String']['input']>;
+  txHash_not_contains?: InputMaybe<Scalars['String']['input']>;
+  txHash_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  txHash_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  txHash_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  txHash_starts_with?: InputMaybe<Scalars['String']['input']>;
+  version?: InputMaybe<Scalars['Int']['input']>;
+  version_gt?: InputMaybe<Scalars['Int']['input']>;
+  version_gte?: InputMaybe<Scalars['Int']['input']>;
+  version_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  version_lt?: InputMaybe<Scalars['Int']['input']>;
+  version_lte?: InputMaybe<Scalars['Int']['input']>;
+  version_not?: InputMaybe<Scalars['Int']['input']>;
+  version_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+};
+
+export type ManualMintTokensEventPage = {
+  items: Array<ManualMintTokensEvent>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
@@ -2744,7 +3262,8 @@ export type Nft = {
   hook: Maybe<NftHook>;
   metadata: Maybe<Scalars['JSON']['output']>;
   mintTx: Scalars['String']['output'];
-  owner: Maybe<Participant>;
+  owner: Scalars['String']['output'];
+  participant: Maybe<Participant>;
   project: Maybe<Project>;
   projectId: Scalars['Int']['output'];
   tier: Maybe<NftTier>;
@@ -2886,6 +3405,7 @@ export type NftHookNftTiersArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<NftTierFilter>;
@@ -2896,6 +3416,7 @@ export type NftHookNftsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<NftFilter>;
@@ -3010,6 +3531,7 @@ export type NftTierNftsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<NftFilter>;
@@ -3185,6 +3707,7 @@ export type Participant = {
   erc20Balance: Scalars['BigInt']['output'];
   isRevnet: Maybe<Scalars['Boolean']['output']>;
   lastPaidTimestamp: Scalars['Int']['output'];
+  loans: Maybe<LoanPage>;
   nfts: Maybe<NftPage>;
   paymentsCount: Scalars['Int']['output'];
   project: Maybe<Project>;
@@ -3198,10 +3721,22 @@ export type Participant = {
 };
 
 
+export type ParticipantLoansArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<LoanFilter>;
+};
+
+
 export type ParticipantNftsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<NftFilter>;
@@ -3641,6 +4176,7 @@ export type PayEventPage = {
 export type PermissionHolder = {
   account: Scalars['String']['output'];
   chainId: Scalars['Int']['output'];
+  isRevnetOperator: Maybe<Scalars['Boolean']['output']>;
   operator: Scalars['String']['output'];
   permissions: Maybe<Array<Scalars['Int']['output']>>;
   project: Maybe<Project>;
@@ -3669,6 +4205,10 @@ export type PermissionHolderFilter = {
   chainId_lte?: InputMaybe<Scalars['Int']['input']>;
   chainId_not?: InputMaybe<Scalars['Int']['input']>;
   chainId_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  isRevnetOperator?: InputMaybe<Scalars['Boolean']['input']>;
+  isRevnetOperator_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
+  isRevnetOperator_not?: InputMaybe<Scalars['Boolean']['input']>;
+  isRevnetOperator_not_in?: InputMaybe<Array<InputMaybe<Scalars['Boolean']['input']>>>;
   operator?: InputMaybe<Scalars['String']['input']>;
   operator_contains?: InputMaybe<Scalars['String']['input']>;
   operator_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -3728,12 +4268,15 @@ export type Project = {
   description: Maybe<Scalars['String']['output']>;
   discord: Maybe<Scalars['String']['output']>;
   domain: Maybe<Scalars['String']['output']>;
+  farcaster: Maybe<Scalars['String']['output']>;
   handle: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   infoUri: Maybe<Scalars['String']['output']>;
   isRevnet: Maybe<Scalars['Boolean']['output']>;
   liquidateLoanEvents: Maybe<LiquidateLoanEventPage>;
   logoUri: Maybe<Scalars['String']['output']>;
+  manualBurnEvents: Maybe<ManualBurnEventPage>;
+  manualMintTokensEvents: Maybe<ManualMintTokensEventPage>;
   metadata: Maybe<Scalars['JSON']['output']>;
   metadataUri: Maybe<Scalars['String']['output']>;
   mintNftEvents: Maybe<MintNftEventPage>;
@@ -3757,6 +4300,7 @@ export type Project = {
   redeemVolume: Scalars['BigInt']['output'];
   redeemVolumeUsd: Scalars['BigInt']['output'];
   repayLoanEvents: Maybe<RepayLoanEventPage>;
+  reservedTokenSupply: Scalars['BigInt']['output'];
   sendPayoutToSplitEvents: Maybe<SendPayoutToSplitEventPage>;
   sendPayoutsEvents: Maybe<SendPayoutsEventPage>;
   sendReservedTokensToSplitEvents: Maybe<SendReservedTokensToSplitEventPage>;
@@ -3768,6 +4312,7 @@ export type Project = {
   telegram: Maybe<Scalars['String']['output']>;
   token: Maybe<Scalars['String']['output']>;
   tokenSupply: Scalars['BigInt']['output'];
+  tokenSymbol: Maybe<Scalars['String']['output']>;
   tokens: Maybe<Array<Scalars['String']['output']>>;
   trendingPaymentsCount: Scalars['Int']['output'];
   trendingScore: Scalars['BigInt']['output'];
@@ -3785,6 +4330,7 @@ export type ProjectActivityEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ActivityEventFilter>;
@@ -3795,6 +4341,7 @@ export type ProjectAddToBalanceEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<AddToBalanceEventFilter>;
@@ -3805,6 +4352,7 @@ export type ProjectAutoIssueEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<AutoIssueEventFilter>;
@@ -3815,6 +4363,7 @@ export type ProjectBorrowLoanEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<BorrowLoanEventFilter>;
@@ -3825,6 +4374,7 @@ export type ProjectBurnEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<BurnEventFilter>;
@@ -3835,6 +4385,7 @@ export type ProjectCashOutTokensEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<CashOutTokensEventFilter>;
@@ -3845,6 +4396,7 @@ export type ProjectDeployErc20EventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<DeployErc20EventFilter>;
@@ -3855,9 +4407,32 @@ export type ProjectLiquidateLoanEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<LiquidateLoanEventFilter>;
+};
+
+
+export type ProjectManualBurnEventsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<ManualBurnEventFilter>;
+};
+
+
+export type ProjectManualMintTokensEventsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<ManualMintTokensEventFilter>;
 };
 
 
@@ -3865,6 +4440,7 @@ export type ProjectMintNftEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<MintNftEventFilter>;
@@ -3875,6 +4451,7 @@ export type ProjectMintTokensEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<MintTokensEventFilter>;
@@ -3885,6 +4462,7 @@ export type ProjectNftHooksArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<NftHookFilter>;
@@ -3895,6 +4473,7 @@ export type ProjectNftsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<NftFilter>;
@@ -3905,6 +4484,7 @@ export type ProjectParticipantsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ParticipantFilter>;
@@ -3915,6 +4495,7 @@ export type ProjectPayEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<PayEventFilter>;
@@ -3925,6 +4506,7 @@ export type ProjectPermissionHoldersArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<PermissionHolderFilter>;
@@ -3935,6 +4517,7 @@ export type ProjectProjectCreateEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ProjectCreateEventFilter>;
@@ -3945,6 +4528,7 @@ export type ProjectProjectMomentsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ProjectMomentFilter>;
@@ -3955,6 +4539,7 @@ export type ProjectReallocateLoanEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ReallocateLoanEventFilter>;
@@ -3965,6 +4550,7 @@ export type ProjectRepayLoanEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<RepayLoanEventFilter>;
@@ -3975,6 +4561,7 @@ export type ProjectSendPayoutToSplitEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<SendPayoutToSplitEventFilter>;
@@ -3985,6 +4572,7 @@ export type ProjectSendPayoutsEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<SendPayoutsEventFilter>;
@@ -3995,6 +4583,7 @@ export type ProjectSendReservedTokensToSplitEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<SendReservedTokensToSplitEventFilter>;
@@ -4005,6 +4594,7 @@ export type ProjectSendReservedTokensToSplitsEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<SendReservedTokensToSplitsEventFilter>;
@@ -4015,6 +4605,7 @@ export type ProjectStoreAutoIssuanceAmountEventArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<StoreAutoIssuanceAmountEventFilter>;
@@ -4025,6 +4616,7 @@ export type ProjectUseAllowanceEventsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<UseAllowanceEventFilter>;
@@ -4260,6 +4852,16 @@ export type ProjectFilter = {
   domain_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   domain_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   domain_starts_with?: InputMaybe<Scalars['String']['input']>;
+  farcaster?: InputMaybe<Scalars['String']['input']>;
+  farcaster_contains?: InputMaybe<Scalars['String']['input']>;
+  farcaster_ends_with?: InputMaybe<Scalars['String']['input']>;
+  farcaster_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  farcaster_not?: InputMaybe<Scalars['String']['input']>;
+  farcaster_not_contains?: InputMaybe<Scalars['String']['input']>;
+  farcaster_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  farcaster_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  farcaster_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  farcaster_starts_with?: InputMaybe<Scalars['String']['input']>;
   handle?: InputMaybe<Scalars['String']['input']>;
   handle_contains?: InputMaybe<Scalars['String']['input']>;
   handle_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -4402,6 +5004,14 @@ export type ProjectFilter = {
   redeemVolume_lte?: InputMaybe<Scalars['BigInt']['input']>;
   redeemVolume_not?: InputMaybe<Scalars['BigInt']['input']>;
   redeemVolume_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  reservedTokenSupply?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  reservedTokenSupply_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_not?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   suckerGroupId?: InputMaybe<Scalars['String']['input']>;
   suckerGroupId_contains?: InputMaybe<Scalars['String']['input']>;
   suckerGroupId_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -4435,6 +5045,16 @@ export type ProjectFilter = {
   tokenSupply_lte?: InputMaybe<Scalars['BigInt']['input']>;
   tokenSupply_not?: InputMaybe<Scalars['BigInt']['input']>;
   tokenSupply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  tokenSymbol?: InputMaybe<Scalars['String']['input']>;
+  tokenSymbol_contains?: InputMaybe<Scalars['String']['input']>;
+  tokenSymbol_ends_with?: InputMaybe<Scalars['String']['input']>;
+  tokenSymbol_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  tokenSymbol_not?: InputMaybe<Scalars['String']['input']>;
+  tokenSymbol_not_contains?: InputMaybe<Scalars['String']['input']>;
+  tokenSymbol_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  tokenSymbol_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  tokenSymbol_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  tokenSymbol_starts_with?: InputMaybe<Scalars['String']['input']>;
   token_contains?: InputMaybe<Scalars['String']['input']>;
   token_ends_with?: InputMaybe<Scalars['String']['input']>;
   token_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -5824,6 +6444,8 @@ export type SuckerGroup = {
   redeemCount: Scalars['Int']['output'];
   redeemVolume: Scalars['BigInt']['output'];
   redeemVolumeUsd: Scalars['BigInt']['output'];
+  reservedTokenSupply: Scalars['BigInt']['output'];
+  suckerTransactions: Maybe<SuckerTransactionPage>;
   tokenSupply: Scalars['BigInt']['output'];
   trendingPaymentsCount: Scalars['Int']['output'];
   trendingScore: Scalars['BigInt']['output'];
@@ -5838,9 +6460,21 @@ export type SuckerGroupProjectsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ProjectFilter>;
+};
+
+
+export type SuckerGroupSuckerTransactionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  orderDirection?: InputMaybe<Scalars['String']['input']>;
+  where?: InputMaybe<SuckerTransactionFilter>;
 };
 
 export type SuckerGroupFilter = {
@@ -5928,6 +6562,14 @@ export type SuckerGroupFilter = {
   redeemVolume_lte?: InputMaybe<Scalars['BigInt']['input']>;
   redeemVolume_not?: InputMaybe<Scalars['BigInt']['input']>;
   redeemVolume_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  reservedTokenSupply?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  reservedTokenSupply_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_not?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   tokenSupply?: InputMaybe<Scalars['BigInt']['input']>;
   tokenSupply_gt?: InputMaybe<Scalars['BigInt']['input']>;
   tokenSupply_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -5988,13 +6630,13 @@ export type SuckerGroupFilter = {
 
 export type SuckerGroupMoment = {
   balance: Scalars['BigInt']['output'];
-  block: Scalars['Int']['output'];
   contributorsCount: Scalars['Int']['output'];
   nftsMintedCount: Scalars['Int']['output'];
   paymentsCount: Scalars['Int']['output'];
   redeemCount: Scalars['Int']['output'];
   redeemVolume: Scalars['BigInt']['output'];
   redeemVolumeUsd: Scalars['BigInt']['output'];
+  reservedTokenSupply: Scalars['BigInt']['output'];
   suckerGroupId: Scalars['String']['output'];
   timestamp: Scalars['Int']['output'];
   tokenSupply: Scalars['BigInt']['output'];
@@ -6017,14 +6659,6 @@ export type SuckerGroupMomentFilter = {
   balance_lte?: InputMaybe<Scalars['BigInt']['input']>;
   balance_not?: InputMaybe<Scalars['BigInt']['input']>;
   balance_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
-  block?: InputMaybe<Scalars['Int']['input']>;
-  block_gt?: InputMaybe<Scalars['Int']['input']>;
-  block_gte?: InputMaybe<Scalars['Int']['input']>;
-  block_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  block_lt?: InputMaybe<Scalars['Int']['input']>;
-  block_lte?: InputMaybe<Scalars['Int']['input']>;
-  block_not?: InputMaybe<Scalars['Int']['input']>;
-  block_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   contributorsCount?: InputMaybe<Scalars['Int']['input']>;
   contributorsCount_gt?: InputMaybe<Scalars['Int']['input']>;
   contributorsCount_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -6073,6 +6707,14 @@ export type SuckerGroupMomentFilter = {
   redeemVolume_lte?: InputMaybe<Scalars['BigInt']['input']>;
   redeemVolume_not?: InputMaybe<Scalars['BigInt']['input']>;
   redeemVolume_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  reservedTokenSupply?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  reservedTokenSupply_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_not?: InputMaybe<Scalars['BigInt']['input']>;
+  reservedTokenSupply_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
   suckerGroupId?: InputMaybe<Scalars['String']['input']>;
   suckerGroupId_contains?: InputMaybe<Scalars['String']['input']>;
   suckerGroupId_ends_with?: InputMaybe<Scalars['String']['input']>;
@@ -6160,6 +6802,170 @@ export type SuckerGroupPage = {
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
+
+export type SuckerTransaction = {
+  beneficiary: Scalars['String']['output'];
+  chainId: Scalars['Int']['output'];
+  createdAt: Scalars['Int']['output'];
+  index: Scalars['Int']['output'];
+  peer: Scalars['String']['output'];
+  peerChainId: Scalars['Int']['output'];
+  projectId: Scalars['Int']['output'];
+  projectTokenCount: Scalars['BigInt']['output'];
+  root: Scalars['String']['output'];
+  status: Maybe<SuckerTransactionStatus>;
+  sucker: Scalars['String']['output'];
+  suckerGroup: Maybe<SuckerGroup>;
+  suckerGroupId: Scalars['String']['output'];
+  terminalTokenAmount: Scalars['BigInt']['output'];
+  token: Scalars['String']['output'];
+  version: Scalars['Int']['output'];
+};
+
+export type SuckerTransactionFilter = {
+  AND?: InputMaybe<Array<InputMaybe<SuckerTransactionFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<SuckerTransactionFilter>>>;
+  beneficiary?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_contains?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_ends_with?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  beneficiary_not?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_not_contains?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  beneficiary_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  beneficiary_starts_with?: InputMaybe<Scalars['String']['input']>;
+  chainId?: InputMaybe<Scalars['Int']['input']>;
+  chainId_gt?: InputMaybe<Scalars['Int']['input']>;
+  chainId_gte?: InputMaybe<Scalars['Int']['input']>;
+  chainId_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  chainId_lt?: InputMaybe<Scalars['Int']['input']>;
+  chainId_lte?: InputMaybe<Scalars['Int']['input']>;
+  chainId_not?: InputMaybe<Scalars['Int']['input']>;
+  chainId_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  createdAt?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  createdAt_lt?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_not?: InputMaybe<Scalars['Int']['input']>;
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  index?: InputMaybe<Scalars['Int']['input']>;
+  index_gt?: InputMaybe<Scalars['Int']['input']>;
+  index_gte?: InputMaybe<Scalars['Int']['input']>;
+  index_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  index_lt?: InputMaybe<Scalars['Int']['input']>;
+  index_lte?: InputMaybe<Scalars['Int']['input']>;
+  index_not?: InputMaybe<Scalars['Int']['input']>;
+  index_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  peer?: InputMaybe<Scalars['String']['input']>;
+  peerChainId?: InputMaybe<Scalars['Int']['input']>;
+  peerChainId_gt?: InputMaybe<Scalars['Int']['input']>;
+  peerChainId_gte?: InputMaybe<Scalars['Int']['input']>;
+  peerChainId_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  peerChainId_lt?: InputMaybe<Scalars['Int']['input']>;
+  peerChainId_lte?: InputMaybe<Scalars['Int']['input']>;
+  peerChainId_not?: InputMaybe<Scalars['Int']['input']>;
+  peerChainId_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  peer_contains?: InputMaybe<Scalars['String']['input']>;
+  peer_ends_with?: InputMaybe<Scalars['String']['input']>;
+  peer_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  peer_not?: InputMaybe<Scalars['String']['input']>;
+  peer_not_contains?: InputMaybe<Scalars['String']['input']>;
+  peer_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  peer_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  peer_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  peer_starts_with?: InputMaybe<Scalars['String']['input']>;
+  projectId?: InputMaybe<Scalars['Int']['input']>;
+  projectId_gt?: InputMaybe<Scalars['Int']['input']>;
+  projectId_gte?: InputMaybe<Scalars['Int']['input']>;
+  projectId_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  projectId_lt?: InputMaybe<Scalars['Int']['input']>;
+  projectId_lte?: InputMaybe<Scalars['Int']['input']>;
+  projectId_not?: InputMaybe<Scalars['Int']['input']>;
+  projectId_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  projectTokenCount?: InputMaybe<Scalars['BigInt']['input']>;
+  projectTokenCount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  projectTokenCount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  projectTokenCount_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  projectTokenCount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  projectTokenCount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  projectTokenCount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  projectTokenCount_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  root?: InputMaybe<Scalars['String']['input']>;
+  root_contains?: InputMaybe<Scalars['String']['input']>;
+  root_ends_with?: InputMaybe<Scalars['String']['input']>;
+  root_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  root_not?: InputMaybe<Scalars['String']['input']>;
+  root_not_contains?: InputMaybe<Scalars['String']['input']>;
+  root_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  root_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  root_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  root_starts_with?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<SuckerTransactionStatus>;
+  status_in?: InputMaybe<Array<InputMaybe<SuckerTransactionStatus>>>;
+  status_not?: InputMaybe<SuckerTransactionStatus>;
+  status_not_in?: InputMaybe<Array<InputMaybe<SuckerTransactionStatus>>>;
+  sucker?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_contains?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  suckerGroupId_not?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  suckerGroupId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  suckerGroupId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  sucker_contains?: InputMaybe<Scalars['String']['input']>;
+  sucker_ends_with?: InputMaybe<Scalars['String']['input']>;
+  sucker_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  sucker_not?: InputMaybe<Scalars['String']['input']>;
+  sucker_not_contains?: InputMaybe<Scalars['String']['input']>;
+  sucker_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  sucker_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  sucker_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  sucker_starts_with?: InputMaybe<Scalars['String']['input']>;
+  terminalTokenAmount?: InputMaybe<Scalars['BigInt']['input']>;
+  terminalTokenAmount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  terminalTokenAmount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  terminalTokenAmount_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  terminalTokenAmount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  terminalTokenAmount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  terminalTokenAmount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  terminalTokenAmount_not_in?: InputMaybe<Array<InputMaybe<Scalars['BigInt']['input']>>>;
+  token?: InputMaybe<Scalars['String']['input']>;
+  token_contains?: InputMaybe<Scalars['String']['input']>;
+  token_ends_with?: InputMaybe<Scalars['String']['input']>;
+  token_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  token_not?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains?: InputMaybe<Scalars['String']['input']>;
+  token_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  token_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  token_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  token_starts_with?: InputMaybe<Scalars['String']['input']>;
+  version?: InputMaybe<Scalars['Int']['input']>;
+  version_gt?: InputMaybe<Scalars['Int']['input']>;
+  version_gte?: InputMaybe<Scalars['Int']['input']>;
+  version_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  version_lt?: InputMaybe<Scalars['Int']['input']>;
+  version_lte?: InputMaybe<Scalars['Int']['input']>;
+  version_not?: InputMaybe<Scalars['Int']['input']>;
+  version_not_in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+};
+
+export type SuckerTransactionPage = {
+  items: Array<SuckerTransaction>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export enum SuckerTransactionStatus {
+  claimable = 'claimable',
+  claimed = 'claimed',
+  pending = 'pending'
+}
 
 export type UseAllowanceEvent = {
   amount: Scalars['BigInt']['output'];
@@ -6368,6 +7174,7 @@ export type WalletNftsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<NftFilter>;
@@ -6378,6 +7185,7 @@ export type WalletParticipantsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
   orderDirection?: InputMaybe<Scalars['String']['input']>;
   where?: InputMaybe<ParticipantFilter>;
@@ -6490,14 +7298,6 @@ export type NftTiersQueryVariables = Exact<{
 
 export type NftTiersQuery = { nftTiers: { items: Array<{ tierId: number, price: bigint, encodedIpfsUri: string | null, resolvedUri: string | null, svg: string | null, initialSupply: number, remainingSupply: number, reserveFrequency: number | null, category: number, chainId: number, metadata: any | null }> } };
 
-export type ProjectQueryVariables = Exact<{
-  chainId: Scalars['Float']['input'];
-  projectId: Scalars['Float']['input'];
-}>;
-
-
-export type ProjectQuery = { project: { suckerGroup: { id: string } | null } | null };
-
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -6578,6 +7378,7 @@ export type ResolversTypes = {
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  ViewPageInfo: ResolverTypeWrapper<ViewPageInfo>;
   _sucker: ResolverTypeWrapper<_Sucker>;
   _suckerFilter: _SuckerFilter;
   _suckerPage: ResolverTypeWrapper<_SuckerPage>;
@@ -6597,6 +7398,9 @@ export type ResolversTypes = {
   burnEvent: ResolverTypeWrapper<BurnEvent>;
   burnEventFilter: BurnEventFilter;
   burnEventPage: ResolverTypeWrapper<BurnEventPage>;
+  cashOutTaxSnapshot: ResolverTypeWrapper<CashOutTaxSnapshot>;
+  cashOutTaxSnapshotFilter: CashOutTaxSnapshotFilter;
+  cashOutTaxSnapshotPage: ResolverTypeWrapper<CashOutTaxSnapshotPage>;
   cashOutTokensEvent: ResolverTypeWrapper<CashOutTokensEvent>;
   cashOutTokensEventFilter: CashOutTokensEventFilter;
   cashOutTokensEventPage: ResolverTypeWrapper<CashOutTokensEventPage>;
@@ -6612,6 +7416,12 @@ export type ResolversTypes = {
   loan: ResolverTypeWrapper<Loan>;
   loanFilter: LoanFilter;
   loanPage: ResolverTypeWrapper<LoanPage>;
+  manualBurnEvent: ResolverTypeWrapper<ManualBurnEvent>;
+  manualBurnEventFilter: ManualBurnEventFilter;
+  manualBurnEventPage: ResolverTypeWrapper<ManualBurnEventPage>;
+  manualMintTokensEvent: ResolverTypeWrapper<ManualMintTokensEvent>;
+  manualMintTokensEventFilter: ManualMintTokensEventFilter;
+  manualMintTokensEventPage: ResolverTypeWrapper<ManualMintTokensEventPage>;
   mintNftEvent: ResolverTypeWrapper<MintNftEvent>;
   mintNftEventFilter: MintNftEventFilter;
   mintNftEventPage: ResolverTypeWrapper<MintNftEventPage>;
@@ -6675,6 +7485,10 @@ export type ResolversTypes = {
   suckerGroupMomentFilter: SuckerGroupMomentFilter;
   suckerGroupMomentPage: ResolverTypeWrapper<SuckerGroupMomentPage>;
   suckerGroupPage: ResolverTypeWrapper<SuckerGroupPage>;
+  suckerTransaction: ResolverTypeWrapper<SuckerTransaction>;
+  suckerTransactionFilter: SuckerTransactionFilter;
+  suckerTransactionPage: ResolverTypeWrapper<SuckerTransactionPage>;
+  suckerTransactionStatus: SuckerTransactionStatus;
   useAllowanceEvent: ResolverTypeWrapper<UseAllowanceEvent>;
   useAllowanceEventFilter: UseAllowanceEventFilter;
   useAllowanceEventPage: ResolverTypeWrapper<UseAllowanceEventPage>;
@@ -6694,6 +7508,7 @@ export type ResolversParentTypes = {
   PageInfo: PageInfo;
   Query: {};
   String: Scalars['String']['output'];
+  ViewPageInfo: ViewPageInfo;
   _sucker: _Sucker;
   _suckerFilter: _SuckerFilter;
   _suckerPage: _SuckerPage;
@@ -6712,6 +7527,9 @@ export type ResolversParentTypes = {
   burnEvent: BurnEvent;
   burnEventFilter: BurnEventFilter;
   burnEventPage: BurnEventPage;
+  cashOutTaxSnapshot: CashOutTaxSnapshot;
+  cashOutTaxSnapshotFilter: CashOutTaxSnapshotFilter;
+  cashOutTaxSnapshotPage: CashOutTaxSnapshotPage;
   cashOutTokensEvent: CashOutTokensEvent;
   cashOutTokensEventFilter: CashOutTokensEventFilter;
   cashOutTokensEventPage: CashOutTokensEventPage;
@@ -6727,6 +7545,12 @@ export type ResolversParentTypes = {
   loan: Loan;
   loanFilter: LoanFilter;
   loanPage: LoanPage;
+  manualBurnEvent: ManualBurnEvent;
+  manualBurnEventFilter: ManualBurnEventFilter;
+  manualBurnEventPage: ManualBurnEventPage;
+  manualMintTokensEvent: ManualMintTokensEvent;
+  manualMintTokensEventFilter: ManualMintTokensEventFilter;
+  manualMintTokensEventPage: ManualMintTokensEventPage;
   mintNftEvent: MintNftEvent;
   mintNftEventFilter: MintNftEventFilter;
   mintNftEventPage: MintNftEventPage;
@@ -6790,6 +7614,9 @@ export type ResolversParentTypes = {
   suckerGroupMomentFilter: SuckerGroupMomentFilter;
   suckerGroupMomentPage: SuckerGroupMomentPage;
   suckerGroupPage: SuckerGroupPage;
+  suckerTransaction: SuckerTransaction;
+  suckerTransactionFilter: SuckerTransactionFilter;
+  suckerTransactionPage: SuckerTransactionPage;
   useAllowanceEvent: UseAllowanceEvent;
   useAllowanceEventFilter: UseAllowanceEventFilter;
   useAllowanceEventPage: UseAllowanceEventPage;
@@ -6797,10 +7624,6 @@ export type ResolversParentTypes = {
   walletFilter: WalletFilter;
   walletPage: WalletPage;
 };
-
-export type OneOfDirectiveArgs = { };
-
-export type OneOfDirectiveResolver<Result, Parent, ContextType = any, Args = OneOfDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
   name: 'BigInt';
@@ -6837,6 +7660,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   borrowLoanEvents?: Resolver<ResolversTypes['borrowLoanEventPage'], ParentType, ContextType, Partial<QueryBorrowLoanEventsArgs>>;
   burnEvent?: Resolver<Maybe<ResolversTypes['burnEvent']>, ParentType, ContextType, RequireFields<QueryBurnEventArgs, 'id'>>;
   burnEvents?: Resolver<ResolversTypes['burnEventPage'], ParentType, ContextType, Partial<QueryBurnEventsArgs>>;
+  cashOutTaxSnapshot?: Resolver<Maybe<ResolversTypes['cashOutTaxSnapshot']>, ParentType, ContextType, RequireFields<QueryCashOutTaxSnapshotArgs, 'chainId' | 'projectId' | 'rulesetId' | 'version'>>;
+  cashOutTaxSnapshots?: Resolver<ResolversTypes['cashOutTaxSnapshotPage'], ParentType, ContextType, Partial<QueryCashOutTaxSnapshotsArgs>>;
   cashOutTokensEvent?: Resolver<Maybe<ResolversTypes['cashOutTokensEvent']>, ParentType, ContextType, RequireFields<QueryCashOutTokensEventArgs, 'id'>>;
   cashOutTokensEvents?: Resolver<ResolversTypes['cashOutTokensEventPage'], ParentType, ContextType, Partial<QueryCashOutTokensEventsArgs>>;
   decorateBannyEvent?: Resolver<Maybe<ResolversTypes['decorateBannyEvent']>, ParentType, ContextType, RequireFields<QueryDecorateBannyEventArgs, 'id'>>;
@@ -6847,6 +7672,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   liquidateLoanEvents?: Resolver<ResolversTypes['liquidateLoanEventPage'], ParentType, ContextType, Partial<QueryLiquidateLoanEventsArgs>>;
   loan?: Resolver<Maybe<ResolversTypes['loan']>, ParentType, ContextType, RequireFields<QueryLoanArgs, 'chainId' | 'id' | 'version'>>;
   loans?: Resolver<ResolversTypes['loanPage'], ParentType, ContextType, Partial<QueryLoansArgs>>;
+  manualBurnEvent?: Resolver<Maybe<ResolversTypes['manualBurnEvent']>, ParentType, ContextType, RequireFields<QueryManualBurnEventArgs, 'id'>>;
+  manualBurnEvents?: Resolver<ResolversTypes['manualBurnEventPage'], ParentType, ContextType, Partial<QueryManualBurnEventsArgs>>;
+  manualMintTokensEvent?: Resolver<Maybe<ResolversTypes['manualMintTokensEvent']>, ParentType, ContextType, RequireFields<QueryManualMintTokensEventArgs, 'id'>>;
+  manualMintTokensEvents?: Resolver<ResolversTypes['manualMintTokensEventPage'], ParentType, ContextType, Partial<QueryManualMintTokensEventsArgs>>;
   mintNftEvent?: Resolver<Maybe<ResolversTypes['mintNftEvent']>, ParentType, ContextType, RequireFields<QueryMintNftEventArgs, 'id'>>;
   mintNftEvents?: Resolver<ResolversTypes['mintNftEventPage'], ParentType, ContextType, Partial<QueryMintNftEventsArgs>>;
   mintTokensEvent?: Resolver<Maybe<ResolversTypes['mintTokensEvent']>, ParentType, ContextType, RequireFields<QueryMintTokensEventArgs, 'id'>>;
@@ -6858,7 +7687,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   nftTiers?: Resolver<ResolversTypes['nftTierPage'], ParentType, ContextType, Partial<QueryNftTiersArgs>>;
   nfts?: Resolver<ResolversTypes['nftPage'], ParentType, ContextType, Partial<QueryNftsArgs>>;
   participant?: Resolver<Maybe<ResolversTypes['participant']>, ParentType, ContextType, RequireFields<QueryParticipantArgs, 'address' | 'chainId' | 'projectId' | 'version'>>;
-  participantSnapshot?: Resolver<Maybe<ResolversTypes['participantSnapshot']>, ParentType, ContextType, RequireFields<QueryParticipantSnapshotArgs, 'address' | 'chainId' | 'projectId' | 'version'>>;
+  participantSnapshot?: Resolver<Maybe<ResolversTypes['participantSnapshot']>, ParentType, ContextType, RequireFields<QueryParticipantSnapshotArgs, 'address' | 'block' | 'chainId' | 'projectId' | 'version'>>;
   participantSnapshots?: Resolver<ResolversTypes['participantSnapshotPage'], ParentType, ContextType, Partial<QueryParticipantSnapshotsArgs>>;
   participants?: Resolver<ResolversTypes['participantPage'], ParentType, ContextType, Partial<QueryParticipantsArgs>>;
   payEvent?: Resolver<Maybe<ResolversTypes['payEvent']>, ParentType, ContextType, RequireFields<QueryPayEventArgs, 'id'>>;
@@ -6886,13 +7715,21 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   storeAutoIssuanceAmountEvent?: Resolver<Maybe<ResolversTypes['storeAutoIssuanceAmountEvent']>, ParentType, ContextType, RequireFields<QueryStoreAutoIssuanceAmountEventArgs, 'id'>>;
   storeAutoIssuanceAmountEvents?: Resolver<ResolversTypes['storeAutoIssuanceAmountEventPage'], ParentType, ContextType, Partial<QueryStoreAutoIssuanceAmountEventsArgs>>;
   suckerGroup?: Resolver<Maybe<ResolversTypes['suckerGroup']>, ParentType, ContextType, RequireFields<QuerySuckerGroupArgs, 'id'>>;
-  suckerGroupMoment?: Resolver<Maybe<ResolversTypes['suckerGroupMoment']>, ParentType, ContextType, RequireFields<QuerySuckerGroupMomentArgs, 'block' | 'suckerGroupId' | 'version'>>;
+  suckerGroupMoment?: Resolver<Maybe<ResolversTypes['suckerGroupMoment']>, ParentType, ContextType, RequireFields<QuerySuckerGroupMomentArgs, 'suckerGroupId' | 'timestamp' | 'version'>>;
   suckerGroupMoments?: Resolver<ResolversTypes['suckerGroupMomentPage'], ParentType, ContextType, Partial<QuerySuckerGroupMomentsArgs>>;
   suckerGroups?: Resolver<ResolversTypes['suckerGroupPage'], ParentType, ContextType, Partial<QuerySuckerGroupsArgs>>;
+  suckerTransaction?: Resolver<Maybe<ResolversTypes['suckerTransaction']>, ParentType, ContextType, RequireFields<QuerySuckerTransactionArgs, 'chainId' | 'index' | 'sucker' | 'token'>>;
+  suckerTransactions?: Resolver<ResolversTypes['suckerTransactionPage'], ParentType, ContextType, Partial<QuerySuckerTransactionsArgs>>;
   useAllowanceEvent?: Resolver<Maybe<ResolversTypes['useAllowanceEvent']>, ParentType, ContextType, RequireFields<QueryUseAllowanceEventArgs, 'id'>>;
   useAllowanceEvents?: Resolver<ResolversTypes['useAllowanceEventPage'], ParentType, ContextType, Partial<QueryUseAllowanceEventsArgs>>;
   wallet?: Resolver<Maybe<ResolversTypes['wallet']>, ParentType, ContextType, RequireFields<QueryWalletArgs, 'address'>>;
   wallets?: Resolver<ResolversTypes['walletPage'], ParentType, ContextType, Partial<QueryWalletsArgs>>;
+};
+
+export type ViewPageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['ViewPageInfo'] = ResolversParentTypes['ViewPageInfo']> = {
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type _SuckerResolvers<ContextType = any, ParentType extends ResolversParentTypes['_sucker'] = ResolversParentTypes['_sucker']> = {
@@ -6923,6 +7760,8 @@ export type ActivityEventResolvers<ContextType = any, ParentType extends Resolve
   from?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   liquidateLoanEvent?: Resolver<Maybe<ResolversTypes['liquidateLoanEvent']>, ParentType, ContextType>;
+  manualBurnEvent?: Resolver<Maybe<ResolversTypes['manualBurnEvent']>, ParentType, ContextType>;
+  manualMintTokensEvent?: Resolver<Maybe<ResolversTypes['manualMintTokensEvent']>, ParentType, ContextType>;
   mintNftEvent?: Resolver<Maybe<ResolversTypes['mintNftEvent']>, ParentType, ContextType>;
   mintTokensEvent?: Resolver<Maybe<ResolversTypes['mintTokensEvent']>, ParentType, ContextType>;
   payEvent?: Resolver<Maybe<ResolversTypes['payEvent']>, ParentType, ContextType>;
@@ -7055,6 +7894,25 @@ export type BurnEventPageResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CashOutTaxSnapshotResolvers<ContextType = any, ParentType extends ResolversParentTypes['cashOutTaxSnapshot'] = ResolversParentTypes['cashOutTaxSnapshot']> = {
+  cashOutTax?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  chainId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  duration?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rulesetId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  start?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  suckerGroupId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CashOutTaxSnapshotPageResolvers<ContextType = any, ParentType extends ResolversParentTypes['cashOutTaxSnapshotPage'] = ResolversParentTypes['cashOutTaxSnapshotPage']> = {
+  items?: Resolver<Array<ResolversTypes['cashOutTaxSnapshot']>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CashOutTokensEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['cashOutTokensEvent'] = ResolversParentTypes['cashOutTokensEvent']> = {
   beneficiary?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   caller?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -7168,6 +8026,7 @@ export type LoanResolvers<ContextType = any, ParentType extends ResolversParentT
   createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  participant?: Resolver<Maybe<ResolversTypes['participant']>, ParentType, ContextType>;
   prepaidDuration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   prepaidFeePercent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['project']>, ParentType, ContextType>;
@@ -7177,11 +8036,62 @@ export type LoanResolvers<ContextType = any, ParentType extends ResolversParentT
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tokenUri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  wallet?: Resolver<Maybe<ResolversTypes['wallet']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type LoanPageResolvers<ContextType = any, ParentType extends ResolversParentTypes['loanPage'] = ResolversParentTypes['loanPage']> = {
   items?: Resolver<Array<ResolversTypes['loan']>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ManualBurnEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['manualBurnEvent'] = ResolversParentTypes['manualBurnEvent']> = {
+  amount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  chainId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  creditAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  erc20Amount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  from?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  project?: Resolver<Maybe<ResolversTypes['project']>, ParentType, ContextType>;
+  projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  suckerGroupId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  txHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ManualBurnEventPageResolvers<ContextType = any, ParentType extends ResolversParentTypes['manualBurnEventPage'] = ResolversParentTypes['manualBurnEventPage']> = {
+  items?: Resolver<Array<ResolversTypes['manualBurnEvent']>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ManualMintTokensEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['manualMintTokensEvent'] = ResolversParentTypes['manualMintTokensEvent']> = {
+  beneficiary?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  beneficiaryTokenCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  caller?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  chainId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  from?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  logIndex?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  memo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  project?: Resolver<Maybe<ResolversTypes['project']>, ParentType, ContextType>;
+  projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  reservedPercent?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  suckerGroupId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tokenCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  txHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ManualMintTokensEventPageResolvers<ContextType = any, ParentType extends ResolversParentTypes['manualMintTokensEventPage'] = ResolversParentTypes['manualMintTokensEventPage']> = {
+  items?: Resolver<Array<ResolversTypes['manualMintTokensEvent']>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -7252,7 +8162,8 @@ export type NftResolvers<ContextType = any, ParentType extends ResolversParentTy
   hook?: Resolver<Maybe<ResolversTypes['nftHook']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   mintTx?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owner?: Resolver<Maybe<ResolversTypes['participant']>, ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  participant?: Resolver<Maybe<ResolversTypes['participant']>, ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['project']>, ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tier?: Resolver<Maybe<ResolversTypes['nftTier']>, ParentType, ContextType>;
@@ -7334,6 +8245,7 @@ export type ParticipantResolvers<ContextType = any, ParentType extends Resolvers
   erc20Balance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   isRevnet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   lastPaidTimestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  loans?: Resolver<Maybe<ResolversTypes['loanPage']>, ParentType, ContextType, Partial<ParticipantLoansArgs>>;
   nfts?: Resolver<Maybe<ResolversTypes['nftPage']>, ParentType, ContextType, Partial<ParticipantNftsArgs>>;
   paymentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['project']>, ParentType, ContextType>;
@@ -7409,6 +8321,7 @@ export type PayEventPageResolvers<ContextType = any, ParentType extends Resolver
 export type PermissionHolderResolvers<ContextType = any, ParentType extends ResolversParentTypes['permissionHolder'] = ResolversParentTypes['permissionHolder']> = {
   account?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   chainId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  isRevnetOperator?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   operator?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   permissions?: Resolver<Maybe<Array<ResolversTypes['Int']>>, ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['project']>, ParentType, ContextType>;
@@ -7445,12 +8358,15 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   discord?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   domain?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  farcaster?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   handle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   infoUri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isRevnet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   liquidateLoanEvents?: Resolver<Maybe<ResolversTypes['liquidateLoanEventPage']>, ParentType, ContextType, Partial<ProjectLiquidateLoanEventsArgs>>;
   logoUri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  manualBurnEvents?: Resolver<Maybe<ResolversTypes['manualBurnEventPage']>, ParentType, ContextType, Partial<ProjectManualBurnEventsArgs>>;
+  manualMintTokensEvents?: Resolver<Maybe<ResolversTypes['manualMintTokensEventPage']>, ParentType, ContextType, Partial<ProjectManualMintTokensEventsArgs>>;
   metadata?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   metadataUri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   mintNftEvents?: Resolver<Maybe<ResolversTypes['mintNftEventPage']>, ParentType, ContextType, Partial<ProjectMintNftEventsArgs>>;
@@ -7474,6 +8390,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   redeemVolume?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   redeemVolumeUsd?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   repayLoanEvents?: Resolver<Maybe<ResolversTypes['repayLoanEventPage']>, ParentType, ContextType, Partial<ProjectRepayLoanEventsArgs>>;
+  reservedTokenSupply?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   sendPayoutToSplitEvents?: Resolver<Maybe<ResolversTypes['sendPayoutToSplitEventPage']>, ParentType, ContextType, Partial<ProjectSendPayoutToSplitEventsArgs>>;
   sendPayoutsEvents?: Resolver<Maybe<ResolversTypes['sendPayoutsEventPage']>, ParentType, ContextType, Partial<ProjectSendPayoutsEventsArgs>>;
   sendReservedTokensToSplitEvents?: Resolver<Maybe<ResolversTypes['sendReservedTokensToSplitEventPage']>, ParentType, ContextType, Partial<ProjectSendReservedTokensToSplitEventsArgs>>;
@@ -7485,6 +8402,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   telegram?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tokenSupply?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  tokenSymbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tokens?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   trendingPaymentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   trendingScore?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -7757,6 +8675,8 @@ export type SuckerGroupResolvers<ContextType = any, ParentType extends Resolvers
   redeemCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   redeemVolume?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   redeemVolumeUsd?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  reservedTokenSupply?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  suckerTransactions?: Resolver<Maybe<ResolversTypes['suckerTransactionPage']>, ParentType, ContextType, Partial<SuckerGroupSuckerTransactionsArgs>>;
   tokenSupply?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   trendingPaymentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   trendingScore?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -7769,13 +8689,13 @@ export type SuckerGroupResolvers<ContextType = any, ParentType extends Resolvers
 
 export type SuckerGroupMomentResolvers<ContextType = any, ParentType extends ResolversParentTypes['suckerGroupMoment'] = ResolversParentTypes['suckerGroupMoment']> = {
   balance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  block?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   contributorsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   nftsMintedCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   paymentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   redeemCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   redeemVolume?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   redeemVolumeUsd?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  reservedTokenSupply?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   suckerGroupId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tokenSupply?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -7797,6 +8717,33 @@ export type SuckerGroupMomentPageResolvers<ContextType = any, ParentType extends
 
 export type SuckerGroupPageResolvers<ContextType = any, ParentType extends ResolversParentTypes['suckerGroupPage'] = ResolversParentTypes['suckerGroupPage']> = {
   items?: Resolver<Array<ResolversTypes['suckerGroup']>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SuckerTransactionResolvers<ContextType = any, ParentType extends ResolversParentTypes['suckerTransaction'] = ResolversParentTypes['suckerTransaction']> = {
+  beneficiary?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  chainId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  index?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  peer?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  peerChainId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  projectId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  projectTokenCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  root?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['suckerTransactionStatus']>, ParentType, ContextType>;
+  sucker?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  suckerGroup?: Resolver<Maybe<ResolversTypes['suckerGroup']>, ParentType, ContextType>;
+  suckerGroupId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  terminalTokenAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SuckerTransactionPageResolvers<ContextType = any, ParentType extends ResolversParentTypes['suckerTransactionPage'] = ResolversParentTypes['suckerTransactionPage']> = {
+  items?: Resolver<Array<ResolversTypes['suckerTransaction']>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -7855,6 +8802,7 @@ export type Resolvers<ContextType = any> = {
   Meta?: MetaResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  ViewPageInfo?: ViewPageInfoResolvers<ContextType>;
   _sucker?: _SuckerResolvers<ContextType>;
   _suckerPage?: _SuckerPageResolvers<ContextType>;
   activityEvent?: ActivityEventResolvers<ContextType>;
@@ -7867,6 +8815,8 @@ export type Resolvers<ContextType = any> = {
   borrowLoanEventPage?: BorrowLoanEventPageResolvers<ContextType>;
   burnEvent?: BurnEventResolvers<ContextType>;
   burnEventPage?: BurnEventPageResolvers<ContextType>;
+  cashOutTaxSnapshot?: CashOutTaxSnapshotResolvers<ContextType>;
+  cashOutTaxSnapshotPage?: CashOutTaxSnapshotPageResolvers<ContextType>;
   cashOutTokensEvent?: CashOutTokensEventResolvers<ContextType>;
   cashOutTokensEventPage?: CashOutTokensEventPageResolvers<ContextType>;
   decorateBannyEvent?: DecorateBannyEventResolvers<ContextType>;
@@ -7877,6 +8827,10 @@ export type Resolvers<ContextType = any> = {
   liquidateLoanEventPage?: LiquidateLoanEventPageResolvers<ContextType>;
   loan?: LoanResolvers<ContextType>;
   loanPage?: LoanPageResolvers<ContextType>;
+  manualBurnEvent?: ManualBurnEventResolvers<ContextType>;
+  manualBurnEventPage?: ManualBurnEventPageResolvers<ContextType>;
+  manualMintTokensEvent?: ManualMintTokensEventResolvers<ContextType>;
+  manualMintTokensEventPage?: ManualMintTokensEventPageResolvers<ContextType>;
   mintNftEvent?: MintNftEventResolvers<ContextType>;
   mintNftEventPage?: MintNftEventPageResolvers<ContextType>;
   mintTokensEvent?: MintTokensEventResolvers<ContextType>;
@@ -7919,15 +8873,14 @@ export type Resolvers<ContextType = any> = {
   suckerGroupMoment?: SuckerGroupMomentResolvers<ContextType>;
   suckerGroupMomentPage?: SuckerGroupMomentPageResolvers<ContextType>;
   suckerGroupPage?: SuckerGroupPageResolvers<ContextType>;
+  suckerTransaction?: SuckerTransactionResolvers<ContextType>;
+  suckerTransactionPage?: SuckerTransactionPageResolvers<ContextType>;
   useAllowanceEvent?: UseAllowanceEventResolvers<ContextType>;
   useAllowanceEventPage?: UseAllowanceEventPageResolvers<ContextType>;
   wallet?: WalletResolvers<ContextType>;
   walletPage?: WalletPageResolvers<ContextType>;
 };
 
-export type DirectiveResolvers<ContextType = any> = {
-  oneOf?: OneOfDirectiveResolver<any, any, ContextType>;
-};
 
 export const TierDataFragmentDoc = gql`
     fragment TierData on nftTier {
@@ -8165,7 +9118,7 @@ export type MintNftEventsSuspenseQueryHookResult = ReturnType<typeof useMintNftE
 export type MintNftEventsQueryResult = Apollo.QueryResult<MintNftEventsQuery, MintNftEventsQueryVariables>;
 export const NftDocument = gql`
     query NFT($tokenId: BigInt!, $chainId: Float!, $hook: String!) {
-  nft(tokenId: $tokenId, chainId: $chainId, hook: $hook, version: 5) {
+  nft(tokenId: $tokenId, chainId: $chainId, hook: $hook, version: 6) {
     chainId
     tokenId
     wallet {
@@ -8331,46 +9284,3 @@ export type NftTiersQueryHookResult = ReturnType<typeof useNftTiersQuery>;
 export type NftTiersLazyQueryHookResult = ReturnType<typeof useNftTiersLazyQuery>;
 export type NftTiersSuspenseQueryHookResult = ReturnType<typeof useNftTiersSuspenseQuery>;
 export type NftTiersQueryResult = Apollo.QueryResult<NftTiersQuery, NftTiersQueryVariables>;
-export const ProjectDocument = gql`
-    query Project($chainId: Float!, $projectId: Float!) {
-  project(chainId: $chainId, projectId: $projectId, version: 5) {
-    suckerGroup {
-      id
-    }
-  }
-}
-    `;
-
-/**
- * __useProjectQuery__
- *
- * To run a query within a React component, call `useProjectQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectQuery({
- *   variables: {
- *      chainId: // value for 'chainId'
- *      projectId: // value for 'projectId'
- *   },
- * });
- */
-export function useProjectQuery(baseOptions: Apollo.QueryHookOptions<ProjectQuery, ProjectQueryVariables> & ({ variables: ProjectQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectQuery, ProjectQueryVariables>(ProjectDocument, options);
-      }
-export function useProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectQuery, ProjectQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectQuery, ProjectQueryVariables>(ProjectDocument, options);
-        }
-export function useProjectSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectQuery, ProjectQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectQuery, ProjectQueryVariables>(ProjectDocument, options);
-        }
-export type ProjectQueryHookResult = ReturnType<typeof useProjectQuery>;
-export type ProjectLazyQueryHookResult = ReturnType<typeof useProjectLazyQuery>;
-export type ProjectSuspenseQueryHookResult = ReturnType<typeof useProjectSuspenseQuery>;
-export type ProjectQueryResult = Apollo.QueryResult<ProjectQuery, ProjectQueryVariables>;

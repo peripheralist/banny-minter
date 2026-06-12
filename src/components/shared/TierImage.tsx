@@ -10,7 +10,7 @@ export default function TierImage({
   tier,
   size,
 }: {
-  tier: Pick<TierOrNft, "category" | "metadata"> | undefined;
+  tier: Pick<TierOrNft, "category" | "metadata" | "svg"> | undefined;
   size: number;
 }) {
   const { _size, style } = useMemo(() => {
@@ -57,15 +57,17 @@ export default function TierImage({
       {tier?.metadata?.productName ? (
         <AssetSvg
           name={tier?.metadata.productName}
+          svgContents={tier?.svg}
           size={_size}
           style={{ position: "absolute", ...style }}
         />
-      ) : (
+      ) : tier?.category !== "body" ? null : (
         <DefaultAsset size={_size} type="mannequin" style={style} />
       )}
 
       {tier?.category === "body" && (
         <>
+          <DefaultAsset size={_size} type="eyes" style={style} />
           <DefaultAsset size={_size} type="mouth" style={style} />
           <DefaultAsset size={_size} type="necklace" style={style} />
         </>

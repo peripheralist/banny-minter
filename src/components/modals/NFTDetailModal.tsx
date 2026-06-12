@@ -55,14 +55,14 @@ function NFTDetail({
 
   const nft = useMemo(
     () => (data?.nft ? parseTierOrNft(data.nft) : undefined),
-    [data?.nft]
+    [data?.nft],
   );
 
   const { width } = useWindowSize();
 
   const imgSize = useMemo(
     () => Math.min(Math.max(width ? width - 96 : 0, 240), 400),
-    [width]
+    [width],
   );
 
   const NftImage = useCallback(() => {

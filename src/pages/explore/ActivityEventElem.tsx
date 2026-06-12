@@ -16,7 +16,6 @@ import { useCallback, useMemo } from "react";
 import { formatEther } from "viem";
 import { config } from "../../../config.wagmi";
 import DressedBannyElem from "./DressedBannyElem";
-import { parseTierOrNft } from "@/utils/parseTier";
 
 export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
   const { parsedTiers } = useAllTiers();
@@ -31,7 +30,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
       if (!event.payEvent.memo?.startsWith("Minted tiers ")) {
         mainText = `Paid ${formatEther(event.payEvent.amount).substring(
           0,
-          6
+          6,
         )} ETH`;
       } else {
         const items = event.payEvent.memo.split("Minted tiers ")[1].split(", ");
@@ -52,7 +51,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
           <span style={{ fontSize: FONT_SIZE.xs, opacity: 0.6 }}>
             earned{" "}
             {Math.round(
-              parseFloat(formatEther(event.payEvent.newlyIssuedTokenCount))
+              parseFloat(formatEther(event.payEvent.newlyIssuedTokenCount)),
             )}{" "}
             $BAN
           </span>
@@ -67,7 +66,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
         {moment(event.timestamp * 1000).fromNow()}
       </div>
     ),
-    [event.timestamp]
+    [event.timestamp],
   );
 
   const From = useCallback(() => {
@@ -95,29 +94,32 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
         .split(", ")
         .map((str) => parseInt(str));
 
-      const _tiers = tierIds.reduce((acc, tierId) => {
-        if (acc.some((t) => t.tier.tierId === tierId)) {
-          return acc.map((t) =>
-            t.tier.tierId === tierId
-              ? { tier: t.tier, quantity: t.quantity + 1 }
-              : t
-          );
-        }
+      const _tiers = tierIds.reduce(
+        (acc, tierId) => {
+          if (acc.some((t) => t.tier.tierId === tierId)) {
+            return acc.map((t) =>
+              t.tier.tierId === tierId
+                ? { tier: t.tier, quantity: t.quantity + 1 }
+                : t,
+            );
+          }
 
-        const tier = parsedTiers?.find((t) => t.tierId === tierId);
+          const tier = parsedTiers?.find((t) => t.tierId === tierId);
 
-        if (tier) {
-          return [
-            ...acc,
-            {
-              tier,
-              quantity: 1,
-            },
-          ];
-        }
+          if (tier) {
+            return [
+              ...acc,
+              {
+                tier,
+                quantity: 1,
+              },
+            ];
+          }
 
-        return acc;
-      }, [] as { tier: TierOrNft; quantity: number }[]);
+          return acc;
+        },
+        [] as { tier: TierOrNft; quantity: number }[],
+      );
 
       if (!_tiers) return "...";
 
@@ -156,7 +158,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
         // Return true if banny is NOT wearing a background
         parsedTiers
           .filter((t) => t.category === "background")
-          .every((t) => t.tierId !== tierIdOfTokenId(tokenId))
+          .every((t) => t.tierId !== tierIdOfTokenId(tokenId)),
       );
 
       const size = imgSize * (displayLarge ? 1.3 : 1);
@@ -187,7 +189,7 @@ export default function ActivityEventElem({ event }: { event: ActivityEvent }) {
         {chainName(event.chainId)?.toUpperCase()}
       </div>
     ),
-    [event.chainId]
+    [event.chainId],
   );
 
   const txUrl = useMemo(() => {

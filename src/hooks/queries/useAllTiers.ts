@@ -32,9 +32,9 @@ export function useAllTiers() {
             acc.some((parsed) => parsed.tierId === curr.tierId)
               ? acc
               : [...acc, curr],
-          [] as TierOrNft[]
+          [] as TierOrNft[],
         ),
-    [_tiers]
+    [_tiers],
   );
 
   return {
