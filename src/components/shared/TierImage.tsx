@@ -56,8 +56,7 @@ export default function TierImage({
 
       {tier?.metadata?.productName ? (
         <AssetSvg
-          name={tier?.metadata.productName}
-          svgContents={tier?.svg}
+          tier={tier}
           size={_size}
           style={{ position: "absolute", ...style }}
         />

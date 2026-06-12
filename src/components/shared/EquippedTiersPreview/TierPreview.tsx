@@ -7,6 +7,7 @@ import { TierOrNft } from "@/model/tierOrNft";
 import { useCallback, useMemo } from "react";
 import AssetSvg from "../AssetSvg";
 import DefaultAsset from "../DefaultAsset";
+import { ASSET_SVGS } from "@/constants/assetSvgs";
 
 const fuzzStepCount = 4;
 
@@ -27,11 +28,11 @@ export function TierPreview({
 }) {
   const isEquipping = useMemo(
     () => equippingCategory === category,
-    [equippingCategory, category]
+    [equippingCategory, category],
   );
   const isUnEquipping = useMemo(
     () => unequippingCategory === category,
-    [unequippingCategory, category]
+    [unequippingCategory, category],
   );
 
   const fuzzConfig = {
@@ -76,7 +77,7 @@ export function TierPreview({
             maskSize: size,
           }
         : {},
-    [size]
+    [size],
   );
 
   const tier = useMemo(() => equipped[category], [equipped, category]);
@@ -94,9 +95,8 @@ export function TierPreview({
               ...fuzzMask(unequipFuzz),
             }}
             svgStyle={inheritedStyle}
-            name={tier.name}
+            tier={tier}
             size={size}
-            svgContents={tier.svg}
           />
         )}
 
@@ -107,9 +107,7 @@ export function TierPreview({
               {!equipped.necklace && (
                 <DefaultAsset size={size} type="necklace" />
               )}
-              {!equipped.eyes && (
-                <DefaultAsset size={size} type="eyes" />
-              )}
+              {!equipped.eyes && <DefaultAsset size={size} type="eyes" />}
             </>
           ) : (
             <DefaultAsset size={size} type="mannequin" />
