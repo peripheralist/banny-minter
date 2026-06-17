@@ -1,8 +1,8 @@
-import { BAN_HOOK } from "@/constants/contracts";
 import { useNftTiersQuery } from "@/generated/graphql";
 import { ChainId } from "@/model/chain";
 import { parseTierOrNft } from "@/utils/parseTier";
 import { useMemo } from "react";
+import { useBanHook } from "../useBanHook";
 
 type MultichainSupplies = Record<
   number,
@@ -13,10 +13,12 @@ type MultichainSupplies = Record<
 >;
 
 export function useMultichainSupplies() {
+  const banHook = useBanHook();
+
   const { data: tiers } = useNftTiersQuery({
     variables: {
       where: {
-        hook: BAN_HOOK,
+        hook: banHook,
       },
     },
   });

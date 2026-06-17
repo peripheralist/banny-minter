@@ -2,8 +2,8 @@ import Modal from "@/components/shared/Modal";
 import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
-import { BAN_HOOK } from "@/constants/contracts";
 import { useNftQuery } from "@/generated/graphql";
+import { useBanHook } from "@/hooks/useBanHook";
 import { useRouterNftParams } from "@/hooks/useRouterNftParams";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Chain } from "@/model/chain";
@@ -44,11 +44,12 @@ function NFTDetail({
   onClose: VoidFunction;
 }) {
   const { switchChain } = useContext(WalletContext);
+  const banHook = useBanHook();
 
   const { data } = useNftQuery({
     variables: {
       tokenId: BigInt(tokenId),
-      hook: BAN_HOOK,
+      hook: banHook,
       chainId: chain.id,
     },
   });

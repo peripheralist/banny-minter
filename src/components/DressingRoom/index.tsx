@@ -1,8 +1,8 @@
-import { BAN_HOOK } from "@/constants/contracts";
 import DressBannyContextProvider from "@/contexts/DressBannyContextProvider";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useBannyEquippedTiers } from "@/hooks/queries/useBannyEquippedTiers";
 import { useAppChain } from "@/hooks/useAppChain";
+import { useBanHook } from "@/hooks/useBanHook";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { CategoryLib } from "@/model/categoryLib";
 import { TierOrNft } from "@/model/tierOrNft";
@@ -17,13 +17,14 @@ import { MigrateOutfitModal } from "../modals/MigrateOutfitModal";
 
 export default function Index({ bannyNft }: { bannyNft: TierOrNft<true> }) {
   const appChain = useAppChain();
+  const banHook = useBanHook();
   const { address } = useAccount();
 
   // Only NFTs owned by connected wallet. Does not include worn NFTs owned by resolver contract
   const { data: nfts, loading } = useNfTsQuery({
     variables: {
       where: {
-        hook: BAN_HOOK.toLowerCase(),
+        hook: banHook.toLowerCase(),
         owner: address,
         chainId: appChain.id,
       },

@@ -1,13 +1,15 @@
-import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/contracts";
+import { RESOLVER_ADDRESS } from "@/constants/contracts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { isAddressEqual } from "viem";
 import { config } from "../../../config.wagmi";
+import { useBanHook } from "../useBanHook";
 
 /**
  * Check which tokenIds are approved for transfer to resolver contract
  */
 export function useNFTApprovals(tokenIds: bigint[]) {
+  const banHook = useBanHook();
   const [loading, setLoading] = useState(false);
 
   const [approvals, setApprovals] = useState<
@@ -45,7 +47,7 @@ export function useNFTApprovals(tokenIds: bigint[]) {
                 stateMutability: "view",
               },
             ],
-            address: BAN_HOOK,
+            address: banHook,
             functionName: "getApproved",
             args: [id],
           })
@@ -63,7 +65,7 @@ export function useNFTApprovals(tokenIds: bigint[]) {
     }
 
     getApprovals();
-  }, [tokenIds]);
+  }, [tokenIds, banHook]);
 
   return { approvals, loading };
 }

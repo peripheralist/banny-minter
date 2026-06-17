@@ -1,9 +1,11 @@
-import { BAN_HOOK, RESOLVER_ADDRESS_OLD } from "@/constants/contracts";
+import { RESOLVER_ADDRESS_OLD } from "@/constants/contracts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { config } from "../../../config.wagmi";
+import { useBanHook } from "../useBanHook";
 
 export function useIsDressedWithOldResolver(bannyBodyId: number | undefined) {
+  const banHook = useBanHook();
   const [loading, setLoading] = useState(false);
 
   const [dressedTokenIds, setDressedTokenIds] = useState<bigint[]>();
@@ -48,7 +50,7 @@ export function useIsDressedWithOldResolver(bannyBodyId: number | undefined) {
         ],
         address: RESOLVER_ADDRESS_OLD,
         functionName: "assetIdsOf",
-        args: [BAN_HOOK, BigInt(bannyBodyId)],
+        args: [banHook, BigInt(bannyBodyId)],
       });
 
       setDressedTokenIds([result[0], ...result[1]].filter((x) => !!x));
@@ -57,7 +59,7 @@ export function useIsDressedWithOldResolver(bannyBodyId: number | undefined) {
     }
 
     getOutfitIds();
-  }, [bannyBodyId]);
+  }, [bannyBodyId, banHook]);
 
   return { dressedTokenIds, loading };
 }

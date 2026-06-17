@@ -1,8 +1,4 @@
-import {
-  BAN_HOOK,
-  BAN_REVNET_ID,
-  TERMINAL_ADDRESS,
-} from "@/constants/contracts";
+import { BAN_REVNET_ID, TERMINAL_ADDRESS } from "@/constants/contracts";
 import { AlertContext } from "@/contexts/alertContext";
 import { ShopContext } from "@/contexts/shopContext";
 import { NATIVE_TOKEN } from "juice-sdk-core";
@@ -13,6 +9,7 @@ import {
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useCreditBalance } from "../queries/useCreditBalance";
+import { useBanHook } from "../useBanHook";
 
 export function useMint(props?: {
   onSuccess?: VoidFunction;
@@ -23,6 +20,7 @@ export function useMint(props?: {
   const { setAlert } = useContext(AlertContext);
   const { bag, totalEquippedPrice } = useContext(ShopContext);
   const creditBalance = useCreditBalance();
+  const banHook = useBanHook();
 
   const tierIds = useMemo(
     () =>
@@ -38,7 +36,7 @@ export function useMint(props?: {
 
   const metadata = usePreparePayMetadata({
     jb721Hook: {
-      dataHookAddress: BAN_HOOK,
+      dataHookAddress: banHook,
       tierIdsToMint: tierIds,
     },
   });
@@ -57,7 +55,7 @@ export function useMint(props?: {
   console.log("Mint using params:", {
     value: totalEquippedPrice,
     wallet: connectedWalletAddress,
-    hook: BAN_HOOK,
+    hook: banHook,
     tierIds,
     memo,
     metadata,

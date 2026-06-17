@@ -1,9 +1,9 @@
 import DressingRoom from "@/components/DressingRoom";
 import FullscreenLoading from "@/components/shared/FullscreenLoading";
-import { BAN_HOOK } from "@/constants/contracts";
 import { AlertContext } from "@/contexts/alertContext";
 import { useNftQuery } from "@/generated/graphql";
 import { useAppChain } from "@/hooks/useAppChain";
+import { useBanHook } from "@/hooks/useBanHook";
 import { parseTierOrNft } from "@/utils/parseTier";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useMemo } from "react";
@@ -18,6 +18,7 @@ export default function Index() {
   const router = useRouter();
 
   const appChain = useAppChain();
+  const banHook = useBanHook();
 
   const tokenId = useMemo(() => {
     try {
@@ -31,7 +32,7 @@ export default function Index() {
   const { data: nft, loading: nftsLoading } = useNftQuery({
     variables: {
       tokenId,
-      hook: BAN_HOOK,
+      hook: banHook,
       chainId: appChain.id,
     },
   });

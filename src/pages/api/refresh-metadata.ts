@@ -1,6 +1,7 @@
-import { BAN_HOOK } from "@/constants/contracts";
+import { BAN_HOOK_MAINNET, BAN_HOOK_TESTNET } from "@/constants/contracts";
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
+import { config } from "../../../config.wagmi";
 
 const apiKey = process.env.OS_API_KEY;
 
@@ -22,8 +23,11 @@ export default async function handler(
       return res.status(400);
     }
 
+    const isTestnet = config.chains.find((c) => c.id === chainId)?.testnet;
+    const banHook = isTestnet ? BAN_HOOK_TESTNET : BAN_HOOK_MAINNET;
+
     await axios.post(
-      `https://api.opensea.io/api/v2/chain/${chainId}/contract/${BAN_HOOK}/nfts/${tokenId}/refresh`,
+      `https://api.opensea.io/api/v2/chain/${chainId}/contract/${banHook}/nfts/${tokenId}/refresh`,
       {
         headers: {
           "x-api-key": apiKey,

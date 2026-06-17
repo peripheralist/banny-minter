@@ -32,7 +32,8 @@ import {
 import { JB_CHAINS, JBChainId } from "juice-sdk-core";
 import { ChainPayment } from "juice-sdk-react";
 import { encodeFunctionData, formatEther, parseEther, zeroAddress } from "viem";
-import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/contracts";
+import { RESOLVER_ADDRESS } from "@/constants/contracts";
+import { useBanHook } from "@/hooks/useBanHook";
 
 type TierObj = {
   file: File;
@@ -173,6 +174,8 @@ function DefineTiersView({
   tiers: TierObj[];
   setTiers: Dispatch<SetStateAction<TierObj[]>>;
 }) {
+  const banHook = useBanHook();
+
   const [files, setFiles] = useState<File[] | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [isStoringToIpfs, setIsStoringToIpfs] = useState(false);
@@ -581,11 +584,11 @@ function DefineTiersView({
           [], // tierIdsToRemove
         ],
       });
-      console.log("adjustTiers calldata:", { target: BAN_HOOK, calldata });
+      console.log("adjustTiers calldata:", { target: banHook, calldata });
     } catch (e) {
       console.error("Failed to encode adjustTiers:", e);
     }
-  }, [tiers, didStoreIpfs]);
+  }, [tiers, didStoreIpfs, banHook]);
 
   // Log the setSvgHashsOf calldata for debugging
   useEffect(() => {

@@ -1,10 +1,12 @@
-import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/contracts";
+import { RESOLVER_ADDRESS } from "@/constants/contracts";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { Address } from "viem";
 import { config } from "../../../config.wagmi";
+import { useBanHook } from "../useBanHook";
 
 export function useIsApprovedForAll(wallet: Address | undefined) {
+  const banHook = useBanHook();
   const [loading, setLoading] = useState(false);
 
   const [isApprovedForAll, setIsApprovedForAll] = useState<boolean>();
@@ -42,7 +44,7 @@ export function useIsApprovedForAll(wallet: Address | undefined) {
             stateMutability: "view",
           },
         ],
-        address: BAN_HOOK,
+        address: banHook,
         functionName: "isApprovedForAll",
         args: [wallet, RESOLVER_ADDRESS],
       });
@@ -53,7 +55,7 @@ export function useIsApprovedForAll(wallet: Address | undefined) {
     }
 
     getIsApprovedForAll();
-  }, [wallet]);
+  }, [wallet, banHook]);
 
   return { isApprovedForAll, loading };
 }

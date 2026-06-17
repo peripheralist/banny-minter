@@ -1,12 +1,12 @@
 import { CATEGORY_IDS } from "@/constants/category";
 import {
-  BAN_HOOK,
   RESOLVER_ADDRESS,
   RESOLVER_ADDRESS_OLD,
 } from "@/constants/contracts";
 import { TierOrNft } from "@/model/tierOrNft";
 import axios from "axios";
 import { useAppChain } from "../useAppChain";
+import { useBanHook } from "../useBanHook";
 import {
   WriteContractHandlerOptions,
   useWriteContractHandler,
@@ -47,6 +47,7 @@ export function useDecorateBanny(
   options?: WriteContractHandlerOptions & { useOldResolver?: boolean }
 ) {
   const appChain = useAppChain();
+  const banHook = useBanHook();
 
   const { write: decorateBanny, ...data } = useWriteContractHandler(
     {
@@ -72,7 +73,7 @@ export function useDecorateBanny(
           )
           .map((o) => BigInt(o.tokenId!));
 
-        const args = [BAN_HOOK, bannyBodyId, backgroundId, sortedOutfitIds];
+        const args = [banHook, bannyBodyId, backgroundId, sortedOutfitIds];
 
         console.info("Creating transaction with args:", args);
 

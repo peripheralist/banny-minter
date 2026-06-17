@@ -1,14 +1,16 @@
-import { BAN_HOOK } from "@/constants/contracts";
 import { Address } from "viem";
+import { useBanHook } from "../useBanHook";
 import {
   WriteContractHandlerOptions,
   useWriteContractHandler,
 } from "./useWriteContractHandler";
 
 export function useAdjustTiers(options?: WriteContractHandlerOptions) {
+  const banHook = useBanHook();
+
   const { write: adjustTiers, ...data } = useWriteContractHandler(
     {
-      address: BAN_HOOK,
+      address: banHook,
       abi: [
         {
           type: "function",

@@ -5,10 +5,10 @@ import FormattedAddress from "@/components/shared/FormattedAddress";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
 import { COLORS } from "@/constants/colors";
-import { BAN_HOOK } from "@/constants/contracts";
 import { FONT_SIZE } from "@/constants/fontSize";
 import { useNfTsQuery } from "@/generated/graphql";
 import { useAllActivity } from "@/hooks/queries/useAllActivity";
+import { useBanHook } from "@/hooks/useBanHook";
 import { useMeasuredRef } from "@/hooks/useMeasuredRef";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { chainName } from "@/utils/chainName";
@@ -25,6 +25,8 @@ moment.relativeTimeThreshold("m", 60);
 moment.relativeTimeThreshold("d", 365);
 
 export default function Activity() {
+  const banHook = useBanHook();
+
   const {
     events,
     loading: eventsLoading,
@@ -39,7 +41,7 @@ export default function Activity() {
     variables: {
       where: {
         category: 0,
-        hook: BAN_HOOK,
+        hook: banHook,
         customized: true,
       },
       limit: 12,

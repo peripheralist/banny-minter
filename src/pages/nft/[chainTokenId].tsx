@@ -4,8 +4,8 @@ import NftTierInfo from "@/components/shared/NftTierInfo";
 import RoundedFrame from "@/components/shared/RoundedFrame";
 import TierImage from "@/components/shared/TierImage";
 import ToolbarBagView from "@/components/shared/ToolbarBagView";
-import { BAN_HOOK } from "@/constants/contracts";
 import { useNftQuery } from "@/generated/graphql";
+import { useBanHook } from "@/hooks/useBanHook";
 import { useRouterNftParams } from "@/hooks/useRouterNftParams";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { parseTierOrNft } from "@/utils/parseTier";
@@ -21,6 +21,7 @@ export default function Index() {
 
 function Main({ tokenId, chainId }: { tokenId: number; chainId: number }) {
   const { isSmallScreen, width } = useWindowSize();
+  const banHook = useBanHook();
 
   const size = useMemo(
     () => Math.min(Math.max(width ? width - 48 : 0, 240), 420),
@@ -30,7 +31,7 @@ function Main({ tokenId, chainId }: { tokenId: number; chainId: number }) {
   const { data: _nft } = useNftQuery({
     variables: {
       tokenId: BigInt(tokenId),
-      hook: BAN_HOOK,
+      hook: banHook,
       chainId,
     },
   });

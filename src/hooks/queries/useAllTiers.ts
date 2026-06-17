@@ -1,20 +1,21 @@
-import { BAN_HOOK } from "@/constants/contracts";
 import { useNftTiersQuery } from "@/generated/graphql";
 import { TierOrNft } from "@/model/tierOrNft";
 import { parseTierOrNft } from "@/utils/parseTier";
 import { useMemo } from "react";
 import { useAppChain } from "../useAppChain";
+import { useBanHook } from "../useBanHook";
 
 /**
  * @returns All Looks NFT tiers
  */
 export function useAllTiers() {
   const appChain = useAppChain();
+  const banHook = useBanHook();
 
   const { data: tiers, ...props } = useNftTiersQuery({
     variables: {
       where: {
-        hook: BAN_HOOK,
+        hook: banHook,
         chainId: appChain.id,
       },
     },

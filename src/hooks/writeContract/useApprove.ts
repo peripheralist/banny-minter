@@ -1,13 +1,16 @@
-import { BAN_HOOK, RESOLVER_ADDRESS } from "@/constants/contracts";
+import { RESOLVER_ADDRESS } from "@/constants/contracts";
+import { useBanHook } from "../useBanHook";
 import {
   WriteContractHandlerOptions,
   useWriteContractHandler,
 } from "./useWriteContractHandler";
 
 export function useApprove(options?: WriteContractHandlerOptions) {
+  const banHook = useBanHook();
+
   const { write: approve, ...data } = useWriteContractHandler(
     {
-      address: BAN_HOOK,
+      address: banHook,
       abi: [
         {
           type: "function",

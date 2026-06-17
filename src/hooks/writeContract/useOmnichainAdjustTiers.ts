@@ -1,5 +1,5 @@
-import { BAN_HOOK } from "@/constants/contracts";
 import { useGetRelayrTxQuote } from "@/hooks/relayr/useGetRelayrTxQuote";
+import { useBanHook } from "@/hooks/useBanHook";
 import { useSupportedChains } from "@/hooks/useSupportedChains";
 import { JBChainId } from "juice-sdk-core";
 import {
@@ -120,6 +120,7 @@ function clearStoredQuote(): void {
 export function useOmnichainAdjustTiers() {
   const { address } = useAccount();
   const chains = useSupportedChains();
+  const banHook = useBanHook();
 
   const {
     getRelayrTxQuote,
@@ -208,7 +209,7 @@ export function useOmnichainAdjustTiers() {
           chainId: chain.id as JBChainId,
           data: {
             from: address,
-            to: BAN_HOOK,
+            to: banHook,
             value: BigInt(0),
             gas: GAS_ESTIMATE,
             data: encodedData,
@@ -223,7 +224,7 @@ export function useOmnichainAdjustTiers() {
         throw err;
       }
     },
-    [address, chains, getRelayrTxQuote]
+    [address, chains, getRelayrTxQuote, banHook]
   );
 
   /**
