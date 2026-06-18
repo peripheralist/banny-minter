@@ -7,7 +7,6 @@ import { TierOrNft } from "@/model/tierOrNft";
 import { useCallback, useMemo } from "react";
 import AssetSvg from "../AssetSvg";
 import DefaultAsset from "../DefaultAsset";
-import { ASSET_SVGS } from "@/constants/assetSvgs";
 
 const fuzzStepCount = 4;
 
@@ -107,7 +106,9 @@ export function TierPreview({
               {!equipped.necklace && (
                 <DefaultAsset size={size} type="necklace" />
               )}
-              {!equipped.eyes && <DefaultAsset size={size} type="eyes" />}
+              {!equipped.eyes && tier.tierId !== 1 && (
+                <DefaultAsset size={size} type="eyes" />
+              )}
             </>
           ) : (
             <DefaultAsset size={size} type="mannequin" />

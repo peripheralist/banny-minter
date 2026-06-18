@@ -10,7 +10,7 @@ export default function TierImage({
   tier,
   size,
 }: {
-  tier: Pick<TierOrNft, "category" | "metadata"> | undefined;
+  tier: Pick<TierOrNft, "category" | "metadata" | "tierId"> | undefined;
   size: number;
 }) {
   const { _size, style } = useMemo(() => {
@@ -66,7 +66,9 @@ export default function TierImage({
 
       {tier?.category === "body" && (
         <>
-          <DefaultAsset size={_size} type="eyes" style={style} />
+          {tier.tierId !== 1 && (
+            <DefaultAsset size={_size} type="eyes" style={style} />
+          )}
           <DefaultAsset size={_size} type="mouth" style={style} />
           <DefaultAsset size={_size} type="necklace" style={style} />
         </>
