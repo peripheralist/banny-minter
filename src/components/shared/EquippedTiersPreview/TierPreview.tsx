@@ -106,8 +106,11 @@ export function TierPreview({
               {!equipped.necklace && (
                 <DefaultAsset size={size} type="necklace" />
               )}
-              {!equipped.eyes && tier.tierId !== 1 && (
-                <DefaultAsset size={size} type="eyes" />
+              {!equipped.eyes && (
+                <DefaultAsset
+                  size={size}
+                  type={tier.tierId === 1 ? "alien-eyes" : "eyes"}
+                />
               )}
             </>
           ) : (

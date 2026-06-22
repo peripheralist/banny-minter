@@ -66,9 +66,11 @@ export default function TierImage({
 
       {tier?.category === "body" && (
         <>
-          {tier.tierId !== 1 && (
-            <DefaultAsset size={_size} type="eyes" style={style} />
-          )}
+          <DefaultAsset
+            size={_size}
+            type={tier.tierId === 1 ? "alien-eyes" : "eyes"}
+            style={style}
+          />
           <DefaultAsset size={_size} type="mouth" style={style} />
           <DefaultAsset size={_size} type="necklace" style={style} />
         </>
